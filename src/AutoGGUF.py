@@ -13,6 +13,10 @@ import requests
 import zipfile
 from datetime import datetime
 from imports_and_globals import ensure_directory
+from DownloadThread import *
+from ModelInfoDialog import *
+from TaskListItem import *
+from QuantizationThread import *
 
 class AutoGGUF(QMainWindow):
     def __init__(self):
@@ -387,12 +391,7 @@ class AutoGGUF(QMainWindow):
             if file.endswith(".gguf"):
                 self.model_list.addItem(file)
     
-    def browse_backend(self):
-        backend_path = QFileDialog.getExistingDirectory(self, "Select Llama.cpp Backend Directory")
-        if backend_path:
-            self.backend_input.setText(os.path.abspath(backend_path))
-            ensure_directory(backend_path)
-    
+        
     def browse_models(self):
         models_path = QFileDialog.getExistingDirectory(self, "Select Models Directory")
         if models_path:
@@ -431,8 +430,8 @@ class AutoGGUF(QMainWindow):
         self.token_embedding_type.setEnabled(state == Qt.CheckState.Checked)
 
     def validate_quantization_inputs(self):
-        if not self.backend_input.text():
-            raise ValueError("Backend path is required")
+        if not self.backend_combo.currentData():
+            raise ValueError("No backend selected")
         if not self.models_input.text():
             raise ValueError("Models path is required")
         if not self.output_input.text():
@@ -571,7 +570,7 @@ class AutoGGUF(QMainWindow):
 
     def generate_imatrix(self):
         try:
-            backend_path = self.backend_input.text()
+            backend_path = self.backend_combo.currentData()
             if not os.path.exists(backend_path):
                 raise FileNotFoundError(f"Backend path does not exist: {backend_path}")
 
