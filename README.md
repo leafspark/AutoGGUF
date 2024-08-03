@@ -12,9 +12,11 @@ options.
 4. Monitor system resources during quantization
 
 **Usage**:
+
 Cross platform:
   1. Install dependencies, either using the `requirements.txt` file or `pip install PyQt6 requests psutil`.
   2. Run the `run.bat` script to start the application, or run the command `python src/main.py`.
+
 Windows:
   1. Download latest release, extract all to folder and run `AutoGGUF.exe`
   2. Enjoy!
