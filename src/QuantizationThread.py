@@ -11,7 +11,9 @@ import json
 import platform
 import requests
 import zipfile
+import traceback
 from datetime import datetime
+from imports_and_globals import open_file_safe
 
 class QuantizationThread(QThread):
     output_signal = pyqtSignal(str)
@@ -32,7 +34,7 @@ class QuantizationThread(QThread):
         try:
             self.process = subprocess.Popen(self.command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, 
                                        text=True, cwd=self.cwd)
-            with open(self.log_file, 'w') as log:
+            with open_file_safe(self.log_file, 'w') as log:
                 for line in self.process.stdout:
                     line = line.strip()
                     self.output_signal.emit(line)
@@ -40,7 +42,6 @@ class QuantizationThread(QThread):
                     log.flush()
                     self.status_signal.emit("In Progress")
                     self.parse_model_info(line)
-            
             self.process.wait()
             if self.process.returncode == 0:
                 self.status_signal.emit("Completed")

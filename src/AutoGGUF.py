@@ -531,7 +531,7 @@ class AutoGGUF(QMainWindow):
             
             # Load existing content
             if os.path.exists(task_item.log_file):
-                with open(task_item.log_file, 'r') as f:
+                with open_file_safe(task_item.log_file, 'r') as f:
                     log_text.setPlainText(f.read())
             
             # Connect to the thread if it's still running

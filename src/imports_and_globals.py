@@ -19,3 +19,12 @@ from PyQt6.QtGui import QCloseEvent, QAction
 def ensure_directory(path):
     if not os.path.exists(path):
         os.makedirs(path)
+        
+def open_file_safe(file_path, mode='r'):
+    encodings = ['utf-8', 'latin-1', 'ascii', 'utf-16']
+    for encoding in encodings:
+        try:
+            return open(file_path, mode, encoding=encoding)
+        except UnicodeDecodeError:
+            continue
+    raise ValueError(f"Unable to open file {file_path} with any of the encodings: {encodings}")        
