@@ -35,12 +35,12 @@ main
 - requests
 - psutil
 
-**To be implemented:**
+**Issues:**
 - Actual progress bar tracking
 - Download safetensors from HF and convert to unquanted GGUF
-- Specify multiple KV overrides
-- Better error handling
-- Cannot select output/token embd type
+- ~~Specify multiple KV overrides~~ (added in v1.1.0)
+- ~~Better error handling~~ (added in v1.1.0)
+- ~~Cannot select output/token embd type~~ (fixed in v1.1.0)
 
 **Troubleshooting:**
 - llama.cpp quantizations errors out with an iostream error: create the `quantized_models` directory (or set a directory)
