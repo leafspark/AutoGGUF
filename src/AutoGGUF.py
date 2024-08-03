@@ -4,6 +4,7 @@ from PyQt6.QtGui import *
 import os
 import sys
 import psutil
+import shutil
 import subprocess
 import time
 import signal
@@ -12,17 +13,18 @@ import platform
 import requests
 import zipfile
 from datetime import datetime
-from imports_and_globals import ensure_directory
-from DownloadThread import *
-from ModelInfoDialog import *
-from TaskListItem import *
-from QuantizationThread import *
+from imports_and_globals import ensure_directory, open_file_safe
+from DownloadThread import DownloadThread
+from ModelInfoDialog import ModelInfoDialog
+from TaskListItem import TaskListItem
+from QuantizationThread import QuantizationThread
+from KVOverrideEntry import KVOverrideEntry
 
 class AutoGGUF(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("AutoGGUF (automated GGUF model quantizer)")
-        self.setGeometry(100, 100, 1200, 1000)
+        self.setGeometry(100, 100, 1300, 1100)
 
         main_layout = QHBoxLayout()
         left_layout = QVBoxLayout()
@@ -45,7 +47,7 @@ class AutoGGUF(QMainWindow):
         backend_layout.addWidget(self.refresh_backends_button)
         left_layout.addLayout(backend_layout)
 
-        # Add Download llama.cpp section
+        # Modify the Download llama.cpp section
         download_group = QGroupBox("Download llama.cpp")
         download_layout = QFormLayout()
 
@@ -58,7 +60,18 @@ class AutoGGUF(QMainWindow):
         download_layout.addRow("Select Release:", release_layout)
 
         self.asset_combo = QComboBox()
+        self.asset_combo.currentIndexChanged.connect(self.update_cuda_option)
         download_layout.addRow("Select Asset:", self.asset_combo)
+
+        self.cuda_extract_checkbox = QCheckBox("Extract CUDA files")
+        self.cuda_extract_checkbox.setVisible(False)
+        download_layout.addRow(self.cuda_extract_checkbox)
+
+        self.cuda_backend_label = QLabel("Select CUDA Backend:")
+        self.cuda_backend_label.setVisible(False)
+        self.backend_combo_cuda = QComboBox()
+        self.backend_combo_cuda.setVisible(False)
+        download_layout.addRow(self.cuda_backend_label, self.backend_combo_cuda)
 
         self.download_progress = QProgressBar()
         self.download_button = QPushButton("Download")
@@ -144,20 +157,20 @@ class AutoGGUF(QMainWindow):
         quant_options_layout.addRow(self.create_label("Exclude Weights:", "Don't use importance matrix for these tensors"), self.exclude_weights)
 
         self.use_output_tensor_type = QCheckBox("Use Output Tensor Type")
-        self.use_output_tensor_type.stateChanged.connect(self.toggle_output_tensor_type)
         self.output_tensor_type = QComboBox()
         self.output_tensor_type.addItems(["F32", "F16", "Q4_0", "Q4_1", "Q5_0", "Q5_1", "Q8_0"])
         self.output_tensor_type.setEnabled(False)
+        self.use_output_tensor_type.toggled.connect(lambda checked: self.output_tensor_type.setEnabled(checked))
         output_tensor_layout = QHBoxLayout()
         output_tensor_layout.addWidget(self.use_output_tensor_type)
         output_tensor_layout.addWidget(self.output_tensor_type)
         quant_options_layout.addRow(self.create_label("Output Tensor Type:", "Use this type for the output.weight tensor"), output_tensor_layout)
 
         self.use_token_embedding_type = QCheckBox("Use Token Embedding Type")
-        self.use_token_embedding_type.stateChanged.connect(self.toggle_token_embedding_type)
         self.token_embedding_type = QComboBox()
         self.token_embedding_type.addItems(["F32", "F16", "Q4_0", "Q4_1", "Q5_0", "Q5_1", "Q8_0"])
         self.token_embedding_type.setEnabled(False)
+        self.use_token_embedding_type.toggled.connect(lambda checked: self.token_embedding_type.setEnabled(checked))
         token_embedding_layout = QHBoxLayout()
         token_embedding_layout.addWidget(self.use_token_embedding_type)
         token_embedding_layout.addWidget(self.token_embedding_type)
@@ -166,7 +179,24 @@ class AutoGGUF(QMainWindow):
         self.keep_split = QCheckBox("Keep Split")
         self.override_kv = QLineEdit()
         quant_options_layout.addRow(self.create_label("", "Will generate quantized model in the same shards as input"), self.keep_split)
-        quant_options_layout.addRow(self.create_label("Override KV:", "Override model metadata by key in the quantized model"), self.override_kv)
+        # KV Override section
+        self.kv_override_widget = QWidget()
+        self.kv_override_layout = QVBoxLayout(self.kv_override_widget)
+        self.kv_override_entries = []
+
+        add_override_button = QPushButton("Add new override")
+        add_override_button.clicked.connect(self.add_kv_override)
+        
+        kv_override_scroll = QScrollArea()
+        kv_override_scroll.setWidgetResizable(True)
+        kv_override_scroll.setWidget(self.kv_override_widget)
+        kv_override_scroll.setMinimumHeight(200)
+        
+        kv_override_main_layout = QVBoxLayout()
+        kv_override_main_layout.addWidget(kv_override_scroll)
+        kv_override_main_layout.addWidget(add_override_button)
+
+        quant_options_layout.addRow(self.create_label("KV Overrides:", "Override model metadata"), kv_override_main_layout)
 
         quant_options_widget.setLayout(quant_options_layout)
         quant_options_scroll.setWidget(quant_options_widget)
@@ -219,13 +249,17 @@ class AutoGGUF(QMainWindow):
         # GPU Offload for IMatrix
         gpu_offload_layout = QHBoxLayout()
         self.gpu_offload_slider = QSlider(Qt.Orientation.Horizontal)
-        self.gpu_offload_slider.setRange(0, 100)
+        self.gpu_offload_slider.setRange(0, 200)
         self.gpu_offload_slider.valueChanged.connect(self.update_gpu_offload_spinbox)
+
         self.gpu_offload_spinbox = QSpinBox()
-        self.gpu_offload_spinbox.setRange(0, 100)
+        self.gpu_offload_spinbox.setRange(0, 1000)
         self.gpu_offload_spinbox.valueChanged.connect(self.update_gpu_offload_slider)
+        self.gpu_offload_spinbox.setMinimumWidth(75)  # Set the minimum width to 75 pixels
+
         self.gpu_offload_auto = QCheckBox("Auto")
         self.gpu_offload_auto.stateChanged.connect(self.toggle_gpu_offload_auto)
+
         gpu_offload_layout.addWidget(self.gpu_offload_slider)
         gpu_offload_layout.addWidget(self.gpu_offload_spinbox)
         gpu_offload_layout.addWidget(self.gpu_offload_auto)
@@ -260,12 +294,44 @@ class AutoGGUF(QMainWindow):
         llama_bin = os.path.abspath("llama_bin")
         if not os.path.exists(llama_bin):
             os.makedirs(llama_bin)
-        
+    
         self.backend_combo.clear()
+        valid_backends = []
         for item in os.listdir(llama_bin):
             item_path = os.path.join(llama_bin, item)
-            if os.path.isdir(item_path):
-                self.backend_combo.addItem(item, userData=item_path)
+            if os.path.isdir(item_path) and "cudart-llama" not in item.lower():
+                valid_backends.append((item, item_path))
+    
+        if valid_backends:
+            for name, path in valid_backends:
+                self.backend_combo.addItem(name, userData=path)
+            self.backend_combo.setEnabled(True)  # Enable the combo box if there are valid backends
+        else:
+            self.backend_combo.addItem("No backends available")
+            self.backend_combo.setEnabled(False)
+
+    def download_finished(self, extract_dir):
+        self.download_button.setEnabled(True)
+        self.download_progress.setValue(100)
+        
+        if self.cuda_extract_checkbox.isChecked() and self.cuda_extract_checkbox.isVisible():
+            cuda_backend = self.backend_combo_cuda.currentData()
+            if cuda_backend and cuda_backend != "No suitable CUDA backends found":
+                self.extract_cuda_files(extract_dir, cuda_backend)
+                QMessageBox.information(self, "Download Complete", f"llama.cpp binary downloaded and extracted to {extract_dir}\nCUDA files extracted to {cuda_backend}")
+            else:
+                QMessageBox.warning(self, "CUDA Extraction Failed", "No suitable CUDA backend found for extraction")
+        else:
+            QMessageBox.information(self, "Download Complete", f"llama.cpp binary downloaded and extracted to {extract_dir}")
+        
+        self.refresh_backends()  # Refresh the backends after successful download
+        self.update_cuda_option()  # Update CUDA options in case a CUDA-capable backend was downloaded
+        
+        # Select the newly downloaded backend
+        new_backend_name = os.path.basename(extract_dir)
+        index = self.backend_combo.findText(new_backend_name)
+        if index >= 0:
+            self.backend_combo.setCurrentIndex(index)    
 
     def refresh_releases(self):
         try:
@@ -285,6 +351,16 @@ class AutoGGUF(QMainWindow):
         if release:
             for asset in release['assets']:
                 self.asset_combo.addItem(asset['name'], userData=asset)
+        self.update_cuda_option()
+
+    def update_cuda_option(self):
+        asset = self.asset_combo.currentData()
+        is_cuda = asset and "cudart" in asset['name'].lower()
+        self.cuda_extract_checkbox.setVisible(is_cuda)
+        self.cuda_backend_label.setVisible(is_cuda)
+        self.backend_combo_cuda.setVisible(is_cuda)
+        if is_cuda:
+            self.update_cuda_backends()
 
     def download_llama_cpp(self):
         asset = self.asset_combo.currentData()
@@ -301,11 +377,27 @@ class AutoGGUF(QMainWindow):
         self.download_thread = DownloadThread(asset['browser_download_url'], save_path)
         self.download_thread.progress_signal.connect(self.update_download_progress)
         self.download_thread.finished_signal.connect(self.download_finished)
-        self.download_thread.error_signal.connect(self.show_error)
+        self.download_thread.error_signal.connect(self.download_error)
         self.download_thread.start()
 
         self.download_button.setEnabled(False)
         self.download_progress.setValue(0)
+
+    def update_cuda_backends(self):
+        self.backend_combo_cuda.clear()
+        llama_bin = os.path.abspath("llama_bin")
+        if os.path.exists(llama_bin):
+            for item in os.listdir(llama_bin):
+                item_path = os.path.join(llama_bin, item)
+                if os.path.isdir(item_path) and "cudart-llama" not in item.lower():
+                    if "cu1" in item.lower():  # Only include CUDA-capable backends
+                        self.backend_combo_cuda.addItem(item, userData=item_path)
+        
+        if self.backend_combo_cuda.count() == 0:
+            self.backend_combo_cuda.addItem("No suitable CUDA backends found")
+            self.backend_combo_cuda.setEnabled(False)
+        else:
+            self.backend_combo_cuda.setEnabled(True)
 
     def update_download_progress(self, progress):
         self.download_progress.setValue(progress)
@@ -313,9 +405,40 @@ class AutoGGUF(QMainWindow):
     def download_finished(self, extract_dir):
         self.download_button.setEnabled(True)
         self.download_progress.setValue(100)
-        QMessageBox.information(self, "Download Complete", f"llama.cpp binary downloaded and extracted to {extract_dir}")
-        self.refresh_backends()   
         
+        if self.cuda_extract_checkbox.isChecked() and self.cuda_extract_checkbox.isVisible():
+            cuda_backend = self.backend_combo_cuda.currentData()
+            if cuda_backend:
+                self.extract_cuda_files(extract_dir, cuda_backend)
+                QMessageBox.information(self, "Download Complete", f"llama.cpp binary downloaded and extracted to {extract_dir}\nCUDA files extracted to {cuda_backend}")
+            else:
+                QMessageBox.warning(self, "CUDA Extraction Failed", "No CUDA backend selected for extraction")
+        else:
+            QMessageBox.information(self, "Download Complete", f"llama.cpp binary downloaded and extracted to {extract_dir}")
+        
+        self.refresh_backends()
+
+    def extract_cuda_files(self, extract_dir, destination):
+        for root, dirs, files in os.walk(extract_dir):
+            for file in files:
+                if file.lower().endswith('.dll'):
+                    source_path = os.path.join(root, file)
+                    dest_path = os.path.join(destination, file)
+                    shutil.copy2(source_path, dest_path)
+        
+     
+    def download_error(self, error_message):
+        self.download_button.setEnabled(True)
+        self.download_progress.setValue(0)
+        self.show_error(f"Download failed: {error_message}")
+        
+        # Clean up any partially downloaded files
+        asset = self.asset_combo.currentData()
+        if asset:
+            partial_file = os.path.join(os.path.abspath("llama_bin"), asset['name'])
+            if os.path.exists(partial_file):
+                os.remove(partial_file)
+     
     def show_task_context_menu(self, position):
         item = self.task_list.itemAt(position)
         if item is not None:
@@ -422,12 +545,6 @@ class AutoGGUF(QMainWindow):
         self.ram_bar.setValue(int(ram.percent))
         self.ram_bar.setFormat(f"{ram.percent:.1f}% ({ram.used // 1024 // 1024} MB / {ram.total // 1024 // 1024} MB)")
         self.cpu_label.setText(f"CPU Usage: {cpu:.1f}%")
-    
-    def toggle_output_tensor_type(self, state):
-        self.output_tensor_type.setEnabled(state == Qt.CheckState.Checked)
-
-    def toggle_token_embedding_type(self, state):
-        self.token_embedding_type.setEnabled(state == Qt.CheckState.Checked)
 
     def validate_quantization_inputs(self):
         if not self.backend_combo.currentData():
@@ -438,6 +555,17 @@ class AutoGGUF(QMainWindow):
             raise ValueError("Output path is required")
         if not self.logs_input.text():
             raise ValueError("Logs path is required")
+
+    def add_kv_override(self):
+        entry = KVOverrideEntry()
+        entry.deleted.connect(self.remove_kv_override)
+        self.kv_override_layout.addWidget(entry)
+        self.kv_override_entries.append(entry)
+
+    def remove_kv_override(self, entry):
+        self.kv_override_layout.removeWidget(entry)
+        self.kv_override_entries.remove(entry)
+        entry.deleteLater()
 
     def quantize_model(self):
         try:
@@ -480,7 +608,10 @@ class AutoGGUF(QMainWindow):
             if self.keep_split.isChecked():
                 command.append("--keep-split")
             if self.override_kv.text():
-                command.extend(["--override-kv", self.override_kv.text()])
+                for entry in self.kv_override_entries:
+                    override_string = entry.get_override_string()
+                    if override_string:
+                        command.extend(["--override-kv", override_string])
             
             command.extend([input_path, output_path, quant_type])
             

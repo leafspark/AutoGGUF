@@ -50,4 +50,5 @@ class DownloadThread(QThread):
             self.finished_signal.emit(extract_dir)
         except Exception as e:
             self.error_signal.emit(str(e))
-
+            if os.path.exists(self.save_path):
+                os.remove(self.save_path)
