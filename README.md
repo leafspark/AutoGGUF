@@ -24,3 +24,6 @@ options.
 - Actual progress bar tracking
 - Download safetensors from HF and convert to unquanted GGUF
 - Specify multiple KV overrides
+
+**User interface:**
+![image](https://github.com/user-attachments/assets/b1b58cba-4314-479d-a1d8-21ca0b5a8935)
