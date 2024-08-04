@@ -22,13 +22,20 @@ Windows:
   2. Enjoy!
 
 **Building**:
+
+Cross platform:
 ```bash
 cd src
 pip install -U pyinstaller
-pyinstaller main.py
+pyinstaller main.py --onefile
 cd dist/main
 ./main
 ```
+Windows:
+```bash
+build RELEASE/DEV
+```
+Find exe in `build/<type>/dist/AutoGGUF.exe`.
 
 **Dependencies**:
 - PyQt6

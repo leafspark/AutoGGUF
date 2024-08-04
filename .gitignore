@@ -11,5 +11,9 @@ __pycache__/
 !*.md
 !LICENSE
 
+# Allow assets folder
+!assets/
+!assets/**
+
 # Don't ignore .gitignore
 !.gitignore
