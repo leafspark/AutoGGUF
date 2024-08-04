@@ -89,7 +89,8 @@ class AutoGGUF(QMainWindow):
         right_layout.addWidget(download_group)
 
         # Initialize releases and backends
-        self.refresh_releases()
+        if os.environ.get('AUTOGGUF_CHECK_BACKEND', '').lower() == 'enabled':
+            self.refresh_releases()
         self.refresh_backends()    
         
         # Models path
