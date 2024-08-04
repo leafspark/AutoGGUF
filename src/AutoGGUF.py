@@ -12,6 +12,7 @@ import json
 import platform
 import requests
 import zipfile
+import re
 from datetime import datetime
 from imports_and_globals import ensure_directory, open_file_safe
 from DownloadThread import DownloadThread
@@ -144,10 +145,6 @@ class AutoGGUF(QMainWindow):
         self.quant_type = QComboBox()
         self.quant_type.addItems(
             [
-                "Q4_0",
-                "Q4_1",
-                "Q5_0",
-                "Q5_1",
                 "IQ2_XXS",
                 "IQ2_XS",
                 "IQ2_S",
@@ -173,12 +170,16 @@ class AutoGGUF(QMainWindow):
                 "Q5_K_S",
                 "Q5_K_M",
                 "Q6_K",
-                "Q8_0",
+                "Q8_0",            
+                "Q4_0",
+                "Q4_1",
+                "Q5_0",
+                "Q5_1",
                 "Q4_0_4_4",
                 "Q4_0_4_8",
                 "Q4_0_8_8",
-                "F16",
                 "BF16",
+                "F16",                
                 "F32",
                 "COPY",
             ]
@@ -796,7 +797,7 @@ class AutoGGUF(QMainWindow):
             thread = QuantizationThread(command, backend_path, log_file)
             self.quant_threads.append(thread)
 
-            task_item = TaskListItem(EXPORTING_LORA, log_file)
+            task_item = TaskListItem(EXPORTING_LORA, log_file, show_progress_bar=False)
             list_item = QListWidgetItem(self.task_list)
             list_item.setSizeHint(task_item.sizeHint())
             self.task_list.addItem(list_item)
@@ -888,7 +889,7 @@ class AutoGGUF(QMainWindow):
             task_name = LORA_CONVERSION_FROM_TO.format(
                 os.path.basename(lora_input_path), os.path.basename(lora_output_path)
             )
-            task_item = TaskListItem(task_name, log_file)
+            task_item = TaskListItem(task_name, log_file, show_progress_bar=False)
             list_item = QListWidgetItem(self.task_list)
             list_item.setSizeHint(task_item.sizeHint())
             self.task_list.addItem(list_item)
@@ -967,13 +968,14 @@ class AutoGGUF(QMainWindow):
             response = requests.get(
                 "https://api.github.com/repos/ggerganov/llama.cpp/releases"
             )
+            response.raise_for_status()  # Raise an exception for bad status codes
             releases = response.json()
             self.release_combo.clear()
             for release in releases:
                 self.release_combo.addItem(release["tag_name"], userData=release)
             self.release_combo.currentIndexChanged.connect(self.update_assets)
             self.update_assets()
-        except Exception as e:
+        except requests.exceptions.RequestException as e:
             self.show_error(ERROR_FETCHING_RELEASES.format(str(e)))
 
     def update_assets(self):
@@ -981,19 +983,12 @@ class AutoGGUF(QMainWindow):
         self.asset_combo.clear()
         release = self.release_combo.currentData()
         if release:
-            for asset in release["assets"]:
-                self.asset_combo.addItem(asset["name"], userData=asset)
+            if "assets" in release:
+                for asset in release["assets"]:
+                    self.asset_combo.addItem(asset["name"], userData=asset)
+            else:
+                self.show_error(NO_ASSETS_FOUND_FOR_RELEASE.format(release["tag_name"]))
         self.update_cuda_option()
-
-    def update_cuda_option(self):
-        self.logger.debug(UPDATING_CUDA_OPTIONS)
-        asset = self.asset_combo.currentData()
-        is_cuda = asset and "cudart" in asset["name"].lower()
-        self.cuda_extract_checkbox.setVisible(is_cuda)
-        self.cuda_backend_label.setVisible(is_cuda)
-        self.backend_combo_cuda.setVisible(is_cuda)
-        if is_cuda:
-            self.update_cuda_backends()
 
     def download_llama_cpp(self):
         self.logger.info(STARTING_LLAMACPP_DOWNLOAD)
@@ -1016,6 +1011,25 @@ class AutoGGUF(QMainWindow):
 
         self.download_button.setEnabled(False)
         self.download_progress.setValue(0)
+
+    def update_cuda_option(self):
+        self.logger.debug(UPDATING_CUDA_OPTIONS)
+        asset = self.asset_combo.currentData()
+
+        # Handle the case where asset is None
+        if asset is None:
+            self.logger.warning(NO_ASSET_SELECTED_FOR_CUDA_CHECK)
+            self.cuda_extract_checkbox.setVisible(False)
+            self.cuda_backend_label.setVisible(False)
+            self.backend_combo_cuda.setVisible(False)
+            return  # Exit the function early
+
+        is_cuda = asset and "cudart" in asset["name"].lower()
+        self.cuda_extract_checkbox.setVisible(is_cuda)
+        self.cuda_backend_label.setVisible(is_cuda)
+        self.backend_combo_cuda.setVisible(is_cuda)
+        if is_cuda:
+            self.update_cuda_backends()
 
     def update_cuda_backends(self):
         self.logger.debug(UPDATING_CUDA_BACKENDS)
@@ -1385,6 +1399,8 @@ class AutoGGUF(QMainWindow):
             self.task_list.addItem(list_item)
             self.task_list.setItemWidget(list_item, task_item)
 
+            # Connect the output signal to the new progress parsing function
+            thread.output_signal.connect(lambda line: self.parse_progress(line, task_item))
             thread.status_signal.connect(task_item.update_status)
             thread.finished_signal.connect(lambda: self.task_finished(thread))
             thread.error_signal.connect(lambda err: self.handle_error(err, task_item))
@@ -1400,6 +1416,15 @@ class AutoGGUF(QMainWindow):
         self.logger.debug(UPDATING_MODEL_INFO.format(model_info))
         # TODO: Do something with this
         pass
+
+    def parse_progress(self, line, task_item):
+        # Parses the output line for progress information and updates the task item.
+        match = re.search(r"\[(\d+)/(\d+)\]", line)
+        if match:
+            current = int(match.group(1))
+            total = int(match.group(2))
+            progress = int((current / total) * 100)
+            task_item.update_progress(progress)
 
     def task_finished(self, thread):
         self.logger.info(TASK_FINISHED.format(thread.log_file))
@@ -1508,7 +1533,7 @@ class AutoGGUF(QMainWindow):
             task_name = GENERATING_IMATRIX_FOR.format(
                 os.path.basename(self.imatrix_model.text())
             )
-            task_item = TaskListItem(task_name, log_file)
+            task_item = TaskListItem(task_name, log_file, show_progress_bar=False)
             list_item = QListWidgetItem(self.task_list)
             list_item.setSizeHint(task_item.sizeHint())
             self.task_list.addItem(list_item)

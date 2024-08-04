@@ -11,15 +11,24 @@ import sys
 import json
 from math import prod
 from pathlib import Path
-from typing import TYPE_CHECKING, Any, Callable, Iterable, Iterator, Sequence, SupportsIndex, cast
+from typing import (
+    TYPE_CHECKING,
+    Any,
+    Callable,
+    Iterable,
+    Iterator,
+    Sequence,
+    SupportsIndex,
+    cast,
+)
 
 import torch
 
 if TYPE_CHECKING:
     from torch import Tensor
 
-if 'NO_LOCAL_GGUF' not in os.environ:
-    sys.path.insert(1, str(Path(__file__).parent / 'gguf-py'))
+if "NO_LOCAL_GGUF" not in os.environ:
+    sys.path.insert(1, str(Path(__file__).parent / "gguf-py"))
 import gguf
 
 # reuse model definitions from convert_hf_to_gguf.py
@@ -32,6 +41,7 @@ logger = logging.getLogger("lora-to-gguf")
 class PartialLoraTensor:
     A: Tensor | None = None
     B: Tensor | None = None
+
 
 # magic to support tensor shape modifications and splitting
 class LoraTorchTensor:
@@ -57,7 +67,9 @@ class LoraTorchTensor:
         indices: (
             SupportsIndex
             | slice
-            | tuple[SupportsIndex | slice | Tensor, ...]  # TODO: add ellipsis in the type signature
+            | tuple[
+                SupportsIndex | slice | Tensor, ...
+            ]  # TODO: add ellipsis in the type signature
         ),
     ) -> LoraTorchTensor:
         shape = self.shape
@@ -90,7 +102,10 @@ class LoraTorchTensor:
             )
 
             if len(indices) < len(shape):
-                indices = (*indices, *(slice(None, None) for _ in range(len(indices), len(shape))))
+                indices = (
+                    *indices,
+                    *(slice(None, None) for _ in range(len(indices), len(shape))),
+                )
 
             # TODO: make sure this is correct
             indices_A = (
@@ -138,7 +153,9 @@ class LoraTorchTensor:
             n_elems = prod(orig_shape)
             n_new_elems = prod(dim if dim != -1 else 1 for dim in new_shape)
             assert n_elems % n_new_elems == 0
-            new_shape = (*(dim if dim != -1 else n_elems // n_new_elems for dim in new_shape),)
+            new_shape = (
+                *(dim if dim != -1 else n_elems // n_new_elems for dim in new_shape),
+            )
 
         if new_shape[-1] != orig_shape[-1]:
             raise NotImplementedError  # can't reshape the row size trivially
@@ -164,7 +181,9 @@ class LoraTorchTensor:
             assert all(dim == 1 for dim in self._lora_A.shape[:-2])
             return LoraTorchTensor(self._lora_A, self._lora_B.permute(*dims))
         if len(shape) == 2 and dims[-1] == -2 and dims[-2] == -1:
-            return LoraTorchTensor(self._lora_B.permute(*dims), self._lora_A.permute(*dims))
+            return LoraTorchTensor(
+                self._lora_B.permute(*dims), self._lora_A.permute(*dims)
+            )
         else:
             # TODO: compose the above two
             raise NotImplementedError
@@ -179,7 +198,9 @@ class LoraTorchTensor:
         return self.transpose(axis0, axis1)
 
     def to(self, *args, **kwargs):
-        return LoraTorchTensor(self._lora_A.to(*args, **kwargs), self._lora_B.to(*args, **kwargs))
+        return LoraTorchTensor(
+            self._lora_A.to(*args, **kwargs), self._lora_B.to(*args, **kwargs)
+        )
 
     @classmethod
     def __torch_function__(cls, func: Callable, types, args=(), kwargs=None):
@@ -226,50 +247,64 @@ def get_base_tensor_name(lora_tensor_name: str) -> str:
     base_name = base_name.replace(".lora_B.weight", ".weight")
     return base_name
 
+
 def pyinstaller_include():
     # PyInstaller import
     pass
 
+
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="Convert a huggingface PEFT LoRA adapter to a GGML compatible file")
+        description="Convert a huggingface PEFT LoRA adapter to a GGML compatible file"
+    )
     parser.add_argument(
-        "--outfile", type=Path,
+        "--outfile",
+        type=Path,
         help="path to write to; default: based on input. {ftype} will be replaced by the outtype.",
     )
     parser.add_argument(
-        "--outtype", type=str, choices=["f32", "f16", "bf16", "q8_0", "auto"], default="f16",
+        "--outtype",
+        type=str,
+        choices=["f32", "f16", "bf16", "q8_0", "auto"],
+        default="f16",
         help="output format - use f32 for float32, f16 for float16, bf16 for bfloat16, q8_0 for Q8_0, auto for the highest-fidelity 16-bit float type depending on the first loaded tensor type",
     )
     parser.add_argument(
-        "--bigendian", action="store_true",
+        "--bigendian",
+        action="store_true",
         help="model is executed on big endian machine",
     )
     parser.add_argument(
-        "--no-lazy", action="store_true",
+        "--no-lazy",
+        action="store_true",
         help="use more RAM by computing all outputs before writing (use in case lazy evaluation is broken)",
     )
     parser.add_argument(
-        "--verbose", action="store_true",
+        "--verbose",
+        action="store_true",
         help="increase output verbosity",
     )
     parser.add_argument(
-        "--dry-run", action="store_true",
+        "--dry-run",
+        action="store_true",
         help="only print out what will be done, without writing any new files",
     )
     parser.add_argument(
-        "--base", type=Path, required=True,
+        "--base",
+        type=Path,
+        required=True,
         help="directory containing base model file",
     )
     parser.add_argument(
-        "lora_path", type=Path,
+        "lora_path",
+        type=Path,
         help="directory containing LoRA adapter file",
     )
 
     return parser.parse_args()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     args = parse_args()
     logging.basicConfig(level=logging.DEBUG if args.verbose else logging.INFO)
 
@@ -318,7 +353,9 @@ if __name__ == '__main__':
 
             lora_alpha: float
 
-            def __init__(self, *args, dir_lora_model: Path, lora_alpha: float, **kwargs):
+            def __init__(
+                self, *args, dir_lora_model: Path, lora_alpha: float, **kwargs
+            ):
 
                 super().__init__(*args, **kwargs)
 
@@ -330,7 +367,9 @@ if __name__ == '__main__':
                 self.gguf_writer.add_string(gguf.Keys.Adapter.TYPE, "lora")
 
             def set_gguf_parameters(self):
-                self.gguf_writer.add_float32(gguf.Keys.Adapter.LORA_ALPHA, self.lora_alpha)
+                self.gguf_writer.add_float32(
+                    gguf.Keys.Adapter.LORA_ALPHA, self.lora_alpha
+                )
                 super().set_gguf_parameters()
 
             def get_tensors(self) -> Iterator[tuple[str, Tensor]]:
@@ -345,7 +384,9 @@ if __name__ == '__main__':
                     if not is_lora_a and not is_lora_b:
                         if ".base_layer.weight" in name:
                             continue
-                        logger.error(f"Unexpected name '{name}': Not a lora_A or lora_B tensor")
+                        logger.error(
+                            f"Unexpected name '{name}': Not a lora_A or lora_B tensor"
+                        )
                         sys.exit(1)
 
                     if base_name in tensor_map:
@@ -362,9 +403,14 @@ if __name__ == '__main__':
                 for name, tensor in tensor_map.items():
                     assert tensor.A is not None
                     assert tensor.B is not None
-                    yield (name, cast(torch.Tensor, LoraTorchTensor(tensor.A, tensor.B)))
+                    yield (
+                        name,
+                        cast(torch.Tensor, LoraTorchTensor(tensor.A, tensor.B)),
+                    )
 
-            def modify_tensors(self, data_torch: Tensor, name: str, bid: int | None) -> Iterable[tuple[str, Tensor]]:
+            def modify_tensors(
+                self, data_torch: Tensor, name: str, bid: int | None
+            ) -> Iterable[tuple[str, Tensor]]:
                 dest = super().modify_tensors(data_torch, name, bid)
                 for dest_name, dest_data in dest:
                     assert isinstance(dest_data, LoraTorchTensor)

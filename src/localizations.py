@@ -224,6 +224,7 @@ class _Localization:
         self.LORA_CONVERSION_FROM_TO = ""
         self.GENERATING_IMATRIX_FOR = ""
         self.MODEL_PATH_REQUIRED_FOR_IMATRIX = ""
+        self.NO_ASSET_SELECTED_FOR_CUDA_CHECK = ""
 
 class _English(_Localization):
     def __init__(self):
@@ -450,6 +451,7 @@ class _English(_Localization):
         self.LORA_CONVERSION_FROM_TO = "LoRA Conversion from {} to {}"
         self.GENERATING_IMATRIX_FOR = "Generating IMatrix for {}"
         self.MODEL_PATH_REQUIRED_FOR_IMATRIX = "Model path is required for IMatrix generation."
+        self.NO_ASSET_SELECTED_FOR_CUDA_CHECK = "No asset selected for CUDA check"
         
 class _French:
     # French localization
@@ -5231,7 +5233,7 @@ def set_language(lang_code):
     global ADDING_LORA_ADAPTER, DELETING_LORA_ADAPTER, LORA_FILES, SELECT_LORA_ADAPTER_FILE, STARTING_LORA_EXPORT
     global OUTPUT_TYPE, SELECT_OUTPUT_TYPE, GGUF_AND_BIN_FILES, BASE_MODEL, SELECT_BASE_MODEL_FILE
     global BASE_MODEL_PATH_REQUIRED, BROWSING_FOR_BASE_MODEL_FILE, SELECT_BASE_MODEL_FOLDER, BROWSING_FOR_BASE_MODEL_FOLDER
-    global LORA_CONVERSION_FROM_TO, GENERATING_IMATRIX_FOR, MODEL_PATH_REQUIRED_FOR_IMATRIX
+    global LORA_CONVERSION_FROM_TO, GENERATING_IMATRIX_FOR, MODEL_PATH_REQUIRED_FOR_IMATRIX, NO_ASSET_SELECTED_FOR_CUDA_CHECK
         
     loc = _languages.get(lang_code, _English)()
     english_loc = _English()  # Create an instance of English localization for fallback

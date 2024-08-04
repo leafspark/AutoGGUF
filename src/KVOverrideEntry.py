@@ -2,6 +2,7 @@ from PyQt6.QtWidgets import QWidget, QHBoxLayout, QLineEdit, QComboBox, QPushBut
 from PyQt6.QtCore import pyqtSignal, QRegularExpression
 from PyQt6.QtGui import QDoubleValidator, QIntValidator, QRegularExpressionValidator
 
+
 class KVOverrideEntry(QWidget):
     deleted = pyqtSignal(QWidget)
 
@@ -13,7 +14,7 @@ class KVOverrideEntry(QWidget):
         self.key_input = QLineEdit()
         self.key_input.setPlaceholderText("Key")
         # Set validator for key input (letters and dots only)
-        key_validator = QRegularExpressionValidator(QRegularExpression(r'[A-Za-z.]+'))
+        key_validator = QRegularExpressionValidator(QRegularExpression(r"[A-Za-z.]+"))
         self.key_input.setValidator(key_validator)
         layout.addWidget(self.key_input)
 
@@ -32,7 +33,7 @@ class KVOverrideEntry(QWidget):
 
         # Connect type change to validator update
         self.type_combo.currentTextChanged.connect(self.update_validator)
-        
+
         # Initialize validator
         self.update_validator(self.type_combo.currentText())
 
