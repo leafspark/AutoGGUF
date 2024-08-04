@@ -78,8 +78,8 @@ In order to use them, please set the `AUTOGGUF_LANGUAGE` environment variable to
 - Actual progress bar tracking
 - Download safetensors from HF and convert to unquanted GGUF
 - Perplexity testing
-- Cannot disable llama.cpp update check on startup
-- `_internal` directory required, will see if I can package this into a single exe on the next release
+- ~~Cannot disable llama.cpp update check on startup~~ (fixed in v1.3.1)
+- ~~`_internal` directory required, will see if I can package this into a single exe on the next release~~ (fixed in v1.3.1)
 - ~~Custom command line parameters~~ (added in v1.3.0)
 - ~~More iMatrix generation parameters~~ (added in v1.3.0)
 - ~~Specify multiple KV overrides~~ (added in v1.1.0)
@@ -87,8 +87,12 @@ In order to use them, please set the `AUTOGGUF_LANGUAGE` environment variable to
 - ~~Cannot select output/token embd type~~ (fixed in v1.1.0)
 - ~~Importing presets with KV overrides causes UI thread crash~~ (fixed in v1.3.0)
 
+**Prerelease issues:**
+- Base Model label persists even when GGML type is selected
+
 **Troubleshooting:**
 - ~~llama.cpp quantizations errors out with an iostream error: create the `quantized_models` directory (or set a directory)~~ (fixed in v1.2.1, automatically created on launch)
+- SSL module cannot be found error: Install OpenSSL or run from source `python src/main.py` using the `run.bat` script (`pip install requests`)
 
 **User interface:**
-![image](https://github.com/user-attachments/assets/eaec960e-2ada-4f79-9592-8882f8f23f63)
+![image](https://github.com/user-attachments/assets/906bf9cb-38ed-4945-a32e-179acfdcc529)
