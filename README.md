@@ -80,7 +80,7 @@ In order to use them, please set the `AUTOGGUF_LANGUAGE` enviroment variable to 
 - ~~Cannot select output/token embd type~~ (fixed in v1.1.0)
 
 **Troubleshooting:**
-- llama.cpp quantizations errors out with an iostream error: create the `quantized_models` directory (or set a directory)
+- ~~llama.cpp quantizations errors out with an iostream error: create the `quantized_models` directory (or set a directory)~~ (fixed in v1.2.1, automatically created on launch)
 
 **User interface:**
-![image](https://github.com/user-attachments/assets/b1b58cba-4314-479d-a1d8-21ca0b5a8935)
+![image](https://github.com/user-attachments/assets/eaec960e-2ada-4f79-9592-8882f8f23f63)
