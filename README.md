@@ -72,7 +72,7 @@ The following languages are currently supported (machine translated, except for 
     'zh-TW': _TraditionalChinese,   # Traditional Chinese (Taiwan)
 }
 ```
-In order to use them, please set the `AUTOGGUF_LANGUAGE` enviroment variable to one of the listed language codes.
+In order to use them, please set the `AUTOGGUF_LANGUAGE` environment variable to one of the listed language codes.
 
 **Issues:**
 - Actual progress bar tracking
