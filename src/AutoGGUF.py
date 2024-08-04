@@ -326,6 +326,95 @@ class AutoGGUF(QMainWindow):
         main_widget.setLayout(main_layout)
         self.setCentralWidget(main_widget)
         
+        # LoRA Conversion Section
+        lora_group = QGroupBox(LORA_CONVERSION)
+        lora_layout = QFormLayout()
+
+        self.lora_input = QLineEdit()
+        lora_input_button = QPushButton(BROWSE)
+        lora_input_button.clicked.connect(self.browse_lora_input)
+        lora_input_layout = QHBoxLayout()
+        lora_input_layout.addWidget(self.lora_input)
+        lora_input_layout.addWidget(lora_input_button)
+        lora_layout.addRow(self.create_label(LORA_INPUT_PATH, SELECT_LORA_INPUT_DIRECTORY), lora_input_layout)
+
+        self.lora_output = QLineEdit()
+        lora_output_button = QPushButton(BROWSE)
+        lora_output_button.clicked.connect(self.browse_lora_output)
+        lora_output_layout = QHBoxLayout()
+        lora_output_layout.addWidget(self.lora_output)
+        lora_output_layout.addWidget(lora_output_button)
+        lora_layout.addRow(self.create_label(LORA_OUTPUT_PATH, SELECT_LORA_OUTPUT_FILE), lora_output_layout)
+
+        # Output Type Dropdown
+        self.lora_output_type_combo = QComboBox()
+        self.lora_output_type_combo.addItems(["GGML", "GGUF"])
+        self.lora_output_type_combo.currentIndexChanged.connect(self.update_base_model_visibility)  # Connect to update visibility
+        lora_layout.addRow(self.create_label(OUTPUT_TYPE, SELECT_OUTPUT_TYPE), self.lora_output_type_combo)
+
+        # Base Model Path (initially hidden)
+        self.base_model_path = QLineEdit()
+        base_model_button = QPushButton(BROWSE)
+        base_model_button.clicked.connect(self.browse_base_model)
+        base_model_layout = QHBoxLayout()
+        base_model_layout.addWidget(self.base_model_path)
+        base_model_layout.addWidget(base_model_button)
+        self.base_model_widget = QWidget()
+        self.base_model_widget.setLayout(base_model_layout)
+        self.base_model_widget.setVisible(False)  # Initially hidden
+        lora_layout.addRow(self.create_label(BASE_MODEL, SELECT_BASE_MODEL_FILE), self.base_model_widget)
+
+        lora_convert_button = QPushButton(CONVERT_LORA)
+        lora_convert_button.clicked.connect(self.convert_lora)
+        lora_layout.addRow(lora_convert_button)
+
+        lora_group.setLayout(lora_layout)
+        right_layout.addWidget(lora_group)
+        
+        # Export LoRA
+        export_lora_group = QGroupBox(EXPORT_LORA)
+        export_lora_layout = QFormLayout()
+
+        self.export_lora_model = QLineEdit()
+        export_lora_model_button = QPushButton(BROWSE)
+        export_lora_model_button.clicked.connect(self.browse_export_lora_model)
+        export_lora_model_layout = QHBoxLayout()
+        export_lora_model_layout.addWidget(self.export_lora_model)
+        export_lora_model_layout.addWidget(export_lora_model_button)
+        export_lora_layout.addRow(self.create_label(MODEL, SELECT_MODEL_FILE), export_lora_model_layout)
+
+        self.export_lora_output = QLineEdit()
+        export_lora_output_button = QPushButton(BROWSE)
+        export_lora_output_button.clicked.connect(self.browse_export_lora_output)
+        export_lora_output_layout = QHBoxLayout()
+        export_lora_output_layout.addWidget(self.export_lora_output)
+        export_lora_output_layout.addWidget(export_lora_output_button)
+        export_lora_layout.addRow(self.create_label(OUTPUT, SELECT_OUTPUT_FILE), export_lora_output_layout)
+
+        # GGML LoRA Adapters
+        self.export_lora_adapters = QListWidget()
+        add_adapter_button = QPushButton(ADD_ADAPTER)
+        add_adapter_button.clicked.connect(self.add_lora_adapter)
+        adapters_layout = QVBoxLayout()
+        adapters_layout.addWidget(self.export_lora_adapters)
+        buttons_layout = QHBoxLayout()
+        buttons_layout.addWidget(add_adapter_button)
+        adapters_layout.addLayout(buttons_layout)
+        export_lora_layout.addRow(self.create_label(GGML_LORA_ADAPTERS, SELECT_LORA_ADAPTER_FILES), adapters_layout)
+
+        # Threads
+        self.export_lora_threads = QSpinBox()
+        self.export_lora_threads.setRange(1, 64)
+        self.export_lora_threads.setValue(8)  # Default value
+        export_lora_layout.addRow(self.create_label(THREADS, NUMBER_OF_THREADS_FOR_LORA_EXPORT), self.export_lora_threads)
+
+        export_lora_button = QPushButton(EXPORT_LORA)
+        export_lora_button.clicked.connect(self.export_lora)
+        export_lora_layout.addRow(export_lora_button)
+
+        export_lora_group.setLayout(export_lora_layout)
+        right_layout.addWidget(export_lora_group)  # Add the Export LoRA group to the right layout
+        
         # Modify the task list to support right-click menu
         self.task_list.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
         self.task_list.customContextMenuRequested.connect(self.show_task_context_menu)                
@@ -361,6 +450,9 @@ class AutoGGUF(QMainWindow):
             self.backend_combo.addItem(NO_BACKENDS_AVAILABLE)
             self.backend_combo.setEnabled(False)
         self.logger.info(FOUND_VALID_BACKENDS.format(self.backend_combo.count()))
+        
+    def update_base_model_visibility(self, index):
+        self.base_model_widget.setVisible(self.lora_output_type_combo.itemText(index) == "GGUF")
 
     def save_preset(self):
         self.logger.info(SAVING_PRESET)    
@@ -437,6 +529,128 @@ class AutoGGUF(QMainWindow):
                     QMessageBox.information(self, TASK_PRESET_SAVED, TASK_PRESET_SAVED_TO.format(file_name))
                 break
 
+    def browse_export_lora_model(self):
+        self.logger.info(BROWSING_FOR_EXPORT_LORA_MODEL_FILE)
+        model_file, _ = QFileDialog.getOpenFileName(self, SELECT_MODEL_FILE, "", GGUF_FILES)
+        if model_file:
+            self.export_lora_model.setText(os.path.abspath(model_file))
+
+    def browse_export_lora_output(self):
+        self.logger.info(BROWSING_FOR_EXPORT_LORA_OUTPUT_FILE)
+        output_file, _ = QFileDialog.getSaveFileName(self, SELECT_OUTPUT_FILE, "", GGUF_FILES)
+        if output_file:
+            self.export_lora_output.setText(os.path.abspath(output_file))
+
+    def add_lora_adapter(self):
+        self.logger.info(ADDING_LORA_ADAPTER)
+        adapter_path, _ = QFileDialog.getOpenFileName(self, SELECT_LORA_ADAPTER_FILE, "", LORA_FILES)
+        if adapter_path:
+            # Create a widget to hold the path and scale input
+            adapter_widget = QWidget()
+            adapter_layout = QHBoxLayout(adapter_widget)
+
+            path_input = QLineEdit(adapter_path)
+            path_input.setReadOnly(True)
+            adapter_layout.addWidget(path_input)
+
+            scale_input = QLineEdit("1.0")  # Default scale value
+            adapter_layout.addWidget(scale_input)
+
+            delete_button = QPushButton(DELETE_ADAPTER)
+            delete_button.clicked.connect(lambda: self.delete_lora_adapter_item(adapter_widget))
+            adapter_layout.addWidget(delete_button)
+
+            # Add the widget to the list
+            list_item = QListWidgetItem(self.export_lora_adapters)
+            list_item.setSizeHint(adapter_widget.sizeHint())
+            self.export_lora_adapters.addItem(list_item)
+            self.export_lora_adapters.setItemWidget(list_item, adapter_widget)
+
+    def browse_base_model(self):
+        self.logger.info(BROWSING_FOR_BASE_MODEL_FOLDER)  # Updated log message
+        base_model_folder = QFileDialog.getExistingDirectory(self, SELECT_BASE_MODEL_FOLDER)
+        if base_model_folder:
+            self.base_model_path.setText(os.path.abspath(base_model_folder))
+
+    def delete_lora_adapter_item(self, adapter_widget):
+        self.logger.info(DELETING_LORA_ADAPTER)
+        # Find the QListWidgetItem containing the adapter_widget
+        for i in range(self.export_lora_adapters.count()):
+            item = self.export_lora_adapters.item(i)
+            if self.export_lora_adapters.itemWidget(item) == adapter_widget:
+                self.export_lora_adapters.takeItem(i)  # Remove the item
+                break
+
+    def export_lora(self):
+        self.logger.info(STARTING_LORA_EXPORT)
+        try:
+            model_path = self.export_lora_model.text()
+            output_path = self.export_lora_output.text()
+            lora_adapters = []
+
+            for i in range(self.export_lora_adapters.count()):
+                item = self.export_lora_adapters.item(i)
+                adapter_widget = self.export_lora_adapters.itemWidget(item)
+                path_input = adapter_widget.layout().itemAt(0).widget()
+                scale_input = adapter_widget.layout().itemAt(1).widget()
+                adapter_path = path_input.text()
+                adapter_scale = scale_input.text()
+                lora_adapters.append((adapter_path, adapter_scale))
+
+            if not model_path:
+                raise ValueError(MODEL_PATH_REQUIRED)
+            if not output_path:
+                raise ValueError(OUTPUT_PATH_REQUIRED)
+            if not lora_adapters:
+                raise ValueError(AT_LEAST_ONE_LORA_ADAPTER_REQUIRED)
+
+            backend_path = self.backend_combo.currentData()
+            if not backend_path:
+                raise ValueError(NO_BACKEND_SELECTED)
+
+            command = [os.path.join(backend_path, "llama-export-lora"),
+                       "--model", model_path,
+                       "--output", output_path]
+
+            for adapter_path, adapter_scale in lora_adapters:
+                if adapter_path:
+                    if adapter_scale:
+                        try:
+                            scale_value = float(adapter_scale)
+                            command.extend(["--lora-scaled", adapter_path, str(scale_value)])
+                        except ValueError:
+                            raise ValueError(INVALID_LORA_SCALE_VALUE)
+                    else:
+                        command.extend(["--lora", adapter_path])
+
+            threads = self.export_lora_threads.value()
+            command.extend(["--threads", str(threads)])
+
+            logs_path = self.logs_input.text()
+            ensure_directory(logs_path)
+
+            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+            log_file = os.path.join(logs_path, f"lora_export_{timestamp}.log")
+
+            thread = QuantizationThread(command, backend_path, log_file)
+            self.quant_threads.append(thread)
+
+            task_item = TaskListItem(EXPORTING_LORA, log_file)
+            list_item = QListWidgetItem(self.task_list)
+            list_item.setSizeHint(task_item.sizeHint())
+            self.task_list.addItem(list_item)
+            self.task_list.setItemWidget(list_item, task_item)
+
+            thread.status_signal.connect(task_item.update_status)
+            thread.finished_signal.connect(lambda: self.task_finished(thread))
+            thread.error_signal.connect(lambda err: self.handle_error(err, task_item))
+            thread.start()
+            self.logger.info(LORA_EXPORT_TASK_STARTED)
+        except ValueError as e:
+            self.show_error(str(e))
+        except Exception as e:
+            self.show_error(ERROR_STARTING_LORA_EXPORT.format(str(e)))
+
     def restart_task(self, task_item):
         self.logger.info(RESTARTING_TASK.format(task_item.task_name))    
         for thread in self.quant_threads:
@@ -450,6 +664,82 @@ class AutoGGUF(QMainWindow):
                 new_thread.start()
                 task_item.update_status(IN_PROGRESS)
                 break
+
+    def browse_lora_input(self):
+        self.logger.info(BROWSING_FOR_LORA_INPUT_DIRECTORY)
+        lora_input_path = QFileDialog.getExistingDirectory(self, SELECT_LORA_INPUT_DIRECTORY)
+        if lora_input_path:
+            self.lora_input.setText(os.path.abspath(lora_input_path))
+            ensure_directory(lora_input_path)
+
+    def browse_lora_output(self):
+        self.logger.info(BROWSING_FOR_LORA_OUTPUT_FILE)
+        lora_output_file, _ = QFileDialog.getSaveFileName(self, SELECT_LORA_OUTPUT_FILE, "", GGUF_AND_BIN_FILES)
+        if lora_output_file:
+            self.lora_output.setText(os.path.abspath(lora_output_file))
+
+    def convert_lora(self):
+        self.logger.info(STARTING_LORA_CONVERSION)
+        try:
+            lora_input_path = self.lora_input.text()
+            lora_output_path = self.lora_output.text()
+            lora_output_type = self.lora_output_type_combo.currentText()
+
+            if not lora_input_path:
+                raise ValueError(LORA_INPUT_PATH_REQUIRED)
+            if not lora_output_path:
+                raise ValueError(LORA_OUTPUT_PATH_REQUIRED)
+
+            if lora_output_type == "GGUF":  # Use new file and parameters for GGUF
+                command = ["python", "src/convert_lora_to_gguf.py", "--outfile", lora_output_path, lora_input_path]
+                base_model_path = self.base_model_path.text()
+                if not base_model_path:
+                    raise ValueError(BASE_MODEL_PATH_REQUIRED)
+                command.extend(["--base", base_model_path])
+            else:  # Use old GGML parameters for GGML
+                command = ["python", "src/convert_lora_to_ggml.py", lora_input_path]
+                
+            logs_path = self.logs_input.text()
+            ensure_directory(logs_path)
+
+            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+            log_file = os.path.join(logs_path, f"lora_conversion_{timestamp}.log")
+
+            thread = QuantizationThread(command, os.getcwd(), log_file)
+            self.quant_threads.append(thread)
+
+            task_name = LORA_CONVERSION_FROM_TO.format(os.path.basename(lora_input_path), os.path.basename(lora_output_path))
+            task_item = TaskListItem(task_name, log_file)
+            list_item = QListWidgetItem(self.task_list)
+            list_item.setSizeHint(task_item.sizeHint())
+            self.task_list.addItem(list_item)
+            self.task_list.setItemWidget(list_item, task_item)
+
+            thread.status_signal.connect(task_item.update_status)
+            thread.finished_signal.connect(lambda: self.lora_conversion_finished(thread, lora_input_path, lora_output_path))
+            thread.error_signal.connect(lambda err: self.handle_error(err, task_item))
+            thread.start()
+            self.logger.info(LORA_CONVERSION_TASK_STARTED)
+        except ValueError as e:
+            self.show_error(str(e))
+        except Exception as e:
+            self.show_error(ERROR_STARTING_LORA_CONVERSION.format(str(e)))
+
+    def lora_conversion_finished(self, thread, input_path, output_path):
+        self.logger.info(LORA_CONVERSION_FINISHED)
+        if thread in self.quant_threads:
+            self.quant_threads.remove(thread)
+        try:
+            # Only move the file if the output type is GGML
+            if self.lora_output_type_combo.currentText() == "GGML":
+                source_file = os.path.join(input_path, "ggml-adapter-model.bin")
+                if os.path.exists(source_file):
+                    shutil.move(source_file, output_path)
+                    self.logger.info(LORA_FILE_MOVED.format(source_file, output_path))
+                else:
+                    self.logger.warning(LORA_FILE_NOT_FOUND.format(source_file))
+        except Exception as e:
+            self.logger.error(ERROR_MOVING_LORA_FILE.format(str(e)))
 
     def download_finished(self, extract_dir):
         self.logger.info(DOWNLOAD_FINISHED_EXTRACTED_TO.format(extract_dir))    
@@ -945,6 +1235,10 @@ class AutoGGUF(QMainWindow):
             if not os.path.exists(backend_path):
                 raise FileNotFoundError(BACKEND_PATH_NOT_EXIST.format(backend_path))
 
+            # Check if the Model area is empty
+            if not self.imatrix_model.text():
+                raise ValueError(MODEL_PATH_REQUIRED_FOR_IMATRIX)
+
             command = [
                 os.path.join(backend_path, "llama-imatrix"),
                 "-f", self.imatrix_datafile.text(),
@@ -966,7 +1260,8 @@ class AutoGGUF(QMainWindow):
             thread = QuantizationThread(command, backend_path, log_file)
             self.quant_threads.append(thread)
             
-            task_item = TaskListItem(GENERATING_IMATRIX, log_file)
+            task_name = GENERATING_IMATRIX_FOR.format(os.path.basename(self.imatrix_model.text()))
+            task_item = TaskListItem(task_name, log_file)
             list_item = QListWidgetItem(self.task_list)
             list_item.setSizeHint(task_item.sizeHint())
             self.task_list.addItem(list_item)
