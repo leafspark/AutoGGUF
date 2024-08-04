@@ -26,6 +26,7 @@ class AutoGGUF(QMainWindow):
     def __init__(self):        
         super().__init__()
         self.logger = Logger("AutoGGUF", "logs")
+        ensure_directory(os.path.abspath("quantized_models"))        
 
         self.logger.info(INITIALIZING_AUTOGGUF)        
         self.setWindowTitle(WINDOW_TITLE)
@@ -127,6 +128,11 @@ class AutoGGUF(QMainWindow):
         left_layout.addWidget(QLabel(AVAILABLE_MODELS))
         left_layout.addWidget(self.model_list)
         
+        # Refresh models button
+        refresh_models_button = QPushButton(REFRESH_MODELS)
+        refresh_models_button.clicked.connect(self.load_models)
+        left_layout.addWidget(refresh_models_button)        
+        
         # Quantization options
         quant_options_scroll = QScrollArea()
         quant_options_widget = QWidget()
@@ -184,6 +190,7 @@ class AutoGGUF(QMainWindow):
         self.keep_split = QCheckBox(KEEP_SPLIT)
         self.override_kv = QLineEdit()
         quant_options_layout.addRow(self.create_label("", WILL_GENERATE_QUANTIZED_MODEL_IN_SAME_SHARDS), self.keep_split)
+        
         # KV Override section
         self.kv_override_widget = QWidget()
         self.kv_override_layout = QVBoxLayout(self.kv_override_widget)

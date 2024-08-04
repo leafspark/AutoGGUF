@@ -163,6 +163,7 @@ class _Localization:
         self.HOW_OFTEN_TO_SAVE_IMATRIX = ""
         self.SET_GPU_OFFLOAD_VALUE = ""
         self.COMPLETED = ""
+        self.REFRESH_MODELS = ""
 
 class _English(_Localization):
     def __init__(self):
@@ -227,7 +228,7 @@ class _English(_Localization):
         self.NO_MODEL_SELECTED = "No model selected"
         self.REFRESH_RELEASES = "Refresh Releases"
         self.NO_SUITABLE_CUDA_BACKENDS = "No suitable CUDA backends found"
-        self.LLAMACPP_DOWNLOADED_EXTRACTED = "llama.cpp binary downloaded and extracted to {0}\nCUDA files extracted to {1}"
+        self.LLAMACPP_DOWNLOADED_EXTRACTED = "llama.cpp binary downloaded and extracted to {0}"
         self.CUDA_FILES_EXTRACTED = "CUDA files extracted to"
         self.NO_SUITABLE_CUDA_BACKEND_EXTRACTION = "No suitable CUDA backend found for extraction"
         self.ERROR_FETCHING_RELEASES = "Error fetching releases: {0}"
@@ -254,7 +255,7 @@ class _English(_Localization):
         self.RESTARTING_TASK = "Restarting task: {0}"
         self.IN_PROGRESS = "In Progress"
         self.DOWNLOAD_FINISHED_EXTRACTED_TO = "Download finished. Extracted to: {0}"
-        self.LLAMACPP_DOWNLOADED_AND_EXTRACTED = "llama.cpp binary downloaded and extracted to {0}\nCUDA files extracted to {1}"
+        self.LLAMACPP_DOWNLOADED_AND_EXTRACTED = "llama.cpp binary downloaded and extracted to {0}"
         self.NO_SUITABLE_CUDA_BACKEND_FOUND = "No suitable CUDA backend found for extraction"
         self.LLAMACPP_BINARY_DOWNLOADED_AND_EXTRACTED = "llama.cpp binary downloaded and extracted to {0}"
         self.REFRESHING_LLAMACPP_RELEASES = "Refreshing llama.cpp releases"
@@ -328,7 +329,7 @@ class _English(_Localization):
         self.HOW_OFTEN_TO_SAVE_IMATRIX = "How often to save the IMatrix"
         self.SET_GPU_OFFLOAD_VALUE = "Set GPU offload value (-ngl)"
         self.COMPLETED = "Completed"
-
+        self.REFRESH_MODELS = "Refresh Models"
 class _French:
     # French localization
     def __init__(self):
@@ -494,6 +495,7 @@ class _French:
         self.HOW_OFTEN_TO_SAVE_IMATRIX = "Fréquence de sauvegarde de l'IMatrix"
         self.SET_GPU_OFFLOAD_VALUE = "Définir la valeur de déchargement GPU (-ngl)"
         self.COMPLETED = "Terminé"
+        self.REFRESH_MODELS = "Actualiser les modèles"        
         
 class _SimplifiedChinese(_Localization):
     def __init__(self):
@@ -659,6 +661,7 @@ class _SimplifiedChinese(_Localization):
         self.HOW_OFTEN_TO_SAVE_IMATRIX = "保存IMatrix的频率"
         self.SET_GPU_OFFLOAD_VALUE = "设置GPU卸载值（-ngl）"
         self.COMPLETED = "已完成"
+        self.REFRESH_MODELS = "刷新模型"
 
 class _Spanish(_Localization):
     def __init__(self):
@@ -824,6 +827,7 @@ class _Spanish(_Localization):
         self.HOW_OFTEN_TO_SAVE_IMATRIX = "Con qué frecuencia guardar el IMatrix"
         self.SET_GPU_OFFLOAD_VALUE = "Establecer valor de descarga GPU (-ngl)"
         self.COMPLETED = "Completado"
+        self.REFRESH_MODELS = "Actualizar modelos"
 
 class _Hindi(_Localization):
     def __init__(self):
@@ -1032,7 +1036,7 @@ class _Hindi(_Localization):
         self.HOW_OFTEN_TO_SAVE_IMATRIX = "IMatrix को कितनी बार सहेजना है"
         self.SET_GPU_OFFLOAD_VALUE = "GPU ऑफलोड मान सेट करें (-ngl)"
         self.COMPLETED = "पूरा हुआ"
-
+        self.REFRESH_MODELS = "मॉडल रीफ्रेश करें"
 
 class _Russian(_Localization):
     def __init__(self):
@@ -1198,6 +1202,7 @@ class _Russian(_Localization):
         self.HOW_OFTEN_TO_SAVE_IMATRIX = "Как часто сохранять IMatrix"
         self.SET_GPU_OFFLOAD_VALUE = "Установить значение разгрузки GPU (-ngl)"
         self.COMPLETED = "Завершено"        
+        self.REFRESH_MODELS = "Обновить модели"
 
 class _Ukrainian(_Localization):
     def __init__(self):
@@ -1363,6 +1368,7 @@ class _Ukrainian(_Localization):
         self.HOW_OFTEN_TO_SAVE_IMATRIX = "Як часто зберігати IMatrix"
         self.SET_GPU_OFFLOAD_VALUE = "Встановити значення розвантаження GPU (-ngl)"
         self.COMPLETED = "Завершено"
+        self.REFRESH_MODELS = "Оновити моделі"
 
 class _Japanese(_Localization):
     def __init__(self):
@@ -1528,7 +1534,8 @@ class _Japanese(_Localization):
         self.HOW_OFTEN_TO_SAVE_IMATRIX = "IMatrixを保存する頻度"
         self.SET_GPU_OFFLOAD_VALUE = "GPUオフロード値を設定 (-ngl)"
         self.COMPLETED = "完了しました"
-        
+        self.REFRESH_MODELS = "モデルを更新"
+ 
 class _German(_Localization):
     def __init__(self):
         super().__init__()
@@ -1693,6 +1700,7 @@ class _German(_Localization):
         self.HOW_OFTEN_TO_SAVE_IMATRIX = "Wie oft die IMatrix gespeichert werden soll"
         self.SET_GPU_OFFLOAD_VALUE = "GPU-Offload-Wert festlegen (-ngl)"
         self.COMPLETED = "Abgeschlossen"        
+        self.REFRESH_MODELS = "Modelle aktualisieren"
 
 class _Portuguese(_Localization):
     def __init__(self):
@@ -1858,6 +1866,7 @@ class _Portuguese(_Localization):
         self.HOW_OFTEN_TO_SAVE_IMATRIX = "Com que frequência salvar o IMatrix"
         self.SET_GPU_OFFLOAD_VALUE = "Definir valor de offload da GPU (-ngl)"
         self.COMPLETED = "Concluído"
+        self.REFRESH_MODELS = "Atualizar modelos"
 
 class _Arabic(_Localization):
     def __init__(self):
@@ -2023,6 +2032,7 @@ class _Arabic(_Localization):
         self.HOW_OFTEN_TO_SAVE_IMATRIX = "عدد مرات حفظ IMatrix"
         self.SET_GPU_OFFLOAD_VALUE = "تعيين قيمة تفريغ GPU (-ngl)"
         self.COMPLETED = "مكتمل"
+        self.REFRESH_MODELS = "تحديث النماذج"
 
 class _Korean(_Localization):
     def __init__(self):
@@ -2188,6 +2198,7 @@ class _Korean(_Localization):
         self.HOW_OFTEN_TO_SAVE_IMATRIX = "IMatrix를 저장할 빈도"
         self.SET_GPU_OFFLOAD_VALUE = "GPU 오프로드 값 설정 (-ngl)"
         self.COMPLETED = "완료됨"
+        self.REFRESH_MODELS = "모델 새로고침"
 
 class _Italian(_Localization):
     def __init__(self):
@@ -2353,6 +2364,7 @@ class _Italian(_Localization):
         self.HOW_OFTEN_TO_SAVE_IMATRIX = "Con quale frequenza salvare l'IMatrix"
         self.SET_GPU_OFFLOAD_VALUE = "Imposta il valore di offload GPU (-ngl)"
         self.COMPLETED = "Completato"
+        self.REFRESH_MODELS = "Aggiorna modelli"
 
 class _Turkish(_Localization):
     def __init__(self):
@@ -2518,6 +2530,7 @@ class _Turkish(_Localization):
         self.HOW_OFTEN_TO_SAVE_IMATRIX = "IMatrix'in ne sıklıkta kaydedileceği"
         self.SET_GPU_OFFLOAD_VALUE = "GPU yük boşaltma değerini ayarla (-ngl)"
         self.COMPLETED = "Tamamlandı"
+        self.REFRESH_MODELS = "Modelleri yenile"
 
 class _Dutch(_Localization):
     def __init__(self):
@@ -2683,6 +2696,7 @@ class _Dutch(_Localization):
         self.HOW_OFTEN_TO_SAVE_IMATRIX = "Hoe vaak de IMatrix moet worden opgeslagen"
         self.SET_GPU_OFFLOAD_VALUE = "Stel de GPU-offloadwaarde in (-ngl)"
         self.COMPLETED = "Voltooid"
+        self.REFRESH_MODELS = "Modellen vernieuwen"
 
 class _Finnish(_Localization):
     def __init__(self):
@@ -2848,6 +2862,7 @@ class _Finnish(_Localization):
         self.HOW_OFTEN_TO_SAVE_IMATRIX = "Kuinka usein IMatrix tallennetaan"
         self.SET_GPU_OFFLOAD_VALUE = "Aseta GPU-kuormansiirron arvo (-ngl)"
         self.COMPLETED = "Valmis"
+        self.REFRESH_MODELS = "Päivitä mallit"
 
 class _Bengali(_Localization):
     def __init__(self):
@@ -3013,6 +3028,7 @@ class _Bengali(_Localization):
         self.HOW_OFTEN_TO_SAVE_IMATRIX = "IMatrix কতবার সংরক্ষণ করবেন"
         self.SET_GPU_OFFLOAD_VALUE = "GPU অফলোড মান সেট করুন (-ngl)"
         self.COMPLETED = "সম্পন্ন"
+        self.REFRESH_MODELS = "মডেল রিফ্রেশ করুন"
         
 class _Polish(_Localization):
     def __init__(self):
@@ -3178,6 +3194,7 @@ class _Polish(_Localization):
         self.HOW_OFTEN_TO_SAVE_IMATRIX = "Jak często zapisywać IMatrix"
         self.SET_GPU_OFFLOAD_VALUE = "Ustaw wartość odciążenia GPU (-ngl)"
         self.COMPLETED = "Ukończono"
+        self.REFRESH_MODELS = "Obnovit modely"
 
 class _Romanian(_Localization):
     def __init__(self):
@@ -3343,6 +3360,7 @@ class _Romanian(_Localization):
         self.HOW_OFTEN_TO_SAVE_IMATRIX = "Cât de des să salvați IMatrix"
         self.SET_GPU_OFFLOAD_VALUE = "Setați valoarea de descărcare GPU (-ngl)"
         self.COMPLETED = "Finalizat"        
+        self.REFRESH_MODELS = "Odśwież modele"
 
 class _Czech(_Localization):
     def __init__(self):
@@ -3508,6 +3526,7 @@ class _Czech(_Localization):
         self.HOW_OFTEN_TO_SAVE_IMATRIX = "Jak často ukládat IMatrix"
         self.SET_GPU_OFFLOAD_VALUE = "Nastavit hodnotu odlehčení GPU (-ngl)"
         self.COMPLETED = "Dokončeno"
+        self.REFRESH_MODELS = "Reîmprospătează modelele"
 
 class _CanadianFrench(_Localization):
     def __init__(self):
@@ -3673,6 +3692,7 @@ class _CanadianFrench(_Localization):
         self.HOW_OFTEN_TO_SAVE_IMATRIX = "Fréquence d'enregistrement de l'IMatrix"
         self.SET_GPU_OFFLOAD_VALUE = "Définir la valeur de déchargement GPU (-ngl)"
         self.COMPLETED = "Terminé"
+        self.REFRESH_MODELS = "Rafraîchir les modèles"
 
 class _Portuguese_PT(_Localization):
     def __init__(self):
@@ -3838,6 +3858,7 @@ class _Portuguese_PT(_Localization):
         self.HOW_OFTEN_TO_SAVE_IMATRIX = "Com que frequência guardar o IMatrix"
         self.SET_GPU_OFFLOAD_VALUE = "Definir valor de offload da GPU (-ngl)"
         self.COMPLETED = "Concluído"        
+        self.REFRESH_MODELS = "Atualizar modelos"
 
 class _Greek(_Localization):
     def __init__(self):
@@ -4003,6 +4024,7 @@ class _Greek(_Localization):
         self.HOW_OFTEN_TO_SAVE_IMATRIX = "Πόσο συχνά να αποθηκεύεται το IMatrix"
         self.SET_GPU_OFFLOAD_VALUE = "Ορίστε την τιμή εκφόρτωσης GPU (-ngl)"
         self.COMPLETED = "Ολοκληρώθηκε"
+        self.REFRESH_MODELS = "Ανανέωση μοντέλων"
 
 class _Hungarian(_Localization):
     def __init__(self):
@@ -4168,6 +4190,7 @@ class _Hungarian(_Localization):
         self.HOW_OFTEN_TO_SAVE_IMATRIX = "Milyen gyakran mentse az IMatrixot"
         self.SET_GPU_OFFLOAD_VALUE = "GPU tehermentesítési érték beállítása (-ngl)"
         self.COMPLETED = "Befejezve"
+        self.REFRESH_MODELS = "Modellek frissítése"
 
 class _BritishEnglish(_Localization):
     def __init__(self):
@@ -4333,6 +4356,7 @@ class _BritishEnglish(_Localization):
         self.HOW_OFTEN_TO_SAVE_IMATRIX = "How often to save the IMatrix"
         self.SET_GPU_OFFLOAD_VALUE = "Set GPU offload value (-ngl)"
         self.COMPLETED = "Completed"
+        self.REFRESH_MODELS = "Refresh Models"
 
 class _IndianEnglish(_Localization):
     def __init__(self):
@@ -4498,6 +4522,7 @@ class _IndianEnglish(_Localization):
         self.HOW_OFTEN_TO_SAVE_IMATRIX = "How often to save the IMatrix"
         self.SET_GPU_OFFLOAD_VALUE = "Set GPU offload value (-ngl)"
         self.COMPLETED = "Completed"
+        self.REFRESH_MODELS = "Refresh Models"
         
 class _CanadianEnglish(_Localization):
     def __init__(self):
@@ -4663,6 +4688,7 @@ class _CanadianEnglish(_Localization):
         self.HOW_OFTEN_TO_SAVE_IMATRIX = "How often to save the IMatrix"
         self.SET_GPU_OFFLOAD_VALUE = "Set GPU offload value (-ngl)"
         self.COMPLETED = "Completed"        
+        self.REFRESH_MODELS = "Refresh Models"
 
 class _TraditionalChinese(_Localization):
     def __init__(self):
@@ -4828,6 +4854,7 @@ class _TraditionalChinese(_Localization):
         self.HOW_OFTEN_TO_SAVE_IMATRIX = "儲存 IMatrix 的頻率"
         self.SET_GPU_OFFLOAD_VALUE = "設定 GPU 卸載值（-ngl）"
         self.COMPLETED = "已完成"
+        self.REFRESH_MODELS = "重新整理模型"
 
 # Dictionary to map language codes to classes
 _languages = {
@@ -4862,13 +4889,12 @@ _languages = {
 }
 
 def set_language(lang_code):
-    global WINDOW_TITLE, RAM_USAGE, CPU_USAGE, BACKEND, REFRESH_BACKENDS, MODELS_PATH, OUTPUT_PATH, LOGS_PATH, BROWSE, AVAILABLE_MODELS, QUANTIZATION_TYPE, ALLOW_REQUANTIZE, LEAVE_OUTPUT_TENSOR, PURE, IMATRIX, INCLUDE_WEIGHTS, EXCLUDE_WEIGHTS, USE_OUTPUT_TENSOR_TYPE, USE_TOKEN_EMBEDDING_TYPE, KEEP_SPLIT, KV_OVERRIDES, ADD_NEW_OVERRIDE, QUANTIZE_MODEL, SAVE_PRESET, LOAD_PRESET, TASKS, DOWNLOAD_LLAMACPP, SELECT_RELEASE, SELECT_ASSET, EXTRACT_CUDA_FILES, SELECT_CUDA_BACKEND, DOWNLOAD, IMATRIX_GENERATION, DATA_FILE, MODEL, OUTPUT, OUTPUT_FREQUENCY, GPU_OFFLOAD, AUTO, GENERATE_IMATRIX, ERROR, WARNING, PROPERTIES, CANCEL, RESTART, DELETE, CONFIRM_DELETION, TASK_RUNNING_WARNING, YES, NO, DOWNLOAD_COMPLETE, CUDA_EXTRACTION_FAILED, PRESET_SAVED, PRESET_LOADED, NO_ASSET_SELECTED, DOWNLOAD_FAILED, NO_BACKEND_SELECTED, NO_MODEL_SELECTED, REFRESH_RELEASES, NO_SUITABLE_CUDA_BACKENDS, LLAMACPP_DOWNLOADED_EXTRACTED, CUDA_FILES_EXTRACTED, NO_SUITABLE_CUDA_BACKEND_EXTRACTION, ERROR_FETCHING_RELEASES, CONFIRM_DELETION_TITLE, LOG_FOR, ALL_FILES, GGUF_FILES, DAT_FILES, JSON_FILES, FAILED_LOAD_PRESET, INITIALIZING_AUTOGGUF, AUTOGGUF_INITIALIZATION_COMPLETE, REFRESHING_BACKENDS, NO_BACKENDS_AVAILABLE, FOUND_VALID_BACKENDS, SAVING_PRESET, PRESET_SAVED_TO, LOADING_PRESET, PRESET_LOADED_FROM, ADDING_KV_OVERRIDE, SAVING_TASK_PRESET, TASK_PRESET_SAVED, TASK_PRESET_SAVED_TO, RESTARTING_TASK, IN_PROGRESS, DOWNLOAD_FINISHED_EXTRACTED_TO, LLAMACPP_DOWNLOADED_AND_EXTRACTED, NO_SUITABLE_CUDA_BACKEND_FOUND, LLAMACPP_BINARY_DOWNLOADED_AND_EXTRACTED, REFRESHING_LLAMACPP_RELEASES, UPDATING_ASSET_LIST, UPDATING_CUDA_OPTIONS, STARTING_LLAMACPP_DOWNLOAD, UPDATING_CUDA_BACKENDS, NO_CUDA_BACKEND_SELECTED, EXTRACTING_CUDA_FILES, DOWNLOAD_ERROR, SHOWING_TASK_CONTEXT_MENU, SHOWING_PROPERTIES_FOR_TASK, CANCELLING_TASK, CANCELED, DELETING_TASK, LOADING_MODELS, LOADED_MODELS, BROWSING_FOR_MODELS_DIRECTORY, SELECT_MODELS_DIRECTORY, BROWSING_FOR_OUTPUT_DIRECTORY, SELECT_OUTPUT_DIRECTORY, BROWSING_FOR_LOGS_DIRECTORY, SELECT_LOGS_DIRECTORY, BROWSING_FOR_IMATRIX_FILE, SELECT_IMATRIX_FILE, RAM_USAGE_FORMAT, CPU_USAGE_FORMAT, VALIDATING_QUANTIZATION_INPUTS, MODELS_PATH_REQUIRED, OUTPUT_PATH_REQUIRED, LOGS_PATH_REQUIRED, STARTING_MODEL_QUANTIZATION, INPUT_FILE_NOT_EXIST, QUANTIZING_MODEL_TO, QUANTIZATION_TASK_STARTED, ERROR_STARTING_QUANTIZATION, UPDATING_MODEL_INFO, TASK_FINISHED, SHOWING_TASK_DETAILS_FOR, BROWSING_FOR_IMATRIX_DATA_FILE, SELECT_DATA_FILE, BROWSING_FOR_IMATRIX_MODEL_FILE, SELECT_MODEL_FILE, BROWSING_FOR_IMATRIX_OUTPUT_FILE, SELECT_OUTPUT_FILE, STARTING_IMATRIX_GENERATION, BACKEND_PATH_NOT_EXIST, GENERATING_IMATRIX, ERROR_STARTING_IMATRIX_GENERATION, IMATRIX_GENERATION_TASK_STARTED, ERROR_MESSAGE, TASK_ERROR, APPLICATION_CLOSING, APPLICATION_CLOSED, SELECT_QUANTIZATION_TYPE, ALLOWS_REQUANTIZING, LEAVE_OUTPUT_WEIGHT, DISABLE_K_QUANT_MIXTURES, USE_DATA_AS_IMPORTANCE_MATRIX, USE_IMPORTANCE_MATRIX_FOR_TENSORS, DONT_USE_IMPORTANCE_MATRIX_FOR_TENSORS, OUTPUT_TENSOR_TYPE, USE_THIS_TYPE_FOR_OUTPUT_WEIGHT, TOKEN_EMBEDDING_TYPE, USE_THIS_TYPE_FOR_TOKEN_EMBEDDINGS, WILL_GENERATE_QUANTIZED_MODEL_IN_SAME_SHARDS, OVERRIDE_MODEL_METADATA, INPUT_DATA_FILE_FOR_IMATRIX, MODEL_TO_BE_QUANTIZED, OUTPUT_PATH_FOR_GENERATED_IMATRIX, HOW_OFTEN_TO_SAVE_IMATRIX, SET_GPU_OFFLOAD_VALUE, COMPLETED
+    global WINDOW_TITLE, RAM_USAGE, CPU_USAGE, BACKEND, REFRESH_BACKENDS, MODELS_PATH, OUTPUT_PATH, LOGS_PATH, BROWSE, AVAILABLE_MODELS, QUANTIZATION_TYPE, ALLOW_REQUANTIZE, LEAVE_OUTPUT_TENSOR, PURE, IMATRIX, INCLUDE_WEIGHTS, EXCLUDE_WEIGHTS, USE_OUTPUT_TENSOR_TYPE, USE_TOKEN_EMBEDDING_TYPE, KEEP_SPLIT, KV_OVERRIDES, ADD_NEW_OVERRIDE, QUANTIZE_MODEL, SAVE_PRESET, LOAD_PRESET, TASKS, DOWNLOAD_LLAMACPP, SELECT_RELEASE, SELECT_ASSET, EXTRACT_CUDA_FILES, SELECT_CUDA_BACKEND, DOWNLOAD, IMATRIX_GENERATION, DATA_FILE, MODEL, OUTPUT, OUTPUT_FREQUENCY, GPU_OFFLOAD, AUTO, GENERATE_IMATRIX, ERROR, WARNING, PROPERTIES, CANCEL, RESTART, DELETE, CONFIRM_DELETION, TASK_RUNNING_WARNING, YES, NO, DOWNLOAD_COMPLETE, CUDA_EXTRACTION_FAILED, PRESET_SAVED, PRESET_LOADED, NO_ASSET_SELECTED, DOWNLOAD_FAILED, NO_BACKEND_SELECTED, NO_MODEL_SELECTED, REFRESH_RELEASES, NO_SUITABLE_CUDA_BACKENDS, LLAMACPP_DOWNLOADED_EXTRACTED, CUDA_FILES_EXTRACTED, NO_SUITABLE_CUDA_BACKEND_EXTRACTION, ERROR_FETCHING_RELEASES, CONFIRM_DELETION_TITLE, LOG_FOR, ALL_FILES, GGUF_FILES, DAT_FILES, JSON_FILES, FAILED_LOAD_PRESET, INITIALIZING_AUTOGGUF, AUTOGGUF_INITIALIZATION_COMPLETE, REFRESHING_BACKENDS, NO_BACKENDS_AVAILABLE, FOUND_VALID_BACKENDS, SAVING_PRESET, PRESET_SAVED_TO, LOADING_PRESET, PRESET_LOADED_FROM, ADDING_KV_OVERRIDE, SAVING_TASK_PRESET, TASK_PRESET_SAVED, TASK_PRESET_SAVED_TO, RESTARTING_TASK, IN_PROGRESS, DOWNLOAD_FINISHED_EXTRACTED_TO, LLAMACPP_DOWNLOADED_AND_EXTRACTED, NO_SUITABLE_CUDA_BACKEND_FOUND, LLAMACPP_BINARY_DOWNLOADED_AND_EXTRACTED, REFRESHING_LLAMACPP_RELEASES, UPDATING_ASSET_LIST, UPDATING_CUDA_OPTIONS, STARTING_LLAMACPP_DOWNLOAD, UPDATING_CUDA_BACKENDS, NO_CUDA_BACKEND_SELECTED, EXTRACTING_CUDA_FILES, DOWNLOAD_ERROR, SHOWING_TASK_CONTEXT_MENU, SHOWING_PROPERTIES_FOR_TASK, CANCELLING_TASK, CANCELED, DELETING_TASK, LOADING_MODELS, LOADED_MODELS, BROWSING_FOR_MODELS_DIRECTORY, SELECT_MODELS_DIRECTORY, BROWSING_FOR_OUTPUT_DIRECTORY, SELECT_OUTPUT_DIRECTORY, BROWSING_FOR_LOGS_DIRECTORY, SELECT_LOGS_DIRECTORY, BROWSING_FOR_IMATRIX_FILE, SELECT_IMATRIX_FILE, RAM_USAGE_FORMAT, CPU_USAGE_FORMAT, VALIDATING_QUANTIZATION_INPUTS, MODELS_PATH_REQUIRED, OUTPUT_PATH_REQUIRED, LOGS_PATH_REQUIRED, STARTING_MODEL_QUANTIZATION, INPUT_FILE_NOT_EXIST, QUANTIZING_MODEL_TO, QUANTIZATION_TASK_STARTED, ERROR_STARTING_QUANTIZATION, UPDATING_MODEL_INFO, TASK_FINISHED, SHOWING_TASK_DETAILS_FOR, BROWSING_FOR_IMATRIX_DATA_FILE, SELECT_DATA_FILE, BROWSING_FOR_IMATRIX_MODEL_FILE, SELECT_MODEL_FILE, BROWSING_FOR_IMATRIX_OUTPUT_FILE, SELECT_OUTPUT_FILE, STARTING_IMATRIX_GENERATION, BACKEND_PATH_NOT_EXIST, GENERATING_IMATRIX, ERROR_STARTING_IMATRIX_GENERATION, IMATRIX_GENERATION_TASK_STARTED, ERROR_MESSAGE, TASK_ERROR, APPLICATION_CLOSING, APPLICATION_CLOSED, SELECT_QUANTIZATION_TYPE, ALLOWS_REQUANTIZING, LEAVE_OUTPUT_WEIGHT, DISABLE_K_QUANT_MIXTURES, USE_DATA_AS_IMPORTANCE_MATRIX, USE_IMPORTANCE_MATRIX_FOR_TENSORS, DONT_USE_IMPORTANCE_MATRIX_FOR_TENSORS, OUTPUT_TENSOR_TYPE, USE_THIS_TYPE_FOR_OUTPUT_WEIGHT, TOKEN_EMBEDDING_TYPE, USE_THIS_TYPE_FOR_TOKEN_EMBEDDINGS, WILL_GENERATE_QUANTIZED_MODEL_IN_SAME_SHARDS, OVERRIDE_MODEL_METADATA, INPUT_DATA_FILE_FOR_IMATRIX, MODEL_TO_BE_QUANTIZED, OUTPUT_PATH_FOR_GENERATED_IMATRIX, HOW_OFTEN_TO_SAVE_IMATRIX, SET_GPU_OFFLOAD_VALUE, COMPLETED, REFRESH_MODELS
 
     loc = _languages.get(lang_code, _English)()
     for key, value in loc.__dict__.items():
         if not key.startswith('_'):
             globals()[key] = value
-
 # Get the language from the AUTOGGUF_LANGUAGE environment variable, default to 'en'
 language_code = os.getenv('AUTOGGUF_LANGUAGE', 'en-US')
 
