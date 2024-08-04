@@ -1,6 +1,8 @@
+![AutoGGUF-banner](https://github.com/user-attachments/assets/0f74b104-0541-46a7-9ac8-4a3fcb74b896)
+
 # AutoGGUF - automated GGUF model quantizer
 
-This application provides a graphical user interface for quantizing GGUF models
+AutoGGUF provides a graphical user interface for quantizing GGUF models
 using the llama.cpp library. It allows users to download different versions of
 llama.cpp, manage multiple backends, and perform quantization tasks with various
 options.
