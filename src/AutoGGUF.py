@@ -215,6 +215,10 @@ class AutoGGUF(QMainWindow):
         quant_options_scroll.setWidgetResizable(True)
         left_layout.addWidget(quant_options_scroll)
         
+        # Add this after the KV override section
+        self.extra_arguments = QLineEdit()
+        quant_options_layout.addRow(self.create_label(EXTRA_ARGUMENTS, "Additional command-line arguments"), self.extra_arguments)        
+        
         # Quantize button layout
         quantize_layout = QHBoxLayout()
         quantize_button = QPushButton(QUANTIZE_MODEL)
@@ -238,7 +242,7 @@ class AutoGGUF(QMainWindow):
         # IMatrix section
         imatrix_group = QGroupBox(IMATRIX_GENERATION)
         imatrix_layout = QFormLayout()
-        
+
         self.imatrix_datafile = QLineEdit()
         self.imatrix_datafile_button = QPushButton(BROWSE)
         self.imatrix_datafile_button.clicked.connect(self.browse_imatrix_datafile)
@@ -246,7 +250,7 @@ class AutoGGUF(QMainWindow):
         imatrix_datafile_layout.addWidget(self.imatrix_datafile)
         imatrix_datafile_layout.addWidget(self.imatrix_datafile_button)
         imatrix_layout.addRow(self.create_label(DATA_FILE, INPUT_DATA_FILE_FOR_IMATRIX), imatrix_datafile_layout)
-        
+
         self.imatrix_model = QLineEdit()
         self.imatrix_model_button = QPushButton(BROWSE)
         self.imatrix_model_button.clicked.connect(self.browse_imatrix_model)
@@ -254,7 +258,7 @@ class AutoGGUF(QMainWindow):
         imatrix_model_layout.addWidget(self.imatrix_model)
         imatrix_model_layout.addWidget(self.imatrix_model_button)
         imatrix_layout.addRow(self.create_label(MODEL, MODEL_TO_BE_QUANTIZED), imatrix_model_layout)
-        
+
         self.imatrix_output = QLineEdit()
         self.imatrix_output_button = QPushButton(BROWSE)
         self.imatrix_output_button.clicked.connect(self.browse_imatrix_output)
@@ -262,11 +266,34 @@ class AutoGGUF(QMainWindow):
         imatrix_output_layout.addWidget(self.imatrix_output)
         imatrix_output_layout.addWidget(self.imatrix_output_button)
         imatrix_layout.addRow(self.create_label(OUTPUT, OUTPUT_PATH_FOR_GENERATED_IMATRIX), imatrix_output_layout)
-        
-        self.imatrix_frequency = QLineEdit()
+
+        self.imatrix_frequency = QSpinBox()
+        self.imatrix_frequency.setRange(1, 100)  # Set the range from 1 to 100
+        self.imatrix_frequency.setValue(1)  # Set a default value
         imatrix_layout.addRow(self.create_label(OUTPUT_FREQUENCY, HOW_OFTEN_TO_SAVE_IMATRIX), self.imatrix_frequency)
-        
-        # GPU Offload for IMatrix
+
+        # Context size input (now a spinbox)
+        self.imatrix_ctx_size = QSpinBox()
+        self.imatrix_ctx_size.setRange(1, 1048576)  # Up to one million tokens
+        self.imatrix_ctx_size.setValue(512)  # Set a default value
+        imatrix_layout.addRow(self.create_label(CONTEXT_SIZE, CONTEXT_SIZE_FOR_IMATRIX), self.imatrix_ctx_size)
+
+        # Threads input with slider and spinbox
+        threads_layout = QHBoxLayout()
+        self.threads_slider = QSlider(Qt.Orientation.Horizontal)
+        self.threads_slider.setRange(1, 64)
+        self.threads_slider.valueChanged.connect(self.update_threads_spinbox)
+
+        self.threads_spinbox = QSpinBox()
+        self.threads_spinbox.setRange(1, 128)
+        self.threads_spinbox.valueChanged.connect(self.update_threads_slider)
+        self.threads_spinbox.setMinimumWidth(75)
+
+        threads_layout.addWidget(self.threads_slider)
+        threads_layout.addWidget(self.threads_spinbox)
+        imatrix_layout.addRow(self.create_label(THREADS, NUMBER_OF_THREADS_FOR_IMATRIX), threads_layout)
+
+        # GPU Offload for IMatrix (corrected version)
         gpu_offload_layout = QHBoxLayout()
         self.gpu_offload_slider = QSlider(Qt.Orientation.Horizontal)
         self.gpu_offload_slider.setRange(0, 200)
@@ -275,7 +302,7 @@ class AutoGGUF(QMainWindow):
         self.gpu_offload_spinbox = QSpinBox()
         self.gpu_offload_spinbox.setRange(0, 1000)
         self.gpu_offload_spinbox.valueChanged.connect(self.update_gpu_offload_slider)
-        self.gpu_offload_spinbox.setMinimumWidth(75)  # Set the minimum width to 75 pixels
+        self.gpu_offload_spinbox.setMinimumWidth(75)
 
         self.gpu_offload_auto = QCheckBox(AUTO)
         self.gpu_offload_auto.stateChanged.connect(self.toggle_gpu_offload_auto)
@@ -284,11 +311,11 @@ class AutoGGUF(QMainWindow):
         gpu_offload_layout.addWidget(self.gpu_offload_spinbox)
         gpu_offload_layout.addWidget(self.gpu_offload_auto)
         imatrix_layout.addRow(self.create_label(GPU_OFFLOAD, SET_GPU_OFFLOAD_VALUE), gpu_offload_layout)
-        
+
         imatrix_generate_button = QPushButton(GENERATE_IMATRIX)
         imatrix_generate_button.clicked.connect(self.generate_imatrix)
         imatrix_layout.addRow(imatrix_generate_button)
-        
+
         imatrix_group.setLayout(imatrix_layout)
         right_layout.addWidget(imatrix_group)
         
@@ -349,7 +376,8 @@ class AutoGGUF(QMainWindow):
             "use_token_embedding_type": self.use_token_embedding_type.isChecked(),
             "token_embedding_type": self.token_embedding_type.currentText(),
             "keep_split": self.keep_split.isChecked(),
-            "kv_overrides": [entry.get_override_string() for entry in self.kv_override_entries]
+            "kv_overrides": [entry.get_override_string() for entry in self.kv_override_entries],
+            "extra_arguments": self.extra_arguments.text()
         }
         
         file_name, _ = QFileDialog.getSaveFileName(self, SAVE_PRESET, "", JSON_FILES)
@@ -379,6 +407,7 @@ class AutoGGUF(QMainWindow):
                 self.use_token_embedding_type.setChecked(preset.get("use_token_embedding_type", False))
                 self.token_embedding_type.setCurrentText(preset.get("token_embedding_type", ""))
                 self.keep_split.setChecked(preset.get("keep_split", False))
+                self.extra_arguments.setText(preset.get("extra_arguments", ""))
                 
                 # Clear existing KV overrides and add new ones
                 for entry in self.kv_override_entries:
@@ -390,19 +419,6 @@ class AutoGGUF(QMainWindow):
             except Exception as e:
                 QMessageBox.critical(self, ERROR, FAILED_TO_LOAD_PRESET.format(str(e)))
         self.logger.info(PRESET_LOADED_FROM.format(file_name))
-
-    def add_kv_override(self, override_string=None):
-        self.logger.debug(ADDING_KV_OVERRIDE.format(override_string))   
-        entry = KVOverrideEntry()
-        entry.deleted.connect(self.remove_kv_override)
-        if override_string:
-            key, value = override_string.split('=')
-            type_, val = value.split(':')
-            entry.key_input.setText(key)
-            entry.type_combo.setCurrentText(type_)
-            entry.value_input.setText(val)
-        self.kv_override_layout.addWidget(entry)
-        self.kv_override_entries.append(entry)
 
     def save_task_preset(self, task_item):
         self.logger.info(SAVING_TASK_PRESET.format(task_item.task_name))    
@@ -610,6 +626,23 @@ class AutoGGUF(QMainWindow):
                 model_info_dialog = ModelInfoDialog(thread.model_info, self)
                 model_info_dialog.exec()
                 break
+                
+    def update_threads_spinbox(self, value):
+        self.threads_spinbox.setValue(value)
+
+    def update_threads_slider(self, value):
+        self.threads_slider.setValue(value)
+
+    def update_gpu_offload_spinbox(self, value):
+        self.gpu_offload_spinbox.setValue(value)
+
+    def update_gpu_offload_slider(self, value):
+        self.gpu_offload_slider.setValue(value)
+
+    def toggle_gpu_offload_auto(self, state):
+        is_auto = state == Qt.CheckState.Checked
+        self.gpu_offload_slider.setEnabled(not is_auto)
+        self.gpu_offload_spinbox.setEnabled(not is_auto)
 
     def cancel_task(self, item):
         self.logger.info(CANCELLING_TASK.format(item.text()))    
@@ -710,9 +743,15 @@ class AutoGGUF(QMainWindow):
         if errors:
             raise ValueError("\n".join(errors))
 
-    def add_kv_override(self):
+    def add_kv_override(self, override_string=None):
         entry = KVOverrideEntry()
         entry.deleted.connect(self.remove_kv_override)
+        if override_string:
+            key, value = override_string.split('=')
+            type_, val = value.split(':')
+            entry.key_input.setText(key)
+            entry.type_combo.setCurrentText(type_)
+            entry.value_input.setText(val)
         self.kv_override_layout.addWidget(entry)
         self.kv_override_entries.append(entry)
 
@@ -735,10 +774,41 @@ class AutoGGUF(QMainWindow):
                 raise ValueError(NO_BACKEND_SELECTED)
             quant_type = self.quant_type.currentText()
             
-            input_path = os.path.join(self.models_input.text(), model_name)
-            output_name = f"{os.path.splitext(model_name)[0]}_{quant_type}.gguf"
-            output_path = os.path.join(self.output_input.text(), output_name)
+            input_path = os.path.join(self.models_input.text(), model_name)            
+            model_name = selected_model.text()
+            quant_type = self.quant_type.currentText()
             
+            # Start building the output name
+            output_name_parts = [os.path.splitext(model_name)[0], "converted", quant_type]
+            
+            # Check for output tensor options
+            if self.use_output_tensor_type.isChecked() or self.leave_output_tensor.isChecked():
+                output_tensor_part = "o"
+                if self.use_output_tensor_type.isChecked():
+                    output_tensor_part += "." + self.output_tensor_type.currentText()
+                output_name_parts.append(output_tensor_part)
+            
+            # Check for embedding tensor options
+            if self.use_token_embedding_type.isChecked():
+                embd_tensor_part = "t." + self.token_embedding_type.currentText()
+                output_name_parts.append(embd_tensor_part)
+            
+            # Check for pure option
+            if self.pure.isChecked():
+                output_name_parts.append("pure")
+            
+            # Check for requantize option
+            if self.allow_requantize.isChecked():
+                output_name_parts.append("rq")
+            
+            # Check for KV override
+            if any(entry.get_override_string() for entry in self.kv_override_entries):
+                output_name_parts.append("kv")
+            
+            # Join all parts with underscores and add .gguf extension
+            output_name = "_".join(output_name_parts) + ".gguf"
+            
+            output_path = os.path.join(self.output_input.text(), output_name)            
             if not os.path.exists(input_path):
                 raise FileNotFoundError(INPUT_FILE_NOT_EXIST.format(input_path))
 
@@ -769,6 +839,10 @@ class AutoGGUF(QMainWindow):
                         command.extend(["--override-kv", override_string])
             
             command.extend([input_path, output_path, quant_type])
+            
+            # Add extra arguments
+            if self.extra_arguments.text():
+                command.extend(self.extra_arguments.text().split())
             
             logs_path = self.logs_input.text()
             ensure_directory(logs_path)
@@ -875,7 +949,9 @@ class AutoGGUF(QMainWindow):
                 "-f", self.imatrix_datafile.text(),
                 "-m", self.imatrix_model.text(),
                 "-o", self.imatrix_output.text(),
-                "--output-frequency", self.imatrix_frequency.text()
+                "--output-frequency", str(self.imatrix_frequency.value()),
+                "--ctx-size", str(self.imatrix_ctx_size.value()),
+                "--threads", str(self.threads_spinbox.value())
             ]
 
             if self.gpu_offload_auto.isChecked():

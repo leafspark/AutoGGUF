@@ -1,5 +1,6 @@
 from PyQt6.QtWidgets import QWidget, QHBoxLayout, QLineEdit, QComboBox, QPushButton
-from PyQt6.QtCore import pyqtSignal
+from PyQt6.QtCore import pyqtSignal, QRegularExpression
+from PyQt6.QtGui import QDoubleValidator, QIntValidator, QRegularExpressionValidator
 
 class KVOverrideEntry(QWidget):
     deleted = pyqtSignal(QWidget)
@@ -11,6 +12,9 @@ class KVOverrideEntry(QWidget):
 
         self.key_input = QLineEdit()
         self.key_input.setPlaceholderText("Key")
+        # Set validator for key input (letters and dots only)
+        key_validator = QRegularExpressionValidator(QRegularExpression(r'[A-Za-z.]+'))
+        self.key_input.setValidator(key_validator)
         layout.addWidget(self.key_input)
 
         self.type_combo = QComboBox()
@@ -26,8 +30,22 @@ class KVOverrideEntry(QWidget):
         delete_button.clicked.connect(self.delete_clicked)
         layout.addWidget(delete_button)
 
+        # Connect type change to validator update
+        self.type_combo.currentTextChanged.connect(self.update_validator)
+        
+        # Initialize validator
+        self.update_validator(self.type_combo.currentText())
+
     def delete_clicked(self):
         self.deleted.emit(self)
 
     def get_override_string(self):
         return f"{self.key_input.text()}={self.type_combo.currentText()}:{self.value_input.text()}"
+
+    def update_validator(self, type_):
+        if type_ == "int":
+            self.value_input.setValidator(QIntValidator())
+        elif type_ == "float":
+            self.value_input.setValidator(QDoubleValidator())
+        else:  # str
+            self.value_input.setValidator(None)
