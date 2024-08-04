@@ -1,0 +1,15 @@
+# Ignore __pycache__ directories
+__pycache__/
+
+# Ignore everything
+*
+
+# But allow these file types
+!*.py
+!*.bat
+!*.txt
+!*.md
+!LICENSE
+
+# Don't ignore .gitignore
+!.gitignore
