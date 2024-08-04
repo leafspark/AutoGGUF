@@ -22,18 +22,20 @@ Windows:
   2. Enjoy!
 
 **Building**:
-```
+```bash
 cd src
 pip install -U pyinstaller
 pyinstaller main.py
 cd dist/main
-main
+./main
 ```
 
 **Dependencies**:
 - PyQt6
 - requests
 - psutil
+- shutil
+- OpenSSL
 
 **Localizations:**
 
@@ -75,9 +77,15 @@ In order to use them, please set the `AUTOGGUF_LANGUAGE` enviroment variable to 
 **Issues:**
 - Actual progress bar tracking
 - Download safetensors from HF and convert to unquanted GGUF
+- Perplexity testing
+- Cannot disable llama.cpp update check on startup
+- `_internal` directory required, will see if I can package this into a single exe on the next release
+- ~~Custom command line parameters~~ (added in v1.3.0)
+- ~~More iMatrix generation parameters~~ (added in v1.3.0)
 - ~~Specify multiple KV overrides~~ (added in v1.1.0)
 - ~~Better error handling~~ (added in v1.1.0)
 - ~~Cannot select output/token embd type~~ (fixed in v1.1.0)
+- ~~Importing presets with KV overrides causes UI thread crash~~ (fixed in v1.3.0)
 
 **Troubleshooting:**
 - ~~llama.cpp quantizations errors out with an iostream error: create the `quantized_models` directory (or set a directory)~~ (fixed in v1.2.1, automatically created on launch)
