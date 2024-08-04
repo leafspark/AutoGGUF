@@ -28,3 +28,12 @@ def open_file_safe(file_path, mode='r'):
         except UnicodeDecodeError:
             continue
     raise ValueError(f"Unable to open file {file_path} with any of the encodings: {encodings}")        
+    
+def resource_path(relative_path):
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+
+    return os.path.join(base_path, relative_path)    

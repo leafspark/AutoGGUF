@@ -14,7 +14,7 @@ import requests
 import zipfile
 import re
 from datetime import datetime
-from imports_and_globals import ensure_directory, open_file_safe
+from imports_and_globals import ensure_directory, open_file_safe, resource_path
 from DownloadThread import DownloadThread
 from ModelInfoDialog import ModelInfoDialog
 from TaskListItem import TaskListItem
@@ -31,6 +31,7 @@ class AutoGGUF(QMainWindow):
 
         self.logger.info(INITIALIZING_AUTOGGUF)
         self.setWindowTitle(WINDOW_TITLE)
+        self.setWindowIcon(QIcon(resource_path("assets/favicon.ico")))        
         self.setGeometry(100, 100, 1600, 1200)
 
         ensure_directory(os.path.abspath("quantized_models"))
@@ -1546,7 +1547,7 @@ class AutoGGUF(QMainWindow):
         except Exception as e:
             self.show_error(ERROR_STARTING_IMATRIX_GENERATION.format(str(e)))
         self.logger.info(IMATRIX_GENERATION_TASK_STARTED)
-
+        
     def show_error(self, message):
         self.logger.error(ERROR_MESSAGE.format(message))
         QMessageBox.critical(self, ERROR, message)
