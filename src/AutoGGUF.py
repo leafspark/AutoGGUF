@@ -22,27 +22,29 @@ from KVOverrideEntry import KVOverrideEntry
 from Logger import Logger
 from localizations import *
 
+
 class AutoGGUF(QMainWindow):
-    def __init__(self):        
+    def __init__(self):
         super().__init__()
         self.logger = Logger("AutoGGUF", "logs")
-        ensure_directory(os.path.abspath("quantized_models"))        
 
-        self.logger.info(INITIALIZING_AUTOGGUF)        
+        self.logger.info(INITIALIZING_AUTOGGUF)
         self.setWindowTitle(WINDOW_TITLE)
-        self.setGeometry(100, 100, 1300, 1100)
+        self.setGeometry(100, 100, 1600, 1200)
+
+        ensure_directory(os.path.abspath("quantized_models"))
 
         main_layout = QHBoxLayout()
         left_layout = QVBoxLayout()
         right_layout = QVBoxLayout()
-        
+
         # System info
         self.ram_bar = QProgressBar()
         self.cpu_label = QLabel(CPU_USAGE)
         left_layout.addWidget(QLabel(RAM_USAGE))
         left_layout.addWidget(self.ram_bar)
         left_layout.addWidget(self.cpu_label)
-        
+
         # Modify the backend selection
         backend_layout = QHBoxLayout()
         self.backend_combo = QComboBox()
@@ -89,10 +91,10 @@ class AutoGGUF(QMainWindow):
         right_layout.addWidget(download_group)
 
         # Initialize releases and backends
-        if os.environ.get('AUTOGGUF_CHECK_BACKEND', '').lower() == 'enabled':
+        if os.environ.get("AUTOGGUF_CHECK_BACKEND", "").lower() == "enabled":
             self.refresh_releases()
-        self.refresh_backends()    
-        
+        self.refresh_backends()
+
         # Models path
         models_layout = QHBoxLayout()
         self.models_input = QLineEdit(os.path.abspath("models"))
@@ -102,7 +104,7 @@ class AutoGGUF(QMainWindow):
         models_layout.addWidget(self.models_input)
         models_layout.addWidget(models_button)
         left_layout.addLayout(models_layout)
-        
+
         # Output path
         output_layout = QHBoxLayout()
         self.output_input = QLineEdit(os.path.abspath("quantized_models"))
@@ -112,7 +114,7 @@ class AutoGGUF(QMainWindow):
         output_layout.addWidget(self.output_input)
         output_layout.addWidget(output_button)
         left_layout.addLayout(output_layout)
-        
+
         # Logs path
         logs_layout = QHBoxLayout()
         self.logs_input = QLineEdit(os.path.abspath("logs"))
@@ -122,38 +124,82 @@ class AutoGGUF(QMainWindow):
         logs_layout.addWidget(self.logs_input)
         logs_layout.addWidget(logs_button)
         left_layout.addLayout(logs_layout)
-        
+
         # Model list
         self.model_list = QListWidget()
         self.load_models()
         left_layout.addWidget(QLabel(AVAILABLE_MODELS))
         left_layout.addWidget(self.model_list)
-        
+
         # Refresh models button
         refresh_models_button = QPushButton(REFRESH_MODELS)
         refresh_models_button.clicked.connect(self.load_models)
-        left_layout.addWidget(refresh_models_button)        
-        
+        left_layout.addWidget(refresh_models_button)
+
         # Quantization options
         quant_options_scroll = QScrollArea()
         quant_options_widget = QWidget()
         quant_options_layout = QFormLayout()
 
         self.quant_type = QComboBox()
-        self.quant_type.addItems([
-            "Q4_0", "Q4_1", "Q5_0", "Q5_1", "IQ2_XXS", "IQ2_XS", "IQ2_S", "IQ2_M", "IQ1_S", "IQ1_M",
-            "Q2_K", "Q2_K_S", "IQ3_XXS", "IQ3_S", "IQ3_M", "Q3_K", "IQ3_XS", "Q3_K_S", "Q3_K_M", "Q3_K_L",
-            "IQ4_NL", "IQ4_XS", "Q4_K", "Q4_K_S", "Q4_K_M", "Q5_K", "Q5_K_S", "Q5_K_M", "Q6_K", "Q8_0",
-            "Q4_0_4_4", "Q4_0_4_8", "Q4_0_8_8", "F16", "BF16", "F32", "COPY"
-        ])
-        quant_options_layout.addRow(self.create_label(QUANTIZATION_TYPE, SELECT_QUANTIZATION_TYPE), self.quant_type)
+        self.quant_type.addItems(
+            [
+                "Q4_0",
+                "Q4_1",
+                "Q5_0",
+                "Q5_1",
+                "IQ2_XXS",
+                "IQ2_XS",
+                "IQ2_S",
+                "IQ2_M",
+                "IQ1_S",
+                "IQ1_M",
+                "Q2_K",
+                "Q2_K_S",
+                "IQ3_XXS",
+                "IQ3_S",
+                "IQ3_M",
+                "Q3_K",
+                "IQ3_XS",
+                "Q3_K_S",
+                "Q3_K_M",
+                "Q3_K_L",
+                "IQ4_NL",
+                "IQ4_XS",
+                "Q4_K",
+                "Q4_K_S",
+                "Q4_K_M",
+                "Q5_K",
+                "Q5_K_S",
+                "Q5_K_M",
+                "Q6_K",
+                "Q8_0",
+                "Q4_0_4_4",
+                "Q4_0_4_8",
+                "Q4_0_8_8",
+                "F16",
+                "BF16",
+                "F32",
+                "COPY",
+            ]
+        )
+        quant_options_layout.addRow(
+            self.create_label(QUANTIZATION_TYPE, SELECT_QUANTIZATION_TYPE),
+            self.quant_type,
+        )
 
         self.allow_requantize = QCheckBox(ALLOW_REQUANTIZE)
         self.leave_output_tensor = QCheckBox(LEAVE_OUTPUT_TENSOR)
         self.pure = QCheckBox(PURE)
-        quant_options_layout.addRow(self.create_label("", ALLOWS_REQUANTIZING), self.allow_requantize)
-        quant_options_layout.addRow(self.create_label("", LEAVE_OUTPUT_WEIGHT), self.leave_output_tensor)
-        quant_options_layout.addRow(self.create_label("", DISABLE_K_QUANT_MIXTURES), self.pure)
+        quant_options_layout.addRow(
+            self.create_label("", ALLOWS_REQUANTIZING), self.allow_requantize
+        )
+        quant_options_layout.addRow(
+            self.create_label("", LEAVE_OUTPUT_WEIGHT), self.leave_output_tensor
+        )
+        quant_options_layout.addRow(
+            self.create_label("", DISABLE_K_QUANT_MIXTURES), self.pure
+        )
 
         self.imatrix = QLineEdit()
         self.imatrix_button = QPushButton(BROWSE)
@@ -161,37 +207,62 @@ class AutoGGUF(QMainWindow):
         imatrix_layout = QHBoxLayout()
         imatrix_layout.addWidget(self.imatrix)
         imatrix_layout.addWidget(self.imatrix_button)
-        quant_options_layout.addRow(self.create_label(IMATRIX, USE_DATA_AS_IMPORTANCE_MATRIX), imatrix_layout)
+        quant_options_layout.addRow(
+            self.create_label(IMATRIX, USE_DATA_AS_IMPORTANCE_MATRIX), imatrix_layout
+        )
 
         self.include_weights = QLineEdit()
         self.exclude_weights = QLineEdit()
-        quant_options_layout.addRow(self.create_label(INCLUDE_WEIGHTS, USE_IMPORTANCE_MATRIX_FOR_TENSORS), self.include_weights)
-        quant_options_layout.addRow(self.create_label(EXCLUDE_WEIGHTS, DONT_USE_IMPORTANCE_MATRIX_FOR_TENSORS), self.exclude_weights)
+        quant_options_layout.addRow(
+            self.create_label(INCLUDE_WEIGHTS, USE_IMPORTANCE_MATRIX_FOR_TENSORS),
+            self.include_weights,
+        )
+        quant_options_layout.addRow(
+            self.create_label(EXCLUDE_WEIGHTS, DONT_USE_IMPORTANCE_MATRIX_FOR_TENSORS),
+            self.exclude_weights,
+        )
 
         self.use_output_tensor_type = QCheckBox(USE_OUTPUT_TENSOR_TYPE)
         self.output_tensor_type = QComboBox()
-        self.output_tensor_type.addItems(["F32", "F16", "Q4_0", "Q4_1", "Q5_0", "Q5_1", "Q8_0"])
+        self.output_tensor_type.addItems(
+            ["F32", "F16", "Q4_0", "Q4_1", "Q5_0", "Q5_1", "Q8_0"]
+        )
         self.output_tensor_type.setEnabled(False)
-        self.use_output_tensor_type.toggled.connect(lambda checked: self.output_tensor_type.setEnabled(checked))
+        self.use_output_tensor_type.toggled.connect(
+            lambda checked: self.output_tensor_type.setEnabled(checked)
+        )
         output_tensor_layout = QHBoxLayout()
         output_tensor_layout.addWidget(self.use_output_tensor_type)
         output_tensor_layout.addWidget(self.output_tensor_type)
-        quant_options_layout.addRow(self.create_label(OUTPUT_TENSOR_TYPE, USE_THIS_TYPE_FOR_OUTPUT_WEIGHT), output_tensor_layout)
+        quant_options_layout.addRow(
+            self.create_label(OUTPUT_TENSOR_TYPE, USE_THIS_TYPE_FOR_OUTPUT_WEIGHT),
+            output_tensor_layout,
+        )
 
         self.use_token_embedding_type = QCheckBox(USE_TOKEN_EMBEDDING_TYPE)
         self.token_embedding_type = QComboBox()
-        self.token_embedding_type.addItems(["F32", "F16", "Q4_0", "Q4_1", "Q5_0", "Q5_1", "Q8_0"])
+        self.token_embedding_type.addItems(
+            ["F32", "F16", "Q4_0", "Q4_1", "Q5_0", "Q5_1", "Q8_0"]
+        )
         self.token_embedding_type.setEnabled(False)
-        self.use_token_embedding_type.toggled.connect(lambda checked: self.token_embedding_type.setEnabled(checked))
+        self.use_token_embedding_type.toggled.connect(
+            lambda checked: self.token_embedding_type.setEnabled(checked)
+        )
         token_embedding_layout = QHBoxLayout()
         token_embedding_layout.addWidget(self.use_token_embedding_type)
         token_embedding_layout.addWidget(self.token_embedding_type)
-        quant_options_layout.addRow(self.create_label(TOKEN_EMBEDDING_TYPE, USE_THIS_TYPE_FOR_TOKEN_EMBEDDINGS), token_embedding_layout)
+        quant_options_layout.addRow(
+            self.create_label(TOKEN_EMBEDDING_TYPE, USE_THIS_TYPE_FOR_TOKEN_EMBEDDINGS),
+            token_embedding_layout,
+        )
 
         self.keep_split = QCheckBox(KEEP_SPLIT)
         self.override_kv = QLineEdit()
-        quant_options_layout.addRow(self.create_label("", WILL_GENERATE_QUANTIZED_MODEL_IN_SAME_SHARDS), self.keep_split)
-        
+        quant_options_layout.addRow(
+            self.create_label("", WILL_GENERATE_QUANTIZED_MODEL_IN_SAME_SHARDS),
+            self.keep_split,
+        )
+
         # KV Override section
         self.kv_override_widget = QWidget()
         self.kv_override_layout = QVBoxLayout(self.kv_override_widget)
@@ -199,27 +270,33 @@ class AutoGGUF(QMainWindow):
 
         add_override_button = QPushButton(ADD_NEW_OVERRIDE)
         add_override_button.clicked.connect(self.add_kv_override)
-        
+
         kv_override_scroll = QScrollArea()
         kv_override_scroll.setWidgetResizable(True)
         kv_override_scroll.setWidget(self.kv_override_widget)
         kv_override_scroll.setMinimumHeight(200)
-        
+
         kv_override_main_layout = QVBoxLayout()
         kv_override_main_layout.addWidget(kv_override_scroll)
         kv_override_main_layout.addWidget(add_override_button)
 
-        quant_options_layout.addRow(self.create_label(KV_OVERRIDES, OVERRIDE_MODEL_METADATA), kv_override_main_layout)
+        quant_options_layout.addRow(
+            self.create_label(KV_OVERRIDES, OVERRIDE_MODEL_METADATA),
+            kv_override_main_layout,
+        )
 
         quant_options_widget.setLayout(quant_options_layout)
         quant_options_scroll.setWidget(quant_options_widget)
         quant_options_scroll.setWidgetResizable(True)
         left_layout.addWidget(quant_options_scroll)
-        
+
         # Add this after the KV override section
         self.extra_arguments = QLineEdit()
-        quant_options_layout.addRow(self.create_label(EXTRA_ARGUMENTS, "Additional command-line arguments"), self.extra_arguments)        
-        
+        quant_options_layout.addRow(
+            self.create_label(EXTRA_ARGUMENTS, "Additional command-line arguments"),
+            self.extra_arguments,
+        )
+
         # Quantize button layout
         quantize_layout = QHBoxLayout()
         quantize_button = QPushButton(QUANTIZE_MODEL)
@@ -232,14 +309,14 @@ class AutoGGUF(QMainWindow):
         quantize_layout.addWidget(save_preset_button)
         quantize_layout.addWidget(load_preset_button)
         left_layout.addLayout(quantize_layout)
-        
+
         # Task list
         self.task_list = QListWidget()
         self.task_list.setSelectionMode(QListWidget.SelectionMode.NoSelection)
         self.task_list.itemDoubleClicked.connect(self.show_task_details)
         left_layout.addWidget(QLabel(TASKS))
         left_layout.addWidget(self.task_list)
-        
+
         # IMatrix section
         imatrix_group = QGroupBox(IMATRIX_GENERATION)
         imatrix_layout = QFormLayout()
@@ -250,7 +327,10 @@ class AutoGGUF(QMainWindow):
         imatrix_datafile_layout = QHBoxLayout()
         imatrix_datafile_layout.addWidget(self.imatrix_datafile)
         imatrix_datafile_layout.addWidget(self.imatrix_datafile_button)
-        imatrix_layout.addRow(self.create_label(DATA_FILE, INPUT_DATA_FILE_FOR_IMATRIX), imatrix_datafile_layout)
+        imatrix_layout.addRow(
+            self.create_label(DATA_FILE, INPUT_DATA_FILE_FOR_IMATRIX),
+            imatrix_datafile_layout,
+        )
 
         self.imatrix_model = QLineEdit()
         self.imatrix_model_button = QPushButton(BROWSE)
@@ -258,7 +338,9 @@ class AutoGGUF(QMainWindow):
         imatrix_model_layout = QHBoxLayout()
         imatrix_model_layout.addWidget(self.imatrix_model)
         imatrix_model_layout.addWidget(self.imatrix_model_button)
-        imatrix_layout.addRow(self.create_label(MODEL, MODEL_TO_BE_QUANTIZED), imatrix_model_layout)
+        imatrix_layout.addRow(
+            self.create_label(MODEL, MODEL_TO_BE_QUANTIZED), imatrix_model_layout
+        )
 
         self.imatrix_output = QLineEdit()
         self.imatrix_output_button = QPushButton(BROWSE)
@@ -266,18 +348,27 @@ class AutoGGUF(QMainWindow):
         imatrix_output_layout = QHBoxLayout()
         imatrix_output_layout.addWidget(self.imatrix_output)
         imatrix_output_layout.addWidget(self.imatrix_output_button)
-        imatrix_layout.addRow(self.create_label(OUTPUT, OUTPUT_PATH_FOR_GENERATED_IMATRIX), imatrix_output_layout)
+        imatrix_layout.addRow(
+            self.create_label(OUTPUT, OUTPUT_PATH_FOR_GENERATED_IMATRIX),
+            imatrix_output_layout,
+        )
 
         self.imatrix_frequency = QSpinBox()
         self.imatrix_frequency.setRange(1, 100)  # Set the range from 1 to 100
         self.imatrix_frequency.setValue(1)  # Set a default value
-        imatrix_layout.addRow(self.create_label(OUTPUT_FREQUENCY, HOW_OFTEN_TO_SAVE_IMATRIX), self.imatrix_frequency)
+        imatrix_layout.addRow(
+            self.create_label(OUTPUT_FREQUENCY, HOW_OFTEN_TO_SAVE_IMATRIX),
+            self.imatrix_frequency,
+        )
 
         # Context size input (now a spinbox)
         self.imatrix_ctx_size = QSpinBox()
         self.imatrix_ctx_size.setRange(1, 1048576)  # Up to one million tokens
         self.imatrix_ctx_size.setValue(512)  # Set a default value
-        imatrix_layout.addRow(self.create_label(CONTEXT_SIZE, CONTEXT_SIZE_FOR_IMATRIX), self.imatrix_ctx_size)
+        imatrix_layout.addRow(
+            self.create_label(CONTEXT_SIZE, CONTEXT_SIZE_FOR_IMATRIX),
+            self.imatrix_ctx_size,
+        )
 
         # Threads input with slider and spinbox
         threads_layout = QHBoxLayout()
@@ -292,7 +383,9 @@ class AutoGGUF(QMainWindow):
 
         threads_layout.addWidget(self.threads_slider)
         threads_layout.addWidget(self.threads_spinbox)
-        imatrix_layout.addRow(self.create_label(THREADS, NUMBER_OF_THREADS_FOR_IMATRIX), threads_layout)
+        imatrix_layout.addRow(
+            self.create_label(THREADS, NUMBER_OF_THREADS_FOR_IMATRIX), threads_layout
+        )
 
         # GPU Offload for IMatrix (corrected version)
         gpu_offload_layout = QHBoxLayout()
@@ -311,7 +404,9 @@ class AutoGGUF(QMainWindow):
         gpu_offload_layout.addWidget(self.gpu_offload_slider)
         gpu_offload_layout.addWidget(self.gpu_offload_spinbox)
         gpu_offload_layout.addWidget(self.gpu_offload_auto)
-        imatrix_layout.addRow(self.create_label(GPU_OFFLOAD, SET_GPU_OFFLOAD_VALUE), gpu_offload_layout)
+        imatrix_layout.addRow(
+            self.create_label(GPU_OFFLOAD, SET_GPU_OFFLOAD_VALUE), gpu_offload_layout
+        )
 
         imatrix_generate_button = QPushButton(GENERATE_IMATRIX)
         imatrix_generate_button.clicked.connect(self.generate_imatrix)
@@ -319,13 +414,13 @@ class AutoGGUF(QMainWindow):
 
         imatrix_group.setLayout(imatrix_layout)
         right_layout.addWidget(imatrix_group)
-        
+
         main_widget = QWidget()
         main_layout.addLayout(left_layout, 2)
         main_layout.addLayout(right_layout, 1)
         main_widget.setLayout(main_layout)
         self.setCentralWidget(main_widget)
-        
+
         # LoRA Conversion Section
         lora_group = QGroupBox(LORA_CONVERSION)
         lora_layout = QFormLayout()
@@ -336,7 +431,10 @@ class AutoGGUF(QMainWindow):
         lora_input_layout = QHBoxLayout()
         lora_input_layout.addWidget(self.lora_input)
         lora_input_layout.addWidget(lora_input_button)
-        lora_layout.addRow(self.create_label(LORA_INPUT_PATH, SELECT_LORA_INPUT_DIRECTORY), lora_input_layout)
+        lora_layout.addRow(
+            self.create_label(LORA_INPUT_PATH, SELECT_LORA_INPUT_DIRECTORY),
+            lora_input_layout,
+        )
 
         self.lora_output = QLineEdit()
         lora_output_button = QPushButton(BROWSE)
@@ -344,13 +442,21 @@ class AutoGGUF(QMainWindow):
         lora_output_layout = QHBoxLayout()
         lora_output_layout.addWidget(self.lora_output)
         lora_output_layout.addWidget(lora_output_button)
-        lora_layout.addRow(self.create_label(LORA_OUTPUT_PATH, SELECT_LORA_OUTPUT_FILE), lora_output_layout)
+        lora_layout.addRow(
+            self.create_label(LORA_OUTPUT_PATH, SELECT_LORA_OUTPUT_FILE),
+            lora_output_layout,
+        )
 
         # Output Type Dropdown
         self.lora_output_type_combo = QComboBox()
         self.lora_output_type_combo.addItems(["GGML", "GGUF"])
-        self.lora_output_type_combo.currentIndexChanged.connect(self.update_base_model_visibility)  # Connect to update visibility
-        lora_layout.addRow(self.create_label(OUTPUT_TYPE, SELECT_OUTPUT_TYPE), self.lora_output_type_combo)
+        self.lora_output_type_combo.currentIndexChanged.connect(
+            self.update_base_model_visibility
+        )  # Connect to update visibility
+        lora_layout.addRow(
+            self.create_label(OUTPUT_TYPE, SELECT_OUTPUT_TYPE),
+            self.lora_output_type_combo,
+        )
 
         # Base Model Path (initially hidden)
         self.base_model_path = QLineEdit()
@@ -362,7 +468,10 @@ class AutoGGUF(QMainWindow):
         self.base_model_widget = QWidget()
         self.base_model_widget.setLayout(base_model_layout)
         self.base_model_widget.setVisible(False)  # Initially hidden
-        lora_layout.addRow(self.create_label(BASE_MODEL, SELECT_BASE_MODEL_FILE), self.base_model_widget)
+        lora_layout.addRow(
+            self.create_label(BASE_MODEL, SELECT_BASE_MODEL_FILE),
+            self.base_model_widget,
+        )
 
         lora_convert_button = QPushButton(CONVERT_LORA)
         lora_convert_button.clicked.connect(self.convert_lora)
@@ -370,7 +479,7 @@ class AutoGGUF(QMainWindow):
 
         lora_group.setLayout(lora_layout)
         right_layout.addWidget(lora_group)
-        
+
         # Export LoRA
         export_lora_group = QGroupBox(EXPORT_LORA)
         export_lora_layout = QFormLayout()
@@ -381,7 +490,9 @@ class AutoGGUF(QMainWindow):
         export_lora_model_layout = QHBoxLayout()
         export_lora_model_layout.addWidget(self.export_lora_model)
         export_lora_model_layout.addWidget(export_lora_model_button)
-        export_lora_layout.addRow(self.create_label(MODEL, SELECT_MODEL_FILE), export_lora_model_layout)
+        export_lora_layout.addRow(
+            self.create_label(MODEL, SELECT_MODEL_FILE), export_lora_model_layout
+        )
 
         self.export_lora_output = QLineEdit()
         export_lora_output_button = QPushButton(BROWSE)
@@ -389,7 +500,9 @@ class AutoGGUF(QMainWindow):
         export_lora_output_layout = QHBoxLayout()
         export_lora_output_layout.addWidget(self.export_lora_output)
         export_lora_output_layout.addWidget(export_lora_output_button)
-        export_lora_layout.addRow(self.create_label(OUTPUT, SELECT_OUTPUT_FILE), export_lora_output_layout)
+        export_lora_layout.addRow(
+            self.create_label(OUTPUT, SELECT_OUTPUT_FILE), export_lora_output_layout
+        )
 
         # GGML LoRA Adapters
         self.export_lora_adapters = QListWidget()
@@ -400,62 +513,74 @@ class AutoGGUF(QMainWindow):
         buttons_layout = QHBoxLayout()
         buttons_layout.addWidget(add_adapter_button)
         adapters_layout.addLayout(buttons_layout)
-        export_lora_layout.addRow(self.create_label(GGML_LORA_ADAPTERS, SELECT_LORA_ADAPTER_FILES), adapters_layout)
+        export_lora_layout.addRow(
+            self.create_label(GGML_LORA_ADAPTERS, SELECT_LORA_ADAPTER_FILES),
+            adapters_layout,
+        )
 
         # Threads
         self.export_lora_threads = QSpinBox()
         self.export_lora_threads.setRange(1, 64)
         self.export_lora_threads.setValue(8)  # Default value
-        export_lora_layout.addRow(self.create_label(THREADS, NUMBER_OF_THREADS_FOR_LORA_EXPORT), self.export_lora_threads)
+        export_lora_layout.addRow(
+            self.create_label(THREADS, NUMBER_OF_THREADS_FOR_LORA_EXPORT),
+            self.export_lora_threads,
+        )
 
         export_lora_button = QPushButton(EXPORT_LORA)
         export_lora_button.clicked.connect(self.export_lora)
         export_lora_layout.addRow(export_lora_button)
 
         export_lora_group.setLayout(export_lora_layout)
-        right_layout.addWidget(export_lora_group)  # Add the Export LoRA group to the right layout
-        
+        right_layout.addWidget(
+            export_lora_group
+        )  # Add the Export LoRA group to the right layout
+
         # Modify the task list to support right-click menu
         self.task_list.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
-        self.task_list.customContextMenuRequested.connect(self.show_task_context_menu)                
-        
+        self.task_list.customContextMenuRequested.connect(self.show_task_context_menu)
+
         # Timer for updating system info
         self.timer = QTimer()
         self.timer.timeout.connect(self.update_system_info)
         self.timer.start(200)
 
         # Initialize threads
-        self.quant_threads = []    
-        
-        self.logger.info(AUTOGGUF_INITIALIZATION_COMPLETE)            
-        
+        self.quant_threads = []
+
+        self.logger.info(AUTOGGUF_INITIALIZATION_COMPLETE)
+
     def refresh_backends(self):
-        self.logger.info(REFRESHING_BACKENDS)    
+        self.logger.info(REFRESHING_BACKENDS)
         llama_bin = os.path.abspath("llama_bin")
         if not os.path.exists(llama_bin):
             os.makedirs(llama_bin)
-    
+
         self.backend_combo.clear()
         valid_backends = []
         for item in os.listdir(llama_bin):
             item_path = os.path.join(llama_bin, item)
             if os.path.isdir(item_path) and "cudart-llama" not in item.lower():
                 valid_backends.append((item, item_path))
-    
+
         if valid_backends:
             for name, path in valid_backends:
                 self.backend_combo.addItem(name, userData=path)
-            self.backend_combo.setEnabled(True)  # Enable the combo box if there are valid backends
+            self.backend_combo.setEnabled(
+                True
+            )  # Enable the combo box if there are valid backends
         else:
             self.backend_combo.addItem(NO_BACKENDS_AVAILABLE)
             self.backend_combo.setEnabled(False)
         self.logger.info(FOUND_VALID_BACKENDS.format(self.backend_combo.count()))
-        
+
     def update_base_model_visibility(self, index):
-        self.base_model_widget.setVisible(self.lora_output_type_combo.itemText(index) == "GGUF")
+        self.base_model_widget.setVisible(
+            self.lora_output_type_combo.itemText(index) == "GGUF"
+        )
 
     def save_preset(self):
-        self.logger.info(SAVING_PRESET)    
+        self.logger.info(SAVING_PRESET)
         preset = {
             "quant_type": self.quant_type.currentText(),
             "allow_requantize": self.allow_requantize.isChecked(),
@@ -469,81 +594,107 @@ class AutoGGUF(QMainWindow):
             "use_token_embedding_type": self.use_token_embedding_type.isChecked(),
             "token_embedding_type": self.token_embedding_type.currentText(),
             "keep_split": self.keep_split.isChecked(),
-            "kv_overrides": [entry.get_override_string() for entry in self.kv_override_entries],
-            "extra_arguments": self.extra_arguments.text()
+            "kv_overrides": [
+                entry.get_override_string() for entry in self.kv_override_entries
+            ],
+            "extra_arguments": self.extra_arguments.text(),
         }
-        
+
         file_name, _ = QFileDialog.getSaveFileName(self, SAVE_PRESET, "", JSON_FILES)
         if file_name:
-            with open(file_name, 'w') as f:
+            with open(file_name, "w") as f:
                 json.dump(preset, f, indent=4)
-            QMessageBox.information(self, PRESET_SAVED, PRESET_SAVED_TO.format(file_name))
+            QMessageBox.information(
+                self, PRESET_SAVED, PRESET_SAVED_TO.format(file_name)
+            )
         self.logger.info(PRESET_SAVED_TO.format(file_name))
 
     def load_preset(self):
-        self.logger.info(LOADING_PRESET)    
+        self.logger.info(LOADING_PRESET)
         file_name, _ = QFileDialog.getOpenFileName(self, LOAD_PRESET, "", JSON_FILES)
         if file_name:
             try:
-                with open(file_name, 'r') as f:
+                with open(file_name, "r") as f:
                     preset = json.load(f)
-                
+
                 self.quant_type.setCurrentText(preset.get("quant_type", ""))
                 self.allow_requantize.setChecked(preset.get("allow_requantize", False))
-                self.leave_output_tensor.setChecked(preset.get("leave_output_tensor", False))
+                self.leave_output_tensor.setChecked(
+                    preset.get("leave_output_tensor", False)
+                )
                 self.pure.setChecked(preset.get("pure", False))
                 self.imatrix.setText(preset.get("imatrix", ""))
                 self.include_weights.setText(preset.get("include_weights", ""))
                 self.exclude_weights.setText(preset.get("exclude_weights", ""))
-                self.use_output_tensor_type.setChecked(preset.get("use_output_tensor_type", False))
-                self.output_tensor_type.setCurrentText(preset.get("output_tensor_type", ""))
-                self.use_token_embedding_type.setChecked(preset.get("use_token_embedding_type", False))
-                self.token_embedding_type.setCurrentText(preset.get("token_embedding_type", ""))
+                self.use_output_tensor_type.setChecked(
+                    preset.get("use_output_tensor_type", False)
+                )
+                self.output_tensor_type.setCurrentText(
+                    preset.get("output_tensor_type", "")
+                )
+                self.use_token_embedding_type.setChecked(
+                    preset.get("use_token_embedding_type", False)
+                )
+                self.token_embedding_type.setCurrentText(
+                    preset.get("token_embedding_type", "")
+                )
                 self.keep_split.setChecked(preset.get("keep_split", False))
                 self.extra_arguments.setText(preset.get("extra_arguments", ""))
-                
+
                 # Clear existing KV overrides and add new ones
                 for entry in self.kv_override_entries:
                     self.remove_kv_override(entry)
                 for override in preset.get("kv_overrides", []):
                     self.add_kv_override(override)
-                
-                QMessageBox.information(self, PRESET_LOADED, PRESET_LOADED_FROM.format(file_name))
+
+                QMessageBox.information(
+                    self, PRESET_LOADED, PRESET_LOADED_FROM.format(file_name)
+                )
             except Exception as e:
                 QMessageBox.critical(self, ERROR, FAILED_TO_LOAD_PRESET.format(str(e)))
         self.logger.info(PRESET_LOADED_FROM.format(file_name))
 
     def save_task_preset(self, task_item):
-        self.logger.info(SAVING_TASK_PRESET.format(task_item.task_name))    
+        self.logger.info(SAVING_TASK_PRESET.format(task_item.task_name))
         for thread in self.quant_threads:
             if thread.log_file == task_item.log_file:
                 preset = {
                     "command": thread.command,
                     "backend_path": thread.cwd,
-                    "log_file": thread.log_file
+                    "log_file": thread.log_file,
                 }
-                file_name, _ = QFileDialog.getSaveFileName(self, SAVE_TASK_PRESET, "", JSON_FILES)
+                file_name, _ = QFileDialog.getSaveFileName(
+                    self, SAVE_TASK_PRESET, "", JSON_FILES
+                )
                 if file_name:
-                    with open(file_name, 'w') as f:
+                    with open(file_name, "w") as f:
                         json.dump(preset, f, indent=4)
-                    QMessageBox.information(self, TASK_PRESET_SAVED, TASK_PRESET_SAVED_TO.format(file_name))
+                    QMessageBox.information(
+                        self, TASK_PRESET_SAVED, TASK_PRESET_SAVED_TO.format(file_name)
+                    )
                 break
 
     def browse_export_lora_model(self):
         self.logger.info(BROWSING_FOR_EXPORT_LORA_MODEL_FILE)
-        model_file, _ = QFileDialog.getOpenFileName(self, SELECT_MODEL_FILE, "", GGUF_FILES)
+        model_file, _ = QFileDialog.getOpenFileName(
+            self, SELECT_MODEL_FILE, "", GGUF_FILES
+        )
         if model_file:
             self.export_lora_model.setText(os.path.abspath(model_file))
 
     def browse_export_lora_output(self):
         self.logger.info(BROWSING_FOR_EXPORT_LORA_OUTPUT_FILE)
-        output_file, _ = QFileDialog.getSaveFileName(self, SELECT_OUTPUT_FILE, "", GGUF_FILES)
+        output_file, _ = QFileDialog.getSaveFileName(
+            self, SELECT_OUTPUT_FILE, "", GGUF_FILES
+        )
         if output_file:
             self.export_lora_output.setText(os.path.abspath(output_file))
 
     def add_lora_adapter(self):
         self.logger.info(ADDING_LORA_ADAPTER)
-        adapter_path, _ = QFileDialog.getOpenFileName(self, SELECT_LORA_ADAPTER_FILE, "", LORA_FILES)
+        adapter_path, _ = QFileDialog.getOpenFileName(
+            self, SELECT_LORA_ADAPTER_FILE, "", LORA_FILES
+        )
         if adapter_path:
             # Create a widget to hold the path and scale input
             adapter_widget = QWidget()
@@ -557,7 +708,9 @@ class AutoGGUF(QMainWindow):
             adapter_layout.addWidget(scale_input)
 
             delete_button = QPushButton(DELETE_ADAPTER)
-            delete_button.clicked.connect(lambda: self.delete_lora_adapter_item(adapter_widget))
+            delete_button.clicked.connect(
+                lambda: self.delete_lora_adapter_item(adapter_widget)
+            )
             adapter_layout.addWidget(delete_button)
 
             # Add the widget to the list
@@ -568,7 +721,9 @@ class AutoGGUF(QMainWindow):
 
     def browse_base_model(self):
         self.logger.info(BROWSING_FOR_BASE_MODEL_FOLDER)  # Updated log message
-        base_model_folder = QFileDialog.getExistingDirectory(self, SELECT_BASE_MODEL_FOLDER)
+        base_model_folder = QFileDialog.getExistingDirectory(
+            self, SELECT_BASE_MODEL_FOLDER
+        )
         if base_model_folder:
             self.base_model_path.setText(os.path.abspath(base_model_folder))
 
@@ -608,16 +763,22 @@ class AutoGGUF(QMainWindow):
             if not backend_path:
                 raise ValueError(NO_BACKEND_SELECTED)
 
-            command = [os.path.join(backend_path, "llama-export-lora"),
-                       "--model", model_path,
-                       "--output", output_path]
+            command = [
+                os.path.join(backend_path, "llama-export-lora"),
+                "--model",
+                model_path,
+                "--output",
+                output_path,
+            ]
 
             for adapter_path, adapter_scale in lora_adapters:
                 if adapter_path:
                     if adapter_scale:
                         try:
                             scale_value = float(adapter_scale)
-                            command.extend(["--lora-scaled", adapter_path, str(scale_value)])
+                            command.extend(
+                                ["--lora-scaled", adapter_path, str(scale_value)]
+                            )
                         except ValueError:
                             raise ValueError(INVALID_LORA_SCALE_VALUE)
                     else:
@@ -652,14 +813,20 @@ class AutoGGUF(QMainWindow):
             self.show_error(ERROR_STARTING_LORA_EXPORT.format(str(e)))
 
     def restart_task(self, task_item):
-        self.logger.info(RESTARTING_TASK.format(task_item.task_name))    
+        self.logger.info(RESTARTING_TASK.format(task_item.task_name))
         for thread in self.quant_threads:
             if thread.log_file == task_item.log_file:
-                new_thread = QuantizationThread(thread.command, thread.cwd, thread.log_file)
+                new_thread = QuantizationThread(
+                    thread.command, thread.cwd, thread.log_file
+                )
                 self.quant_threads.append(new_thread)
                 new_thread.status_signal.connect(task_item.update_status)
-                new_thread.finished_signal.connect(lambda: self.task_finished(new_thread))
-                new_thread.error_signal.connect(lambda err: self.handle_error(err, task_item))
+                new_thread.finished_signal.connect(
+                    lambda: self.task_finished(new_thread)
+                )
+                new_thread.error_signal.connect(
+                    lambda err: self.handle_error(err, task_item)
+                )
                 new_thread.model_info_signal.connect(self.update_model_info)
                 new_thread.start()
                 task_item.update_status(IN_PROGRESS)
@@ -667,14 +834,18 @@ class AutoGGUF(QMainWindow):
 
     def browse_lora_input(self):
         self.logger.info(BROWSING_FOR_LORA_INPUT_DIRECTORY)
-        lora_input_path = QFileDialog.getExistingDirectory(self, SELECT_LORA_INPUT_DIRECTORY)
+        lora_input_path = QFileDialog.getExistingDirectory(
+            self, SELECT_LORA_INPUT_DIRECTORY
+        )
         if lora_input_path:
             self.lora_input.setText(os.path.abspath(lora_input_path))
             ensure_directory(lora_input_path)
 
     def browse_lora_output(self):
         self.logger.info(BROWSING_FOR_LORA_OUTPUT_FILE)
-        lora_output_file, _ = QFileDialog.getSaveFileName(self, SELECT_LORA_OUTPUT_FILE, "", GGUF_AND_BIN_FILES)
+        lora_output_file, _ = QFileDialog.getSaveFileName(
+            self, SELECT_LORA_OUTPUT_FILE, "", GGUF_AND_BIN_FILES
+        )
         if lora_output_file:
             self.lora_output.setText(os.path.abspath(lora_output_file))
 
@@ -691,14 +862,20 @@ class AutoGGUF(QMainWindow):
                 raise ValueError(LORA_OUTPUT_PATH_REQUIRED)
 
             if lora_output_type == "GGUF":  # Use new file and parameters for GGUF
-                command = ["python", "src/convert_lora_to_gguf.py", "--outfile", lora_output_path, lora_input_path]
+                command = [
+                    "python",
+                    "src/convert_lora_to_gguf.py",
+                    "--outfile",
+                    lora_output_path,
+                    lora_input_path,
+                ]
                 base_model_path = self.base_model_path.text()
                 if not base_model_path:
                     raise ValueError(BASE_MODEL_PATH_REQUIRED)
                 command.extend(["--base", base_model_path])
             else:  # Use old GGML parameters for GGML
                 command = ["python", "src/convert_lora_to_ggml.py", lora_input_path]
-                
+
             logs_path = self.logs_input.text()
             ensure_directory(logs_path)
 
@@ -708,7 +885,9 @@ class AutoGGUF(QMainWindow):
             thread = QuantizationThread(command, os.getcwd(), log_file)
             self.quant_threads.append(thread)
 
-            task_name = LORA_CONVERSION_FROM_TO.format(os.path.basename(lora_input_path), os.path.basename(lora_output_path))
+            task_name = LORA_CONVERSION_FROM_TO.format(
+                os.path.basename(lora_input_path), os.path.basename(lora_output_path)
+            )
             task_item = TaskListItem(task_name, log_file)
             list_item = QListWidgetItem(self.task_list)
             list_item.setSizeHint(task_item.sizeHint())
@@ -716,7 +895,11 @@ class AutoGGUF(QMainWindow):
             self.task_list.setItemWidget(list_item, task_item)
 
             thread.status_signal.connect(task_item.update_status)
-            thread.finished_signal.connect(lambda: self.lora_conversion_finished(thread, lora_input_path, lora_output_path))
+            thread.finished_signal.connect(
+                lambda: self.lora_conversion_finished(
+                    thread, lora_input_path, lora_output_path
+                )
+            )
             thread.error_signal.connect(lambda err: self.handle_error(err, task_item))
             thread.start()
             self.logger.info(LORA_CONVERSION_TASK_STARTED)
@@ -742,55 +925,70 @@ class AutoGGUF(QMainWindow):
             self.logger.error(ERROR_MOVING_LORA_FILE.format(str(e)))
 
     def download_finished(self, extract_dir):
-        self.logger.info(DOWNLOAD_FINISHED_EXTRACTED_TO.format(extract_dir))    
+        self.logger.info(DOWNLOAD_FINISHED_EXTRACTED_TO.format(extract_dir))
         self.download_button.setEnabled(True)
         self.download_progress.setValue(100)
-        
-        if self.cuda_extract_checkbox.isChecked() and self.cuda_extract_checkbox.isVisible():
+
+        if (
+            self.cuda_extract_checkbox.isChecked()
+            and self.cuda_extract_checkbox.isVisible()
+        ):
             cuda_backend = self.backend_combo_cuda.currentData()
             if cuda_backend and cuda_backend != NO_SUITABLE_CUDA_BACKENDS:
                 self.extract_cuda_files(extract_dir, cuda_backend)
-                QMessageBox.information(self, DOWNLOAD_COMPLETE, LLAMACPP_DOWNLOADED_AND_EXTRACTED.format(extract_dir, cuda_backend))
+                QMessageBox.information(
+                    self,
+                    DOWNLOAD_COMPLETE,
+                    LLAMACPP_DOWNLOADED_AND_EXTRACTED.format(extract_dir, cuda_backend),
+                )
             else:
-                QMessageBox.warning(self, CUDA_EXTRACTION_FAILED, NO_SUITABLE_CUDA_BACKEND_FOUND)
+                QMessageBox.warning(
+                    self, CUDA_EXTRACTION_FAILED, NO_SUITABLE_CUDA_BACKEND_FOUND
+                )
         else:
-            QMessageBox.information(self, DOWNLOAD_COMPLETE, LLAMACPP_BINARY_DOWNLOADED_AND_EXTRACTED.format(extract_dir))
-        
+            QMessageBox.information(
+                self,
+                DOWNLOAD_COMPLETE,
+                LLAMACPP_BINARY_DOWNLOADED_AND_EXTRACTED.format(extract_dir),
+            )
+
         self.refresh_backends()  # Refresh the backends after successful download
         self.update_cuda_option()  # Update CUDA options in case a CUDA-capable backend was downloaded
-        
+
         # Select the newly downloaded backend
         new_backend_name = os.path.basename(extract_dir)
         index = self.backend_combo.findText(new_backend_name)
         if index >= 0:
-            self.backend_combo.setCurrentIndex(index)    
+            self.backend_combo.setCurrentIndex(index)
 
     def refresh_releases(self):
-        self.logger.info(REFRESHING_LLAMACPP_RELEASES)    
+        self.logger.info(REFRESHING_LLAMACPP_RELEASES)
         try:
-            response = requests.get("https://api.github.com/repos/ggerganov/llama.cpp/releases")
+            response = requests.get(
+                "https://api.github.com/repos/ggerganov/llama.cpp/releases"
+            )
             releases = response.json()
             self.release_combo.clear()
             for release in releases:
-                self.release_combo.addItem(release['tag_name'], userData=release)
+                self.release_combo.addItem(release["tag_name"], userData=release)
             self.release_combo.currentIndexChanged.connect(self.update_assets)
             self.update_assets()
         except Exception as e:
             self.show_error(ERROR_FETCHING_RELEASES.format(str(e)))
 
     def update_assets(self):
-        self.logger.debug(UPDATING_ASSET_LIST)    
+        self.logger.debug(UPDATING_ASSET_LIST)
         self.asset_combo.clear()
         release = self.release_combo.currentData()
         if release:
-            for asset in release['assets']:
-                self.asset_combo.addItem(asset['name'], userData=asset)
+            for asset in release["assets"]:
+                self.asset_combo.addItem(asset["name"], userData=asset)
         self.update_cuda_option()
 
     def update_cuda_option(self):
-        self.logger.debug(UPDATING_CUDA_OPTIONS)    
+        self.logger.debug(UPDATING_CUDA_OPTIONS)
         asset = self.asset_combo.currentData()
-        is_cuda = asset and "cudart" in asset['name'].lower()
+        is_cuda = asset and "cudart" in asset["name"].lower()
         self.cuda_extract_checkbox.setVisible(is_cuda)
         self.cuda_backend_label.setVisible(is_cuda)
         self.backend_combo_cuda.setVisible(is_cuda)
@@ -798,7 +996,7 @@ class AutoGGUF(QMainWindow):
             self.update_cuda_backends()
 
     def download_llama_cpp(self):
-        self.logger.info(STARTING_LLAMACPP_DOWNLOAD)    
+        self.logger.info(STARTING_LLAMACPP_DOWNLOAD)
         asset = self.asset_combo.currentData()
         if not asset:
             self.show_error(NO_ASSET_SELECTED)
@@ -808,9 +1006,9 @@ class AutoGGUF(QMainWindow):
         if not os.path.exists(llama_bin):
             os.makedirs(llama_bin)
 
-        save_path = os.path.join(llama_bin, asset['name'])
+        save_path = os.path.join(llama_bin, asset["name"])
 
-        self.download_thread = DownloadThread(asset['browser_download_url'], save_path)
+        self.download_thread = DownloadThread(asset["browser_download_url"], save_path)
         self.download_thread.progress_signal.connect(self.update_download_progress)
         self.download_thread.finished_signal.connect(self.download_finished)
         self.download_thread.error_signal.connect(self.download_error)
@@ -820,7 +1018,7 @@ class AutoGGUF(QMainWindow):
         self.download_progress.setValue(0)
 
     def update_cuda_backends(self):
-        self.logger.debug(UPDATING_CUDA_BACKENDS)    
+        self.logger.debug(UPDATING_CUDA_BACKENDS)
         self.backend_combo_cuda.clear()
         llama_bin = os.path.abspath("llama_bin")
         if os.path.exists(llama_bin):
@@ -829,7 +1027,7 @@ class AutoGGUF(QMainWindow):
                 if os.path.isdir(item_path) and "cudart-llama" not in item.lower():
                     if "cu1" in item.lower():  # Only include CUDA-capable backends
                         self.backend_combo_cuda.addItem(item, userData=item_path)
-        
+
         if self.backend_combo_cuda.count() == 0:
             self.backend_combo_cuda.addItem(NO_SUITABLE_CUDA_BACKENDS)
             self.backend_combo_cuda.setEnabled(False)
@@ -842,48 +1040,60 @@ class AutoGGUF(QMainWindow):
     def download_finished(self, extract_dir):
         self.download_button.setEnabled(True)
         self.download_progress.setValue(100)
-        
-        if self.cuda_extract_checkbox.isChecked() and self.cuda_extract_checkbox.isVisible():
+
+        if (
+            self.cuda_extract_checkbox.isChecked()
+            and self.cuda_extract_checkbox.isVisible()
+        ):
             cuda_backend = self.backend_combo_cuda.currentData()
             if cuda_backend:
                 self.extract_cuda_files(extract_dir, cuda_backend)
-                QMessageBox.information(self, DOWNLOAD_COMPLETE, LLAMACPP_DOWNLOADED_AND_EXTRACTED.format(extract_dir, cuda_backend))
+                QMessageBox.information(
+                    self,
+                    DOWNLOAD_COMPLETE,
+                    LLAMACPP_DOWNLOADED_AND_EXTRACTED.format(extract_dir, cuda_backend),
+                )
             else:
-                QMessageBox.warning(self, CUDA_EXTRACTION_FAILED, NO_CUDA_BACKEND_SELECTED)
+                QMessageBox.warning(
+                    self, CUDA_EXTRACTION_FAILED, NO_CUDA_BACKEND_SELECTED
+                )
         else:
-            QMessageBox.information(self, DOWNLOAD_COMPLETE, LLAMACPP_BINARY_DOWNLOADED_AND_EXTRACTED.format(extract_dir))
-        
+            QMessageBox.information(
+                self,
+                DOWNLOAD_COMPLETE,
+                LLAMACPP_BINARY_DOWNLOADED_AND_EXTRACTED.format(extract_dir),
+            )
+
         self.refresh_backends()
 
     def extract_cuda_files(self, extract_dir, destination):
-        self.logger.info(EXTRACTING_CUDA_FILES.format(extract_dir, destination))    
+        self.logger.info(EXTRACTING_CUDA_FILES.format(extract_dir, destination))
         for root, dirs, files in os.walk(extract_dir):
             for file in files:
-                if file.lower().endswith('.dll'):
+                if file.lower().endswith(".dll"):
                     source_path = os.path.join(root, file)
                     dest_path = os.path.join(destination, file)
                     shutil.copy2(source_path, dest_path)
-        
-     
+
     def download_error(self, error_message):
-        self.logger.error(DOWNLOAD_ERROR.format(error_message))    
+        self.logger.error(DOWNLOAD_ERROR.format(error_message))
         self.download_button.setEnabled(True)
         self.download_progress.setValue(0)
         self.show_error(DOWNLOAD_FAILED.format(error_message))
-        
+
         # Clean up any partially downloaded files
         asset = self.asset_combo.currentData()
         if asset:
-            partial_file = os.path.join(os.path.abspath("llama_bin"), asset['name'])
+            partial_file = os.path.join(os.path.abspath("llama_bin"), asset["name"])
             if os.path.exists(partial_file):
                 os.remove(partial_file)
-     
+
     def show_task_context_menu(self, position):
-        self.logger.debug(SHOWING_TASK_CONTEXT_MENU)    
+        self.logger.debug(SHOWING_TASK_CONTEXT_MENU)
         item = self.task_list.itemAt(position)
         if item is not None:
             context_menu = QMenu(self)
-            
+
             properties_action = QAction(PROPERTIES, self)
             properties_action.triggered.connect(lambda: self.show_task_properties(item))
             context_menu.addAction(properties_action)
@@ -900,7 +1110,9 @@ class AutoGGUF(QMainWindow):
                 context_menu.addAction(restart_action)
 
             save_preset_action = QAction(SAVE_PRESET, self)
-            save_preset_action.triggered.connect(lambda: self.save_task_preset(task_item))
+            save_preset_action.triggered.connect(
+                lambda: self.save_task_preset(task_item)
+            )
             context_menu.addAction(save_preset_action)
 
             delete_action = QAction(DELETE, self)
@@ -908,16 +1120,16 @@ class AutoGGUF(QMainWindow):
             context_menu.addAction(delete_action)
 
             context_menu.exec(self.task_list.viewport().mapToGlobal(position))
-            
+
     def show_task_properties(self, item):
-        self.logger.debug(SHOWING_PROPERTIES_FOR_TASK.format(item.text()))    
+        self.logger.debug(SHOWING_PROPERTIES_FOR_TASK.format(item.text()))
         task_item = self.task_list.itemWidget(item)
         for thread in self.quant_threads:
             if thread.log_file == task_item.log_file:
                 model_info_dialog = ModelInfoDialog(thread.model_info, self)
                 model_info_dialog.exec()
                 break
-                
+
     def update_threads_spinbox(self, value):
         self.threads_spinbox.setValue(value)
 
@@ -936,7 +1148,7 @@ class AutoGGUF(QMainWindow):
         self.gpu_offload_spinbox.setEnabled(not is_auto)
 
     def cancel_task(self, item):
-        self.logger.info(CANCELLING_TASK.format(item.text()))    
+        self.logger.info(CANCELLING_TASK.format(item.text()))
         task_item = self.task_list.itemWidget(item)
         for thread in self.quant_threads:
             if thread.log_file == task_item.log_file:
@@ -948,13 +1160,16 @@ class AutoGGUF(QMainWindow):
         task_item = self.task_list.itemWidget(item)
         # TODO: Implement the logic to restart the task
         pass
-        
+
     def delete_task(self, item):
-        self.logger.info(DELETING_TASK.format(item.text()))    
-        reply = QMessageBox.question(self, CONFIRM_DELETION_TITLE,
-                                     CONFIRM_DELETION,
-                                     QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
-                                     QMessageBox.StandardButton.No)
+        self.logger.info(DELETING_TASK.format(item.text()))
+        reply = QMessageBox.question(
+            self,
+            CONFIRM_DELETION_TITLE,
+            CONFIRM_DELETION,
+            QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
+            QMessageBox.StandardButton.No,
+        )
         if reply == QMessageBox.StandardButton.Yes:
             row = self.task_list.row(item)
             self.task_list.takeItem(row)
@@ -964,61 +1179,66 @@ class AutoGGUF(QMainWindow):
                 if thread.log_file == task_item.log_file:
                     thread.terminate()
                     self.quant_threads.remove(thread)
-                    break        
+                    break
 
     def create_label(self, text, tooltip):
         label = QLabel(text)
         label.setToolTip(tooltip)
         return label
-    
+
     def load_models(self):
-        self.logger.info(LOADING_MODELS)    
+        self.logger.info(LOADING_MODELS)
         models_dir = self.models_input.text()
         ensure_directory(models_dir)
         self.model_list.clear()
         for file in os.listdir(models_dir):
             if file.endswith(".gguf"):
                 self.model_list.addItem(file)
-        self.logger.info(LOADED_MODELS.format(self.model_list.count()))                
-    
-        
+        self.logger.info(LOADED_MODELS.format(self.model_list.count()))
+
     def browse_models(self):
-        self.logger.info(BROWSING_FOR_MODELS_DIRECTORY)    
+        self.logger.info(BROWSING_FOR_MODELS_DIRECTORY)
         models_path = QFileDialog.getExistingDirectory(self, SELECT_MODELS_DIRECTORY)
         if models_path:
             self.models_input.setText(os.path.abspath(models_path))
             ensure_directory(models_path)
             self.load_models()
-    
+
     def browse_output(self):
-        self.logger.info(BROWSING_FOR_OUTPUT_DIRECTORY)    
+        self.logger.info(BROWSING_FOR_OUTPUT_DIRECTORY)
         output_path = QFileDialog.getExistingDirectory(self, SELECT_OUTPUT_DIRECTORY)
         if output_path:
             self.output_input.setText(os.path.abspath(output_path))
             ensure_directory(output_path)
-    
+
     def browse_logs(self):
-        self.logger.info(BROWSING_FOR_LOGS_DIRECTORY)    
+        self.logger.info(BROWSING_FOR_LOGS_DIRECTORY)
         logs_path = QFileDialog.getExistingDirectory(self, SELECT_LOGS_DIRECTORY)
         if logs_path:
             self.logs_input.setText(os.path.abspath(logs_path))
             ensure_directory(logs_path)
-    
+
     def browse_imatrix(self):
-        self.logger.info(BROWSING_FOR_IMATRIX_FILE)    
-        imatrix_file, _ = QFileDialog.getOpenFileName(self, SELECT_IMATRIX_FILE, "", DAT_FILES)
+        self.logger.info(BROWSING_FOR_IMATRIX_FILE)
+        imatrix_file, _ = QFileDialog.getOpenFileName(
+            self, SELECT_IMATRIX_FILE, "", DAT_FILES
+        )
         if imatrix_file:
             self.imatrix.setText(os.path.abspath(imatrix_file))
-    
+
     def update_system_info(self):
         ram = psutil.virtual_memory()
         cpu = psutil.cpu_percent()
         self.ram_bar.setValue(int(ram.percent))
-        self.ram_bar.setFormat(RAM_USAGE_FORMAT.format(ram.percent, ram.used // 1024 // 1024, ram.total // 1024 // 1024))
+        self.ram_bar.setFormat(
+            RAM_USAGE_FORMAT.format(
+                ram.percent, ram.used // 1024 // 1024, ram.total // 1024 // 1024
+            )
+        )
         self.cpu_label.setText(CPU_USAGE_FORMAT.format(cpu))
 
     def validate_quantization_inputs(self):
-        self.logger.debug(VALIDATING_QUANTIZATION_INPUTS)    
+        self.logger.debug(VALIDATING_QUANTIZATION_INPUTS)
         errors = []
         if not self.backend_combo.currentData():
             errors.append(NO_BACKEND_SELECTED)
@@ -1030,7 +1250,7 @@ class AutoGGUF(QMainWindow):
             errors.append(LOGS_PATH_REQUIRED)
         if not self.model_list.currentItem():
             errors.append(NO_MODEL_SELECTED)
-        
+
         if errors:
             raise ValueError("\n".join(errors))
 
@@ -1038,8 +1258,8 @@ class AutoGGUF(QMainWindow):
         entry = KVOverrideEntry()
         entry.deleted.connect(self.remove_kv_override)
         if override_string:
-            key, value = override_string.split('=')
-            type_, val = value.split(':')
+            key, value = override_string.split("=")
+            type_, val = value.split(":")
             entry.key_input.setText(key)
             entry.type_combo.setCurrentText(type_)
             entry.value_input.setText(val)
@@ -1052,7 +1272,7 @@ class AutoGGUF(QMainWindow):
         entry.deleteLater()
 
     def quantize_model(self):
-        self.logger.info(STARTING_MODEL_QUANTIZATION)    
+        self.logger.info(STARTING_MODEL_QUANTIZATION)
         try:
             self.validate_quantization_inputs()
             selected_model = self.model_list.currentItem()
@@ -1064,47 +1284,54 @@ class AutoGGUF(QMainWindow):
             if not backend_path:
                 raise ValueError(NO_BACKEND_SELECTED)
             quant_type = self.quant_type.currentText()
-            
-            input_path = os.path.join(self.models_input.text(), model_name)            
+
+            input_path = os.path.join(self.models_input.text(), model_name)
             model_name = selected_model.text()
             quant_type = self.quant_type.currentText()
-            
+
             # Start building the output name
-            output_name_parts = [os.path.splitext(model_name)[0], "converted", quant_type]
-            
+            output_name_parts = [
+                os.path.splitext(model_name)[0],
+                "converted",
+                quant_type,
+            ]
+
             # Check for output tensor options
-            if self.use_output_tensor_type.isChecked() or self.leave_output_tensor.isChecked():
+            if (
+                self.use_output_tensor_type.isChecked()
+                or self.leave_output_tensor.isChecked()
+            ):
                 output_tensor_part = "o"
                 if self.use_output_tensor_type.isChecked():
                     output_tensor_part += "." + self.output_tensor_type.currentText()
                 output_name_parts.append(output_tensor_part)
-            
+
             # Check for embedding tensor options
             if self.use_token_embedding_type.isChecked():
                 embd_tensor_part = "t." + self.token_embedding_type.currentText()
                 output_name_parts.append(embd_tensor_part)
-            
+
             # Check for pure option
             if self.pure.isChecked():
                 output_name_parts.append("pure")
-            
+
             # Check for requantize option
             if self.allow_requantize.isChecked():
                 output_name_parts.append("rq")
-            
+
             # Check for KV override
             if any(entry.get_override_string() for entry in self.kv_override_entries):
                 output_name_parts.append("kv")
-            
+
             # Join all parts with underscores and add .gguf extension
             output_name = "_".join(output_name_parts) + ".gguf"
-            
-            output_path = os.path.join(self.output_input.text(), output_name)            
+
+            output_path = os.path.join(self.output_input.text(), output_name)
             if not os.path.exists(input_path):
                 raise FileNotFoundError(INPUT_FILE_NOT_EXIST.format(input_path))
 
             command = [os.path.join(backend_path, "llama-quantize")]
-            
+
             if self.allow_requantize.isChecked():
                 command.append("--allow-requantize")
             if self.leave_output_tensor.isChecked():
@@ -1118,9 +1345,13 @@ class AutoGGUF(QMainWindow):
             if self.exclude_weights.text():
                 command.extend(["--exclude-weights", self.exclude_weights.text()])
             if self.use_output_tensor_type.isChecked():
-                command.extend(["--output-tensor-type", self.output_tensor_type.currentText()])
+                command.extend(
+                    ["--output-tensor-type", self.output_tensor_type.currentText()]
+                )
             if self.use_token_embedding_type.isChecked():
-                command.extend(["--token-embedding-type", self.token_embedding_type.currentText()])
+                command.extend(
+                    ["--token-embedding-type", self.token_embedding_type.currentText()]
+                )
             if self.keep_split.isChecked():
                 command.append("--keep-split")
             if self.override_kv.text():
@@ -1128,92 +1359,100 @@ class AutoGGUF(QMainWindow):
                     override_string = entry.get_override_string()
                     if override_string:
                         command.extend(["--override-kv", override_string])
-            
+
             command.extend([input_path, output_path, quant_type])
-            
+
             # Add extra arguments
             if self.extra_arguments.text():
                 command.extend(self.extra_arguments.text().split())
-            
+
             logs_path = self.logs_input.text()
             ensure_directory(logs_path)
-            
+
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-            log_file = os.path.join(logs_path, f"{model_name}_{timestamp}_{quant_type}.log")
-            
+            log_file = os.path.join(
+                logs_path, f"{model_name}_{timestamp}_{quant_type}.log"
+            )
+
             thread = QuantizationThread(command, backend_path, log_file)
             self.quant_threads.append(thread)
-            
-            task_item = TaskListItem(QUANTIZING_MODEL_TO.format(model_name, quant_type), log_file)
+
+            task_item = TaskListItem(
+                QUANTIZING_MODEL_TO.format(model_name, quant_type), log_file
+            )
             list_item = QListWidgetItem(self.task_list)
             list_item.setSizeHint(task_item.sizeHint())
             self.task_list.addItem(list_item)
             self.task_list.setItemWidget(list_item, task_item)
-            
+
             thread.status_signal.connect(task_item.update_status)
             thread.finished_signal.connect(lambda: self.task_finished(thread))
             thread.error_signal.connect(lambda err: self.handle_error(err, task_item))
             thread.model_info_signal.connect(self.update_model_info)
             thread.start()
-            self.logger.info(QUANTIZATION_TASK_STARTED.format(model_name))             
+            self.logger.info(QUANTIZATION_TASK_STARTED.format(model_name))
         except ValueError as e:
             self.show_error(str(e))
         except Exception as e:
-            self.show_error(ERROR_STARTING_QUANTIZATION.format(str(e)))           
-            
+            self.show_error(ERROR_STARTING_QUANTIZATION.format(str(e)))
+
     def update_model_info(self, model_info):
-        self.logger.debug(UPDATING_MODEL_INFO.format(model_info))    
+        self.logger.debug(UPDATING_MODEL_INFO.format(model_info))
         # TODO: Do something with this
-        pass    
-    
+        pass
+
     def task_finished(self, thread):
-        self.logger.info(TASK_FINISHED.format(thread.log_file))    
+        self.logger.info(TASK_FINISHED.format(thread.log_file))
         if thread in self.quant_threads:
             self.quant_threads.remove(thread)
-    
+
     def show_task_details(self, item):
-        self.logger.debug(SHOWING_TASK_DETAILS_FOR.format(item.text()))    
+        self.logger.debug(SHOWING_TASK_DETAILS_FOR.format(item.text()))
         task_item = self.task_list.itemWidget(item)
         if task_item:
             log_dialog = QDialog(self)
             log_dialog.setWindowTitle(LOG_FOR.format(task_item.task_name))
             log_dialog.setGeometry(200, 200, 800, 600)
-            
+
             log_text = QPlainTextEdit()
             log_text.setReadOnly(True)
-            
+
             layout = QVBoxLayout()
             layout.addWidget(log_text)
             log_dialog.setLayout(layout)
-            
+
             # Load existing content
             if os.path.exists(task_item.log_file):
-                with open_file_safe(task_item.log_file, 'r') as f:
+                with open_file_safe(task_item.log_file, "r") as f:
                     log_text.setPlainText(f.read())
-            
+
             # Connect to the thread if it's still running
             for thread in self.quant_threads:
                 if thread.log_file == task_item.log_file:
                     thread.output_signal.connect(log_text.appendPlainText)
                     break
-            
+
             log_dialog.exec()
-                
+
     def browse_imatrix_datafile(self):
-        self.logger.info(BROWSING_FOR_IMATRIX_DATA_FILE)    
+        self.logger.info(BROWSING_FOR_IMATRIX_DATA_FILE)
         datafile, _ = QFileDialog.getOpenFileName(self, SELECT_DATA_FILE, "", ALL_FILES)
         if datafile:
             self.imatrix_datafile.setText(os.path.abspath(datafile))
 
     def browse_imatrix_model(self):
-        self.logger.info(BROWSING_FOR_IMATRIX_MODEL_FILE)    
-        model_file, _ = QFileDialog.getOpenFileName(self, SELECT_MODEL_FILE, "", GGUF_FILES)
+        self.logger.info(BROWSING_FOR_IMATRIX_MODEL_FILE)
+        model_file, _ = QFileDialog.getOpenFileName(
+            self, SELECT_MODEL_FILE, "", GGUF_FILES
+        )
         if model_file:
             self.imatrix_model.setText(os.path.abspath(model_file))
 
     def browse_imatrix_output(self):
-        self.logger.info(BROWSING_FOR_IMATRIX_OUTPUT_FILE)    
-        output_file, _ = QFileDialog.getSaveFileName(self, SELECT_OUTPUT_FILE, "", DAT_FILES)
+        self.logger.info(BROWSING_FOR_IMATRIX_OUTPUT_FILE)
+        output_file, _ = QFileDialog.getSaveFileName(
+            self, SELECT_OUTPUT_FILE, "", DAT_FILES
+        )
         if output_file:
             self.imatrix_output.setText(os.path.abspath(output_file))
 
@@ -1229,7 +1468,7 @@ class AutoGGUF(QMainWindow):
         self.gpu_offload_spinbox.setEnabled(not is_auto)
 
     def generate_imatrix(self):
-        self.logger.info(STARTING_IMATRIX_GENERATION)    
+        self.logger.info(STARTING_IMATRIX_GENERATION)
         try:
             backend_path = self.backend_combo.currentData()
             if not os.path.exists(backend_path):
@@ -1241,56 +1480,67 @@ class AutoGGUF(QMainWindow):
 
             command = [
                 os.path.join(backend_path, "llama-imatrix"),
-                "-f", self.imatrix_datafile.text(),
-                "-m", self.imatrix_model.text(),
-                "-o", self.imatrix_output.text(),
-                "--output-frequency", str(self.imatrix_frequency.value()),
-                "--ctx-size", str(self.imatrix_ctx_size.value()),
-                "--threads", str(self.threads_spinbox.value())
+                "-f",
+                self.imatrix_datafile.text(),
+                "-m",
+                self.imatrix_model.text(),
+                "-o",
+                self.imatrix_output.text(),
+                "--output-frequency",
+                str(self.imatrix_frequency.value()),
+                "--ctx-size",
+                str(self.imatrix_ctx_size.value()),
+                "--threads",
+                str(self.threads_spinbox.value()),
             ]
 
             if self.gpu_offload_auto.isChecked():
                 command.extend(["-ngl", "99"])
             elif self.gpu_offload_spinbox.value() > 0:
                 command.extend(["-ngl", str(self.gpu_offload_spinbox.value())])
-            
+
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
             log_file = os.path.join(self.logs_input.text(), f"imatrix_{timestamp}.log")
-            
+
             thread = QuantizationThread(command, backend_path, log_file)
             self.quant_threads.append(thread)
-            
-            task_name = GENERATING_IMATRIX_FOR.format(os.path.basename(self.imatrix_model.text()))
+
+            task_name = GENERATING_IMATRIX_FOR.format(
+                os.path.basename(self.imatrix_model.text())
+            )
             task_item = TaskListItem(task_name, log_file)
             list_item = QListWidgetItem(self.task_list)
             list_item.setSizeHint(task_item.sizeHint())
             self.task_list.addItem(list_item)
             self.task_list.setItemWidget(list_item, task_item)
-            
+
             thread.status_signal.connect(task_item.update_status)
             thread.finished_signal.connect(lambda: self.task_finished(thread))
             thread.error_signal.connect(lambda err: self.handle_error(err, task_item))
             thread.start()
         except Exception as e:
             self.show_error(ERROR_STARTING_IMATRIX_GENERATION.format(str(e)))
-        self.logger.info(IMATRIX_GENERATION_TASK_STARTED)    
-    
+        self.logger.info(IMATRIX_GENERATION_TASK_STARTED)
+
     def show_error(self, message):
-        self.logger.error(ERROR_MESSAGE.format(message))    
+        self.logger.error(ERROR_MESSAGE.format(message))
         QMessageBox.critical(self, ERROR, message)
 
     def handle_error(self, error_message, task_item):
-        self.logger.error(TASK_ERROR.format(error_message))    
+        self.logger.error(TASK_ERROR.format(error_message))
         self.show_error(error_message)
         task_item.set_error()
 
     def closeEvent(self, event: QCloseEvent):
-        self.logger.info(APPLICATION_CLOSING)    
+        self.logger.info(APPLICATION_CLOSING)
         if self.quant_threads:
-            reply = QMessageBox.question(self, WARNING,
-                                         TASK_RUNNING_WARNING,
-                                         QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
-                                         QMessageBox.StandardButton.No)
+            reply = QMessageBox.question(
+                self,
+                WARNING,
+                TASK_RUNNING_WARNING,
+                QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
+                QMessageBox.StandardButton.No,
+            )
 
             if reply == QMessageBox.StandardButton.Yes:
                 for thread in self.quant_threads:
@@ -1300,7 +1550,8 @@ class AutoGGUF(QMainWindow):
                 event.ignore()
         else:
             event.accept()
-        self.logger.info(APPLICATION_CLOSED)            
+        self.logger.info(APPLICATION_CLOSED)
+
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
