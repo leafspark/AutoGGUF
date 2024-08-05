@@ -84,9 +84,9 @@ The following languages are currently supported (machine translated, except for 
 In order to use them, please set the `AUTOGGUF_LANGUAGE` environment variable to one of the listed language codes.
 
 ## Issues:
-- Actual progress bar tracking
-- Download safetensors from HF and convert to unquanted GGUF
-- Perplexity testing
+- Saving preset while quantizing causes UI thread crash (planned fix: remove this feature)
+- Cannot delete task while processing, you must cancel it first or the program crashes (planned fix: don't allow deletion before cancelling, or cancel automatically)
+- Base Model text still shows when GGML is selected as LoRA type (fix: include text in show/hide Qt layout)
 - ~~Cannot disable llama.cpp update check on startup~~ (fixed in v1.3.1)
 - ~~`_internal` directory required, will see if I can package this into a single exe on the next release~~ (fixed in v1.3.1)
 - ~~Custom command line parameters~~ (added in v1.3.0)
@@ -96,12 +96,21 @@ In order to use them, please set the `AUTOGGUF_LANGUAGE` environment variable to
 - ~~Cannot select output/token embd type~~ (fixed in v1.1.0)
 - ~~Importing presets with KV overrides causes UI thread crash~~ (fixed in v1.3.0)
 
-## Prerelease issues:
-- Base Model label persists even when GGML type is selected
+## Planned features:
+- Actual progress bar tracking
+- Download safetensors from HF and convert to unquanted GGUF
+- Perplexity testing
+- Managing shards (coming in the next release)
+- Time estimated for quantization
+- Dynamic values for KV cache, e.g. autogguf.quantized.time=str:{system.time.milliseconds} (coming in the next release)
+- Ability to select and start multiple quants at once (saved in presets) (coming in the next release)
 
 ## Troubleshooting:
 - ~~llama.cpp quantizations errors out with an iostream error: create the `quantized_models` directory (or set a directory)~~ (fixed in v1.2.1, automatically created on launch)
 - SSL module cannot be found error: Install OpenSSL or run from source `python src/main.py` using the `run.bat` script (`pip install requests`)
+
+## Contributing:
+Simply fork the repo and make your changes; when merging make sure to have the latest commits. Description should contain a changelog of what's new.
 
 ## User interface:
 ![image](https://github.com/user-attachments/assets/906bf9cb-38ed-4945-a32e-179acfdcc529)
