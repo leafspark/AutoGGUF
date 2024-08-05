@@ -14,6 +14,7 @@ import zipfile
 import traceback
 from datetime import datetime
 from imports_and_globals import open_file_safe
+from localizations import *
 
 
 class QuantizationThread(QThread):
@@ -49,13 +50,13 @@ class QuantizationThread(QThread):
                     self.output_signal.emit(line)
                     log.write(line + "\n")
                     log.flush()
-                    self.status_signal.emit("In Progress")
+                    self.status_signal.emit(IN_PROGRESS)
                     self.parse_model_info(line)
 
             # Wait for process to complete
             self.process.wait()
             if self.process.returncode == 0:
-                self.status_signal.emit("Completed")
+                self.status_signal.emit(COMPLETED)
                 self.model_info_signal.emit(self.model_info)
             else:
                 self.error_signal.emit(

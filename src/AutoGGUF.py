@@ -144,48 +144,50 @@ class AutoGGUF(QMainWindow):
         quant_options_widget = QWidget()
         quant_options_layout = QFormLayout()
 
-        self.quant_type = QComboBox()
-        self.quant_type.addItems(
-            [
-                "IQ2_XXS",
-                "IQ2_XS",
-                "IQ2_S",
-                "IQ2_M",
-                "IQ1_S",
-                "IQ1_M",
-                "Q2_K",
-                "Q2_K_S",
-                "IQ3_XXS",
-                "IQ3_S",
-                "IQ3_M",
-                "Q3_K",
-                "IQ3_XS",
-                "Q3_K_S",
-                "Q3_K_M",
-                "Q3_K_L",
-                "IQ4_NL",
-                "IQ4_XS",
-                "Q4_K",
-                "Q4_K_S",
-                "Q4_K_M",
-                "Q5_K",
-                "Q5_K_S",
-                "Q5_K_M",
-                "Q6_K",
-                "Q8_0",
-                "Q4_0",
-                "Q4_1",
-                "Q5_0",
-                "Q5_1",
-                "Q4_0_4_4",
-                "Q4_0_4_8",
-                "Q4_0_8_8",
-                "BF16",
-                "F16",
-                "F32",
-                "COPY",
-            ]
-        )
+        self.quant_type = QListWidget()
+        self.quant_type.setMinimumHeight(100)
+        self.quant_type.setMinimumWidth(150)
+        self.quant_type.setSelectionMode(QListWidget.SelectionMode.MultiSelection)
+        quant_types = [
+            "IQ2_XXS",
+            "IQ2_XS",
+            "IQ2_S",
+            "IQ2_M",
+            "IQ1_S",
+            "IQ1_M",
+            "Q2_K",
+            "Q2_K_S",
+            "IQ3_XXS",
+            "IQ3_S",
+            "IQ3_M",
+            "Q3_K",
+            "IQ3_XS",
+            "Q3_K_S",
+            "Q3_K_M",
+            "Q3_K_L",
+            "IQ4_NL",
+            "IQ4_XS",
+            "Q4_K",
+            "Q4_K_S",
+            "Q4_K_M",
+            "Q5_K",
+            "Q5_K_S",
+            "Q5_K_M",
+            "Q6_K",
+            "Q8_0",
+            "Q4_0",
+            "Q4_1",
+            "Q5_0",
+            "Q5_1",
+            "Q4_0_4_4",
+            "Q4_0_4_8",
+            "Q4_0_8_8",
+            "BF16",
+            "F16",
+            "F32",
+            "COPY",
+        ]
+        self.quant_type.addItems(quant_types)
         quant_options_layout.addRow(
             self.create_label(QUANTIZATION_TYPE, SELECT_QUANTIZATION_TYPE),
             self.quant_type,
@@ -565,6 +567,9 @@ class AutoGGUF(QMainWindow):
         # Initialize threads
         self.quant_threads = []
 
+        # Load models
+        self.load_models()
+
         self.logger.info(AUTOGGUF_INITIALIZATION_COMPLETE)
 
     def refresh_backends(self):
@@ -598,7 +603,7 @@ class AutoGGUF(QMainWindow):
     def save_preset(self):
         self.logger.info(SAVING_PRESET)
         preset = {
-            "quant_type": self.quant_type.currentText(),
+            "quant_types": [item.text() for item in self.quant_type.selectedItems()],
             "allow_requantize": self.allow_requantize.isChecked(),
             "leave_output_tensor": self.leave_output_tensor.isChecked(),
             "pure": self.pure.isChecked(),
@@ -633,7 +638,11 @@ class AutoGGUF(QMainWindow):
                 with open(file_name, "r") as f:
                     preset = json.load(f)
 
-                self.quant_type.setCurrentText(preset.get("quant_type", ""))
+                self.quant_type.clearSelection()
+                for quant_type in preset.get("quant_types", []):
+                    items = self.quant_type.findItems(quant_type, Qt.MatchExactly)
+                    if items:
+                        items[0].setSelected(True)
                 self.allow_requantize.setChecked(preset.get("allow_requantize", False))
                 self.leave_output_tensor.setChecked(
                     preset.get("leave_output_tensor", False)
@@ -1364,125 +1373,153 @@ class AutoGGUF(QMainWindow):
             backend_path = self.backend_combo.currentData()
             if not backend_path:
                 raise ValueError(NO_BACKEND_SELECTED)
-            quant_type = self.quant_type.currentText()
+
+            selected_quant_types = [
+                item.text() for item in self.quant_type.selectedItems()
+            ]
+            if not selected_quant_types:
+                raise ValueError(NO_QUANTIZATION_TYPE_SELECTED)
 
             input_path = os.path.join(self.models_input.text(), model_file)
-
-            # Start building the output name
-            output_name_parts = [
-                os.path.splitext(model_name)[0],
-                "converted",
-                quant_type,
-            ]
-
-            # Check for output tensor options
-            if (
-                self.use_output_tensor_type.isChecked()
-                or self.leave_output_tensor.isChecked()
-            ):
-                output_tensor_part = "o"
-                if self.use_output_tensor_type.isChecked():
-                    output_tensor_part += "." + self.output_tensor_type.currentText()
-                output_name_parts.append(output_tensor_part)
-
-            # Check for embedding tensor options
-            if self.use_token_embedding_type.isChecked():
-                embd_tensor_part = "t." + self.token_embedding_type.currentText()
-                output_name_parts.append(embd_tensor_part)
-
-            # Check for pure option
-            if self.pure.isChecked():
-                output_name_parts.append("pure")
-
-            # Check for requantize option
-            if self.allow_requantize.isChecked():
-                output_name_parts.append("rq")
-
-            # Check for KV override
-            if any(entry.get_override_string() for entry in self.kv_override_entries):
-                output_name_parts.append("kv")
-
-            # Join all parts with underscores and add .gguf extension
-            output_name = "_".join(output_name_parts) + ".gguf"
-
-            output_path = os.path.join(self.output_input.text(), output_name)
             if not os.path.exists(input_path):
                 raise FileNotFoundError(INPUT_FILE_NOT_EXIST.format(input_path))
 
-            command = [os.path.join(backend_path, "llama-quantize")]
+            tasks = []  # List to keep track of all tasks
 
-            if self.allow_requantize.isChecked():
-                command.append("--allow-requantize")
-            if self.leave_output_tensor.isChecked():
-                command.append("--leave-output-tensor")
-            if self.pure.isChecked():
-                command.append("--pure")
-            if self.imatrix.text():
-                command.extend(["--imatrix", self.imatrix.text()])
-            if self.include_weights.text():
-                command.extend(["--include-weights", self.include_weights.text()])
-            if self.exclude_weights.text():
-                command.extend(["--exclude-weights", self.exclude_weights.text()])
-            if self.use_output_tensor_type.isChecked():
-                command.extend(
-                    ["--output-tensor-type", self.output_tensor_type.currentText()]
-                )
-            if self.use_token_embedding_type.isChecked():
-                command.extend(
-                    ["--token-embedding-type", self.token_embedding_type.currentText()]
-                )
-            if self.keep_split.isChecked():
-                command.append("--keep-split")
-            if self.kv_override_entries:
-                for entry in self.kv_override_entries:
-                    override_string = entry.get_override_string(
-                        model_name=model_name,
-                        quant_type=quant_type,
-                        output_path=output_path,
+            for quant_type in selected_quant_types:
+                # Start building the output name
+                output_name_parts = [
+                    os.path.splitext(model_name)[0],
+                    "converted",
+                    quant_type,
+                ]
+
+                # Check for output tensor options
+                if (
+                    self.use_output_tensor_type.isChecked()
+                    or self.leave_output_tensor.isChecked()
+                ):
+                    output_tensor_part = "o"
+                    if self.use_output_tensor_type.isChecked():
+                        output_tensor_part += (
+                            "." + self.output_tensor_type.currentText()
+                        )
+                    output_name_parts.append(output_tensor_part)
+
+                # Check for embedding tensor options
+                if self.use_token_embedding_type.isChecked():
+                    embd_tensor_part = "t." + self.token_embedding_type.currentText()
+                    output_name_parts.append(embd_tensor_part)
+
+                # Check for pure option
+                if self.pure.isChecked():
+                    output_name_parts.append("pure")
+
+                # Check for requantize option
+                if self.allow_requantize.isChecked():
+                    output_name_parts.append("rq")
+
+                # Check for KV override
+                if any(
+                    entry.get_override_string() for entry in self.kv_override_entries
+                ):
+                    output_name_parts.append("kv")
+
+                # Join all parts with underscores and add .gguf extension
+                output_name = "_".join(output_name_parts) + ".gguf"
+                output_path = os.path.join(self.output_input.text(), output_name)
+
+                command = [os.path.join(backend_path, "llama-quantize")]
+
+                if self.allow_requantize.isChecked():
+                    command.append("--allow-requantize")
+                if self.leave_output_tensor.isChecked():
+                    command.append("--leave-output-tensor")
+                if self.pure.isChecked():
+                    command.append("--pure")
+                if self.imatrix.text():
+                    command.extend(["--imatrix", self.imatrix.text()])
+                if self.include_weights.text():
+                    command.extend(["--include-weights", self.include_weights.text()])
+                if self.exclude_weights.text():
+                    command.extend(["--exclude-weights", self.exclude_weights.text()])
+                if self.use_output_tensor_type.isChecked():
+                    command.extend(
+                        ["--output-tensor-type", self.output_tensor_type.currentText()]
                     )
-                    if override_string:
-                        command.extend(["--override-kv", override_string])
+                if self.use_token_embedding_type.isChecked():
+                    command.extend(
+                        [
+                            "--token-embedding-type",
+                            self.token_embedding_type.currentText(),
+                        ]
+                    )
+                if self.keep_split.isChecked():
+                    command.append("--keep-split")
+                if self.kv_override_entries:
+                    for entry in self.kv_override_entries:
+                        override_string = entry.get_override_string(
+                            model_name=model_name,
+                            quant_type=quant_type,
+                            output_path=output_path,
+                        )
+                        if override_string:
+                            command.extend(["--override-kv", override_string])
 
-            command.extend([input_path, output_path, quant_type])
+                command.extend([input_path, output_path, quant_type])
 
-            # Add extra arguments
-            if self.extra_arguments.text():
-                command.extend(self.extra_arguments.text().split())
+                # Add extra arguments
+                if self.extra_arguments.text():
+                    command.extend(self.extra_arguments.text().split())
 
-            logs_path = self.logs_input.text()
-            ensure_directory(logs_path)
+                logs_path = self.logs_input.text()
+                ensure_directory(logs_path)
 
-            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-            log_file = os.path.join(
-                logs_path, f"{model_name}_{timestamp}_{quant_type}.log"
-            )
+                timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+                log_file = os.path.join(
+                    logs_path, f"{model_name}_{timestamp}_{quant_type}.log"
+                )
 
-            # Log quant command
-            command_str = " ".join(command)
-            self.logger.info(f"{QUANTIZATION_COMMAND}: {command_str}")
+                # Log quant command
+                command_str = " ".join(command)
+                self.logger.info(f"{QUANTIZATION_COMMAND}: {command_str}")
 
-            thread = QuantizationThread(command, backend_path, log_file)
-            self.quant_threads.append(thread)
+                thread = QuantizationThread(command, backend_path, log_file)
+                self.quant_threads.append(thread)
 
-            task_item = TaskListItem(
-                QUANTIZING_MODEL_TO.format(model_name, quant_type), log_file
-            )
-            list_item = QListWidgetItem(self.task_list)
-            list_item.setSizeHint(task_item.sizeHint())
-            self.task_list.addItem(list_item)
-            self.task_list.setItemWidget(list_item, task_item)
+                task_item = TaskListItem(
+                    QUANTIZING_MODEL_TO.format(model_name, quant_type), log_file
+                )
+                list_item = QListWidgetItem(self.task_list)
+                list_item.setSizeHint(task_item.sizeHint())
+                self.task_list.addItem(list_item)
+                self.task_list.setItemWidget(list_item, task_item)
 
-            # Connect the output signal to the new progress parsing function
-            thread.output_signal.connect(
-                lambda line: self.parse_progress(line, task_item)
-            )
-            thread.status_signal.connect(task_item.update_status)
-            thread.finished_signal.connect(lambda: self.task_finished(thread))
-            thread.error_signal.connect(lambda err: self.handle_error(err, task_item))
-            thread.model_info_signal.connect(self.update_model_info)
-            thread.start()
-            self.logger.info(QUANTIZATION_TASK_STARTED.format(model_name))
+                tasks.append(
+                    (thread, task_item)
+                )  # Add the thread and task_item to our list
+
+                # Connect the output signal to the new progress parsing function
+                thread.output_signal.connect(
+                    lambda line, ti=task_item: self.parse_progress(line, ti)
+                )
+                thread.status_signal.connect(task_item.update_status)
+                thread.finished_signal.connect(
+                    lambda t=thread, ti=task_item: self.task_finished(t, ti)
+                )
+                thread.error_signal.connect(
+                    lambda err, ti=task_item: self.handle_error(err, ti)
+                )
+                thread.model_info_signal.connect(self.update_model_info)
+
+            # Start all threads after setting them up
+            for thread, _ in tasks:
+                thread.start()
+                self.logger.info(QUANTIZATION_TASK_STARTED.format(model_name))
+
         except ValueError as e:
+            self.show_error(str(e))
+        except FileNotFoundError as e:
             self.show_error(str(e))
         except Exception as e:
             self.show_error(ERROR_STARTING_QUANTIZATION.format(str(e)))
@@ -1501,10 +1538,11 @@ class AutoGGUF(QMainWindow):
             progress = int((current / total) * 100)
             task_item.update_progress(progress)
 
-    def task_finished(self, thread):
+    def task_finished(self, thread, task_item):
         self.logger.info(TASK_FINISHED.format(thread.log_file))
         if thread in self.quant_threads:
             self.quant_threads.remove(thread)
+        task_item.update_status(COMPLETED)
 
     def show_task_details(self, item):
         self.logger.debug(SHOWING_TASK_DETAILS_FOR.format(item.text()))
@@ -1630,11 +1668,10 @@ class AutoGGUF(QMainWindow):
         self.logger.error(ERROR_MESSAGE.format(message))
         QMessageBox.critical(self, ERROR, message)
 
-    def handle_error(self, error_message, task_item, task_exists=True):
+    def handle_error(self, error_message, task_item):
         self.logger.error(TASK_ERROR.format(error_message))
         self.show_error(error_message)
-        if task_exists:
-            task_item.set_error()
+        task_item.update_status(ERROR)
 
     def closeEvent(self, event: QCloseEvent):
         self.logger.info(APPLICATION_CLOSING)

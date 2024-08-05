@@ -125,10 +125,25 @@ class AutoGGUF(QMainWindow):
 
     def quantize_model(self):
         """
-        Start the model quantization process.
+        Initiates the quantization process for the selected model with the chosen quantization types.
 
-        This method collects all the quantization settings, constructs the
-        quantization command, and starts a new thread to run the quantization process.
+        This function performs the following steps:
+        1. Validates the input parameters and selected model.
+        2. Retrieves the backend path and selected quantization types.
+        3. For each selected quantization type:
+            a. Constructs the output file name based on the quantization options.
+            b. Builds the quantization command with all selected options.
+            c. Creates a new thread for the quantization process.
+            d. Sets up a task item in the GUI to display progress and status.
+            e. Connects the thread signals to update the GUI and handle errors.
+            f. Starts the quantization thread.
+
+        The function handles various exceptions and displays error messages if any step fails.
+
+        Raises:
+            ValueError: If required inputs are missing or invalid.
+            FileNotFoundError: If the input model file doesn't exist.
+            Exception: For any other unexpected errors during the process.
         """
 
     def update_model_info(self, model_info):
