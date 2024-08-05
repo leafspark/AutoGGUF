@@ -452,28 +452,32 @@ class AutoGGUF(QMainWindow):
         # Output Type Dropdown
         self.lora_output_type_combo = QComboBox()
         self.lora_output_type_combo.addItems(["GGML", "GGUF"])
-        self.lora_output_type_combo.currentIndexChanged.connect(
-            self.update_base_model_visibility
-        )  # Connect to update visibility
-        lora_layout.addRow(
-            self.create_label(OUTPUT_TYPE, SELECT_OUTPUT_TYPE),
-            self.lora_output_type_combo,
-        )
+        self.lora_output_type_combo.currentIndexChanged.connect(self.update_base_model_visibility)
+        lora_layout.addRow(self.create_label(OUTPUT_TYPE, SELECT_OUTPUT_TYPE), self.lora_output_type_combo)
 
         # Base Model Path (initially hidden)
+        self.base_model_label = self.create_label(BASE_MODEL, SELECT_BASE_MODEL_FILE)
         self.base_model_path = QLineEdit()
         base_model_button = QPushButton(BROWSE)
         base_model_button.clicked.connect(self.browse_base_model)
         base_model_layout = QHBoxLayout()
-        base_model_layout.addWidget(self.base_model_path)
+        base_model_layout.addWidget(self.base_model_path, 1)  # Give it a stretch factor
         base_model_layout.addWidget(base_model_button)
         self.base_model_widget = QWidget()
         self.base_model_widget.setLayout(base_model_layout)
-        self.base_model_widget.setVisible(False)  # Initially hidden
-        lora_layout.addRow(
-            self.create_label(BASE_MODEL, SELECT_BASE_MODEL_FILE),
-            self.base_model_widget,
-        )
+
+        # Create a wrapper widget to hold both label and input
+        self.base_model_wrapper = QWidget()
+        wrapper_layout = QHBoxLayout(self.base_model_wrapper)
+        wrapper_layout.addWidget(self.base_model_label)
+        wrapper_layout.addWidget(self.base_model_widget, 1)  # Give it a stretch factor
+        wrapper_layout.setContentsMargins(0, 0, 0, 0)  # Remove margins for better alignment
+
+        # Add the wrapper to the layout
+        lora_layout.addRow(self.base_model_wrapper)
+
+        # Set initial visibility
+        self.update_base_model_visibility(self.lora_output_type_combo.currentIndex())
 
         lora_convert_button = QPushButton(CONVERT_LORA)
         lora_convert_button.clicked.connect(self.convert_lora)
@@ -541,6 +545,9 @@ class AutoGGUF(QMainWindow):
         # Modify the task list to support right-click menu
         self.task_list.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
         self.task_list.customContextMenuRequested.connect(self.show_task_context_menu)
+        
+        # Set inital state
+        self.update_base_model_visibility(self.lora_output_type_combo.currentIndex())
 
         # Timer for updating system info
         self.timer = QTimer()
@@ -577,9 +584,8 @@ class AutoGGUF(QMainWindow):
         self.logger.info(FOUND_VALID_BACKENDS.format(self.backend_combo.count()))
 
     def update_base_model_visibility(self, index):
-        self.base_model_widget.setVisible(
-            self.lora_output_type_combo.itemText(index) == "GGUF"
-        )
+        is_gguf = self.lora_output_type_combo.itemText(index) == "GGUF"
+        self.base_model_wrapper.setVisible(is_gguf)
 
     def save_preset(self):
         self.logger.info(SAVING_PRESET)
