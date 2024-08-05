@@ -49,6 +49,7 @@ chore: Other changes that don't modify src or test files
 ### Python Styleguide
 
 - Follow PEP 8
+- Please use Black to format your code first
 - Use meaningful variable names
 - Comment your code, but don't overdo it
 
