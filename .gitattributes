@@ -1,0 +1,193 @@
+# Set default behavior to automatically normalize line endings.
+* text=auto eol=lf
+
+# Explicitly declare text files you want to always be normalized and converted
+# to native line endings on checkout.
+*.c text
+*.h text
+*.cpp text
+*.hpp text
+*.py text
+*.js text
+*.css text
+*.html text
+*.xml text
+*.json text
+*.md text
+*.txt text
+*.yml text
+*.yaml text
+*.ini text
+*.cfg text
+*.conf text
+*.toml text
+*.sh text eol=lf
+*.bat text eol=crlf
+*.cmd text eol=crlf
+*.ps1 text eol=crlf
+Makefile text eol=lf
+
+# Declare files that will always have CRLF line endings on checkout.
+*.sln text eol=crlf
+*.vcxproj text eol=crlf
+*.vcxproj.filters text eol=crlf
+*.dbproj text eol=crlf
+
+# Denote all files that are truly binary and should not be modified.
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.mov binary
+*.mp4 binary
+*.mp3 binary
+*.flv binary
+*.fla binary
+*.swf binary
+*.gz binary
+*.zip binary
+*.7z binary
+*.ttf binary
+*.eot binary
+*.woff binary
+*.woff2 binary
+*.pyc binary
+*.pdf binary
+*.exe binary
+*.dll binary
+*.so binary
+*.dylib binary
+
+# Specific file types for development
+*.sdf binary
+*.db binary
+*.pkl binary
+*.npy binary
+*.npz binary
+*.pyd binary
+
+# Exclude files from exporting
+.gitattributes export-ignore
+.gitignore export-ignore
+.gitkeep export-ignore
+
+# Linguist language overrides
+*.ipynb linguist-language=Python
+*.qml linguist-language=QML
+*.glsl linguist-language=GLSL
+*.frag linguist-language=GLSL
+*.vert linguist-language=GLSL
+*.geom linguist-language=GLSL
+*.comp linguist-language=GLSL
+*.metal linguist-language=Metal
+*.hlsl linguist-language=HLSL
+*.shader linguist-language=ShaderLab
+
+# Treat certain files as binary to prevent merge conflicts
+*.pbxproj binary merge=union
+*.svg text
+
+# Collapse Unity-generated files on GitHub
+*.asset linguist-generated
+*.mat linguist-generated
+*.meta linguist-generated
+*.prefab linguist-generated
+*.unity linguist-generated
+
+# Treat notebook checkpoints as generated
+.ipynb_checkpoints/* linguist-generated
+
+# Custom diff drivers
+*.md diff=markdown
+*.php diff=php
+*.py diff=python
+*.rb diff=ruby
+*.tex diff=tex
+
+# LFS
+*.psd filter=lfs diff=lfs merge=lfs -text
+*.ai filter=lfs diff=lfs merge=lfs -text
+*.tif filter=lfs diff=lfs merge=lfs -text
+*.cubemap filter=lfs diff=lfs merge=lfs -text
+*.tga filter=lfs diff=lfs merge=lfs -text
+*.bin filter=lfs diff=lfs merge=lfs -text
+*.resS filter=lfs diff=lfs merge=lfs -text
+*.assets filter=lfs diff=lfs merge=lfs -text
+*.wav filter=lfs diff=lfs merge=lfs -text
+*.fbx filter=lfs diff=lfs merge=lfs -text
+*.3ds filter=lfs diff=lfs merge=lfs -text
+*.pdb filter=lfs diff=lfs merge=lfs -text
+*.mdb filter=lfs diff=lfs merge=lfs -text
+
+# Ignore files (like .gitignore)
+.dockerignore text
+.env text
+.editorconfig text
+.gitconfig text
+
+# Treat patches as text
+*.patch text diff
+
+# Windows files
+*.bat text eol=crlf
+*.cmd text eol=crlf
+
+# Unix files
+*.bash text eol=lf
+*.sh text eol=lf
+
+# Python files
+*.pxd text diff=python
+*.py3 text diff=python
+*.pyw text diff=python
+*.pyx text diff=python
+
+# Ruby files
+*.rb text diff=ruby
+*.rbw text diff=ruby
+*.gemspec text diff=ruby
+*.rake text diff=ruby
+Rakefile text diff=ruby
+
+# SQL files
+*.sql text
+
+# Java files
+*.java text diff=java
+*.gradle text diff=java
+*.gradle.kts text diff=kotlin
+
+# Kotlin files
+*.kt text diff=kotlin
+*.kts text diff=kotlin
+
+# Scala files
+*.scala text diff=scala
+*.sc text diff=scala
+
+# C# files
+*.cs text diff=csharp
+*.cshtml text diff=html
+*.csx text diff=csharp
+
+# Visual Studio files
+*.sln text eol=crlf merge=union
+*.csproj merge=union
+*.vbproj merge=union
+*.vcxproj merge=union
+*.vcproj merge=union
+*.dbproj merge=union
+*.fsproj merge=union
+*.lsproj merge=union
+*.wixproj merge=union
+*.modelproj merge=union
+*.sqlproj merge=union
+*.wwaproj merge=union
+
+# Xcode files
+*.pbxproj merge=union
+
+# Android files
+*.gradle text diff=java
+*.xml text
