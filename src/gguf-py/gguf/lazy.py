@@ -12,7 +12,6 @@ logger = logging.getLogger(__name__)
 
 
 class LazyMeta(ABCMeta):
-
     def __new__(
         cls, name: str, bases: tuple[type, ...], namespace: dict[str, Any], **kwargs
     ):

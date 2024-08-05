@@ -441,9 +441,9 @@ class Metadata:
                         org_component is not None
                         and model_full_name_component is not None
                     ):
-                        base_model["repo_url"] = (
-                            f"https://huggingface.co/{org_component}/{model_full_name_component}"
-                        )
+                        base_model[
+                            "repo_url"
+                        ] = f"https://huggingface.co/{org_component}/{model_full_name_component}"
                     metadata.base_models.append(base_model)
 
             if "license" in model_card and metadata.license is None:

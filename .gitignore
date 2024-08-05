@@ -12,9 +12,14 @@ __pycache__/
 !*.sh
 !LICENSE
 
+# Allow these files
+!.pre-commit-config.yaml
+
 # Allow assets folder
 !assets/
 !assets/**
+!.github/
+!.github/**
 
 # Don't ignore .gitignore
 !.gitignore
