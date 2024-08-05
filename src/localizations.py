@@ -4,6 +4,8 @@ import os
 class _Localization:
     def __init__(self):
         super().__init__()
+
+        # General UI
         self.WINDOW_TITLE = ""
         self.RAM_USAGE = ""
         self.CPU_USAGE = ""
@@ -14,6 +16,9 @@ class _Localization:
         self.LOGS_PATH = ""
         self.BROWSE = ""
         self.AVAILABLE_MODELS = ""
+        self.REFRESH_MODELS = ""
+
+        # Quantization
         self.QUANTIZATION_TYPE = ""
         self.ALLOW_REQUANTIZE = ""
         self.LEAVE_OUTPUT_TENSOR = ""
@@ -27,15 +32,27 @@ class _Localization:
         self.KV_OVERRIDES = ""
         self.ADD_NEW_OVERRIDE = ""
         self.QUANTIZE_MODEL = ""
+        self.EXTRA_ARGUMENTS = ""
+        self.EXTRA_ARGUMENTS_LABEL = ""
+        self.QUANTIZATION_COMMAND = ""
+
+        # Presets
         self.SAVE_PRESET = ""
         self.LOAD_PRESET = ""
+
+        # Tasks
         self.TASKS = ""
+
+        # llama.cpp Download
         self.DOWNLOAD_LLAMACPP = ""
         self.SELECT_RELEASE = ""
         self.SELECT_ASSET = ""
         self.EXTRACT_CUDA_FILES = ""
         self.SELECT_CUDA_BACKEND = ""
         self.DOWNLOAD = ""
+        self.REFRESH_RELEASES = ""
+
+        # IMatrix Generation
         self.IMATRIX_GENERATION = ""
         self.DATA_FILE = ""
         self.MODEL = ""
@@ -44,6 +61,47 @@ class _Localization:
         self.GPU_OFFLOAD = ""
         self.AUTO = ""
         self.GENERATE_IMATRIX = ""
+        self.CONTEXT_SIZE = ""
+        self.CONTEXT_SIZE_FOR_IMATRIX = ""
+        self.THREADS = ""
+        self.NUMBER_OF_THREADS_FOR_IMATRIX = ""
+        self.IMATRIX_GENERATION_COMMAND = ""
+
+        # LoRA Conversion
+        self.LORA_CONVERSION = ""
+        self.LORA_INPUT_PATH = ""
+        self.LORA_OUTPUT_PATH = ""
+        self.SELECT_LORA_INPUT_DIRECTORY = ""
+        self.SELECT_LORA_OUTPUT_FILE = ""
+        self.CONVERT_LORA = ""
+        self.LORA_CONVERSION_COMMAND = ""
+
+        # LoRA Export
+        self.EXPORT_LORA = ""
+        self.GGML_LORA_ADAPTERS = ""
+        self.SELECT_LORA_ADAPTER_FILES = ""
+        self.ADD_ADAPTER = ""
+        self.DELETE_ADAPTER = ""
+        self.LORA_SCALE = ""
+        self.ENTER_LORA_SCALE_VALUE = ""
+        self.NUMBER_OF_THREADS_FOR_LORA_EXPORT = ""
+        self.LORA_EXPORT_COMMAND = ""
+
+        # HuggingFace to GGUF Conversion
+        self.HF_TO_GGUF_CONVERSION = ""
+        self.MODEL_DIRECTORY = ""
+        self.OUTPUT_FILE = ""
+        self.OUTPUT_TYPE = ""
+        self.VOCAB_ONLY = ""
+        self.USE_TEMP_FILE = ""
+        self.NO_LAZY_EVALUATION = ""
+        self.MODEL_NAME = ""
+        self.VERBOSE = ""
+        self.SPLIT_MAX_SIZE = ""
+        self.DRY_RUN = ""
+        self.CONVERT_HF_TO_GGUF = ""
+
+        # General Messages
         self.ERROR = ""
         self.WARNING = ""
         self.PROPERTIES = ""
@@ -54,6 +112,18 @@ class _Localization:
         self.TASK_RUNNING_WARNING = ""
         self.YES = ""
         self.NO = ""
+        self.COMPLETED = ""
+
+        # File Types
+        self.ALL_FILES = ""
+        self.GGUF_FILES = ""
+        self.DAT_FILES = ""
+        self.JSON_FILES = ""
+        self.BIN_FILES = ""
+        self.LORA_FILES = ""
+        self.GGUF_AND_BIN_FILES = ""
+
+        # Status Messages
         self.DOWNLOAD_COMPLETE = ""
         self.CUDA_EXTRACTION_FAILED = ""
         self.PRESET_SAVED = ""
@@ -62,18 +132,14 @@ class _Localization:
         self.DOWNLOAD_FAILED = ""
         self.NO_BACKEND_SELECTED = ""
         self.NO_MODEL_SELECTED = ""
-        self.REFRESH_RELEASES = ""
         self.NO_SUITABLE_CUDA_BACKENDS = ""
+        self.IN_PROGRESS = ""
         self.LLAMACPP_DOWNLOADED_EXTRACTED = ""
         self.CUDA_FILES_EXTRACTED = ""
         self.NO_SUITABLE_CUDA_BACKEND_EXTRACTION = ""
         self.ERROR_FETCHING_RELEASES = ""
         self.CONFIRM_DELETION_TITLE = ""
         self.LOG_FOR = ""
-        self.ALL_FILES = ""
-        self.GGUF_FILES = ""
-        self.DAT_FILES = ""
-        self.JSON_FILES = ""
         self.FAILED_LOAD_PRESET = ""
         self.INITIALIZING_AUTOGGUF = ""
         self.AUTOGGUF_INITIALIZATION_COMPLETE = ""
@@ -89,7 +155,6 @@ class _Localization:
         self.TASK_PRESET_SAVED = ""
         self.TASK_PRESET_SAVED_TO = ""
         self.RESTARTING_TASK = ""
-        self.IN_PROGRESS = ""
         self.DOWNLOAD_FINISHED_EXTRACTED_TO = ""
         self.LLAMACPP_DOWNLOADED_AND_EXTRACTED = ""
         self.NO_SUITABLE_CUDA_BACKEND_FOUND = ""
@@ -164,26 +229,11 @@ class _Localization:
         self.OUTPUT_PATH_FOR_GENERATED_IMATRIX = ""
         self.HOW_OFTEN_TO_SAVE_IMATRIX = ""
         self.SET_GPU_OFFLOAD_VALUE = ""
-        self.COMPLETED = ""
-        self.REFRESH_MODELS = ""
-        self.EXTRA_ARGUMENTS = ""
-        self.EXTRA_ARGUMENTS_LABEL = ""
-        self.CONTEXT_SIZE = ""
-        self.CONTEXT_SIZE_FOR_IMATRIX = ""
-        self.THREADS = ""
-        self.NUMBER_OF_THREADS_FOR_IMATRIX = ""
-        self.LORA_CONVERSION = ""
-        self.LORA_INPUT_PATH = ""
-        self.LORA_OUTPUT_PATH = ""
-        self.SELECT_LORA_INPUT_DIRECTORY = ""
-        self.SELECT_LORA_OUTPUT_FILE = ""
-        self.CONVERT_LORA = ""
         self.STARTING_LORA_CONVERSION = ""
         self.LORA_INPUT_PATH_REQUIRED = ""
         self.LORA_OUTPUT_PATH_REQUIRED = ""
         self.ERROR_STARTING_LORA_CONVERSION = ""
         self.LORA_CONVERSION_TASK_STARTED = ""
-        self.BIN_FILES = ""
         self.BROWSING_FOR_LORA_INPUT_DIRECTORY = ""
         self.BROWSING_FOR_LORA_OUTPUT_FILE = ""
         self.CONVERTING_LORA = ""
@@ -191,31 +241,19 @@ class _Localization:
         self.LORA_FILE_MOVED = ""
         self.LORA_FILE_NOT_FOUND = ""
         self.ERROR_MOVING_LORA_FILE = ""
-        self.EXPORT_LORA = ""
         self.MODEL_PATH_REQUIRED = ""
-        self.OUTPUT_PATH_REQUIRED = ""
         self.AT_LEAST_ONE_LORA_ADAPTER_REQUIRED = ""
         self.INVALID_LORA_SCALE_VALUE = ""
         self.ERROR_STARTING_LORA_EXPORT = ""
         self.LORA_EXPORT_TASK_STARTED = ""
-        self.GGML_LORA_ADAPTERS = ""
-        self.SELECT_LORA_ADAPTER_FILES = ""
-        self.ADD_ADAPTER = ""
-        self.DELETE_ADAPTER = ""
-        self.LORA_SCALE = ""
-        self.ENTER_LORA_SCALE_VALUE = ""
-        self.NUMBER_OF_THREADS_FOR_LORA_EXPORT = ""
         self.EXPORTING_LORA = ""
         self.BROWSING_FOR_EXPORT_LORA_MODEL_FILE = ""
         self.BROWSING_FOR_EXPORT_LORA_OUTPUT_FILE = ""
         self.ADDING_LORA_ADAPTER = ""
         self.DELETING_LORA_ADAPTER = ""
-        self.LORA_FILES = ""
         self.SELECT_LORA_ADAPTER_FILE = ""
         self.STARTING_LORA_EXPORT = ""
-        self.OUTPUT_TYPE = ""
         self.SELECT_OUTPUT_TYPE = ""
-        self.GGUF_AND_BIN_FILES = ""
         self.BASE_MODEL = ""
         self.SELECT_BASE_MODEL_FILE = ""
         self.BASE_MODEL_PATH_REQUIRED = ""
@@ -226,16 +264,20 @@ class _Localization:
         self.GENERATING_IMATRIX_FOR = ""
         self.MODEL_PATH_REQUIRED_FOR_IMATRIX = ""
         self.NO_ASSET_SELECTED_FOR_CUDA_CHECK = ""
-        self.QUANTIZATION_COMMAND = ""
-        self.IMATRIX_GENERATION_COMMAND = ""
-        self.LORA_CONVERSION_COMMAND = ""
-        self.LORA_EXPORT_COMMAND = ""
         self.NO_QUANTIZATION_TYPE_SELECTED = ""
+        self.STARTING_HF_TO_GGUF_CONVERSION = ""
+        self.MODEL_DIRECTORY_REQUIRED = ""
+        self.HF_TO_GGUF_CONVERSION_COMMAND = ""
+        self.CONVERTING_TO_GGUF = ""
+        self.ERROR_STARTING_HF_TO_GGUF_CONVERSION = ""
+        self.HF_TO_GGUF_CONVERSION_TASK_STARTED = ""
 
 
 class _English(_Localization):
     def __init__(self):
         super().__init__()
+
+        # General UI
         self.WINDOW_TITLE = "AutoGGUF (automated GGUF model quantizer)"
         self.RAM_USAGE = "RAM Usage:"
         self.CPU_USAGE = "CPU Usage:"
@@ -246,6 +288,9 @@ class _English(_Localization):
         self.LOGS_PATH = "Logs Path:"
         self.BROWSE = "Browse"
         self.AVAILABLE_MODELS = "Available Models:"
+        self.REFRESH_MODELS = "Refresh Models"
+
+        # Quantization
         self.QUANTIZATION_TYPE = "Quantization Type:"
         self.ALLOW_REQUANTIZE = "Allow Requantize"
         self.LEAVE_OUTPUT_TENSOR = "Leave Output Tensor"
@@ -259,15 +304,27 @@ class _English(_Localization):
         self.KV_OVERRIDES = "KV Overrides:"
         self.ADD_NEW_OVERRIDE = "Add new override"
         self.QUANTIZE_MODEL = "Quantize Model"
+        self.EXTRA_ARGUMENTS = "Extra Arguments:"
+        self.EXTRA_ARGUMENTS_LABEL = "Additional command-line arguments"
+        self.QUANTIZATION_COMMAND = "Quantization command"
+
+        # Presets
         self.SAVE_PRESET = "Save Preset"
         self.LOAD_PRESET = "Load Preset"
+
+        # Tasks
         self.TASKS = "Tasks:"
+
+        # llama.cpp Download
         self.DOWNLOAD_LLAMACPP = "Download llama.cpp"
         self.SELECT_RELEASE = "Select Release:"
         self.SELECT_ASSET = "Select Asset:"
         self.EXTRACT_CUDA_FILES = "Extract CUDA files"
         self.SELECT_CUDA_BACKEND = "Select CUDA Backend:"
         self.DOWNLOAD = "Download"
+        self.REFRESH_RELEASES = "Refresh Releases"
+
+        # IMatrix Generation
         self.IMATRIX_GENERATION = "IMatrix Generation"
         self.DATA_FILE = "Data File:"
         self.MODEL = "Model:"
@@ -276,6 +333,47 @@ class _English(_Localization):
         self.GPU_OFFLOAD = "GPU Offload:"
         self.AUTO = "Auto"
         self.GENERATE_IMATRIX = "Generate IMatrix"
+        self.CONTEXT_SIZE = "Context Size:"
+        self.CONTEXT_SIZE_FOR_IMATRIX = "Context size for IMatrix generation"
+        self.THREADS = "Threads:"
+        self.NUMBER_OF_THREADS_FOR_IMATRIX = "Number of threads for IMatrix generation"
+        self.IMATRIX_GENERATION_COMMAND = "IMatrix generation command"
+
+        # LoRA Conversion
+        self.LORA_CONVERSION = "LoRA Conversion"
+        self.LORA_INPUT_PATH = "LoRA Input Path"
+        self.LORA_OUTPUT_PATH = "LoRA Output Path"
+        self.SELECT_LORA_INPUT_DIRECTORY = "Select LoRA Input Directory"
+        self.SELECT_LORA_OUTPUT_FILE = "Select LoRA Output File"
+        self.CONVERT_LORA = "Convert LoRA"
+        self.LORA_CONVERSION_COMMAND = "LoRA conversion command"
+
+        # LoRA Export
+        self.EXPORT_LORA = "Export LoRA"
+        self.GGML_LORA_ADAPTERS = "GGML LoRA Adapters"
+        self.SELECT_LORA_ADAPTER_FILES = "Select LoRA Adapter Files"
+        self.ADD_ADAPTER = "Add Adapter"
+        self.DELETE_ADAPTER = "Delete"
+        self.LORA_SCALE = "LoRA Scale"
+        self.ENTER_LORA_SCALE_VALUE = "Enter LoRA Scale Value (Optional)"
+        self.NUMBER_OF_THREADS_FOR_LORA_EXPORT = "Number of Threads for LoRA Export"
+        self.LORA_EXPORT_COMMAND = "LoRA export command"
+
+        # HuggingFace to GGUF Conversion
+        self.HF_TO_GGUF_CONVERSION = "HuggingFace to GGUF Conversion"
+        self.MODEL_DIRECTORY = "Model Directory:"
+        self.OUTPUT_FILE = "Output File:"
+        self.OUTPUT_TYPE = "Output Type:"
+        self.VOCAB_ONLY = "Vocab Only"
+        self.USE_TEMP_FILE = "Use Temp File"
+        self.NO_LAZY_EVALUATION = "No Lazy Evaluation"
+        self.MODEL_NAME = "Model Name:"
+        self.VERBOSE = "Verbose"
+        self.SPLIT_MAX_SIZE = "Split Max Size:"
+        self.DRY_RUN = "Dry Run"
+        self.CONVERT_HF_TO_GGUF = "Convert HF to GGUF"
+
+        # General Messages
         self.ERROR = "Error"
         self.WARNING = "Warning"
         self.PROPERTIES = "Properties"
@@ -288,6 +386,18 @@ class _English(_Localization):
         )
         self.YES = "Yes"
         self.NO = "No"
+        self.COMPLETED = "Completed"
+
+        # File Types
+        self.ALL_FILES = "All Files (*)"
+        self.GGUF_FILES = "GGUF Files (*.gguf)"
+        self.DAT_FILES = "DAT Files (*.dat)"
+        self.JSON_FILES = "JSON Files (*.json)"
+        self.BIN_FILES = "Binary Files (*.bin)"
+        self.LORA_FILES = "LoRA Files (*.bin)"
+        self.GGUF_AND_BIN_FILES = "GGUF and Binary Files (*.gguf *.bin)"
+
+        # Status Messages
         self.DOWNLOAD_COMPLETE = "Download Complete"
         self.CUDA_EXTRACTION_FAILED = "CUDA Extraction Failed"
         self.PRESET_SAVED = "Preset Saved"
@@ -296,8 +406,8 @@ class _English(_Localization):
         self.DOWNLOAD_FAILED = "Download failed"
         self.NO_BACKEND_SELECTED = "No backend selected"
         self.NO_MODEL_SELECTED = "No model selected"
-        self.REFRESH_RELEASES = "Refresh Releases"
         self.NO_SUITABLE_CUDA_BACKENDS = "No suitable CUDA backends found"
+        self.IN_PROGRESS = "In Progress"
         self.LLAMACPP_DOWNLOADED_EXTRACTED = (
             "llama.cpp binary downloaded and extracted to {0}"
         )
@@ -308,10 +418,6 @@ class _English(_Localization):
         self.ERROR_FETCHING_RELEASES = "Error fetching releases: {0}"
         self.CONFIRM_DELETION_TITLE = "Confirm Deletion"
         self.LOG_FOR = "Log for {0}"
-        self.ALL_FILES = "All Files (*)"
-        self.GGUF_FILES = "GGUF Files (*.gguf)"
-        self.DAT_FILES = "DAT Files (*.dat)"
-        self.JSON_FILES = "JSON Files (*.json)"
         self.FAILED_LOAD_PRESET = "Failed to load preset: {0}"
         self.INITIALIZING_AUTOGGUF = "Initializing AutoGGUF application"
         self.AUTOGGUF_INITIALIZATION_COMPLETE = "AutoGGUF initialization complete"
@@ -327,7 +433,6 @@ class _English(_Localization):
         self.TASK_PRESET_SAVED = "Task Preset Saved"
         self.TASK_PRESET_SAVED_TO = "Task preset saved to {0}"
         self.RESTARTING_TASK = "Restarting task: {0}"
-        self.IN_PROGRESS = "In Progress"
         self.DOWNLOAD_FINISHED_EXTRACTED_TO = "Download finished. Extracted to: {0}"
         self.LLAMACPP_DOWNLOADED_AND_EXTRACTED = (
             "llama.cpp binary downloaded and extracted to {0}"
@@ -426,27 +531,11 @@ class _English(_Localization):
         self.OUTPUT_PATH_FOR_GENERATED_IMATRIX = "Output path for the generated IMatrix"
         self.HOW_OFTEN_TO_SAVE_IMATRIX = "How often to save the IMatrix"
         self.SET_GPU_OFFLOAD_VALUE = "Set GPU offload value (-ngl)"
-        self.COMPLETED = "Completed"
-        # TODO: Add the following keys to other languages
-        self.REFRESH_MODELS = "Refresh Models"
-        self.EXTRA_ARGUMENTS = "Extra Arguments:"
-        self.EXTRA_ARGUMENTS_LABEL = "Additional command-line arguments"
-        self.CONTEXT_SIZE = "Context Size:"
-        self.CONTEXT_SIZE_FOR_IMATRIX = "Context size for IMatrix generation"
-        self.THREADS = "Threads:"
-        self.NUMBER_OF_THREADS_FOR_IMATRIX = "Number of threads for IMatrix generation"
-        self.LORA_CONVERSION = "LoRA Conversion"
-        self.LORA_INPUT_PATH = "LoRA Input Path"
-        self.LORA_OUTPUT_PATH = "LoRA Output Path"
-        self.SELECT_LORA_INPUT_DIRECTORY = "Select LoRA Input Directory"
-        self.SELECT_LORA_OUTPUT_FILE = "Select LoRA Output File"
-        self.CONVERT_LORA = "Convert LoRA"
         self.STARTING_LORA_CONVERSION = "Starting LoRA Conversion"
         self.LORA_INPUT_PATH_REQUIRED = "LoRA input path is required."
         self.LORA_OUTPUT_PATH_REQUIRED = "LoRA output path is required."
         self.ERROR_STARTING_LORA_CONVERSION = "Error starting LoRA conversion: {}"
         self.LORA_CONVERSION_TASK_STARTED = "LoRA conversion task started."
-        self.BIN_FILES = "Binary Files (*.bin)"
         self.BROWSING_FOR_LORA_INPUT_DIRECTORY = "Browsing for LoRA input directory..."
         self.BROWSING_FOR_LORA_OUTPUT_FILE = "Browsing for LoRA output file..."
         self.CONVERTING_LORA = "LoRA Conversion"
@@ -454,22 +543,13 @@ class _English(_Localization):
         self.LORA_FILE_MOVED = "LoRA file moved from {} to {}."
         self.LORA_FILE_NOT_FOUND = "LoRA file not found: {}."
         self.ERROR_MOVING_LORA_FILE = "Error moving LoRA file: {}"
-        self.EXPORT_LORA = "Export LoRA"
         self.MODEL_PATH_REQUIRED = "Model path is required."
-        self.OUTPUT_PATH_REQUIRED = "Output path is required."
         self.AT_LEAST_ONE_LORA_ADAPTER_REQUIRED = (
             "At least one LoRA adapter is required."
         )
         self.INVALID_LORA_SCALE_VALUE = "Invalid LoRA scale value."
         self.ERROR_STARTING_LORA_EXPORT = "Error starting LoRA export: {}"
         self.LORA_EXPORT_TASK_STARTED = "LoRA export task started."
-        self.GGML_LORA_ADAPTERS = "GGML LoRA Adapters"
-        self.SELECT_LORA_ADAPTER_FILES = "Select LoRA Adapter Files"
-        self.ADD_ADAPTER = "Add Adapter"
-        self.DELETE_ADAPTER = "Delete"
-        self.LORA_SCALE = "LoRA Scale"
-        self.ENTER_LORA_SCALE_VALUE = "Enter LoRA Scale Value (Optional)"
-        self.NUMBER_OF_THREADS_FOR_LORA_EXPORT = "Number of Threads for LoRA Export"
         self.EXPORTING_LORA = "Exporting LoRA..."
         self.BROWSING_FOR_EXPORT_LORA_MODEL_FILE = (
             "Browsing for Export LoRA Model File..."
@@ -479,12 +559,9 @@ class _English(_Localization):
         )
         self.ADDING_LORA_ADAPTER = "Adding LoRA Adapter..."
         self.DELETING_LORA_ADAPTER = "Deleting LoRA Adapter..."
-        self.LORA_FILES = "LoRA Files (*.bin)"
         self.SELECT_LORA_ADAPTER_FILE = "Select LoRA Adapter File"
         self.STARTING_LORA_EXPORT = "Starting LoRA export..."
-        self.OUTPUT_TYPE = "Output Type"
         self.SELECT_OUTPUT_TYPE = "Select Output Type (GGUF or GGML)"
-        self.GGUF_AND_BIN_FILES = "GGUF and Binary Files (*.gguf *.bin)"
         self.BASE_MODEL = "Base Model"
         self.SELECT_BASE_MODEL_FILE = "Select Base Model File (GGUF)"
         self.BASE_MODEL_PATH_REQUIRED = "Base model path is required for GGUF output."
@@ -499,11 +576,17 @@ class _English(_Localization):
             "Model path is required for IMatrix generation."
         )
         self.NO_ASSET_SELECTED_FOR_CUDA_CHECK = "No asset selected for CUDA check"
-        self.QUANTIZATION_COMMAND = "Quantization command"
-        self.IMATRIX_GENERATION_COMMAND = "IMatrix generation command"
-        self.LORA_CONVERSION_COMMAND = "LoRA conversion command"
-        self.LORA_EXPORT_COMMAND = "LoRA export command"
         self.NO_QUANTIZATION_TYPE_SELECTED = "No quantization type selected. Please select at least one quantization type."
+        self.STARTING_HF_TO_GGUF_CONVERSION = "Starting HuggingFace to GGUF conversion"
+        self.MODEL_DIRECTORY_REQUIRED = "Model directory is required"
+        self.HF_TO_GGUF_CONVERSION_COMMAND = "HF to GGUF Conversion Command: {}"
+        self.CONVERTING_TO_GGUF = "Converting {} to GGUF"
+        self.ERROR_STARTING_HF_TO_GGUF_CONVERSION = (
+            "Error starting HuggingFace to GGUF conversion: {}"
+        )
+        self.HF_TO_GGUF_CONVERSION_TASK_STARTED = (
+            "HuggingFace to GGUF conversion task started"
+        )
 
 
 class _French:

@@ -552,6 +552,58 @@ class AutoGGUF(QMainWindow):
             export_lora_group
         )  # Add the Export LoRA group to the right layout
 
+        # HuggingFace to GGUF Conversion
+        hf_to_gguf_group = QGroupBox(HF_TO_GGUF_CONVERSION)
+        hf_to_gguf_layout = QFormLayout()
+
+        self.hf_model_input = QLineEdit()
+        hf_model_input_button = QPushButton(BROWSE)
+        hf_model_input_button.clicked.connect(self.browse_hf_model_input)
+        hf_model_input_layout = QHBoxLayout()
+        hf_model_input_layout.addWidget(self.hf_model_input)
+        hf_model_input_layout.addWidget(hf_model_input_button)
+        hf_to_gguf_layout.addRow(MODEL_DIRECTORY, hf_model_input_layout)
+
+        self.hf_outfile = QLineEdit()
+        hf_outfile_button = QPushButton(BROWSE)
+        hf_outfile_button.clicked.connect(self.browse_hf_outfile)
+        hf_outfile_layout = QHBoxLayout()
+        hf_outfile_layout.addWidget(self.hf_outfile)
+        hf_outfile_layout.addWidget(hf_outfile_button)
+        hf_to_gguf_layout.addRow(OUTPUT_FILE, hf_outfile_layout)
+
+        self.hf_outtype = QComboBox()
+        self.hf_outtype.addItems(["f32", "f16", "bf16", "q8_0", "auto"])
+        hf_to_gguf_layout.addRow(OUTPUT_TYPE, self.hf_outtype)
+
+        self.hf_vocab_only = QCheckBox(VOCAB_ONLY)
+        hf_to_gguf_layout.addRow(self.hf_vocab_only)
+
+        self.hf_use_temp_file = QCheckBox(USE_TEMP_FILE)
+        hf_to_gguf_layout.addRow(self.hf_use_temp_file)
+
+        self.hf_no_lazy = QCheckBox(NO_LAZY_EVALUATION)
+        hf_to_gguf_layout.addRow(self.hf_no_lazy)
+
+        self.hf_model_name = QLineEdit()
+        hf_to_gguf_layout.addRow(MODEL_NAME, self.hf_model_name)
+
+        self.hf_verbose = QCheckBox(VERBOSE)
+        hf_to_gguf_layout.addRow(self.hf_verbose)
+
+        self.hf_split_max_size = QLineEdit()
+        hf_to_gguf_layout.addRow(SPLIT_MAX_SIZE, self.hf_split_max_size)
+
+        self.hf_dry_run = QCheckBox(DRY_RUN)
+        hf_to_gguf_layout.addRow(self.hf_dry_run)
+
+        hf_to_gguf_convert_button = QPushButton(CONVERT_HF_TO_GGUF)
+        hf_to_gguf_convert_button.clicked.connect(self.convert_hf_to_gguf)
+        hf_to_gguf_layout.addRow(hf_to_gguf_convert_button)
+
+        hf_to_gguf_group.setLayout(hf_to_gguf_layout)
+        right_layout.addWidget(hf_to_gguf_group)
+
         # Modify the task list to support right-click menu
         self.task_list.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
         self.task_list.customContextMenuRequested.connect(self.show_task_context_menu)
@@ -760,6 +812,90 @@ class AutoGGUF(QMainWindow):
             if self.export_lora_adapters.itemWidget(item) == adapter_widget:
                 self.export_lora_adapters.takeItem(i)  # Remove the item
                 break
+
+    def browse_hf_model_input(self):
+        self.logger.info("Browsing for HuggingFace model directory")
+        model_dir = QFileDialog.getExistingDirectory(
+            self, "Select HuggingFace Model Directory"
+        )
+        if model_dir:
+            self.hf_model_input.setText(os.path.abspath(model_dir))
+
+    def browse_hf_outfile(self):
+        self.logger.info("Browsing for HuggingFace to GGUF output file")
+        outfile, _ = QFileDialog.getSaveFileName(
+            self, "Select Output File", "", "GGUF Files (*.gguf)"
+        )
+        if outfile:
+            self.hf_outfile.setText(os.path.abspath(outfile))
+
+    def convert_hf_to_gguf(self):
+        self.logger.info(STARTING_HF_TO_GGUF_CONVERSION)
+        try:
+            model_dir = self.hf_model_input.text()
+            if not model_dir:
+                raise ValueError(MODEL_DIRECTORY_REQUIRED)
+
+            command = ["python", "src/convert_hf_to_gguf.py"]
+
+            if self.hf_vocab_only.isChecked():
+                command.append("--vocab-only")
+
+            if self.hf_outfile.text():
+                command.extend(["--outfile", self.hf_outfile.text()])
+
+            command.extend(["--outtype", self.hf_outtype.currentText()])
+
+            if self.hf_use_temp_file.isChecked():
+                command.append("--use-temp-file")
+
+            if self.hf_no_lazy.isChecked():
+                command.append("--no-lazy")
+
+            if self.hf_model_name.text():
+                command.extend(["--model-name", self.hf_model_name.text()])
+
+            if self.hf_verbose.isChecked():
+                command.append("--verbose")
+
+            if self.hf_split_max_size.text():
+                command.extend(["--split-max-size", self.hf_split_max_size.text()])
+
+            if self.hf_dry_run.isChecked():
+                command.append("--dry-run")
+
+            command.append(model_dir)
+
+            logs_path = self.logs_input.text()
+            ensure_directory(logs_path)
+
+            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+            log_file = os.path.join(logs_path, f"hf_to_gguf_{timestamp}.log")
+
+            # Log command
+            command_str = " ".join(command)
+            self.logger.info(HF_TO_GGUF_CONVERSION_COMMAND.format(command_str))
+
+            thread = QuantizationThread(command, os.getcwd(), log_file)
+            self.quant_threads.append(thread)
+
+            task_name = CONVERTING_TO_GGUF.format(os.path.basename(model_dir))
+            task_item = TaskListItem(task_name, log_file, show_progress_bar=False)
+            list_item = QListWidgetItem(self.task_list)
+            list_item.setSizeHint(task_item.sizeHint())
+            self.task_list.addItem(list_item)
+            self.task_list.setItemWidget(list_item, task_item)
+
+            thread.status_signal.connect(task_item.update_status)
+            thread.finished_signal.connect(
+                lambda: self.task_finished(thread, task_item)
+            )
+            thread.error_signal.connect(lambda err: self.handle_error(err, task_item))
+            thread.start()
+
+        except Exception as e:
+            self.show_error(ERROR_STARTING_HF_TO_GGUF_CONVERSION.format(str(e)))
+        self.logger.info(HF_TO_GGUF_CONVERSION_TASK_STARTED)
 
     def export_lora(self):
         self.logger.info(STARTING_LORA_EXPORT)
