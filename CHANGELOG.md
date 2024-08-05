@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.4.2] - 2024-08-04
+
+### Fixed
+- Resolves bug where Base Model text was shown even when GGML type was selected
+- Improved alignment
+
+### Changed
+- Minor repository changes
+
 ## [1.4.1] - 2024-08-04
 
 ### Added
