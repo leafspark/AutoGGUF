@@ -31,7 +31,7 @@ class AutoGGUF(QMainWindow):
 
         self.logger.info(INITIALIZING_AUTOGGUF)
         self.setWindowTitle(WINDOW_TITLE)
-        self.setWindowIcon(QIcon(resource_path("assets/favicon.ico")))        
+        self.setWindowIcon(QIcon(resource_path("assets/favicon.ico")))
         self.setGeometry(100, 100, 1600, 1200)
 
         ensure_directory(os.path.abspath("quantized_models"))
@@ -171,7 +171,7 @@ class AutoGGUF(QMainWindow):
                 "Q5_K_S",
                 "Q5_K_M",
                 "Q6_K",
-                "Q8_0",            
+                "Q8_0",
                 "Q4_0",
                 "Q4_1",
                 "Q5_0",
@@ -180,7 +180,7 @@ class AutoGGUF(QMainWindow):
                 "Q4_0_4_8",
                 "Q4_0_8_8",
                 "BF16",
-                "F16",                
+                "F16",
                 "F32",
                 "COPY",
             ]
@@ -452,8 +452,13 @@ class AutoGGUF(QMainWindow):
         # Output Type Dropdown
         self.lora_output_type_combo = QComboBox()
         self.lora_output_type_combo.addItems(["GGML", "GGUF"])
-        self.lora_output_type_combo.currentIndexChanged.connect(self.update_base_model_visibility)
-        lora_layout.addRow(self.create_label(OUTPUT_TYPE, SELECT_OUTPUT_TYPE), self.lora_output_type_combo)
+        self.lora_output_type_combo.currentIndexChanged.connect(
+            self.update_base_model_visibility
+        )
+        lora_layout.addRow(
+            self.create_label(OUTPUT_TYPE, SELECT_OUTPUT_TYPE),
+            self.lora_output_type_combo,
+        )
 
         # Base Model Path (initially hidden)
         self.base_model_label = self.create_label(BASE_MODEL, SELECT_BASE_MODEL_FILE)
@@ -471,7 +476,9 @@ class AutoGGUF(QMainWindow):
         wrapper_layout = QHBoxLayout(self.base_model_wrapper)
         wrapper_layout.addWidget(self.base_model_label)
         wrapper_layout.addWidget(self.base_model_widget, 1)  # Give it a stretch factor
-        wrapper_layout.setContentsMargins(0, 0, 0, 0)  # Remove margins for better alignment
+        wrapper_layout.setContentsMargins(
+            0, 0, 0, 0
+        )  # Remove margins for better alignment
 
         # Add the wrapper to the layout
         lora_layout.addRow(self.base_model_wrapper)
@@ -545,7 +552,7 @@ class AutoGGUF(QMainWindow):
         # Modify the task list to support right-click menu
         self.task_list.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
         self.task_list.customContextMenuRequested.connect(self.show_task_context_menu)
-        
+
         # Set inital state
         self.update_base_model_visibility(self.lora_output_type_combo.currentIndex())
 
@@ -1200,19 +1207,19 @@ class AutoGGUF(QMainWindow):
         if reply == QMessageBox.StandardButton.Yes:
             # Retrieve the task_item before removing it from the list
             task_item = self.task_list.itemWidget(item)
-            
+
             # Remove the item from the list
             row = self.task_list.row(item)
             self.task_list.takeItem(row)
-            
+
             # If the task is still running, terminate it
             if task_item and task_item.log_file:
                 for thread in self.quant_threads:
                     if thread.log_file == task_item.log_file:
                         thread.terminate()
                         self.quant_threads.remove(thread)
-                        break       
-            
+                        break
+
             # Delete the task_item widget
             if task_item:
                 task_item.deleteLater()
@@ -1395,7 +1402,7 @@ class AutoGGUF(QMainWindow):
                     override_string = entry.get_override_string(
                         model_name=model_name,
                         quant_type=quant_type,
-                        output_path=output_path
+                        output_path=output_path,
                     )
                     if override_string:
                         command.extend(["--override-kv", override_string])
@@ -1413,7 +1420,7 @@ class AutoGGUF(QMainWindow):
             log_file = os.path.join(
                 logs_path, f"{model_name}_{timestamp}_{quant_type}.log"
             )
-            
+
             # Log quant command
             command_str = " ".join(command)
             self.logger.info(f"{QUANTIZATION_COMMAND}: {command_str}")
@@ -1430,7 +1437,9 @@ class AutoGGUF(QMainWindow):
             self.task_list.setItemWidget(list_item, task_item)
 
             # Connect the output signal to the new progress parsing function
-            thread.output_signal.connect(lambda line: self.parse_progress(line, task_item))
+            thread.output_signal.connect(
+                lambda line: self.parse_progress(line, task_item)
+            )
             thread.status_signal.connect(task_item.update_status)
             thread.finished_signal.connect(lambda: self.task_finished(thread))
             thread.error_signal.connect(lambda err: self.handle_error(err, task_item))
@@ -1556,7 +1565,7 @@ class AutoGGUF(QMainWindow):
 
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
             log_file = os.path.join(self.logs_input.text(), f"imatrix_{timestamp}.log")
-            
+
             # Log command
             command_str = " ".join(command)
             self.logger.info(f"{IMATRIX_GENERATION_COMMAND}: {command_str}")
@@ -1580,7 +1589,7 @@ class AutoGGUF(QMainWindow):
         except Exception as e:
             self.show_error(ERROR_STARTING_IMATRIX_GENERATION.format(str(e)))
         self.logger.info(IMATRIX_GENERATION_TASK_STARTED)
-        
+
     def show_error(self, message):
         self.logger.error(ERROR_MESSAGE.format(message))
         QMessageBox.critical(self, ERROR, message)

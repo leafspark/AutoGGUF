@@ -12,14 +12,18 @@ import numpy as np
 def quant_shape_to_byte_shape(shape: Sequence[int], quant_type: GGMLQuantizationType):
     block_size, type_size = GGML_QUANT_SIZES[quant_type]
     if shape[-1] % block_size != 0:
-        raise ValueError(f"Quantized tensor row size ({shape[-1]}) is not a multiple of {quant_type.name} block size ({block_size})")
+        raise ValueError(
+            f"Quantized tensor row size ({shape[-1]}) is not a multiple of {quant_type.name} block size ({block_size})"
+        )
     return (*shape[:-1], shape[-1] // block_size * type_size)
 
 
 def quant_shape_from_byte_shape(shape: Sequence[int], quant_type: GGMLQuantizationType):
     block_size, type_size = GGML_QUANT_SIZES[quant_type]
     if shape[-1] % type_size != 0:
-        raise ValueError(f"Quantized tensor bytes per row ({shape[-1]}) is not a multiple of {quant_type.name} type size ({type_size})")
+        raise ValueError(
+            f"Quantized tensor bytes per row ({shape[-1]}) is not a multiple of {quant_type.name} type size ({type_size})"
+        )
     return (*shape[:-1], shape[-1] // type_size * block_size)
 
 
@@ -27,14 +31,23 @@ def quant_shape_from_byte_shape(shape: Sequence[int], quant_type: GGMLQuantizati
 def __compute_fp32_to_bf16(n: np.ndarray) -> np.ndarray:
     n = n.astype(np.float32, copy=False).view(np.uint32)
     # force nan to quiet
-    n = np.where((n & 0x7fffffff) > 0x7f800000, (n & np.uint32(0xffff0000)) | np.uint32(64 << 16), n)
+    n = np.where(
+        (n & 0x7FFFFFFF) > 0x7F800000,
+        (n & np.uint32(0xFFFF0000)) | np.uint32(64 << 16),
+        n,
+    )
     # round to nearest even
-    n = (np.uint64(n) + (0x7fff + ((n >> 16) & 1))) >> 16
+    n = (np.uint64(n) + (0x7FFF + ((n >> 16) & 1))) >> 16
     return n.astype(np.uint16)
 
 
 # This is faster than np.vectorize and np.apply_along_axis because it works on more than one row at a time
-def __apply_over_grouped_rows(func: Callable[[np.ndarray], np.ndarray], arr: np.ndarray, otype: DTypeLike, oshape: tuple[int, ...]) -> np.ndarray:
+def __apply_over_grouped_rows(
+    func: Callable[[np.ndarray], np.ndarray],
+    arr: np.ndarray,
+    otype: DTypeLike,
+    oshape: tuple[int, ...],
+) -> np.ndarray:
     rows = arr.reshape((-1, arr.shape[-1]))
     osize = 1
     for dim in oshape:
@@ -42,15 +55,23 @@ def __apply_over_grouped_rows(func: Callable[[np.ndarray], np.ndarray], arr: np.
     out = np.empty(shape=osize, dtype=otype)
     # compute over groups of 16 rows (arbitrary, but seems good for performance)
     n_groups = (rows.shape[0] // 16) or 1
-    np.concatenate([func(group).ravel() for group in np.array_split(rows, n_groups)], axis=0, out=out)
+    np.concatenate(
+        [func(group).ravel() for group in np.array_split(rows, n_groups)],
+        axis=0,
+        out=out,
+    )
     return out.reshape(oshape)
 
 
 def __quantize_bf16_array(n: np.ndarray) -> np.ndarray:
-    return __apply_over_grouped_rows(__compute_fp32_to_bf16, arr=n, otype=np.uint16, oshape=n.shape)
+    return __apply_over_grouped_rows(
+        __compute_fp32_to_bf16, arr=n, otype=np.uint16, oshape=n.shape
+    )
 
 
-__quantize_bf16_lazy = LazyNumpyTensor._wrap_fn(__quantize_bf16_array, meta_noop=np.uint16)
+__quantize_bf16_lazy = LazyNumpyTensor._wrap_fn(
+    __quantize_bf16_array, meta_noop=np.uint16
+)
 
 
 def quantize_bf16(n: np.ndarray):
@@ -105,7 +126,12 @@ def __quantize_q8_0_rows(n: np.ndarray) -> np.ndarray:
 
 
 def __quantize_q8_0_array(n: np.ndarray) -> np.ndarray:
-    return __apply_over_grouped_rows(__quantize_q8_0_rows, arr=n, otype=np.uint8, oshape=__quantize_q8_0_shape_change(n.shape))
+    return __apply_over_grouped_rows(
+        __quantize_q8_0_rows,
+        arr=n,
+        otype=np.uint8,
+        oshape=__quantize_q8_0_shape_change(n.shape),
+    )
 
 
 __quantize_q8_0_lazy = LazyNumpyTensor._wrap_fn(

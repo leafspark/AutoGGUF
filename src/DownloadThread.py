@@ -13,6 +13,7 @@ import requests
 import zipfile
 from datetime import datetime
 
+
 class DownloadThread(QThread):
     progress_signal = pyqtSignal(int)
     finished_signal = pyqtSignal(str)
@@ -27,11 +28,11 @@ class DownloadThread(QThread):
         try:
             response = requests.get(self.url, stream=True)
             response.raise_for_status()
-            total_size = int(response.headers.get('content-length', 0))
+            total_size = int(response.headers.get("content-length", 0))
             block_size = 8192
             downloaded = 0
 
-            with open(self.save_path, 'wb') as file:
+            with open(self.save_path, "wb") as file:
                 for data in response.iter_content(block_size):
                     size = file.write(data)
                     downloaded += size
@@ -41,7 +42,7 @@ class DownloadThread(QThread):
 
             # Extract the downloaded zip file
             extract_dir = os.path.splitext(self.save_path)[0]
-            with zipfile.ZipFile(self.save_path, 'r') as zip_ref:
+            with zipfile.ZipFile(self.save_path, "r") as zip_ref:
                 zip_ref.extractall(extract_dir)
 
             # Remove the zip file after extraction

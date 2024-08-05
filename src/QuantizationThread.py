@@ -15,6 +15,7 @@ import traceback
 from datetime import datetime
 from imports_and_globals import open_file_safe
 
+
 class QuantizationThread(QThread):
     # Define custom signals for communication with the main thread
     output_signal = pyqtSignal(str)
@@ -50,7 +51,7 @@ class QuantizationThread(QThread):
                     log.flush()
                     self.status_signal.emit("In Progress")
                     self.parse_model_info(line)
-            
+
             # Wait for process to complete
             self.process.wait()
             if self.process.returncode == 0:

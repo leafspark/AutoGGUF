@@ -1,5 +1,6 @@
 import os
 
+
 class _Localization:
     def __init__(self):
         super().__init__()
@@ -230,6 +231,7 @@ class _Localization:
         self.LORA_CONVERSION_COMMAND = ""
         self.LORA_EXPORT_COMMAND = ""
 
+
 class _English(_Localization):
     def __init__(self):
         super().__init__()
@@ -280,7 +282,9 @@ class _English(_Localization):
         self.RESTART = "Restart"
         self.DELETE = "Delete"
         self.CONFIRM_DELETION = "Are you sure you want to delete this task?"
-        self.TASK_RUNNING_WARNING = "Some tasks are still running. Are you sure you want to quit?"
+        self.TASK_RUNNING_WARNING = (
+            "Some tasks are still running. Are you sure you want to quit?"
+        )
         self.YES = "Yes"
         self.NO = "No"
         self.DOWNLOAD_COMPLETE = "Download Complete"
@@ -293,9 +297,13 @@ class _English(_Localization):
         self.NO_MODEL_SELECTED = "No model selected"
         self.REFRESH_RELEASES = "Refresh Releases"
         self.NO_SUITABLE_CUDA_BACKENDS = "No suitable CUDA backends found"
-        self.LLAMACPP_DOWNLOADED_EXTRACTED = "llama.cpp binary downloaded and extracted to {0}"
+        self.LLAMACPP_DOWNLOADED_EXTRACTED = (
+            "llama.cpp binary downloaded and extracted to {0}"
+        )
         self.CUDA_FILES_EXTRACTED = "CUDA files extracted to"
-        self.NO_SUITABLE_CUDA_BACKEND_EXTRACTION = "No suitable CUDA backend found for extraction"
+        self.NO_SUITABLE_CUDA_BACKEND_EXTRACTION = (
+            "No suitable CUDA backend found for extraction"
+        )
         self.ERROR_FETCHING_RELEASES = "Error fetching releases: {0}"
         self.CONFIRM_DELETION_TITLE = "Confirm Deletion"
         self.LOG_FOR = "Log for {0}"
@@ -320,9 +328,15 @@ class _English(_Localization):
         self.RESTARTING_TASK = "Restarting task: {0}"
         self.IN_PROGRESS = "In Progress"
         self.DOWNLOAD_FINISHED_EXTRACTED_TO = "Download finished. Extracted to: {0}"
-        self.LLAMACPP_DOWNLOADED_AND_EXTRACTED = "llama.cpp binary downloaded and extracted to {0}"
-        self.NO_SUITABLE_CUDA_BACKEND_FOUND = "No suitable CUDA backend found for extraction"
-        self.LLAMACPP_BINARY_DOWNLOADED_AND_EXTRACTED = "llama.cpp binary downloaded and extracted to {0}"
+        self.LLAMACPP_DOWNLOADED_AND_EXTRACTED = (
+            "llama.cpp binary downloaded and extracted to {0}"
+        )
+        self.NO_SUITABLE_CUDA_BACKEND_FOUND = (
+            "No suitable CUDA backend found for extraction"
+        )
+        self.LLAMACPP_BINARY_DOWNLOADED_AND_EXTRACTED = (
+            "llama.cpp binary downloaded and extracted to {0}"
+        )
         self.REFRESHING_LLAMACPP_RELEASES = "Refreshing llama.cpp releases"
         self.UPDATING_ASSET_LIST = "Updating asset list"
         self.UPDATING_CUDA_OPTIONS = "Updating CUDA options"
@@ -369,24 +383,42 @@ class _English(_Localization):
         self.STARTING_IMATRIX_GENERATION = "Starting IMatrix generation"
         self.BACKEND_PATH_NOT_EXIST = "Backend path does not exist: {0}"
         self.GENERATING_IMATRIX = "Generating IMatrix"
-        self.ERROR_STARTING_IMATRIX_GENERATION = "Error starting IMatrix generation: {0}"
+        self.ERROR_STARTING_IMATRIX_GENERATION = (
+            "Error starting IMatrix generation: {0}"
+        )
         self.IMATRIX_GENERATION_TASK_STARTED = "IMatrix generation task started"
         self.ERROR_MESSAGE = "Error: {0}"
         self.TASK_ERROR = "Task error: {0}"
         self.APPLICATION_CLOSING = "Application closing"
         self.APPLICATION_CLOSED = "Application closed"
         self.SELECT_QUANTIZATION_TYPE = "Select the quantization type"
-        self.ALLOWS_REQUANTIZING = "Allows requantizing tensors that have already been quantized"
+        self.ALLOWS_REQUANTIZING = (
+            "Allows requantizing tensors that have already been quantized"
+        )
         self.LEAVE_OUTPUT_WEIGHT = "Will leave output.weight un(re)quantized"
-        self.DISABLE_K_QUANT_MIXTURES = "Disable k-quant mixtures and quantize all tensors to the same type"
-        self.USE_DATA_AS_IMPORTANCE_MATRIX = "Use data in file as importance matrix for quant optimizations"
-        self.USE_IMPORTANCE_MATRIX_FOR_TENSORS = "Use importance matrix for these tensors"
-        self.DONT_USE_IMPORTANCE_MATRIX_FOR_TENSORS = "Don't use importance matrix for these tensors"
+        self.DISABLE_K_QUANT_MIXTURES = (
+            "Disable k-quant mixtures and quantize all tensors to the same type"
+        )
+        self.USE_DATA_AS_IMPORTANCE_MATRIX = (
+            "Use data in file as importance matrix for quant optimizations"
+        )
+        self.USE_IMPORTANCE_MATRIX_FOR_TENSORS = (
+            "Use importance matrix for these tensors"
+        )
+        self.DONT_USE_IMPORTANCE_MATRIX_FOR_TENSORS = (
+            "Don't use importance matrix for these tensors"
+        )
         self.OUTPUT_TENSOR_TYPE = "Output Tensor Type:"
-        self.USE_THIS_TYPE_FOR_OUTPUT_WEIGHT = "Use this type for the output.weight tensor"
+        self.USE_THIS_TYPE_FOR_OUTPUT_WEIGHT = (
+            "Use this type for the output.weight tensor"
+        )
         self.TOKEN_EMBEDDING_TYPE = "Token Embedding Type:"
-        self.USE_THIS_TYPE_FOR_TOKEN_EMBEDDINGS = "Use this type for the token embeddings tensor"
-        self.WILL_GENERATE_QUANTIZED_MODEL_IN_SAME_SHARDS = "Will generate quantized model in the same shards as input"
+        self.USE_THIS_TYPE_FOR_TOKEN_EMBEDDINGS = (
+            "Use this type for the token embeddings tensor"
+        )
+        self.WILL_GENERATE_QUANTIZED_MODEL_IN_SAME_SHARDS = (
+            "Will generate quantized model in the same shards as input"
+        )
         self.OVERRIDE_MODEL_METADATA = "Override model metadata"
         self.INPUT_DATA_FILE_FOR_IMATRIX = "Input data file for IMatrix generation"
         self.MODEL_TO_BE_QUANTIZED = "Model to be quantized"
@@ -401,7 +433,7 @@ class _English(_Localization):
         self.CONTEXT_SIZE = "Context Size:"
         self.CONTEXT_SIZE_FOR_IMATRIX = "Context size for IMatrix generation"
         self.THREADS = "Threads:"
-        self.NUMBER_OF_THREADS_FOR_IMATRIX = "Number of threads for IMatrix generation"        
+        self.NUMBER_OF_THREADS_FOR_IMATRIX = "Number of threads for IMatrix generation"
         self.LORA_CONVERSION = "LoRA Conversion"
         self.LORA_INPUT_PATH = "LoRA Input Path"
         self.LORA_OUTPUT_PATH = "LoRA Output Path"
@@ -416,7 +448,7 @@ class _English(_Localization):
         self.BIN_FILES = "Binary Files (*.bin)"
         self.BROWSING_FOR_LORA_INPUT_DIRECTORY = "Browsing for LoRA input directory..."
         self.BROWSING_FOR_LORA_OUTPUT_FILE = "Browsing for LoRA output file..."
-        self.CONVERTING_LORA = "LoRA Conversion"        
+        self.CONVERTING_LORA = "LoRA Conversion"
         self.LORA_CONVERSION_FINISHED = "LoRA conversion finished."
         self.LORA_FILE_MOVED = "LoRA file moved from {} to {}."
         self.LORA_FILE_NOT_FOUND = "LoRA file not found: {}."
@@ -424,7 +456,9 @@ class _English(_Localization):
         self.EXPORT_LORA = "Export LoRA"
         self.MODEL_PATH_REQUIRED = "Model path is required."
         self.OUTPUT_PATH_REQUIRED = "Output path is required."
-        self.AT_LEAST_ONE_LORA_ADAPTER_REQUIRED = "At least one LoRA adapter is required."
+        self.AT_LEAST_ONE_LORA_ADAPTER_REQUIRED = (
+            "At least one LoRA adapter is required."
+        )
         self.INVALID_LORA_SCALE_VALUE = "Invalid LoRA scale value."
         self.ERROR_STARTING_LORA_EXPORT = "Error starting LoRA export: {}"
         self.LORA_EXPORT_TASK_STARTED = "LoRA export task started."
@@ -436,8 +470,12 @@ class _English(_Localization):
         self.ENTER_LORA_SCALE_VALUE = "Enter LoRA Scale Value (Optional)"
         self.NUMBER_OF_THREADS_FOR_LORA_EXPORT = "Number of Threads for LoRA Export"
         self.EXPORTING_LORA = "Exporting LoRA..."
-        self.BROWSING_FOR_EXPORT_LORA_MODEL_FILE = "Browsing for Export LoRA Model File..."
-        self.BROWSING_FOR_EXPORT_LORA_OUTPUT_FILE = "Browsing for Export LoRA Output File..."
+        self.BROWSING_FOR_EXPORT_LORA_MODEL_FILE = (
+            "Browsing for Export LoRA Model File..."
+        )
+        self.BROWSING_FOR_EXPORT_LORA_OUTPUT_FILE = (
+            "Browsing for Export LoRA Output File..."
+        )
         self.ADDING_LORA_ADAPTER = "Adding LoRA Adapter..."
         self.DELETING_LORA_ADAPTER = "Deleting LoRA Adapter..."
         self.LORA_FILES = "LoRA Files (*.bin)"
@@ -450,21 +488,26 @@ class _English(_Localization):
         self.SELECT_BASE_MODEL_FILE = "Select Base Model File (GGUF)"
         self.BASE_MODEL_PATH_REQUIRED = "Base model path is required for GGUF output."
         self.BROWSING_FOR_BASE_MODEL_FILE = "Browsing for base model file..."
-        self.SELECT_BASE_MODEL_FOLDER = "Select Base Model Folder (containing safetensors)"
+        self.SELECT_BASE_MODEL_FOLDER = (
+            "Select Base Model Folder (containing safetensors)"
+        )
         self.BROWSING_FOR_BASE_MODEL_FOLDER = "Browsing for base model folder..."
         self.LORA_CONVERSION_FROM_TO = "LoRA Conversion from {} to {}"
         self.GENERATING_IMATRIX_FOR = "Generating IMatrix for {}"
-        self.MODEL_PATH_REQUIRED_FOR_IMATRIX = "Model path is required for IMatrix generation."
+        self.MODEL_PATH_REQUIRED_FOR_IMATRIX = (
+            "Model path is required for IMatrix generation."
+        )
         self.NO_ASSET_SELECTED_FOR_CUDA_CHECK = "No asset selected for CUDA check"
         self.QUANTIZATION_COMMAND = "Quantization command"
         self.IMATRIX_GENERATION_COMMAND = "IMatrix generation command"
         self.LORA_CONVERSION_COMMAND = "LoRA conversion command"
         self.LORA_EXPORT_COMMAND = "LoRA export command"
-        
+
+
 class _French:
     # French localization
     def __init__(self):
-        super().__init__()    
+        super().__init__()
         self.WINDOW_TITLE = "AutoGGUF (quantificateur automatisé de modèles GGUF)"
         self.RAM_USAGE = "Utilisation RAM :"
         self.CPU_USAGE = "Utilisation CPU :"
@@ -512,7 +555,9 @@ class _French:
         self.RESTART = "Redémarrer"
         self.DELETE = "Supprimer"
         self.CONFIRM_DELETION = "Êtes-vous sûr de vouloir supprimer cette tâche ?"
-        self.TASK_RUNNING_WARNING = "Certaines tâches sont encore en cours. Êtes-vous sûr de vouloir quitter ?"
+        self.TASK_RUNNING_WARNING = (
+            "Certaines tâches sont encore en cours. Êtes-vous sûr de vouloir quitter ?"
+        )
         self.YES = "Oui"
         self.NO = "Non"
         self.DOWNLOAD_COMPLETE = "Téléchargement Terminé"
@@ -527,8 +572,12 @@ class _French:
         self.NO_SUITABLE_CUDA_BACKENDS = "Aucun backend CUDA approprié trouvé"
         self.LLAMACPP_DOWNLOADED_EXTRACTED = "Binaire llama.cpp téléchargé et extrait vers {0}\nFichiers CUDA extraits vers {1}"
         self.CUDA_FILES_EXTRACTED = "Fichiers CUDA extraits vers"
-        self.NO_SUITABLE_CUDA_BACKEND_EXTRACTION = "Aucun backend CUDA approprié trouvé pour l'extraction"
-        self.ERROR_FETCHING_RELEASES = "Erreur lors de la récupération des versions : {0}"
+        self.NO_SUITABLE_CUDA_BACKEND_EXTRACTION = (
+            "Aucun backend CUDA approprié trouvé pour l'extraction"
+        )
+        self.ERROR_FETCHING_RELEASES = (
+            "Erreur lors de la récupération des versions : {0}"
+        )
         self.CONFIRM_DELETION_TITLE = "Confirmer la Suppression"
         self.LOG_FOR = "Log pour {0}"
         self.ALL_FILES = "Tous les Fichiers (*)"
@@ -551,20 +600,30 @@ class _French:
         self.TASK_PRESET_SAVED_TO = "Préréglage de tâche sauvegardé dans {0}"
         self.RESTARTING_TASK = "Redémarrage de la tâche : {0}"
         self.IN_PROGRESS = "En Cours"
-        self.DOWNLOAD_FINISHED_EXTRACTED_TO = "Téléchargement terminé. Extrait vers : {0}"
+        self.DOWNLOAD_FINISHED_EXTRACTED_TO = (
+            "Téléchargement terminé. Extrait vers : {0}"
+        )
         self.LLAMACPP_DOWNLOADED_AND_EXTRACTED = "Binaire llama.cpp téléchargé et extrait vers {0}\nFichiers CUDA extraits vers {1}"
-        self.NO_SUITABLE_CUDA_BACKEND_FOUND = "Aucun backend CUDA approprié trouvé pour l'extraction"
-        self.LLAMACPP_BINARY_DOWNLOADED_AND_EXTRACTED = "Binaire llama.cpp téléchargé et extrait vers {0}"
+        self.NO_SUITABLE_CUDA_BACKEND_FOUND = (
+            "Aucun backend CUDA approprié trouvé pour l'extraction"
+        )
+        self.LLAMACPP_BINARY_DOWNLOADED_AND_EXTRACTED = (
+            "Binaire llama.cpp téléchargé et extrait vers {0}"
+        )
         self.REFRESHING_LLAMACPP_RELEASES = "Actualisation des versions de llama.cpp"
         self.UPDATING_ASSET_LIST = "Mise à jour de la liste des assets"
         self.UPDATING_CUDA_OPTIONS = "Mise à jour des options CUDA"
         self.STARTING_LLAMACPP_DOWNLOAD = "Démarrage du téléchargement de llama.cpp"
         self.UPDATING_CUDA_BACKENDS = "Mise à jour des backends CUDA"
-        self.NO_CUDA_BACKEND_SELECTED = "Aucun backend CUDA sélectionné pour l'extraction"
+        self.NO_CUDA_BACKEND_SELECTED = (
+            "Aucun backend CUDA sélectionné pour l'extraction"
+        )
         self.EXTRACTING_CUDA_FILES = "Extraction des fichiers CUDA de {0} vers {1}"
         self.DOWNLOAD_ERROR = "Erreur de téléchargement : {0}"
         self.SHOWING_TASK_CONTEXT_MENU = "Affichage du menu contextuel de tâche"
-        self.SHOWING_PROPERTIES_FOR_TASK = "Affichage des propriétés pour la tâche : {0}"
+        self.SHOWING_PROPERTIES_FOR_TASK = (
+            "Affichage des propriétés pour la tâche : {0}"
+        )
         self.CANCELLING_TASK = "Annulation de la tâche : {0}"
         self.CANCELED = "Annulé"
         self.DELETING_TASK = "Suppression de la tâche : {0}"
@@ -588,7 +647,9 @@ class _French:
         self.INPUT_FILE_NOT_EXIST = "Le fichier d'entrée '{0}' n'existe pas."
         self.QUANTIZING_MODEL_TO = "Quantification de {0} vers {1}"
         self.QUANTIZATION_TASK_STARTED = "Tâche de quantification démarrée pour {0}"
-        self.ERROR_STARTING_QUANTIZATION = "Erreur au démarrage de la quantification : {0}"
+        self.ERROR_STARTING_QUANTIZATION = (
+            "Erreur au démarrage de la quantification : {0}"
+        )
         self.UPDATING_MODEL_INFO = "Mise à jour des infos du modèle : {0}"
         self.TASK_FINISHED = "Tâche terminée : {0}"
         self.SHOWING_TASK_DETAILS_FOR = "Affichage des détails de la tâche pour : {0}"
@@ -601,7 +662,9 @@ class _French:
         self.STARTING_IMATRIX_GENERATION = "Démarrage de la génération IMatrix"
         self.BACKEND_PATH_NOT_EXIST = "Le chemin du backend n'existe pas : {0}"
         self.GENERATING_IMATRIX = "Génération de l'IMatrix"
-        self.ERROR_STARTING_IMATRIX_GENERATION = "Erreur au démarrage de la génération IMatrix : {0}"
+        self.ERROR_STARTING_IMATRIX_GENERATION = (
+            "Erreur au démarrage de la génération IMatrix : {0}"
+        )
         self.IMATRIX_GENERATION_TASK_STARTED = "Tâche de génération IMatrix démarrée"
         self.ERROR_MESSAGE = "Erreur : {0}"
         self.TASK_ERROR = "Erreur de tâche : {0}"
@@ -610,30 +673,50 @@ class _French:
         self.SELECT_QUANTIZATION_TYPE = "Sélectionnez le type de quantification"
         self.ALLOWS_REQUANTIZING = "Permet de requantifier les tenseurs déjà quantifiés"
         self.LEAVE_OUTPUT_WEIGHT = "Laissera output.weight non (re)quantifié"
-        self.DISABLE_K_QUANT_MIXTURES = "Désactive les mélanges k-quant et quantifie tous les tenseurs au même type"
+        self.DISABLE_K_QUANT_MIXTURES = (
+            "Désactive les mélanges k-quant et quantifie tous les tenseurs au même type"
+        )
         self.USE_DATA_AS_IMPORTANCE_MATRIX = "Utilise les données du fichier comme matrice d'importance pour les optimisations de quant"
-        self.USE_IMPORTANCE_MATRIX_FOR_TENSORS = "Utiliser la matrice d'importance pour ces tenseurs"
-        self.DONT_USE_IMPORTANCE_MATRIX_FOR_TENSORS = "Ne pas utiliser la matrice d'importance pour ces tenseurs"
+        self.USE_IMPORTANCE_MATRIX_FOR_TENSORS = (
+            "Utiliser la matrice d'importance pour ces tenseurs"
+        )
+        self.DONT_USE_IMPORTANCE_MATRIX_FOR_TENSORS = (
+            "Ne pas utiliser la matrice d'importance pour ces tenseurs"
+        )
         self.OUTPUT_TENSOR_TYPE = "Type de Tenseur de Sortie :"
-        self.USE_THIS_TYPE_FOR_OUTPUT_WEIGHT = "Utiliser ce type pour le tenseur output.weight"
+        self.USE_THIS_TYPE_FOR_OUTPUT_WEIGHT = (
+            "Utiliser ce type pour le tenseur output.weight"
+        )
         self.TOKEN_EMBEDDING_TYPE = "Type d'Embedding de Token :"
-        self.USE_THIS_TYPE_FOR_TOKEN_EMBEDDINGS = "Utiliser ce type pour le tenseur des embeddings de token"
-        self.WILL_GENERATE_QUANTIZED_MODEL_IN_SAME_SHARDS = "Générera le modèle quantifié dans les mêmes shards que l'entrée"
+        self.USE_THIS_TYPE_FOR_TOKEN_EMBEDDINGS = (
+            "Utiliser ce type pour le tenseur des embeddings de token"
+        )
+        self.WILL_GENERATE_QUANTIZED_MODEL_IN_SAME_SHARDS = (
+            "Générera le modèle quantifié dans les mêmes shards que l'entrée"
+        )
         self.OVERRIDE_MODEL_METADATA = "Remplacer les métadonnées du modèle"
-        self.INPUT_DATA_FILE_FOR_IMATRIX = "Fichier de données d'entrée pour la génération IMatrix"
+        self.INPUT_DATA_FILE_FOR_IMATRIX = (
+            "Fichier de données d'entrée pour la génération IMatrix"
+        )
         self.MODEL_TO_BE_QUANTIZED = "Modèle à quantifier"
-        self.OUTPUT_PATH_FOR_GENERATED_IMATRIX = "Chemin de sortie pour l'IMatrix généré"
+        self.OUTPUT_PATH_FOR_GENERATED_IMATRIX = (
+            "Chemin de sortie pour l'IMatrix généré"
+        )
         self.HOW_OFTEN_TO_SAVE_IMATRIX = "Fréquence de sauvegarde de l'IMatrix"
         self.SET_GPU_OFFLOAD_VALUE = "Définir la valeur de déchargement GPU (-ngl)"
         self.COMPLETED = "Terminé"
-        self.REFRESH_MODELS = "Actualiser les modèles"        
+        self.REFRESH_MODELS = "Actualiser les modèles"
         self.REFRESH_MODELS = "Actualiser les modèles"
         self.EXTRA_ARGUMENTS = "Arguments supplémentaires :"
         self.EXTRA_ARGUMENTS_LABEL = "Arguments supplémentaires en ligne de commande"
         self.CONTEXT_SIZE = "Taille du contexte :"
-        self.CONTEXT_SIZE_FOR_IMATRIX = "Taille du contexte pour la génération d'IMatrix"
+        self.CONTEXT_SIZE_FOR_IMATRIX = (
+            "Taille du contexte pour la génération d'IMatrix"
+        )
         self.THREADS = "Threads :"
-        self.NUMBER_OF_THREADS_FOR_IMATRIX = "Nombre de threads pour la génération d'IMatrix"
+        self.NUMBER_OF_THREADS_FOR_IMATRIX = (
+            "Nombre de threads pour la génération d'IMatrix"
+        )
         self.LORA_CONVERSION = "Conversion LoRA"
         self.LORA_INPUT_PATH = "Chemin d'entrée LoRA"
         self.LORA_OUTPUT_PATH = "Chemin de sortie LoRA"
@@ -643,10 +726,14 @@ class _French:
         self.STARTING_LORA_CONVERSION = "Démarrage de la conversion LoRA"
         self.LORA_INPUT_PATH_REQUIRED = "Le chemin d'entrée LoRA est requis."
         self.LORA_OUTPUT_PATH_REQUIRED = "Le chemin de sortie LoRA est requis."
-        self.ERROR_STARTING_LORA_CONVERSION = "Erreur lors du démarrage de la conversion LoRA : {}"
+        self.ERROR_STARTING_LORA_CONVERSION = (
+            "Erreur lors du démarrage de la conversion LoRA : {}"
+        )
         self.LORA_CONVERSION_TASK_STARTED = "Tâche de conversion LoRA démarrée."
         self.BIN_FILES = "Fichiers binaires (*.bin)"
-        self.BROWSING_FOR_LORA_INPUT_DIRECTORY = "Recherche du répertoire d'entrée LoRA..."
+        self.BROWSING_FOR_LORA_INPUT_DIRECTORY = (
+            "Recherche du répertoire d'entrée LoRA..."
+        )
         self.BROWSING_FOR_LORA_OUTPUT_FILE = "Recherche du fichier de sortie LoRA..."
         self.CONVERTING_LORA = "Conversion LoRA"
         self.LORA_CONVERSION_FINISHED = "Conversion LoRA terminée."
@@ -656,9 +743,13 @@ class _French:
         self.EXPORT_LORA = "Exporter LoRA"
         self.MODEL_PATH_REQUIRED = "Le chemin du modèle est requis."
         self.OUTPUT_PATH_REQUIRED = "Le chemin de sortie est requis."
-        self.AT_LEAST_ONE_LORA_ADAPTER_REQUIRED = "Au moins un adaptateur LoRA est requis."
+        self.AT_LEAST_ONE_LORA_ADAPTER_REQUIRED = (
+            "Au moins un adaptateur LoRA est requis."
+        )
         self.INVALID_LORA_SCALE_VALUE = "Valeur d'échelle LoRA invalide."
-        self.ERROR_STARTING_LORA_EXPORT = "Erreur lors du démarrage de l'exportation LoRA : {}"
+        self.ERROR_STARTING_LORA_EXPORT = (
+            "Erreur lors du démarrage de l'exportation LoRA : {}"
+        )
         self.LORA_EXPORT_TASK_STARTED = "Tâche d'exportation LoRA démarrée."
         self.GGML_LORA_ADAPTERS = "Adaptateurs LoRA GGML"
         self.SELECT_LORA_ADAPTER_FILES = "Sélectionner les fichiers d'adaptateur LoRA"
@@ -666,10 +757,16 @@ class _French:
         self.DELETE_ADAPTER = "Supprimer"
         self.LORA_SCALE = "Échelle LoRA"
         self.ENTER_LORA_SCALE_VALUE = "Entrez la valeur d'échelle LoRA (Optionnel)"
-        self.NUMBER_OF_THREADS_FOR_LORA_EXPORT = "Nombre de threads pour l'exportation LoRA"
+        self.NUMBER_OF_THREADS_FOR_LORA_EXPORT = (
+            "Nombre de threads pour l'exportation LoRA"
+        )
         self.EXPORTING_LORA = "Exportation de LoRA..."
-        self.BROWSING_FOR_EXPORT_LORA_MODEL_FILE = "Recherche du fichier de modèle LoRA à exporter..."
-        self.BROWSING_FOR_EXPORT_LORA_OUTPUT_FILE = "Recherche du fichier de sortie LoRA à exporter..."
+        self.BROWSING_FOR_EXPORT_LORA_MODEL_FILE = (
+            "Recherche du fichier de modèle LoRA à exporter..."
+        )
+        self.BROWSING_FOR_EXPORT_LORA_OUTPUT_FILE = (
+            "Recherche du fichier de sortie LoRA à exporter..."
+        )
         self.ADDING_LORA_ADAPTER = "Ajout d'un adaptateur LoRA..."
         self.DELETING_LORA_ADAPTER = "Suppression de l'adaptateur LoRA..."
         self.LORA_FILES = "Fichiers LoRA (*.bin)"
@@ -680,14 +777,23 @@ class _French:
         self.GGUF_AND_BIN_FILES = "Fichiers GGUF et binaires (*.gguf *.bin)"
         self.BASE_MODEL = "Modèle de base"
         self.SELECT_BASE_MODEL_FILE = "Sélectionner le fichier du modèle de base (GGUF)"
-        self.BASE_MODEL_PATH_REQUIRED = "Le chemin du modèle de base est requis pour la sortie GGUF."
+        self.BASE_MODEL_PATH_REQUIRED = (
+            "Le chemin du modèle de base est requis pour la sortie GGUF."
+        )
         self.BROWSING_FOR_BASE_MODEL_FILE = "Recherche du fichier du modèle de base..."
-        self.SELECT_BASE_MODEL_FOLDER = "Sélectionner le dossier du modèle de base (contenant safetensors)"
-        self.BROWSING_FOR_BASE_MODEL_FOLDER = "Recherche du dossier du modèle de base..."
+        self.SELECT_BASE_MODEL_FOLDER = (
+            "Sélectionner le dossier du modèle de base (contenant safetensors)"
+        )
+        self.BROWSING_FOR_BASE_MODEL_FOLDER = (
+            "Recherche du dossier du modèle de base..."
+        )
         self.LORA_CONVERSION_FROM_TO = "Conversion LoRA de {} à {}"
         self.GENERATING_IMATRIX_FOR = "Génération d'IMatrix pour {}"
-        self.MODEL_PATH_REQUIRED_FOR_IMATRIX = "Le chemin du modèle est requis pour la génération d'IMatrix."
-                
+        self.MODEL_PATH_REQUIRED_FOR_IMATRIX = (
+            "Le chemin du modèle est requis pour la génération d'IMatrix."
+        )
+
+
 class _SimplifiedChinese(_Localization):
     def __init__(self):
         super().__init__()
@@ -751,7 +857,9 @@ class _SimplifiedChinese(_Localization):
         self.NO_MODEL_SELECTED = "未选择模型"
         self.REFRESH_RELEASES = "刷新发布版本"
         self.NO_SUITABLE_CUDA_BACKENDS = "未找到合适的CUDA后端"
-        self.LLAMACPP_DOWNLOADED_EXTRACTED = "llama.cpp二进制文件已下载并提取到{0}\nCUDA文件已提取到{1}"
+        self.LLAMACPP_DOWNLOADED_EXTRACTED = (
+            "llama.cpp二进制文件已下载并提取到{0}\nCUDA文件已提取到{1}"
+        )
         self.CUDA_FILES_EXTRACTED = "CUDA文件已提取到"
         self.NO_SUITABLE_CUDA_BACKEND_EXTRACTION = "未找到适合提取的CUDA后端"
         self.ERROR_FETCHING_RELEASES = "获取发布版本时出错：{0}"
@@ -778,9 +886,13 @@ class _SimplifiedChinese(_Localization):
         self.RESTARTING_TASK = "重启任务：{0}"
         self.IN_PROGRESS = "进行中"
         self.DOWNLOAD_FINISHED_EXTRACTED_TO = "下载完成。已提取到：{0}"
-        self.LLAMACPP_DOWNLOADED_AND_EXTRACTED = "llama.cpp二进制文件已下载并提取到{0}\nCUDA文件已提取到{1}"
+        self.LLAMACPP_DOWNLOADED_AND_EXTRACTED = (
+            "llama.cpp二进制文件已下载并提取到{0}\nCUDA文件已提取到{1}"
+        )
         self.NO_SUITABLE_CUDA_BACKEND_FOUND = "未找到适合提取的CUDA后端"
-        self.LLAMACPP_BINARY_DOWNLOADED_AND_EXTRACTED = "llama.cpp二进制文件已下载并提取到{0}"
+        self.LLAMACPP_BINARY_DOWNLOADED_AND_EXTRACTED = (
+            "llama.cpp二进制文件已下载并提取到{0}"
+        )
         self.REFRESHING_LLAMACPP_RELEASES = "刷新llama.cpp发布版本"
         self.UPDATING_ASSET_LIST = "更新资源列表"
         self.UPDATING_CUDA_OPTIONS = "更新CUDA选项"
@@ -844,7 +956,9 @@ class _SimplifiedChinese(_Localization):
         self.USE_THIS_TYPE_FOR_OUTPUT_WEIGHT = "对output.weight张量使用此类型"
         self.TOKEN_EMBEDDING_TYPE = "令牌嵌入类型："
         self.USE_THIS_TYPE_FOR_TOKEN_EMBEDDINGS = "对令牌嵌入张量使用此类型"
-        self.WILL_GENERATE_QUANTIZED_MODEL_IN_SAME_SHARDS = "将在与输入相同的分片中生成量化模型"
+        self.WILL_GENERATE_QUANTIZED_MODEL_IN_SAME_SHARDS = (
+            "将在与输入相同的分片中生成量化模型"
+        )
         self.OVERRIDE_MODEL_METADATA = "覆盖模型元数据"
         self.INPUT_DATA_FILE_FOR_IMATRIX = "IMatrix生成的输入数据文件"
         self.MODEL_TO_BE_QUANTIZED = "要量化的模型"
@@ -914,6 +1028,7 @@ class _SimplifiedChinese(_Localization):
         self.GENERATING_IMATRIX_FOR = "正在为{}生成IMatrix"
         self.MODEL_PATH_REQUIRED_FOR_IMATRIX = "IMatrix生成需要模型路径。"
 
+
 class _Spanish(_Localization):
     def __init__(self):
         super().__init__()
@@ -979,7 +1094,9 @@ class _Spanish(_Localization):
         self.NO_SUITABLE_CUDA_BACKENDS = "No se encontraron backends CUDA adecuados"
         self.LLAMACPP_DOWNLOADED_EXTRACTED = "Binario de llama.cpp descargado y extraído en {0}\nArchivos CUDA extraídos en {1}"
         self.CUDA_FILES_EXTRACTED = "Archivos CUDA extraídos en"
-        self.NO_SUITABLE_CUDA_BACKEND_EXTRACTION = "No se encontró un backend CUDA adecuado para la extracción"
+        self.NO_SUITABLE_CUDA_BACKEND_EXTRACTION = (
+            "No se encontró un backend CUDA adecuado para la extracción"
+        )
         self.ERROR_FETCHING_RELEASES = "Error al obtener versiones: {0}"
         self.CONFIRM_DELETION_TITLE = "Confirmar Eliminación"
         self.LOG_FOR = "Registro para {0}"
@@ -1005,8 +1122,12 @@ class _Spanish(_Localization):
         self.IN_PROGRESS = "En Progreso"
         self.DOWNLOAD_FINISHED_EXTRACTED_TO = "Descarga finalizada. Extraído en: {0}"
         self.LLAMACPP_DOWNLOADED_AND_EXTRACTED = "Binario de llama.cpp descargado y extraído en {0}\nArchivos CUDA extraídos en {1}"
-        self.NO_SUITABLE_CUDA_BACKEND_FOUND = "No se encontró un backend CUDA adecuado para la extracción"
-        self.LLAMACPP_BINARY_DOWNLOADED_AND_EXTRACTED = "Binario de llama.cpp descargado y extraído en {0}"
+        self.NO_SUITABLE_CUDA_BACKEND_FOUND = (
+            "No se encontró un backend CUDA adecuado para la extracción"
+        )
+        self.LLAMACPP_BINARY_DOWNLOADED_AND_EXTRACTED = (
+            "Binario de llama.cpp descargado y extraído en {0}"
+        )
         self.REFRESHING_LLAMACPP_RELEASES = "Actualizando versiones de llama.cpp"
         self.UPDATING_ASSET_LIST = "Actualizando lista de activos"
         self.UPDATING_CUDA_OPTIONS = "Actualizando opciones de CUDA"
@@ -1053,28 +1174,48 @@ class _Spanish(_Localization):
         self.STARTING_IMATRIX_GENERATION = "Iniciando generación de IMatrix"
         self.BACKEND_PATH_NOT_EXIST = "La ruta del backend no existe: {0}"
         self.GENERATING_IMATRIX = "Generando IMatrix"
-        self.ERROR_STARTING_IMATRIX_GENERATION = "Error al iniciar la generación de IMatrix: {0}"
+        self.ERROR_STARTING_IMATRIX_GENERATION = (
+            "Error al iniciar la generación de IMatrix: {0}"
+        )
         self.IMATRIX_GENERATION_TASK_STARTED = "Tarea de generación de IMatrix iniciada"
         self.ERROR_MESSAGE = "Error: {0}"
         self.TASK_ERROR = "Error de tarea: {0}"
         self.APPLICATION_CLOSING = "Cerrando aplicación"
         self.APPLICATION_CLOSED = "Aplicación cerrada"
         self.SELECT_QUANTIZATION_TYPE = "Seleccione el tipo de cuantización"
-        self.ALLOWS_REQUANTIZING = "Permite recuantizar tensores que ya han sido cuantizados"
+        self.ALLOWS_REQUANTIZING = (
+            "Permite recuantizar tensores que ya han sido cuantizados"
+        )
         self.LEAVE_OUTPUT_WEIGHT = "Dejará output.weight sin (re)cuantizar"
-        self.DISABLE_K_QUANT_MIXTURES = "Desactiva las mezclas k-quant y cuantiza todos los tensores al mismo tipo"
+        self.DISABLE_K_QUANT_MIXTURES = (
+            "Desactiva las mezclas k-quant y cuantiza todos los tensores al mismo tipo"
+        )
         self.USE_DATA_AS_IMPORTANCE_MATRIX = "Usa los datos en el archivo como matriz de importancia para optimizaciones de cuantización"
-        self.USE_IMPORTANCE_MATRIX_FOR_TENSORS = "Usar matriz de importancia para estos tensores"
-        self.DONT_USE_IMPORTANCE_MATRIX_FOR_TENSORS = "No usar matriz de importancia para estos tensores"
+        self.USE_IMPORTANCE_MATRIX_FOR_TENSORS = (
+            "Usar matriz de importancia para estos tensores"
+        )
+        self.DONT_USE_IMPORTANCE_MATRIX_FOR_TENSORS = (
+            "No usar matriz de importancia para estos tensores"
+        )
         self.OUTPUT_TENSOR_TYPE = "Tipo de Tensor de Salida:"
-        self.USE_THIS_TYPE_FOR_OUTPUT_WEIGHT = "Usar este tipo para el tensor output.weight"
+        self.USE_THIS_TYPE_FOR_OUTPUT_WEIGHT = (
+            "Usar este tipo para el tensor output.weight"
+        )
         self.TOKEN_EMBEDDING_TYPE = "Tipo de Incrustación de Token:"
-        self.USE_THIS_TYPE_FOR_TOKEN_EMBEDDINGS = "Usar este tipo para el tensor de incrustaciones de token"
-        self.WILL_GENERATE_QUANTIZED_MODEL_IN_SAME_SHARDS = "Generará el modelo cuantizado en los mismos fragmentos que la entrada"
+        self.USE_THIS_TYPE_FOR_TOKEN_EMBEDDINGS = (
+            "Usar este tipo para el tensor de incrustaciones de token"
+        )
+        self.WILL_GENERATE_QUANTIZED_MODEL_IN_SAME_SHARDS = (
+            "Generará el modelo cuantizado en los mismos fragmentos que la entrada"
+        )
         self.OVERRIDE_MODEL_METADATA = "Anular metadatos del modelo"
-        self.INPUT_DATA_FILE_FOR_IMATRIX = "Archivo de datos de entrada para generación de IMatrix"
+        self.INPUT_DATA_FILE_FOR_IMATRIX = (
+            "Archivo de datos de entrada para generación de IMatrix"
+        )
         self.MODEL_TO_BE_QUANTIZED = "Modelo a cuantizar"
-        self.OUTPUT_PATH_FOR_GENERATED_IMATRIX = "Ruta de salida para el IMatrix generado"
+        self.OUTPUT_PATH_FOR_GENERATED_IMATRIX = (
+            "Ruta de salida para el IMatrix generado"
+        )
         self.HOW_OFTEN_TO_SAVE_IMATRIX = "Con qué frecuencia guardar el IMatrix"
         self.SET_GPU_OFFLOAD_VALUE = "Establecer valor de descarga GPU (-ngl)"
         self.COMPLETED = "Completado"
@@ -1085,7 +1226,9 @@ class _Spanish(_Localization):
         self.CONTEXT_SIZE = "Tamaño del contexto:"
         self.CONTEXT_SIZE_FOR_IMATRIX = "Tamaño del contexto para generación de IMatrix"
         self.THREADS = "Hilos:"
-        self.NUMBER_OF_THREADS_FOR_IMATRIX = "Número de hilos para generación de IMatrix"
+        self.NUMBER_OF_THREADS_FOR_IMATRIX = (
+            "Número de hilos para generación de IMatrix"
+        )
         self.LORA_CONVERSION = "Conversión LoRA"
         self.LORA_INPUT_PATH = "Ruta de entrada LoRA"
         self.LORA_OUTPUT_PATH = "Ruta de salida LoRA"
@@ -1098,7 +1241,9 @@ class _Spanish(_Localization):
         self.ERROR_STARTING_LORA_CONVERSION = "Error al iniciar la conversión LoRA: {}"
         self.LORA_CONVERSION_TASK_STARTED = "Tarea de conversión LoRA iniciada."
         self.BIN_FILES = "Archivos binarios (*.bin)"
-        self.BROWSING_FOR_LORA_INPUT_DIRECTORY = "Buscando directorio de entrada LoRA..."
+        self.BROWSING_FOR_LORA_INPUT_DIRECTORY = (
+            "Buscando directorio de entrada LoRA..."
+        )
         self.BROWSING_FOR_LORA_OUTPUT_FILE = "Buscando archivo de salida LoRA..."
         self.CONVERTING_LORA = "Convirtiendo LoRA"
         self.LORA_CONVERSION_FINISHED = "Conversión LoRA finalizada."
@@ -1108,7 +1253,9 @@ class _Spanish(_Localization):
         self.EXPORT_LORA = "Exportar LoRA"
         self.MODEL_PATH_REQUIRED = "Se requiere la ruta del modelo."
         self.OUTPUT_PATH_REQUIRED = "Se requiere la ruta de salida."
-        self.AT_LEAST_ONE_LORA_ADAPTER_REQUIRED = "Se requiere al menos un adaptador LoRA."
+        self.AT_LEAST_ONE_LORA_ADAPTER_REQUIRED = (
+            "Se requiere al menos un adaptador LoRA."
+        )
         self.INVALID_LORA_SCALE_VALUE = "Valor de escala LoRA inválido."
         self.ERROR_STARTING_LORA_EXPORT = "Error al iniciar la exportación LoRA: {}"
         self.LORA_EXPORT_TASK_STARTED = "Tarea de exportación LoRA iniciada."
@@ -1120,8 +1267,12 @@ class _Spanish(_Localization):
         self.ENTER_LORA_SCALE_VALUE = "Ingresar valor de escala LoRA (Opcional)"
         self.NUMBER_OF_THREADS_FOR_LORA_EXPORT = "Número de hilos para exportación LoRA"
         self.EXPORTING_LORA = "Exportando LoRA..."
-        self.BROWSING_FOR_EXPORT_LORA_MODEL_FILE = "Buscando archivo de modelo LoRA para exportar..."
-        self.BROWSING_FOR_EXPORT_LORA_OUTPUT_FILE = "Buscando archivo de salida LoRA para exportar..."
+        self.BROWSING_FOR_EXPORT_LORA_MODEL_FILE = (
+            "Buscando archivo de modelo LoRA para exportar..."
+        )
+        self.BROWSING_FOR_EXPORT_LORA_OUTPUT_FILE = (
+            "Buscando archivo de salida LoRA para exportar..."
+        )
         self.ADDING_LORA_ADAPTER = "Añadiendo adaptador LoRA..."
         self.DELETING_LORA_ADAPTER = "Eliminando adaptador LoRA..."
         self.LORA_FILES = "Archivos LoRA (*.bin)"
@@ -1132,13 +1283,20 @@ class _Spanish(_Localization):
         self.GGUF_AND_BIN_FILES = "Archivos GGUF y binarios (*.gguf *.bin)"
         self.BASE_MODEL = "Modelo base"
         self.SELECT_BASE_MODEL_FILE = "Seleccionar archivo de modelo base (GGUF)"
-        self.BASE_MODEL_PATH_REQUIRED = "Se requiere la ruta del modelo base para la salida GGUF."
+        self.BASE_MODEL_PATH_REQUIRED = (
+            "Se requiere la ruta del modelo base para la salida GGUF."
+        )
         self.BROWSING_FOR_BASE_MODEL_FILE = "Buscando archivo de modelo base..."
-        self.SELECT_BASE_MODEL_FOLDER = "Seleccionar carpeta de modelo base (que contiene safetensors)"
+        self.SELECT_BASE_MODEL_FOLDER = (
+            "Seleccionar carpeta de modelo base (que contiene safetensors)"
+        )
         self.BROWSING_FOR_BASE_MODEL_FOLDER = "Buscando carpeta de modelo base..."
         self.LORA_CONVERSION_FROM_TO = "Conversión LoRA de {} a {}"
         self.GENERATING_IMATRIX_FOR = "Generando IMatrix para {}"
-        self.MODEL_PATH_REQUIRED_FOR_IMATRIX = "Se requiere la ruta del modelo para la generación de IMatrix."
+        self.MODEL_PATH_REQUIRED_FOR_IMATRIX = (
+            "Se requiere la ruta del modelo para la generación de IMatrix."
+        )
+
 
 class _Hindi(_Localization):
     def __init__(self):
@@ -1233,7 +1391,9 @@ class _Hindi(_Localization):
         self.RESTART = "पुनः आरंभ करें"
         self.DELETE = "हटाएं"
         self.CONFIRM_DELETION = "क्या आप वाकई इस कार्य को हटाना चाहते हैं?"
-        self.TASK_RUNNING_WARNING = "कुछ कार्य अभी भी चल रहे हैं। क्या आप वाकई बाहर निकलना चाहते हैं?"
+        self.TASK_RUNNING_WARNING = (
+            "कुछ कार्य अभी भी चल रहे हैं। क्या आप वाकई बाहर निकलना चाहते हैं?"
+        )
         self.YES = "हां"
         self.NO = "नहीं"
         self.DOWNLOAD_COMPLETE = "डाउनलोड पूरा हुआ"
@@ -1246,9 +1406,13 @@ class _Hindi(_Localization):
         self.NO_MODEL_SELECTED = "कोई मॉडल चयनित नहीं"
         self.REFRESH_RELEASES = "रिलीज़ रीफ्रेश करें"
         self.NO_SUITABLE_CUDA_BACKENDS = "कोई उपयुक्त CUDA बैकएंड नहीं मिला"
-        self.LLAMACPP_DOWNLOADED_EXTRACTED = "llama.cpp बाइनरी डाउनलोड और {0} में निकाली गई\nCUDA फ़ाइलें {1} में निकाली गईं"
+        self.LLAMACPP_DOWNLOADED_EXTRACTED = (
+            "llama.cpp बाइनरी डाउनलोड और {0} में निकाली गई\nCUDA फ़ाइलें {1} में निकाली गईं"
+        )
         self.CUDA_FILES_EXTRACTED = "CUDA फ़ाइलें निकाली गईं"
-        self.NO_SUITABLE_CUDA_BACKEND_EXTRACTION = "निष्कर्षण के लिए कोई उपयुक्त CUDA बैकएंड नहीं मिला"
+        self.NO_SUITABLE_CUDA_BACKEND_EXTRACTION = (
+            "निष्कर्षण के लिए कोई उपयुक्त CUDA बैकएंड नहीं मिला"
+        )
         self.ERROR_FETCHING_RELEASES = "रिलीज़ प्राप्त करने में त्रुटि: {0}"
         self.CONFIRM_DELETION_TITLE = "हटाने की पुष्टि करें"
         self.LOG_FOR = "{0} के लिए लॉग"
@@ -1273,9 +1437,15 @@ class _Hindi(_Localization):
         self.RESTARTING_TASK = "कार्य पुनः आरंभ हो रहा है: {0}"
         self.IN_PROGRESS = "प्रगति में"
         self.DOWNLOAD_FINISHED_EXTRACTED_TO = "डाउनलोड समाप्त। निकाला गया: {0}"
-        self.LLAMACPP_DOWNLOADED_AND_EXTRACTED = "llama.cpp बाइनरी डाउनलोड और {0} में निकाली गई\nCUDA फ़ाइलें {1} में निकाली गईं"
-        self.NO_SUITABLE_CUDA_BACKEND_FOUND = "निष्कर्षण के लिए कोई उपयुक्त CUDA बैकएंड नहीं मिला"
-        self.LLAMACPP_BINARY_DOWNLOADED_AND_EXTRACTED = "llama.cpp बाइनरी डाउनलोड और {0} में निकाली गई"
+        self.LLAMACPP_DOWNLOADED_AND_EXTRACTED = (
+            "llama.cpp बाइनरी डाउनलोड और {0} में निकाली गई\nCUDA फ़ाइलें {1} में निकाली गईं"
+        )
+        self.NO_SUITABLE_CUDA_BACKEND_FOUND = (
+            "निष्कर्षण के लिए कोई उपयुक्त CUDA बैकएंड नहीं मिला"
+        )
+        self.LLAMACPP_BINARY_DOWNLOADED_AND_EXTRACTED = (
+            "llama.cpp बाइनरी डाउनलोड और {0} में निकाली गई"
+        )
         self.REFRESHING_LLAMACPP_RELEASES = "llama.cpp रिलीज़ रीफ्रेश हो रही हैं"
         self.UPDATING_ASSET_LIST = "एसेट सूची अपडेट हो रही है"
         self.UPDATING_CUDA_OPTIONS = "CUDA विकल्प अपडेट हो रहे हैं"
@@ -1313,11 +1483,17 @@ class _Hindi(_Localization):
         self.UPDATING_MODEL_INFO = "मॉडल जानकारी अपडेट हो रही है: {0}"
         self.TASK_FINISHED = "कार्य समाप्त: {0}"
         self.SHOWING_TASK_DETAILS_FOR = "कार्य विवरण दिखाए जा रहे हैं: {0}"
-        self.BROWSING_FOR_IMATRIX_DATA_FILE = "IMatrix डेटा फ़ाइल के लिए ब्राउज़ किया जा रहा है"
+        self.BROWSING_FOR_IMATRIX_DATA_FILE = (
+            "IMatrix डेटा फ़ाइल के लिए ब्राउज़ किया जा रहा है"
+        )
         self.SELECT_DATA_FILE = "डेटा फ़ाइल चुनें"
-        self.BROWSING_FOR_IMATRIX_MODEL_FILE = "IMatrix मॉडल फ़ाइल के लिए ब्राउज़ किया जा रहा है"
+        self.BROWSING_FOR_IMATRIX_MODEL_FILE = (
+            "IMatrix मॉडल फ़ाइल के लिए ब्राउज़ किया जा रहा है"
+        )
         self.SELECT_MODEL_FILE = "मॉडल फ़ाइल चुनें"
-        self.BROWSING_FOR_IMATRIX_OUTPUT_FILE = "IMatrix आउटपुट फ़ाइल के लिए ब्राउज़ किया जा रहा है"
+        self.BROWSING_FOR_IMATRIX_OUTPUT_FILE = (
+            "IMatrix आउटपुट फ़ाइल के लिए ब्राउज़ किया जा रहा है"
+        )
         self.SELECT_OUTPUT_FILE = "आउटपुट फ़ाइल चुनें"
         self.STARTING_IMATRIX_GENERATION = "IMatrix उत्पादन शुरू हो रहा है"
         self.BACKEND_PATH_NOT_EXIST = "बैकएंड पथ मौजूद नहीं है: {0}"
@@ -1329,17 +1505,31 @@ class _Hindi(_Localization):
         self.APPLICATION_CLOSING = "एप्लिकेशन बंद हो रहा है"
         self.APPLICATION_CLOSED = "एप्लिकेशन बंद हो गया"
         self.SELECT_QUANTIZATION_TYPE = "क्वांटाइजेशन प्रकार चुनें"
-        self.ALLOWS_REQUANTIZING = "पहले से क्वांटाइज़ किए गए टेंसर को पुनः क्वांटाइज़ करने की अनुमति देता है"
+        self.ALLOWS_REQUANTIZING = (
+            "पहले से क्वांटाइज़ किए गए टेंसर को पुनः क्वांटाइज़ करने की अनुमति देता है"
+        )
         self.LEAVE_OUTPUT_WEIGHT = "output.weight को अक्वांटाइज़ (या पुनः क्वांटाइज़) छोड़ देगा"
-        self.DISABLE_K_QUANT_MIXTURES = "k-quant मिश्रण को अक्षम करें और सभी टेंसर को एक ही प्रकार में क्वांटाइज़ करें"
-        self.USE_DATA_AS_IMPORTANCE_MATRIX = "क्वांट अनुकूलन के लिए फ़ाइल में डेटा को महत्व मैट्रिक्स के रूप में उपयोग करें"
+        self.DISABLE_K_QUANT_MIXTURES = (
+            "k-quant मिश्रण को अक्षम करें और सभी टेंसर को एक ही प्रकार में क्वांटाइज़ करें"
+        )
+        self.USE_DATA_AS_IMPORTANCE_MATRIX = (
+            "क्वांट अनुकूलन के लिए फ़ाइल में डेटा को महत्व मैट्रिक्स के रूप में उपयोग करें"
+        )
         self.USE_IMPORTANCE_MATRIX_FOR_TENSORS = "इन टेंसर के लिए महत्व मैट्रिक्स का उपयोग करें"
-        self.DONT_USE_IMPORTANCE_MATRIX_FOR_TENSORS = "इन टेंसर के लिए महत्व मैट्रिक्स का उपयोग न करें"
+        self.DONT_USE_IMPORTANCE_MATRIX_FOR_TENSORS = (
+            "इन टेंसर के लिए महत्व मैट्रिक्स का उपयोग न करें"
+        )
         self.OUTPUT_TENSOR_TYPE = "आउटपुट टेंसर प्रकार:"
-        self.USE_THIS_TYPE_FOR_OUTPUT_WEIGHT = "output.weight टेंसर के लिए इस प्रकार का उपयोग करें"
+        self.USE_THIS_TYPE_FOR_OUTPUT_WEIGHT = (
+            "output.weight टेंसर के लिए इस प्रकार का उपयोग करें"
+        )
         self.TOKEN_EMBEDDING_TYPE = "टोकन एम्बेडिंग प्रकार:"
-        self.USE_THIS_TYPE_FOR_TOKEN_EMBEDDINGS = "टोकन एम्बेडिंग टेंसर के लिए इस प्रकार का उपयोग करें"
-        self.WILL_GENERATE_QUANTIZED_MODEL_IN_SAME_SHARDS = "इनपुट के समान शार्ड्स में क्वांटाइज़ किए गए मॉडल को उत्पन्न करेगा"
+        self.USE_THIS_TYPE_FOR_TOKEN_EMBEDDINGS = (
+            "टोकन एम्बेडिंग टेंसर के लिए इस प्रकार का उपयोग करें"
+        )
+        self.WILL_GENERATE_QUANTIZED_MODEL_IN_SAME_SHARDS = (
+            "इनपुट के समान शार्ड्स में क्वांटाइज़ किए गए मॉडल को उत्पन्न करेगा"
+        )
         self.OVERRIDE_MODEL_METADATA = "मॉडल मेटाडेटा को ओवरराइड करें"
         self.INPUT_DATA_FILE_FOR_IMATRIX = "IMatrix उत्पादन के लिए इनपुट डेटा फ़ाइल"
         self.MODEL_TO_BE_QUANTIZED = "क्वांटाइज़ किए जाने वाला मॉडल"
@@ -1348,6 +1538,7 @@ class _Hindi(_Localization):
         self.SET_GPU_OFFLOAD_VALUE = "GPU ऑफलोड मान सेट करें (-ngl)"
         self.COMPLETED = "पूरा हुआ"
         self.REFRESH_MODELS = "मॉडल रीफ्रेश करें"
+
 
 class _Russian(_Localization):
     def __init__(self):
@@ -1399,7 +1590,9 @@ class _Russian(_Localization):
         self.RESTART = "Перезапуск"
         self.DELETE = "Удалить"
         self.CONFIRM_DELETION = "Вы уверены, что хотите удалить эту задачу?"
-        self.TASK_RUNNING_WARNING = "Некоторые задачи все еще выполняются. Вы уверены, что хотите выйти?"
+        self.TASK_RUNNING_WARNING = (
+            "Некоторые задачи все еще выполняются. Вы уверены, что хотите выйти?"
+        )
         self.YES = "Да"
         self.NO = "Нет"
         self.DOWNLOAD_COMPLETE = "Загрузка завершена"
@@ -1414,7 +1607,9 @@ class _Russian(_Localization):
         self.NO_SUITABLE_CUDA_BACKENDS = "Подходящие бэкенды CUDA не найдены"
         self.LLAMACPP_DOWNLOADED_EXTRACTED = "Бинарный файл llama.cpp загружен и извлечен в {0}\nФайлы CUDA извлечены в {1}"
         self.CUDA_FILES_EXTRACTED = "Файлы CUDA извлечены в"
-        self.NO_SUITABLE_CUDA_BACKEND_EXTRACTION = "Подходящий бэкенд CUDA для извлечения не найден"
+        self.NO_SUITABLE_CUDA_BACKEND_EXTRACTION = (
+            "Подходящий бэкенд CUDA для извлечения не найден"
+        )
         self.ERROR_FETCHING_RELEASES = "Ошибка получения релизов: {0}"
         self.CONFIRM_DELETION_TITLE = "Подтвердить удаление"
         self.LOG_FOR = "Лог для {0}"
@@ -1440,8 +1635,12 @@ class _Russian(_Localization):
         self.IN_PROGRESS = "В процессе"
         self.DOWNLOAD_FINISHED_EXTRACTED_TO = "Загрузка завершена. Извлечено в: {0}"
         self.LLAMACPP_DOWNLOADED_AND_EXTRACTED = "Бинарный файл llama.cpp загружен и извлечен в {0}\nФайлы CUDA извлечены в {1}"
-        self.NO_SUITABLE_CUDA_BACKEND_FOUND = "Подходящий бэкенд CUDA для извлечения не найден"
-        self.LLAMACPP_BINARY_DOWNLOADED_AND_EXTRACTED = "Бинарный файл llama.cpp загружен и извлечен в {0}"
+        self.NO_SUITABLE_CUDA_BACKEND_FOUND = (
+            "Подходящий бэкенд CUDA для извлечения не найден"
+        )
+        self.LLAMACPP_BINARY_DOWNLOADED_AND_EXTRACTED = (
+            "Бинарный файл llama.cpp загружен и извлечен в {0}"
+        )
         self.REFRESHING_LLAMACPP_RELEASES = "Обновление релизов llama.cpp"
         self.UPDATING_ASSET_LIST = "Обновление списка активов"
         self.UPDATING_CUDA_OPTIONS = "Обновление параметров CUDA"
@@ -1495,25 +1694,40 @@ class _Russian(_Localization):
         self.APPLICATION_CLOSING = "Закрытие приложения"
         self.APPLICATION_CLOSED = "Приложение закрыто"
         self.SELECT_QUANTIZATION_TYPE = "Выберите тип квантования"
-        self.ALLOWS_REQUANTIZING = "Позволяет переквантовать тензоры, которые уже были квантованы"
+        self.ALLOWS_REQUANTIZING = (
+            "Позволяет переквантовать тензоры, которые уже были квантованы"
+        )
         self.LEAVE_OUTPUT_WEIGHT = "Оставит output.weight не (пере)квантованным"
-        self.DISABLE_K_QUANT_MIXTURES = "Отключить k-квантовые смеси и квантовать все тензоры к одному типу"
+        self.DISABLE_K_QUANT_MIXTURES = (
+            "Отключить k-квантовые смеси и квантовать все тензоры к одному типу"
+        )
         self.USE_DATA_AS_IMPORTANCE_MATRIX = "Использовать данные в файле как матрицу важности для оптимизации квантования"
-        self.USE_IMPORTANCE_MATRIX_FOR_TENSORS = "Использовать матрицу важности для этих тензоров"
-        self.DONT_USE_IMPORTANCE_MATRIX_FOR_TENSORS = "Не использовать матрицу важности для этих тензоров"
+        self.USE_IMPORTANCE_MATRIX_FOR_TENSORS = (
+            "Использовать матрицу важности для этих тензоров"
+        )
+        self.DONT_USE_IMPORTANCE_MATRIX_FOR_TENSORS = (
+            "Не использовать матрицу важности для этих тензоров"
+        )
         self.OUTPUT_TENSOR_TYPE = "Тип выходного тензора:"
-        self.USE_THIS_TYPE_FOR_OUTPUT_WEIGHT = "Использовать этот тип для тензора output.weight"
+        self.USE_THIS_TYPE_FOR_OUTPUT_WEIGHT = (
+            "Использовать этот тип для тензора output.weight"
+        )
         self.TOKEN_EMBEDDING_TYPE = "Тип встраивания токенов:"
-        self.USE_THIS_TYPE_FOR_TOKEN_EMBEDDINGS = "Использовать этот тип для тензора встраивания токенов"
+        self.USE_THIS_TYPE_FOR_TOKEN_EMBEDDINGS = (
+            "Использовать этот тип для тензора встраивания токенов"
+        )
         self.WILL_GENERATE_QUANTIZED_MODEL_IN_SAME_SHARDS = "Будет генерировать квантованную модель в тех же шардах, что и входные данные"
         self.OVERRIDE_MODEL_METADATA = "Переопределить метаданные модели"
         self.INPUT_DATA_FILE_FOR_IMATRIX = "Входной файл данных для генерации IMatrix"
         self.MODEL_TO_BE_QUANTIZED = "Модель для квантования"
-        self.OUTPUT_PATH_FOR_GENERATED_IMATRIX = "Выходной путь для сгенерированного IMatrix"
+        self.OUTPUT_PATH_FOR_GENERATED_IMATRIX = (
+            "Выходной путь для сгенерированного IMatrix"
+        )
         self.HOW_OFTEN_TO_SAVE_IMATRIX = "Как часто сохранять IMatrix"
         self.SET_GPU_OFFLOAD_VALUE = "Установить значение разгрузки GPU (-ngl)"
-        self.COMPLETED = "Завершено"        
+        self.COMPLETED = "Завершено"
         self.REFRESH_MODELS = "Обновить модели"
+
 
 class _Ukrainian(_Localization):
     def __init__(self):
@@ -1565,7 +1779,9 @@ class _Ukrainian(_Localization):
         self.RESTART = "Перезапустити"
         self.DELETE = "Видалити"
         self.CONFIRM_DELETION = "Ви впевнені, що хочете видалити це завдання?"
-        self.TASK_RUNNING_WARNING = "Деякі завдання все ще виконуються. Ви впевнені, що хочете вийти?"
+        self.TASK_RUNNING_WARNING = (
+            "Деякі завдання все ще виконуються. Ви впевнені, що хочете вийти?"
+        )
         self.YES = "Так"
         self.NO = "Ні"
         self.DOWNLOAD_COMPLETE = "Завантаження завершено"
@@ -1580,7 +1796,9 @@ class _Ukrainian(_Localization):
         self.NO_SUITABLE_CUDA_BACKENDS = "Підходящі бекенди CUDA не знайдено"
         self.LLAMACPP_DOWNLOADED_EXTRACTED = "Бінарний файл llama.cpp завантажено та витягнуто в {0}\nФайли CUDA витягнуто в {1}"
         self.CUDA_FILES_EXTRACTED = "Файли CUDA витягнуто в"
-        self.NO_SUITABLE_CUDA_BACKEND_EXTRACTION = "Підходящий бекенд CUDA для витягнення не знайдено"
+        self.NO_SUITABLE_CUDA_BACKEND_EXTRACTION = (
+            "Підходящий бекенд CUDA для витягнення не знайдено"
+        )
         self.ERROR_FETCHING_RELEASES = "Помилка отримання релізів: {0}"
         self.CONFIRM_DELETION_TITLE = "Підтвердити видалення"
         self.LOG_FOR = "Лог для {0}"
@@ -1606,8 +1824,12 @@ class _Ukrainian(_Localization):
         self.IN_PROGRESS = "В процесі"
         self.DOWNLOAD_FINISHED_EXTRACTED_TO = "Завантаження завершено. Витягнуто в: {0}"
         self.LLAMACPP_DOWNLOADED_AND_EXTRACTED = "Бінарний файл llama.cpp завантажено та витягнуто в {0}\nФайли CUDA витягнуто в {1}"
-        self.NO_SUITABLE_CUDA_BACKEND_FOUND = "Підходящий бекенд CUDA для витягнення не знайдено"
-        self.LLAMACPP_BINARY_DOWNLOADED_AND_EXTRACTED = "Бінарний файл llama.cpp завантажено та витягнуто в {0}"
+        self.NO_SUITABLE_CUDA_BACKEND_FOUND = (
+            "Підходящий бекенд CUDA для витягнення не знайдено"
+        )
+        self.LLAMACPP_BINARY_DOWNLOADED_AND_EXTRACTED = (
+            "Бінарний файл llama.cpp завантажено та витягнуто в {0}"
+        )
         self.REFRESHING_LLAMACPP_RELEASES = "Оновлення релізів llama.cpp"
         self.UPDATING_ASSET_LIST = "Оновлення списку активів"
         self.UPDATING_CUDA_OPTIONS = "Оновлення параметрів CUDA"
@@ -1654,32 +1876,51 @@ class _Ukrainian(_Localization):
         self.STARTING_IMATRIX_GENERATION = "Початок генерації IMatrix"
         self.BACKEND_PATH_NOT_EXIST = "Шлях бекенда не існує: {0}"
         self.GENERATING_IMATRIX = "Генерація IMatrix"
-        self.ERROR_STARTING_IMATRIX_GENERATION = "Помилка запуску генерації IMatrix: {0}"
+        self.ERROR_STARTING_IMATRIX_GENERATION = (
+            "Помилка запуску генерації IMatrix: {0}"
+        )
         self.IMATRIX_GENERATION_TASK_STARTED = "Завдання генерації IMatrix запущено"
         self.ERROR_MESSAGE = "Помилка: {0}"
         self.TASK_ERROR = "Помилка завдання: {0}"
         self.APPLICATION_CLOSING = "Закриття програми"
         self.APPLICATION_CLOSED = "Програма закрита"
         self.SELECT_QUANTIZATION_TYPE = "Виберіть тип квантування"
-        self.ALLOWS_REQUANTIZING = "Дозволяє переквантувати тензори, які вже були квантовані"
+        self.ALLOWS_REQUANTIZING = (
+            "Дозволяє переквантувати тензори, які вже були квантовані"
+        )
         self.LEAVE_OUTPUT_WEIGHT = "Залишить output.weight не (пере)квантованим"
-        self.DISABLE_K_QUANT_MIXTURES = "Вимкнути k-квантові суміші та квантувати всі тензори до одного типу"
+        self.DISABLE_K_QUANT_MIXTURES = (
+            "Вимкнути k-квантові суміші та квантувати всі тензори до одного типу"
+        )
         self.USE_DATA_AS_IMPORTANCE_MATRIX = "Використовувати дані у файлі як матрицю важливості для оптимізації квантування"
-        self.USE_IMPORTANCE_MATRIX_FOR_TENSORS = "Використовувати матрицю важливості для цих тензорів"
-        self.DONT_USE_IMPORTANCE_MATRIX_FOR_TENSORS = "Не використовувати матрицю важливості для цих тензорів"
+        self.USE_IMPORTANCE_MATRIX_FOR_TENSORS = (
+            "Використовувати матрицю важливості для цих тензорів"
+        )
+        self.DONT_USE_IMPORTANCE_MATRIX_FOR_TENSORS = (
+            "Не використовувати матрицю важливості для цих тензорів"
+        )
         self.OUTPUT_TENSOR_TYPE = "Тип вихідного тензора:"
-        self.USE_THIS_TYPE_FOR_OUTPUT_WEIGHT = "Використовувати цей тип для тензора output.weight"
+        self.USE_THIS_TYPE_FOR_OUTPUT_WEIGHT = (
+            "Використовувати цей тип для тензора output.weight"
+        )
         self.TOKEN_EMBEDDING_TYPE = "Тип вбудовування токенів:"
-        self.USE_THIS_TYPE_FOR_TOKEN_EMBEDDINGS = "Використовувати цей тип для тензора вбудовування токенів"
-        self.WILL_GENERATE_QUANTIZED_MODEL_IN_SAME_SHARDS = "Генеруватиме квантовану модель у тих самих шардах, що й вхідні дані"
+        self.USE_THIS_TYPE_FOR_TOKEN_EMBEDDINGS = (
+            "Використовувати цей тип для тензора вбудовування токенів"
+        )
+        self.WILL_GENERATE_QUANTIZED_MODEL_IN_SAME_SHARDS = (
+            "Генеруватиме квантовану модель у тих самих шардах, що й вхідні дані"
+        )
         self.OVERRIDE_MODEL_METADATA = "Перевизначити метадані моделі"
         self.INPUT_DATA_FILE_FOR_IMATRIX = "Вхідний файл даних для генерації IMatrix"
         self.MODEL_TO_BE_QUANTIZED = "Модель для квантування"
-        self.OUTPUT_PATH_FOR_GENERATED_IMATRIX = "Вихідний шлях для згенерованого IMatrix"
+        self.OUTPUT_PATH_FOR_GENERATED_IMATRIX = (
+            "Вихідний шлях для згенерованого IMatrix"
+        )
         self.HOW_OFTEN_TO_SAVE_IMATRIX = "Як часто зберігати IMatrix"
         self.SET_GPU_OFFLOAD_VALUE = "Встановити значення розвантаження GPU (-ngl)"
         self.COMPLETED = "Завершено"
         self.REFRESH_MODELS = "Оновити моделі"
+
 
 class _Japanese(_Localization):
     def __init__(self):
@@ -1731,7 +1972,9 @@ class _Japanese(_Localization):
         self.RESTART = "再起動"
         self.DELETE = "削除"
         self.CONFIRM_DELETION = "このタスクを削除してもよろしいですか？"
-        self.TASK_RUNNING_WARNING = "一部のタスクはまだ実行中です。終了してもよろしいですか？"
+        self.TASK_RUNNING_WARNING = (
+            "一部のタスクはまだ実行中です。終了してもよろしいですか？"
+        )
         self.YES = "はい"
         self.NO = "いいえ"
         self.DOWNLOAD_COMPLETE = "ダウンロード完了"
@@ -1746,7 +1989,9 @@ class _Japanese(_Localization):
         self.NO_SUITABLE_CUDA_BACKENDS = "適切なCUDAバックエンドが見つかりませんでした"
         self.LLAMACPP_DOWNLOADED_EXTRACTED = "llama.cppバイナリがダウンロードされ、{0}に抽出されました\nCUDAファイルは{1}に抽出されました"
         self.CUDA_FILES_EXTRACTED = "CUDAファイルはに抽出されました"
-        self.NO_SUITABLE_CUDA_BACKEND_EXTRACTION = "抽出に適したCUDAバックエンドが見つかりませんでした"
+        self.NO_SUITABLE_CUDA_BACKEND_EXTRACTION = (
+            "抽出に適したCUDAバックエンドが見つかりませんでした"
+        )
         self.ERROR_FETCHING_RELEASES = "リリースの取得中にエラーが発生しました: {0}"
         self.CONFIRM_DELETION_TITLE = "削除の確認"
         self.LOG_FOR = "{0}のログ"
@@ -1772,8 +2017,12 @@ class _Japanese(_Localization):
         self.IN_PROGRESS = "処理中"
         self.DOWNLOAD_FINISHED_EXTRACTED_TO = "ダウンロードが完了しました。抽出先: {0}"
         self.LLAMACPP_DOWNLOADED_AND_EXTRACTED = "llama.cppバイナリがダウンロードされ、{0}に抽出されました\nCUDAファイルは{1}に抽出されました"
-        self.NO_SUITABLE_CUDA_BACKEND_FOUND = "抽出に適したCUDAバックエンドが見つかりませんでした"
-        self.LLAMACPP_BINARY_DOWNLOADED_AND_EXTRACTED = "llama.cppバイナリがダウンロードされ、{0}に抽出されました"
+        self.NO_SUITABLE_CUDA_BACKEND_FOUND = (
+            "抽出に適したCUDAバックエンドが見つかりませんでした"
+        )
+        self.LLAMACPP_BINARY_DOWNLOADED_AND_EXTRACTED = (
+            "llama.cppバイナリがダウンロードされ、{0}に抽出されました"
+        )
         self.REFRESHING_LLAMACPP_RELEASES = "llama.cppリリースを更新しています"
         self.UPDATING_ASSET_LIST = "アセットリストを更新しています"
         self.UPDATING_CUDA_OPTIONS = "CUDAオプションを更新しています"
@@ -1820,24 +2069,42 @@ class _Japanese(_Localization):
         self.STARTING_IMATRIX_GENERATION = "IMatrixの生成を開始しています"
         self.BACKEND_PATH_NOT_EXIST = "バックエンドパスが存在しません: {0}"
         self.GENERATING_IMATRIX = "IMatrixを生成しています"
-        self.ERROR_STARTING_IMATRIX_GENERATION = "IMatrixの生成を開始中にエラーが発生しました: {0}"
+        self.ERROR_STARTING_IMATRIX_GENERATION = (
+            "IMatrixの生成を開始中にエラーが発生しました: {0}"
+        )
         self.IMATRIX_GENERATION_TASK_STARTED = "IMatrix生成タスクが開始されました"
         self.ERROR_MESSAGE = "エラー: {0}"
         self.TASK_ERROR = "タスクエラー: {0}"
         self.APPLICATION_CLOSING = "アプリケーションを終了しています"
         self.APPLICATION_CLOSED = "アプリケーションが終了しました"
         self.SELECT_QUANTIZATION_TYPE = "量子化タイプを選択してください"
-        self.ALLOWS_REQUANTIZING = "すでに量子化されているテンソルの再量子化を許可します"
+        self.ALLOWS_REQUANTIZING = (
+            "すでに量子化されているテンソルの再量子化を許可します"
+        )
         self.LEAVE_OUTPUT_WEIGHT = "output.weightは（再）量子化されません"
-        self.DISABLE_K_QUANT_MIXTURES = "k-quant混合を無効にし、すべてのテンソルを同じタイプに量子化します"
-        self.USE_DATA_AS_IMPORTANCE_MATRIX = "量子化最適化の重要度マトリックスとしてファイル内のデータを使用します"
-        self.USE_IMPORTANCE_MATRIX_FOR_TENSORS = "これらのテンソルに重要度マトリックスを使用します"
-        self.DONT_USE_IMPORTANCE_MATRIX_FOR_TENSORS = "これらのテンソルに重要度マトリックスを使用しません"
+        self.DISABLE_K_QUANT_MIXTURES = (
+            "k-quant混合を無効にし、すべてのテンソルを同じタイプに量子化します"
+        )
+        self.USE_DATA_AS_IMPORTANCE_MATRIX = (
+            "量子化最適化の重要度マトリックスとしてファイル内のデータを使用します"
+        )
+        self.USE_IMPORTANCE_MATRIX_FOR_TENSORS = (
+            "これらのテンソルに重要度マトリックスを使用します"
+        )
+        self.DONT_USE_IMPORTANCE_MATRIX_FOR_TENSORS = (
+            "これらのテンソルに重要度マトリックスを使用しません"
+        )
         self.OUTPUT_TENSOR_TYPE = "出力テンソルタイプ:"
-        self.USE_THIS_TYPE_FOR_OUTPUT_WEIGHT = "output.weightテンソルにこのタイプを使用します"
+        self.USE_THIS_TYPE_FOR_OUTPUT_WEIGHT = (
+            "output.weightテンソルにこのタイプを使用します"
+        )
         self.TOKEN_EMBEDDING_TYPE = "トークン埋め込みタイプ:"
-        self.USE_THIS_TYPE_FOR_TOKEN_EMBEDDINGS = "トークン埋め込みテンソルにこのタイプを使用します"
-        self.WILL_GENERATE_QUANTIZED_MODEL_IN_SAME_SHARDS = "入力と同じシャードで量子化されたモデルを生成します"
+        self.USE_THIS_TYPE_FOR_TOKEN_EMBEDDINGS = (
+            "トークン埋め込みテンソルにこのタイプを使用します"
+        )
+        self.WILL_GENERATE_QUANTIZED_MODEL_IN_SAME_SHARDS = (
+            "入力と同じシャードで量子化されたモデルを生成します"
+        )
         self.OVERRIDE_MODEL_METADATA = "モデルメタデータを上書きする"
         self.INPUT_DATA_FILE_FOR_IMATRIX = "IMatrix生成用の入力データファイル"
         self.MODEL_TO_BE_QUANTIZED = "量子化されるモデル"
@@ -1846,7 +2113,8 @@ class _Japanese(_Localization):
         self.SET_GPU_OFFLOAD_VALUE = "GPUオフロード値を設定 (-ngl)"
         self.COMPLETED = "完了しました"
         self.REFRESH_MODELS = "モデルを更新"
- 
+
+
 class _German(_Localization):
     def __init__(self):
         super().__init__()
@@ -1896,8 +2164,12 @@ class _German(_Localization):
         self.CANCEL = "Abbrechen"
         self.RESTART = "Neustart"
         self.DELETE = "Löschen"
-        self.CONFIRM_DELETION = "Sind Sie sicher, dass Sie diese Aufgabe löschen möchten?"
-        self.TASK_RUNNING_WARNING = "Einige Aufgaben laufen noch. Möchten Sie wirklich beenden?"
+        self.CONFIRM_DELETION = (
+            "Sind Sie sicher, dass Sie diese Aufgabe löschen möchten?"
+        )
+        self.TASK_RUNNING_WARNING = (
+            "Einige Aufgaben laufen noch. Möchten Sie wirklich beenden?"
+        )
         self.YES = "Ja"
         self.NO = "Nein"
         self.DOWNLOAD_COMPLETE = "Download abgeschlossen"
@@ -1912,7 +2184,9 @@ class _German(_Localization):
         self.NO_SUITABLE_CUDA_BACKENDS = "Keine geeigneten CUDA-Backends gefunden"
         self.LLAMACPP_DOWNLOADED_EXTRACTED = "llama.cpp-Binärdatei heruntergeladen und extrahiert nach {0}\nCUDA-Dateien extrahiert nach {1}"
         self.CUDA_FILES_EXTRACTED = "CUDA-Dateien extrahiert nach"
-        self.NO_SUITABLE_CUDA_BACKEND_EXTRACTION = "Kein geeignetes CUDA-Backend für die Extraktion gefunden"
+        self.NO_SUITABLE_CUDA_BACKEND_EXTRACTION = (
+            "Kein geeignetes CUDA-Backend für die Extraktion gefunden"
+        )
         self.ERROR_FETCHING_RELEASES = "Fehler beim Abrufen der Releases: {0}"
         self.CONFIRM_DELETION_TITLE = "Löschen bestätigen"
         self.LOG_FOR = "Log für {0}"
@@ -1936,20 +2210,30 @@ class _German(_Localization):
         self.TASK_PRESET_SAVED_TO = "Task-Preset gespeichert unter {0}"
         self.RESTARTING_TASK = "Aufgabe wird neu gestartet: {0}"
         self.IN_PROGRESS = "In Bearbeitung"
-        self.DOWNLOAD_FINISHED_EXTRACTED_TO = "Download abgeschlossen. Extrahiert nach: {0}"
+        self.DOWNLOAD_FINISHED_EXTRACTED_TO = (
+            "Download abgeschlossen. Extrahiert nach: {0}"
+        )
         self.LLAMACPP_DOWNLOADED_AND_EXTRACTED = "llama.cpp-Binärdatei heruntergeladen und extrahiert nach {0}\nCUDA-Dateien extrahiert nach {1}"
-        self.NO_SUITABLE_CUDA_BACKEND_FOUND = "Kein geeignetes CUDA-Backend für die Extraktion gefunden"
-        self.LLAMACPP_BINARY_DOWNLOADED_AND_EXTRACTED = "llama.cpp-Binärdatei heruntergeladen und extrahiert nach {0}"
+        self.NO_SUITABLE_CUDA_BACKEND_FOUND = (
+            "Kein geeignetes CUDA-Backend für die Extraktion gefunden"
+        )
+        self.LLAMACPP_BINARY_DOWNLOADED_AND_EXTRACTED = (
+            "llama.cpp-Binärdatei heruntergeladen und extrahiert nach {0}"
+        )
         self.REFRESHING_LLAMACPP_RELEASES = "llama.cpp-Releases werden aktualisiert"
         self.UPDATING_ASSET_LIST = "Asset-Liste wird aktualisiert"
         self.UPDATING_CUDA_OPTIONS = "CUDA-Optionen werden aktualisiert"
         self.STARTING_LLAMACPP_DOWNLOAD = "Download von llama.cpp wird gestartet"
         self.UPDATING_CUDA_BACKENDS = "CUDA-Backends werden aktualisiert"
-        self.NO_CUDA_BACKEND_SELECTED = "Kein CUDA-Backend für die Extraktion ausgewählt"
+        self.NO_CUDA_BACKEND_SELECTED = (
+            "Kein CUDA-Backend für die Extraktion ausgewählt"
+        )
         self.EXTRACTING_CUDA_FILES = "CUDA-Dateien werden von {0} nach {1} extrahiert"
         self.DOWNLOAD_ERROR = "Download-Fehler: {0}"
         self.SHOWING_TASK_CONTEXT_MENU = "Kontextmenü der Aufgabe wird angezeigt"
-        self.SHOWING_PROPERTIES_FOR_TASK = "Eigenschaften für Aufgabe werden angezeigt: {0}"
+        self.SHOWING_PROPERTIES_FOR_TASK = (
+            "Eigenschaften für Aufgabe werden angezeigt: {0}"
+        )
         self.CANCELLING_TASK = "Aufgabe wird abgebrochen: {0}"
         self.CANCELED = "Abgebrochen"
         self.DELETING_TASK = "Aufgabe wird gelöscht: {0}"
@@ -1986,7 +2270,9 @@ class _German(_Localization):
         self.STARTING_IMATRIX_GENERATION = "IMatrix-Generierung wird gestartet"
         self.BACKEND_PATH_NOT_EXIST = "Backend-Pfad existiert nicht: {0}"
         self.GENERATING_IMATRIX = "IMatrix wird generiert"
-        self.ERROR_STARTING_IMATRIX_GENERATION = "Fehler beim Starten der IMatrix-Generierung: {0}"
+        self.ERROR_STARTING_IMATRIX_GENERATION = (
+            "Fehler beim Starten der IMatrix-Generierung: {0}"
+        )
         self.IMATRIX_GENERATION_TASK_STARTED = "IMatrix-Generierungsaufgabe gestartet"
         self.ERROR_MESSAGE = "Fehler: {0}"
         self.TASK_ERROR = "Aufgabenfehler: {0}"
@@ -1997,21 +2283,36 @@ class _German(_Localization):
         self.LEAVE_OUTPUT_WEIGHT = "Lässt output.weight nicht (re)quantisiert"
         self.DISABLE_K_QUANT_MIXTURES = "Deaktivieren Sie k-Quant-Mischungen und quantisieren Sie alle Tensoren auf denselben Typ"
         self.USE_DATA_AS_IMPORTANCE_MATRIX = "Verwenden Sie Daten in der Datei als Wichtigkeitsmatrix für Quant-Optimierungen"
-        self.USE_IMPORTANCE_MATRIX_FOR_TENSORS = "Verwenden Sie die Wichtigkeitsmatrix für diese Tensoren"
-        self.DONT_USE_IMPORTANCE_MATRIX_FOR_TENSORS = "Verwenden Sie die Wichtigkeitsmatrix nicht für diese Tensoren"
+        self.USE_IMPORTANCE_MATRIX_FOR_TENSORS = (
+            "Verwenden Sie die Wichtigkeitsmatrix für diese Tensoren"
+        )
+        self.DONT_USE_IMPORTANCE_MATRIX_FOR_TENSORS = (
+            "Verwenden Sie die Wichtigkeitsmatrix nicht für diese Tensoren"
+        )
         self.OUTPUT_TENSOR_TYPE = "Ausgabetensortyp:"
-        self.USE_THIS_TYPE_FOR_OUTPUT_WEIGHT = "Verwenden Sie diesen Typ für den output.weight-Tensor"
+        self.USE_THIS_TYPE_FOR_OUTPUT_WEIGHT = (
+            "Verwenden Sie diesen Typ für den output.weight-Tensor"
+        )
         self.TOKEN_EMBEDDING_TYPE = "Token-Einbettungstyp:"
-        self.USE_THIS_TYPE_FOR_TOKEN_EMBEDDINGS = "Verwenden Sie diesen Typ für den Token-Einbettungstensor"
-        self.WILL_GENERATE_QUANTIZED_MODEL_IN_SAME_SHARDS = "Generiert ein quantisiertes Modell in denselben Shards wie die Eingabe"
+        self.USE_THIS_TYPE_FOR_TOKEN_EMBEDDINGS = (
+            "Verwenden Sie diesen Typ für den Token-Einbettungstensor"
+        )
+        self.WILL_GENERATE_QUANTIZED_MODEL_IN_SAME_SHARDS = (
+            "Generiert ein quantisiertes Modell in denselben Shards wie die Eingabe"
+        )
         self.OVERRIDE_MODEL_METADATA = "Modellmetadaten überschreiben"
-        self.INPUT_DATA_FILE_FOR_IMATRIX = "Eingabedatendatei für die IMatrix-Generierung"
+        self.INPUT_DATA_FILE_FOR_IMATRIX = (
+            "Eingabedatendatei für die IMatrix-Generierung"
+        )
         self.MODEL_TO_BE_QUANTIZED = "Zu quantisierendes Modell"
-        self.OUTPUT_PATH_FOR_GENERATED_IMATRIX = "Ausgabepfad für die generierte IMatrix"
+        self.OUTPUT_PATH_FOR_GENERATED_IMATRIX = (
+            "Ausgabepfad für die generierte IMatrix"
+        )
         self.HOW_OFTEN_TO_SAVE_IMATRIX = "Wie oft die IMatrix gespeichert werden soll"
         self.SET_GPU_OFFLOAD_VALUE = "GPU-Offload-Wert festlegen (-ngl)"
-        self.COMPLETED = "Abgeschlossen"        
+        self.COMPLETED = "Abgeschlossen"
         self.REFRESH_MODELS = "Modelle aktualisieren"
+
 
 class _Portuguese(_Localization):
     def __init__(self):
@@ -2063,7 +2364,9 @@ class _Portuguese(_Localization):
         self.RESTART = "Reiniciar"
         self.DELETE = "Excluir"
         self.CONFIRM_DELETION = "Tem certeza de que deseja excluir esta tarefa?"
-        self.TASK_RUNNING_WARNING = "Algumas tarefas ainda estão em execução. Tem certeza de que deseja sair?"
+        self.TASK_RUNNING_WARNING = (
+            "Algumas tarefas ainda estão em execução. Tem certeza de que deseja sair?"
+        )
         self.YES = "Sim"
         self.NO = "Não"
         self.DOWNLOAD_COMPLETE = "Download Concluído"
@@ -2078,7 +2381,9 @@ class _Portuguese(_Localization):
         self.NO_SUITABLE_CUDA_BACKENDS = "Nenhum backend CUDA adequado encontrado"
         self.LLAMACPP_DOWNLOADED_EXTRACTED = "Binário llama.cpp baixado e extraído para {0}\nArquivos CUDA extraídos para {1}"
         self.CUDA_FILES_EXTRACTED = "Arquivos CUDA extraídos para"
-        self.NO_SUITABLE_CUDA_BACKEND_EXTRACTION = "Nenhum backend CUDA adequado encontrado para extração"
+        self.NO_SUITABLE_CUDA_BACKEND_EXTRACTION = (
+            "Nenhum backend CUDA adequado encontrado para extração"
+        )
         self.ERROR_FETCHING_RELEASES = "Erro ao buscar versões: {0}"
         self.CONFIRM_DELETION_TITLE = "Confirmar Exclusão"
         self.LOG_FOR = "Log para {0}"
@@ -2104,8 +2409,12 @@ class _Portuguese(_Localization):
         self.IN_PROGRESS = "Em Andamento"
         self.DOWNLOAD_FINISHED_EXTRACTED_TO = "Download concluído. Extraído para: {0}"
         self.LLAMACPP_DOWNLOADED_AND_EXTRACTED = "Binário llama.cpp baixado e extraído para {0}\nArquivos CUDA extraídos para {1}"
-        self.NO_SUITABLE_CUDA_BACKEND_FOUND = "Nenhum backend CUDA adequado encontrado para extração"
-        self.LLAMACPP_BINARY_DOWNLOADED_AND_EXTRACTED = "Binário llama.cpp baixado e extraído para {0}"
+        self.NO_SUITABLE_CUDA_BACKEND_FOUND = (
+            "Nenhum backend CUDA adequado encontrado para extração"
+        )
+        self.LLAMACPP_BINARY_DOWNLOADED_AND_EXTRACTED = (
+            "Binário llama.cpp baixado e extraído para {0}"
+        )
         self.REFRESHING_LLAMACPP_RELEASES = "Atualizando versões do llama.cpp"
         self.UPDATING_ASSET_LIST = "Atualizando lista de ativos"
         self.UPDATING_CUDA_OPTIONS = "Atualizando opções CUDA"
@@ -2145,39 +2454,62 @@ class _Portuguese(_Localization):
         self.SHOWING_TASK_DETAILS_FOR = "Mostrando detalhes da tarefa para: {0}"
         self.BROWSING_FOR_IMATRIX_DATA_FILE = "Navegando pelo arquivo de dados IMatrix"
         self.SELECT_DATA_FILE = "Selecionar Arquivo de Dados"
-        self.BROWSING_FOR_IMATRIX_MODEL_FILE = "Navegando pelo arquivo de modelo IMatrix"
+        self.BROWSING_FOR_IMATRIX_MODEL_FILE = (
+            "Navegando pelo arquivo de modelo IMatrix"
+        )
         self.SELECT_MODEL_FILE = "Selecionar Arquivo de Modelo"
-        self.BROWSING_FOR_IMATRIX_OUTPUT_FILE = "Navegando pelo arquivo de saída IMatrix"
+        self.BROWSING_FOR_IMATRIX_OUTPUT_FILE = (
+            "Navegando pelo arquivo de saída IMatrix"
+        )
         self.SELECT_OUTPUT_FILE = "Selecionar Arquivo de Saída"
         self.STARTING_IMATRIX_GENERATION = "Iniciando a geração de IMatrix"
         self.BACKEND_PATH_NOT_EXIST = "O caminho do backend não existe: {0}"
         self.GENERATING_IMATRIX = "Gerando IMatrix"
-        self.ERROR_STARTING_IMATRIX_GENERATION = "Erro ao iniciar a geração de IMatrix: {0}"
+        self.ERROR_STARTING_IMATRIX_GENERATION = (
+            "Erro ao iniciar a geração de IMatrix: {0}"
+        )
         self.IMATRIX_GENERATION_TASK_STARTED = "Tarefa de geração de IMatrix iniciada"
         self.ERROR_MESSAGE = "Erro: {0}"
         self.TASK_ERROR = "Erro de tarefa: {0}"
         self.APPLICATION_CLOSING = "Fechando o aplicativo"
         self.APPLICATION_CLOSED = "Aplicativo fechado"
         self.SELECT_QUANTIZATION_TYPE = "Selecione o tipo de quantização"
-        self.ALLOWS_REQUANTIZING = "Permite requantizar tensores que já foram quantizados"
+        self.ALLOWS_REQUANTIZING = (
+            "Permite requantizar tensores que já foram quantizados"
+        )
         self.LEAVE_OUTPUT_WEIGHT = "Deixará output.weight não (re)quantizado"
         self.DISABLE_K_QUANT_MIXTURES = "Desabilitar misturas k-quant e quantizar todos os tensores para o mesmo tipo"
         self.USE_DATA_AS_IMPORTANCE_MATRIX = "Usar os dados no arquivo como matriz de importância para otimizações de quantização"
-        self.USE_IMPORTANCE_MATRIX_FOR_TENSORS = "Usar matriz de importância para estes tensores"
-        self.DONT_USE_IMPORTANCE_MATRIX_FOR_TENSORS = "Não usar matriz de importância para estes tensores"
+        self.USE_IMPORTANCE_MATRIX_FOR_TENSORS = (
+            "Usar matriz de importância para estes tensores"
+        )
+        self.DONT_USE_IMPORTANCE_MATRIX_FOR_TENSORS = (
+            "Não usar matriz de importância para estes tensores"
+        )
         self.OUTPUT_TENSOR_TYPE = "Tipo de Tensor de Saída:"
-        self.USE_THIS_TYPE_FOR_OUTPUT_WEIGHT = "Usar este tipo para o tensor output.weight"
+        self.USE_THIS_TYPE_FOR_OUTPUT_WEIGHT = (
+            "Usar este tipo para o tensor output.weight"
+        )
         self.TOKEN_EMBEDDING_TYPE = "Tipo de Incorporação de Token:"
-        self.USE_THIS_TYPE_FOR_TOKEN_EMBEDDINGS = "Usar este tipo para o tensor de incorporações de token"
-        self.WILL_GENERATE_QUANTIZED_MODEL_IN_SAME_SHARDS = "Irá gerar o modelo quantizado nos mesmos shards da entrada"
+        self.USE_THIS_TYPE_FOR_TOKEN_EMBEDDINGS = (
+            "Usar este tipo para o tensor de incorporações de token"
+        )
+        self.WILL_GENERATE_QUANTIZED_MODEL_IN_SAME_SHARDS = (
+            "Irá gerar o modelo quantizado nos mesmos shards da entrada"
+        )
         self.OVERRIDE_MODEL_METADATA = "Substituir metadados do modelo"
-        self.INPUT_DATA_FILE_FOR_IMATRIX = "Arquivo de dados de entrada para geração de IMatrix"
+        self.INPUT_DATA_FILE_FOR_IMATRIX = (
+            "Arquivo de dados de entrada para geração de IMatrix"
+        )
         self.MODEL_TO_BE_QUANTIZED = "Modelo a ser quantizado"
-        self.OUTPUT_PATH_FOR_GENERATED_IMATRIX = "Caminho de saída para o IMatrix gerado"
+        self.OUTPUT_PATH_FOR_GENERATED_IMATRIX = (
+            "Caminho de saída para o IMatrix gerado"
+        )
         self.HOW_OFTEN_TO_SAVE_IMATRIX = "Com que frequência salvar o IMatrix"
         self.SET_GPU_OFFLOAD_VALUE = "Definir valor de offload da GPU (-ngl)"
         self.COMPLETED = "Concluído"
         self.REFRESH_MODELS = "Atualizar modelos"
+
 
 class _Arabic(_Localization):
     def __init__(self):
@@ -2229,7 +2561,9 @@ class _Arabic(_Localization):
         self.RESTART = "إعادة تشغيل"
         self.DELETE = "حذف"
         self.CONFIRM_DELETION = "هل أنت متأكد أنك تريد حذف هذه المهمة؟"
-        self.TASK_RUNNING_WARNING = "لا تزال بعض المهام قيد التشغيل. هل أنت متأكد أنك تريد الإنهاء؟"
+        self.TASK_RUNNING_WARNING = (
+            "لا تزال بعض المهام قيد التشغيل. هل أنت متأكد أنك تريد الإنهاء؟"
+        )
         self.YES = "نعم"
         self.NO = "لا"
         self.DOWNLOAD_COMPLETE = "اكتمل التنزيل"
@@ -2244,7 +2578,9 @@ class _Arabic(_Localization):
         self.NO_SUITABLE_CUDA_BACKENDS = "لم يتم العثور على خلفيات CUDA مناسبة"
         self.LLAMACPP_DOWNLOADED_EXTRACTED = "تم تنزيل ملف llama.cpp الثنائي واستخراجه إلى {0}\nتم استخراج ملفات CUDA إلى {1}"
         self.CUDA_FILES_EXTRACTED = "تم استخراج ملفات CUDA إلى"
-        self.NO_SUITABLE_CUDA_BACKEND_EXTRACTION = "لم يتم العثور على خلفية CUDA مناسبة للاستخراج"
+        self.NO_SUITABLE_CUDA_BACKEND_EXTRACTION = (
+            "لم يتم العثور على خلفية CUDA مناسبة للاستخراج"
+        )
         self.ERROR_FETCHING_RELEASES = "خطأ في جلب الإصدارات: {0}"
         self.CONFIRM_DELETION_TITLE = "تأكيد الحذف"
         self.LOG_FOR = "سجل لـ {0}"
@@ -2270,8 +2606,12 @@ class _Arabic(_Localization):
         self.IN_PROGRESS = "قيد التقدم"
         self.DOWNLOAD_FINISHED_EXTRACTED_TO = "اكتمل التنزيل. تم الاستخراج إلى: {0}"
         self.LLAMACPP_DOWNLOADED_AND_EXTRACTED = "تم تنزيل ملف llama.cpp الثنائي واستخراجه إلى {0}\nتم استخراج ملفات CUDA إلى {1}"
-        self.NO_SUITABLE_CUDA_BACKEND_FOUND = "لم يتم العثور على خلفية CUDA مناسبة للاستخراج"
-        self.LLAMACPP_BINARY_DOWNLOADED_AND_EXTRACTED = "تم تنزيل ملف llama.cpp الثنائي واستخراجه إلى {0}"
+        self.NO_SUITABLE_CUDA_BACKEND_FOUND = (
+            "لم يتم العثور على خلفية CUDA مناسبة للاستخراج"
+        )
+        self.LLAMACPP_BINARY_DOWNLOADED_AND_EXTRACTED = (
+            "تم تنزيل ملف llama.cpp الثنائي واستخراجه إلى {0}"
+        )
         self.REFRESHING_LLAMACPP_RELEASES = "تحديث إصدارات llama.cpp"
         self.UPDATING_ASSET_LIST = "تحديث قائمة الأصول"
         self.UPDATING_CUDA_OPTIONS = "تحديث خيارات CUDA"
@@ -2327,23 +2667,36 @@ class _Arabic(_Localization):
         self.SELECT_QUANTIZATION_TYPE = "حدد نوع التكميم"
         self.ALLOWS_REQUANTIZING = "يسمح بإعادة تكميم الموترات التي تم تكميمها بالفعل"
         self.LEAVE_OUTPUT_WEIGHT = "سيترك output.weight غير مُكَمَّم (أو مُعاد تكميمه)"
-        self.DISABLE_K_QUANT_MIXTURES = "تعطيل خلطات k-quant وتكميم جميع الموترات إلى نفس النوع"
-        self.USE_DATA_AS_IMPORTANCE_MATRIX = "استخدام البيانات في الملف كمصفوفة أهمية لتحسينات التكميم"
+        self.DISABLE_K_QUANT_MIXTURES = (
+            "تعطيل خلطات k-quant وتكميم جميع الموترات إلى نفس النوع"
+        )
+        self.USE_DATA_AS_IMPORTANCE_MATRIX = (
+            "استخدام البيانات في الملف كمصفوفة أهمية لتحسينات التكميم"
+        )
         self.USE_IMPORTANCE_MATRIX_FOR_TENSORS = "استخدام مصفوفة الأهمية لهذه الموترات"
-        self.DONT_USE_IMPORTANCE_MATRIX_FOR_TENSORS = "عدم استخدام مصفوفة الأهمية لهذه الموترات"
+        self.DONT_USE_IMPORTANCE_MATRIX_FOR_TENSORS = (
+            "عدم استخدام مصفوفة الأهمية لهذه الموترات"
+        )
         self.OUTPUT_TENSOR_TYPE = "نوع موتر الإخراج:"
         self.USE_THIS_TYPE_FOR_OUTPUT_WEIGHT = "استخدم هذا النوع لموتر output.weight"
         self.TOKEN_EMBEDDING_TYPE = "نوع تضمين الرمز المميز:"
-        self.USE_THIS_TYPE_FOR_TOKEN_EMBEDDINGS = "استخدم هذا النوع لموتر تضمينات الرمز المميز"
-        self.WILL_GENERATE_QUANTIZED_MODEL_IN_SAME_SHARDS = "سيولد نموذجًا مُكَمَّمًا في نفس شظايا الإدخال"
+        self.USE_THIS_TYPE_FOR_TOKEN_EMBEDDINGS = (
+            "استخدم هذا النوع لموتر تضمينات الرمز المميز"
+        )
+        self.WILL_GENERATE_QUANTIZED_MODEL_IN_SAME_SHARDS = (
+            "سيولد نموذجًا مُكَمَّمًا في نفس شظايا الإدخال"
+        )
         self.OVERRIDE_MODEL_METADATA = "تجاوز بيانات تعريف النموذج"
         self.INPUT_DATA_FILE_FOR_IMATRIX = "ملف بيانات الإدخال لتوليد IMatrix"
         self.MODEL_TO_BE_QUANTIZED = "النموذج المراد تكميمه"
-        self.OUTPUT_PATH_FOR_GENERATED_IMATRIX = "مسار الإخراج لـ IMatrix الذي تم إنشاؤه"
+        self.OUTPUT_PATH_FOR_GENERATED_IMATRIX = (
+            "مسار الإخراج لـ IMatrix الذي تم إنشاؤه"
+        )
         self.HOW_OFTEN_TO_SAVE_IMATRIX = "عدد مرات حفظ IMatrix"
         self.SET_GPU_OFFLOAD_VALUE = "تعيين قيمة تفريغ GPU (-ngl)"
         self.COMPLETED = "مكتمل"
         self.REFRESH_MODELS = "تحديث النماذج"
+
 
 class _Korean(_Localization):
     def __init__(self):
@@ -2410,7 +2763,9 @@ class _Korean(_Localization):
         self.NO_SUITABLE_CUDA_BACKENDS = "적합한 CUDA 백엔드를 찾을 수 없습니다"
         self.LLAMACPP_DOWNLOADED_EXTRACTED = "llama.cpp 바이너리가 다운로드되어 {0}에 추출되었습니다.\nCUDA 파일이 {1}에 추출되었습니다."
         self.CUDA_FILES_EXTRACTED = "CUDA 파일이 에 추출되었습니다."
-        self.NO_SUITABLE_CUDA_BACKEND_EXTRACTION = "추출에 적합한 CUDA 백엔드를 찾을 수 없습니다."
+        self.NO_SUITABLE_CUDA_BACKEND_EXTRACTION = (
+            "추출에 적합한 CUDA 백엔드를 찾을 수 없습니다."
+        )
         self.ERROR_FETCHING_RELEASES = "릴리스를 가져오는 중 오류가 발생했습니다: {0}"
         self.CONFIRM_DELETION_TITLE = "삭제 확인"
         self.LOG_FOR = "{0}에 대한 로그"
@@ -2434,10 +2789,16 @@ class _Korean(_Localization):
         self.TASK_PRESET_SAVED_TO = "작업 프리셋이 {0}에 저장되었습니다."
         self.RESTARTING_TASK = "작업을 다시 시작하는 중입니다: {0}"
         self.IN_PROGRESS = "진행 중"
-        self.DOWNLOAD_FINISHED_EXTRACTED_TO = "다운로드가 완료되었습니다. 추출 위치: {0}"
+        self.DOWNLOAD_FINISHED_EXTRACTED_TO = (
+            "다운로드가 완료되었습니다. 추출 위치: {0}"
+        )
         self.LLAMACPP_DOWNLOADED_AND_EXTRACTED = "llama.cpp 바이너리가 다운로드되어 {0}에 추출되었습니다.\nCUDA 파일이 {1}에 추출되었습니다."
-        self.NO_SUITABLE_CUDA_BACKEND_FOUND = "추출에 적합한 CUDA 백엔드를 찾을 수 없습니다."
-        self.LLAMACPP_BINARY_DOWNLOADED_AND_EXTRACTED = "llama.cpp 바이너리가 다운로드되어 {0}에 추출되었습니다."
+        self.NO_SUITABLE_CUDA_BACKEND_FOUND = (
+            "추출에 적합한 CUDA 백엔드를 찾을 수 없습니다."
+        )
+        self.LLAMACPP_BINARY_DOWNLOADED_AND_EXTRACTED = (
+            "llama.cpp 바이너리가 다운로드되어 {0}에 추출되었습니다."
+        )
         self.REFRESHING_LLAMACPP_RELEASES = "llama.cpp 릴리스를 새로 고치는 중입니다."
         self.UPDATING_ASSET_LIST = "자산 목록을 업데이트하는 중입니다."
         self.UPDATING_CUDA_OPTIONS = "CUDA 옵션을 업데이트하는 중입니다."
@@ -2471,10 +2832,14 @@ class _Korean(_Localization):
         self.INPUT_FILE_NOT_EXIST = "입력 파일 '{0}'이 존재하지 않습니다."
         self.QUANTIZING_MODEL_TO = "{0}을 {1}(으)로 양자화하는 중입니다."
         self.QUANTIZATION_TASK_STARTED = "{0}에 대한 양자화 작업이 시작되었습니다."
-        self.ERROR_STARTING_QUANTIZATION = "양자화를 시작하는 중 오류가 발생했습니다: {0}"
+        self.ERROR_STARTING_QUANTIZATION = (
+            "양자화를 시작하는 중 오류가 발생했습니다: {0}"
+        )
         self.UPDATING_MODEL_INFO = "모델 정보를 업데이트하는 중입니다: {0}"
         self.TASK_FINISHED = "작업이 완료되었습니다: {0}"
-        self.SHOWING_TASK_DETAILS_FOR = "다음에 대한 작업 세부 정보를 표시하는 중입니다: {0}"
+        self.SHOWING_TASK_DETAILS_FOR = (
+            "다음에 대한 작업 세부 정보를 표시하는 중입니다: {0}"
+        )
         self.BROWSING_FOR_IMATRIX_DATA_FILE = "IMatrix 데이터 파일을 찾아보는 중입니다."
         self.SELECT_DATA_FILE = "데이터 파일 선택"
         self.BROWSING_FOR_IMATRIX_MODEL_FILE = "IMatrix 모델 파일을 찾아보는 중입니다."
@@ -2484,7 +2849,9 @@ class _Korean(_Localization):
         self.STARTING_IMATRIX_GENERATION = "IMatrix 생성을 시작하는 중입니다."
         self.BACKEND_PATH_NOT_EXIST = "백엔드 경로가 존재하지 않습니다: {0}"
         self.GENERATING_IMATRIX = "IMatrix를 생성하는 중입니다."
-        self.ERROR_STARTING_IMATRIX_GENERATION = "IMatrix 생성을 시작하는 중 오류가 발생했습니다: {0}"
+        self.ERROR_STARTING_IMATRIX_GENERATION = (
+            "IMatrix 생성을 시작하는 중 오류가 발생했습니다: {0}"
+        )
         self.IMATRIX_GENERATION_TASK_STARTED = "IMatrix 생성 작업이 시작되었습니다."
         self.ERROR_MESSAGE = "오류: {0}"
         self.TASK_ERROR = "작업 오류: {0}"
@@ -2493,15 +2860,29 @@ class _Korean(_Localization):
         self.SELECT_QUANTIZATION_TYPE = "양자화 유형을 선택하세요."
         self.ALLOWS_REQUANTIZING = "이미 양자화된 텐서의 재양자화를 허용합니다."
         self.LEAVE_OUTPUT_WEIGHT = "output.weight를 (재)양자화하지 않은 상태로 둡니다."
-        self.DISABLE_K_QUANT_MIXTURES = "k-양자 혼합을 비활성화하고 모든 텐서를 동일한 유형으로 양자화합니다."
-        self.USE_DATA_AS_IMPORTANCE_MATRIX = "양자 최적화를 위한 중요도 행렬로 파일의 데이터를 사용합니다."
-        self.USE_IMPORTANCE_MATRIX_FOR_TENSORS = "이러한 텐서에 중요도 행렬을 사용합니다."
-        self.DONT_USE_IMPORTANCE_MATRIX_FOR_TENSORS = "이러한 텐서에 중요도 행렬을 사용하지 않습니다."
+        self.DISABLE_K_QUANT_MIXTURES = (
+            "k-양자 혼합을 비활성화하고 모든 텐서를 동일한 유형으로 양자화합니다."
+        )
+        self.USE_DATA_AS_IMPORTANCE_MATRIX = (
+            "양자 최적화를 위한 중요도 행렬로 파일의 데이터를 사용합니다."
+        )
+        self.USE_IMPORTANCE_MATRIX_FOR_TENSORS = (
+            "이러한 텐서에 중요도 행렬을 사용합니다."
+        )
+        self.DONT_USE_IMPORTANCE_MATRIX_FOR_TENSORS = (
+            "이러한 텐서에 중요도 행렬을 사용하지 않습니다."
+        )
         self.OUTPUT_TENSOR_TYPE = "출력 텐서 유형:"
-        self.USE_THIS_TYPE_FOR_OUTPUT_WEIGHT = "output.weight 텐서에 이 유형을 사용합니다."
+        self.USE_THIS_TYPE_FOR_OUTPUT_WEIGHT = (
+            "output.weight 텐서에 이 유형을 사용합니다."
+        )
         self.TOKEN_EMBEDDING_TYPE = "토큰 임베딩 유형:"
-        self.USE_THIS_TYPE_FOR_TOKEN_EMBEDDINGS = "토큰 임베딩 텐서에 이 유형을 사용합니다."
-        self.WILL_GENERATE_QUANTIZED_MODEL_IN_SAME_SHARDS = "입력과 동일한 샤드에 양자화된 모델을 생성합니다."
+        self.USE_THIS_TYPE_FOR_TOKEN_EMBEDDINGS = (
+            "토큰 임베딩 텐서에 이 유형을 사용합니다."
+        )
+        self.WILL_GENERATE_QUANTIZED_MODEL_IN_SAME_SHARDS = (
+            "입력과 동일한 샤드에 양자화된 모델을 생성합니다."
+        )
         self.OVERRIDE_MODEL_METADATA = "모델 메타데이터를 재정의합니다."
         self.INPUT_DATA_FILE_FOR_IMATRIX = "IMatrix 생성을 위한 입력 데이터 파일"
         self.MODEL_TO_BE_QUANTIZED = "양자화될 모델"
@@ -2510,6 +2891,7 @@ class _Korean(_Localization):
         self.SET_GPU_OFFLOAD_VALUE = "GPU 오프로드 값 설정 (-ngl)"
         self.COMPLETED = "완료됨"
         self.REFRESH_MODELS = "모델 새로고침"
+
 
 class _Italian(_Localization):
     def __init__(self):
@@ -2561,7 +2943,9 @@ class _Italian(_Localization):
         self.RESTART = "Riavvia"
         self.DELETE = "Elimina"
         self.CONFIRM_DELETION = "Sei sicuro di voler eliminare questa attività?"
-        self.TASK_RUNNING_WARNING = "Alcune attività sono ancora in esecuzione. Sei sicuro di voler uscire?"
+        self.TASK_RUNNING_WARNING = (
+            "Alcune attività sono ancora in esecuzione. Sei sicuro di voler uscire?"
+        )
         self.YES = "Sì"
         self.NO = "No"
         self.DOWNLOAD_COMPLETE = "Download Completato"
@@ -2574,9 +2958,13 @@ class _Italian(_Localization):
         self.NO_MODEL_SELECTED = "Nessun modello selezionato"
         self.REFRESH_RELEASES = "Aggiorna Versioni"
         self.NO_SUITABLE_CUDA_BACKENDS = "Nessun backend CUDA adatto trovato"
-        self.LLAMACPP_DOWNLOADED_EXTRACTED = "Binario llama.cpp scaricato ed estratto in {0}\nFile CUDA estratti in {1}"
+        self.LLAMACPP_DOWNLOADED_EXTRACTED = (
+            "Binario llama.cpp scaricato ed estratto in {0}\nFile CUDA estratti in {1}"
+        )
         self.CUDA_FILES_EXTRACTED = "File CUDA estratti in"
-        self.NO_SUITABLE_CUDA_BACKEND_EXTRACTION = "Nessun backend CUDA adatto trovato per l'estrazione"
+        self.NO_SUITABLE_CUDA_BACKEND_EXTRACTION = (
+            "Nessun backend CUDA adatto trovato per l'estrazione"
+        )
         self.ERROR_FETCHING_RELEASES = "Errore durante il recupero delle versioni: {0}"
         self.CONFIRM_DELETION_TITLE = "Conferma Eliminazione"
         self.LOG_FOR = "Log per {0}"
@@ -2586,7 +2974,9 @@ class _Italian(_Localization):
         self.JSON_FILES = "File JSON (*.json)"
         self.FAILED_LOAD_PRESET = "Impossibile caricare la preimpostazione: {0}"
         self.INITIALIZING_AUTOGGUF = "Inizializzazione dell'applicazione AutoGGUF"
-        self.AUTOGGUF_INITIALIZATION_COMPLETE = "Inizializzazione di AutoGGUF completata"
+        self.AUTOGGUF_INITIALIZATION_COMPLETE = (
+            "Inizializzazione di AutoGGUF completata"
+        )
         self.REFRESHING_BACKENDS = "Aggiornamento backend"
         self.NO_BACKENDS_AVAILABLE = "Nessun backend disponibile"
         self.FOUND_VALID_BACKENDS = "Trovati {0} backend validi"
@@ -2601,19 +2991,29 @@ class _Italian(_Localization):
         self.RESTARTING_TASK = "Riavvio attività: {0}"
         self.IN_PROGRESS = "In Corso"
         self.DOWNLOAD_FINISHED_EXTRACTED_TO = "Download completato. Estratto in: {0}"
-        self.LLAMACPP_DOWNLOADED_AND_EXTRACTED = "Binario llama.cpp scaricato ed estratto in {0}\nFile CUDA estratti in {1}"
-        self.NO_SUITABLE_CUDA_BACKEND_FOUND = "Nessun backend CUDA adatto trovato per l'estrazione"
-        self.LLAMACPP_BINARY_DOWNLOADED_AND_EXTRACTED = "Binario llama.cpp scaricato ed estratto in {0}"
+        self.LLAMACPP_DOWNLOADED_AND_EXTRACTED = (
+            "Binario llama.cpp scaricato ed estratto in {0}\nFile CUDA estratti in {1}"
+        )
+        self.NO_SUITABLE_CUDA_BACKEND_FOUND = (
+            "Nessun backend CUDA adatto trovato per l'estrazione"
+        )
+        self.LLAMACPP_BINARY_DOWNLOADED_AND_EXTRACTED = (
+            "Binario llama.cpp scaricato ed estratto in {0}"
+        )
         self.REFRESHING_LLAMACPP_RELEASES = "Aggiornamento versioni di llama.cpp"
         self.UPDATING_ASSET_LIST = "Aggiornamento elenco asset"
         self.UPDATING_CUDA_OPTIONS = "Aggiornamento opzioni CUDA"
         self.STARTING_LLAMACPP_DOWNLOAD = "Avvio download di llama.cpp"
         self.UPDATING_CUDA_BACKENDS = "Aggiornamento backend CUDA"
-        self.NO_CUDA_BACKEND_SELECTED = "Nessun backend CUDA selezionato per l'estrazione"
+        self.NO_CUDA_BACKEND_SELECTED = (
+            "Nessun backend CUDA selezionato per l'estrazione"
+        )
         self.EXTRACTING_CUDA_FILES = "Estrazione file CUDA da {0} a {1}"
         self.DOWNLOAD_ERROR = "Errore di download: {0}"
         self.SHOWING_TASK_CONTEXT_MENU = "Visualizzazione menu contestuale attività"
-        self.SHOWING_PROPERTIES_FOR_TASK = "Visualizzazione proprietà per l'attività: {0}"
+        self.SHOWING_PROPERTIES_FOR_TASK = (
+            "Visualizzazione proprietà per l'attività: {0}"
+        )
         self.CANCELLING_TASK = "Annullamento attività: {0}"
         self.CANCELED = "Annullato"
         self.DELETING_TASK = "Eliminazione attività: {0}"
@@ -2637,7 +3037,9 @@ class _Italian(_Localization):
         self.INPUT_FILE_NOT_EXIST = "Il file di input '{0}' non esiste."
         self.QUANTIZING_MODEL_TO = "Quantizzazione di {0} a {1}"
         self.QUANTIZATION_TASK_STARTED = "Attività di quantizzazione avviata per {0}"
-        self.ERROR_STARTING_QUANTIZATION = "Errore durante l'avvio della quantizzazione: {0}"
+        self.ERROR_STARTING_QUANTIZATION = (
+            "Errore durante l'avvio della quantizzazione: {0}"
+        )
         self.UPDATING_MODEL_INFO = "Aggiornamento informazioni sul modello: {0}"
         self.TASK_FINISHED = "Attività completata: {0}"
         self.SHOWING_TASK_DETAILS_FOR = "Visualizzazione dettagli attività per: {0}"
@@ -2650,32 +3052,53 @@ class _Italian(_Localization):
         self.STARTING_IMATRIX_GENERATION = "Avvio generazione IMatrix"
         self.BACKEND_PATH_NOT_EXIST = "Il percorso del backend non esiste: {0}"
         self.GENERATING_IMATRIX = "Generazione IMatrix"
-        self.ERROR_STARTING_IMATRIX_GENERATION = "Errore durante l'avvio della generazione di IMatrix: {0}"
+        self.ERROR_STARTING_IMATRIX_GENERATION = (
+            "Errore durante l'avvio della generazione di IMatrix: {0}"
+        )
         self.IMATRIX_GENERATION_TASK_STARTED = "Attività di generazione IMatrix avviata"
         self.ERROR_MESSAGE = "Errore: {0}"
         self.TASK_ERROR = "Errore attività: {0}"
         self.APPLICATION_CLOSING = "Chiusura applicazione"
         self.APPLICATION_CLOSED = "Applicazione chiusa"
         self.SELECT_QUANTIZATION_TYPE = "Seleziona il tipo di quantizzazione"
-        self.ALLOWS_REQUANTIZING = "Consente di riquantizzare tensori che sono già stati quantizzati"
+        self.ALLOWS_REQUANTIZING = (
+            "Consente di riquantizzare tensori che sono già stati quantizzati"
+        )
         self.LEAVE_OUTPUT_WEIGHT = "Lascerà output.weight non (ri)quantizzato"
-        self.DISABLE_K_QUANT_MIXTURES = "Disabilita le miscele k-quant e quantizza tutti i tensori allo stesso tipo"
+        self.DISABLE_K_QUANT_MIXTURES = (
+            "Disabilita le miscele k-quant e quantizza tutti i tensori allo stesso tipo"
+        )
         self.USE_DATA_AS_IMPORTANCE_MATRIX = "Utilizza i dati nel file come matrice di importanza per le ottimizzazioni di quantizzazione"
-        self.USE_IMPORTANCE_MATRIX_FOR_TENSORS = "Usa la matrice di importanza per questi tensori"
-        self.DONT_USE_IMPORTANCE_MATRIX_FOR_TENSORS = "Non usare la matrice di importanza per questi tensori"
+        self.USE_IMPORTANCE_MATRIX_FOR_TENSORS = (
+            "Usa la matrice di importanza per questi tensori"
+        )
+        self.DONT_USE_IMPORTANCE_MATRIX_FOR_TENSORS = (
+            "Non usare la matrice di importanza per questi tensori"
+        )
         self.OUTPUT_TENSOR_TYPE = "Tipo di Tensore di Output:"
-        self.USE_THIS_TYPE_FOR_OUTPUT_WEIGHT = "Usa questo tipo per il tensore output.weight"
+        self.USE_THIS_TYPE_FOR_OUTPUT_WEIGHT = (
+            "Usa questo tipo per il tensore output.weight"
+        )
         self.TOKEN_EMBEDDING_TYPE = "Tipo di Incorporamento Token:"
-        self.USE_THIS_TYPE_FOR_TOKEN_EMBEDDINGS = "Usa questo tipo per il tensore di incorporamenti token"
-        self.WILL_GENERATE_QUANTIZED_MODEL_IN_SAME_SHARDS = "Genererà il modello quantizzato negli stessi frammenti dell'input"
+        self.USE_THIS_TYPE_FOR_TOKEN_EMBEDDINGS = (
+            "Usa questo tipo per il tensore di incorporamenti token"
+        )
+        self.WILL_GENERATE_QUANTIZED_MODEL_IN_SAME_SHARDS = (
+            "Genererà il modello quantizzato negli stessi frammenti dell'input"
+        )
         self.OVERRIDE_MODEL_METADATA = "Sovrascrivi i metadati del modello"
-        self.INPUT_DATA_FILE_FOR_IMATRIX = "File di dati di input per la generazione di IMatrix"
+        self.INPUT_DATA_FILE_FOR_IMATRIX = (
+            "File di dati di input per la generazione di IMatrix"
+        )
         self.MODEL_TO_BE_QUANTIZED = "Modello da quantizzare"
-        self.OUTPUT_PATH_FOR_GENERATED_IMATRIX = "Percorso di output per l'IMatrix generato"
+        self.OUTPUT_PATH_FOR_GENERATED_IMATRIX = (
+            "Percorso di output per l'IMatrix generato"
+        )
         self.HOW_OFTEN_TO_SAVE_IMATRIX = "Con quale frequenza salvare l'IMatrix"
         self.SET_GPU_OFFLOAD_VALUE = "Imposta il valore di offload GPU (-ngl)"
         self.COMPLETED = "Completato"
         self.REFRESH_MODELS = "Aggiorna modelli"
+
 
 class _Turkish(_Localization):
     def __init__(self):
@@ -2727,7 +3150,9 @@ class _Turkish(_Localization):
         self.RESTART = "Yeniden Başlat"
         self.DELETE = "Sil"
         self.CONFIRM_DELETION = "Bu görevi silmek istediğinizden emin misiniz?"
-        self.TASK_RUNNING_WARNING = "Bazı görevler hala çalışıyor. Çıkmak istediğinizden emin misiniz?"
+        self.TASK_RUNNING_WARNING = (
+            "Bazı görevler hala çalışıyor. Çıkmak istediğinizden emin misiniz?"
+        )
         self.YES = "Evet"
         self.NO = "Hayır"
         self.DOWNLOAD_COMPLETE = "İndirme Tamamlandı"
@@ -2742,7 +3167,9 @@ class _Turkish(_Localization):
         self.NO_SUITABLE_CUDA_BACKENDS = "Uygun CUDA arka uçları bulunamadı"
         self.LLAMACPP_DOWNLOADED_EXTRACTED = "llama.cpp ikili dosyası indirildi ve {0} konumuna çıkarıldı\nCUDA dosyaları {1} konumuna çıkarıldı"
         self.CUDA_FILES_EXTRACTED = "CUDA dosyaları konumuna çıkarıldı"
-        self.NO_SUITABLE_CUDA_BACKEND_EXTRACTION = "Çıkarma için uygun bir CUDA arka ucu bulunamadı"
+        self.NO_SUITABLE_CUDA_BACKEND_EXTRACTION = (
+            "Çıkarma için uygun bir CUDA arka ucu bulunamadı"
+        )
         self.ERROR_FETCHING_RELEASES = "Sürümleri getirirken hata oluştu: {0}"
         self.CONFIRM_DELETION_TITLE = "Silmeyi Onayla"
         self.LOG_FOR = "{0} için Günlük"
@@ -2766,17 +3193,25 @@ class _Turkish(_Localization):
         self.TASK_PRESET_SAVED_TO = "Görev ön ayarı {0} konumuna kaydedildi"
         self.RESTARTING_TASK = "Görev yeniden başlatılıyor: {0}"
         self.IN_PROGRESS = "Devam Ediyor"
-        self.DOWNLOAD_FINISHED_EXTRACTED_TO = "İndirme tamamlandı. Şuraya çıkarıldı: {0}"
+        self.DOWNLOAD_FINISHED_EXTRACTED_TO = (
+            "İndirme tamamlandı. Şuraya çıkarıldı: {0}"
+        )
         self.LLAMACPP_DOWNLOADED_AND_EXTRACTED = "llama.cpp ikili dosyası indirildi ve {0} konumuna çıkarıldı\nCUDA dosyaları {1} konumuna çıkarıldı"
-        self.NO_SUITABLE_CUDA_BACKEND_FOUND = "Çıkarma için uygun bir CUDA arka ucu bulunamadı"
-        self.LLAMACPP_BINARY_DOWNLOADED_AND_EXTRACTED = "llama.cpp ikili dosyası indirildi ve {0} konumuna çıkarıldı"
+        self.NO_SUITABLE_CUDA_BACKEND_FOUND = (
+            "Çıkarma için uygun bir CUDA arka ucu bulunamadı"
+        )
+        self.LLAMACPP_BINARY_DOWNLOADED_AND_EXTRACTED = (
+            "llama.cpp ikili dosyası indirildi ve {0} konumuna çıkarıldı"
+        )
         self.REFRESHING_LLAMACPP_RELEASES = "llama.cpp sürümleri yenileniyor"
         self.UPDATING_ASSET_LIST = "Varlık listesi güncelleniyor"
         self.UPDATING_CUDA_OPTIONS = "CUDA seçenekleri güncelleniyor"
         self.STARTING_LLAMACPP_DOWNLOAD = "llama.cpp indirme başlatılıyor"
         self.UPDATING_CUDA_BACKENDS = "CUDA arka uçları güncelleniyor"
         self.NO_CUDA_BACKEND_SELECTED = "Çıkarma için CUDA arka ucu seçilmedi"
-        self.EXTRACTING_CUDA_FILES = "CUDA dosyaları {0} konumundan {1} konumuna çıkarılıyor"
+        self.EXTRACTING_CUDA_FILES = (
+            "CUDA dosyaları {0} konumundan {1} konumuna çıkarılıyor"
+        )
         self.DOWNLOAD_ERROR = "İndirme hatası: {0}"
         self.SHOWING_TASK_CONTEXT_MENU = "Görev bağlam menüsü gösteriliyor"
         self.SHOWING_PROPERTIES_FOR_TASK = "Görev için özellikler gösteriliyor: {0}"
@@ -2816,24 +3251,40 @@ class _Turkish(_Localization):
         self.STARTING_IMATRIX_GENERATION = "IMatrix üretimi başlatılıyor"
         self.BACKEND_PATH_NOT_EXIST = "Arka uç yolu mevcut değil: {0}"
         self.GENERATING_IMATRIX = "IMatrix oluşturuluyor"
-        self.ERROR_STARTING_IMATRIX_GENERATION = "IMatrix üretimi başlatılırken hata oluştu: {0}"
+        self.ERROR_STARTING_IMATRIX_GENERATION = (
+            "IMatrix üretimi başlatılırken hata oluştu: {0}"
+        )
         self.IMATRIX_GENERATION_TASK_STARTED = "IMatrix oluşturma görevi başlatıldı"
         self.ERROR_MESSAGE = "Hata: {0}"
         self.TASK_ERROR = "Görev hatası: {0}"
         self.APPLICATION_CLOSING = "Uygulama kapatılıyor"
         self.APPLICATION_CLOSED = "Uygulama kapatıldı"
         self.SELECT_QUANTIZATION_TYPE = "Niceleme türünü seçin"
-        self.ALLOWS_REQUANTIZING = "Zaten niceleme yapılmış tensörlerin yeniden nicelemesine izin verir"
-        self.LEAVE_OUTPUT_WEIGHT = "output.weight öğesini (yeniden) nicelememiş halde bırakır"
+        self.ALLOWS_REQUANTIZING = (
+            "Zaten niceleme yapılmış tensörlerin yeniden nicelemesine izin verir"
+        )
+        self.LEAVE_OUTPUT_WEIGHT = (
+            "output.weight öğesini (yeniden) nicelememiş halde bırakır"
+        )
         self.DISABLE_K_QUANT_MIXTURES = "k-Quant karışımlarını devre dışı bırakın ve tüm tensörleri aynı türe niceleyin"
         self.USE_DATA_AS_IMPORTANCE_MATRIX = "Quant optimizasyonları için dosyadaki verileri önem matrisi olarak kullanın"
-        self.USE_IMPORTANCE_MATRIX_FOR_TENSORS = "Bu tensörler için önem matrisini kullanın"
-        self.DONT_USE_IMPORTANCE_MATRIX_FOR_TENSORS = "Bu tensörler için önem matrisini kullanmayın"
+        self.USE_IMPORTANCE_MATRIX_FOR_TENSORS = (
+            "Bu tensörler için önem matrisini kullanın"
+        )
+        self.DONT_USE_IMPORTANCE_MATRIX_FOR_TENSORS = (
+            "Bu tensörler için önem matrisini kullanmayın"
+        )
         self.OUTPUT_TENSOR_TYPE = "Çıkış Tensör Türü:"
-        self.USE_THIS_TYPE_FOR_OUTPUT_WEIGHT = "output.weight tensörü için bu türü kullanın"
+        self.USE_THIS_TYPE_FOR_OUTPUT_WEIGHT = (
+            "output.weight tensörü için bu türü kullanın"
+        )
         self.TOKEN_EMBEDDING_TYPE = "Token Gömme Türü:"
-        self.USE_THIS_TYPE_FOR_TOKEN_EMBEDDINGS = "Token gömme tensörü için bu türü kullanın"
-        self.WILL_GENERATE_QUANTIZED_MODEL_IN_SAME_SHARDS = "Nicelemeli modeli girişle aynı parçalarda oluşturacaktır"
+        self.USE_THIS_TYPE_FOR_TOKEN_EMBEDDINGS = (
+            "Token gömme tensörü için bu türü kullanın"
+        )
+        self.WILL_GENERATE_QUANTIZED_MODEL_IN_SAME_SHARDS = (
+            "Nicelemeli modeli girişle aynı parçalarda oluşturacaktır"
+        )
         self.OVERRIDE_MODEL_METADATA = "Model meta verilerini geçersiz kıl"
         self.INPUT_DATA_FILE_FOR_IMATRIX = "IMatrix oluşturma için giriş veri dosyası"
         self.MODEL_TO_BE_QUANTIZED = "Nicelemeli model"
@@ -2842,6 +3293,7 @@ class _Turkish(_Localization):
         self.SET_GPU_OFFLOAD_VALUE = "GPU yük boşaltma değerini ayarla (-ngl)"
         self.COMPLETED = "Tamamlandı"
         self.REFRESH_MODELS = "Modelleri yenile"
+
 
 class _Dutch(_Localization):
     def __init__(self):
@@ -2893,7 +3345,9 @@ class _Dutch(_Localization):
         self.RESTART = "Opnieuw starten"
         self.DELETE = "Verwijderen"
         self.CONFIRM_DELETION = "Weet u zeker dat u deze taak wilt verwijderen?"
-        self.TASK_RUNNING_WARNING = "Sommige taken worden nog uitgevoerd. Weet u zeker dat u wilt afsluiten?"
+        self.TASK_RUNNING_WARNING = (
+            "Sommige taken worden nog uitgevoerd. Weet u zeker dat u wilt afsluiten?"
+        )
         self.YES = "Ja"
         self.NO = "Nee"
         self.DOWNLOAD_COMPLETE = "Download voltooid"
@@ -2908,7 +3362,9 @@ class _Dutch(_Localization):
         self.NO_SUITABLE_CUDA_BACKENDS = "Geen geschikte CUDA-backends gevonden"
         self.LLAMACPP_DOWNLOADED_EXTRACTED = "llama.cpp-binairbestand gedownload en uitgepakt naar {0}\nCUDA-bestanden uitgepakt naar {1}"
         self.CUDA_FILES_EXTRACTED = "CUDA-bestanden uitgepakt naar"
-        self.NO_SUITABLE_CUDA_BACKEND_EXTRACTION = "Geen geschikte CUDA-backend gevonden voor extractie"
+        self.NO_SUITABLE_CUDA_BACKEND_EXTRACTION = (
+            "Geen geschikte CUDA-backend gevonden voor extractie"
+        )
         self.ERROR_FETCHING_RELEASES = "Fout bij het ophalen van releases: {0}"
         self.CONFIRM_DELETION_TITLE = "Verwijdering bevestigen"
         self.LOG_FOR = "Logboek voor {0}"
@@ -2934,8 +3390,12 @@ class _Dutch(_Localization):
         self.IN_PROGRESS = "Bezig"
         self.DOWNLOAD_FINISHED_EXTRACTED_TO = "Download voltooid. Uitgepakt naar: {0}"
         self.LLAMACPP_DOWNLOADED_AND_EXTRACTED = "llama.cpp-binairbestand gedownload en uitgepakt naar {0}\nCUDA-bestanden uitgepakt naar {1}"
-        self.NO_SUITABLE_CUDA_BACKEND_FOUND = "Geen geschikte CUDA-backend gevonden voor extractie"
-        self.LLAMACPP_BINARY_DOWNLOADED_AND_EXTRACTED = "llama.cpp-binairbestand gedownload en uitgepakt naar {0}"
+        self.NO_SUITABLE_CUDA_BACKEND_FOUND = (
+            "Geen geschikte CUDA-backend gevonden voor extractie"
+        )
+        self.LLAMACPP_BINARY_DOWNLOADED_AND_EXTRACTED = (
+            "llama.cpp-binairbestand gedownload en uitgepakt naar {0}"
+        )
         self.REFRESHING_LLAMACPP_RELEASES = "llama.cpp-releases worden vernieuwd"
         self.UPDATING_ASSET_LIST = "Itemlijst wordt bijgewerkt"
         self.UPDATING_CUDA_OPTIONS = "CUDA-opties worden bijgewerkt"
@@ -2982,32 +3442,51 @@ class _Dutch(_Localization):
         self.STARTING_IMATRIX_GENERATION = "IMatrix-generatie starten"
         self.BACKEND_PATH_NOT_EXIST = "Backendpad bestaat niet: {0}"
         self.GENERATING_IMATRIX = "IMatrix genereren"
-        self.ERROR_STARTING_IMATRIX_GENERATION = "Fout bij het starten van IMatrix-generatie: {0}"
+        self.ERROR_STARTING_IMATRIX_GENERATION = (
+            "Fout bij het starten van IMatrix-generatie: {0}"
+        )
         self.IMATRIX_GENERATION_TASK_STARTED = "IMatrix-generatietaak gestart"
         self.ERROR_MESSAGE = "Fout: {0}"
         self.TASK_ERROR = "Taakfout: {0}"
         self.APPLICATION_CLOSING = "Applicatie wordt afgesloten"
         self.APPLICATION_CLOSED = "Applicatie afgesloten"
         self.SELECT_QUANTIZATION_TYPE = "Selecteer het kwantiseringstype"
-        self.ALLOWS_REQUANTIZING = "Staat herkwantisering toe van tensoren die al gekwantiseerd zijn"
+        self.ALLOWS_REQUANTIZING = (
+            "Staat herkwantisering toe van tensoren die al gekwantiseerd zijn"
+        )
         self.LEAVE_OUTPUT_WEIGHT = "Laat output.weight niet (opnieuw) gekwantiseerd"
         self.DISABLE_K_QUANT_MIXTURES = "Schakel k-kwant-mengsels uit en kwantiseer alle tensoren naar hetzelfde type"
         self.USE_DATA_AS_IMPORTANCE_MATRIX = "Gebruik gegevens in bestand als belangrijkheidsmatrix voor kwant-optimalisaties"
-        self.USE_IMPORTANCE_MATRIX_FOR_TENSORS = "Gebruik belangrijkheidsmatrix voor deze tensoren"
-        self.DONT_USE_IMPORTANCE_MATRIX_FOR_TENSORS = "Gebruik geen belangrijkheidsmatrix voor deze tensoren"
+        self.USE_IMPORTANCE_MATRIX_FOR_TENSORS = (
+            "Gebruik belangrijkheidsmatrix voor deze tensoren"
+        )
+        self.DONT_USE_IMPORTANCE_MATRIX_FOR_TENSORS = (
+            "Gebruik geen belangrijkheidsmatrix voor deze tensoren"
+        )
         self.OUTPUT_TENSOR_TYPE = "Uitvoertensortype:"
-        self.USE_THIS_TYPE_FOR_OUTPUT_WEIGHT = "Gebruik dit type voor de output.weight-tensor"
+        self.USE_THIS_TYPE_FOR_OUTPUT_WEIGHT = (
+            "Gebruik dit type voor de output.weight-tensor"
+        )
         self.TOKEN_EMBEDDING_TYPE = "Tokeninbeddingstype:"
-        self.USE_THIS_TYPE_FOR_TOKEN_EMBEDDINGS = "Gebruik dit type voor de tokeninbeddingstensor"
-        self.WILL_GENERATE_QUANTIZED_MODEL_IN_SAME_SHARDS = "Genereert een gekwantiseerd model in dezelfde shards als de invoer"
+        self.USE_THIS_TYPE_FOR_TOKEN_EMBEDDINGS = (
+            "Gebruik dit type voor de tokeninbeddingstensor"
+        )
+        self.WILL_GENERATE_QUANTIZED_MODEL_IN_SAME_SHARDS = (
+            "Genereert een gekwantiseerd model in dezelfde shards als de invoer"
+        )
         self.OVERRIDE_MODEL_METADATA = "Modelmetadata overschrijven"
-        self.INPUT_DATA_FILE_FOR_IMATRIX = "Invoergegevensbestand voor IMatrix-generatie"
+        self.INPUT_DATA_FILE_FOR_IMATRIX = (
+            "Invoergegevensbestand voor IMatrix-generatie"
+        )
         self.MODEL_TO_BE_QUANTIZED = "Te kwantiseren model"
-        self.OUTPUT_PATH_FOR_GENERATED_IMATRIX = "Uitvoerpad voor de gegenereerde IMatrix"
+        self.OUTPUT_PATH_FOR_GENERATED_IMATRIX = (
+            "Uitvoerpad voor de gegenereerde IMatrix"
+        )
         self.HOW_OFTEN_TO_SAVE_IMATRIX = "Hoe vaak de IMatrix moet worden opgeslagen"
         self.SET_GPU_OFFLOAD_VALUE = "Stel de GPU-offloadwaarde in (-ngl)"
         self.COMPLETED = "Voltooid"
         self.REFRESH_MODELS = "Modellen vernieuwen"
+
 
 class _Finnish(_Localization):
     def __init__(self):
@@ -3059,7 +3538,9 @@ class _Finnish(_Localization):
         self.RESTART = "Käynnistä uudelleen"
         self.DELETE = "Poista"
         self.CONFIRM_DELETION = "Haluatko varmasti poistaa tämän tehtävän?"
-        self.TASK_RUNNING_WARNING = "Jotkin tehtävät ovat vielä käynnissä. Haluatko varmasti lopettaa?"
+        self.TASK_RUNNING_WARNING = (
+            "Jotkin tehtävät ovat vielä käynnissä. Haluatko varmasti lopettaa?"
+        )
         self.YES = "Kyllä"
         self.NO = "Ei"
         self.DOWNLOAD_COMPLETE = "Lataus valmis"
@@ -3074,7 +3555,9 @@ class _Finnish(_Localization):
         self.NO_SUITABLE_CUDA_BACKENDS = "Sopivia CUDA-taustaosoja ei löytynyt"
         self.LLAMACPP_DOWNLOADED_EXTRACTED = "llama.cpp-binaaritiedosto ladattu ja purettu kansioon {0}\nCUDA-tiedostot purettu kansioon {1}"
         self.CUDA_FILES_EXTRACTED = "CUDA-tiedostot purettu kansioon"
-        self.NO_SUITABLE_CUDA_BACKEND_EXTRACTION = "Sopivaa CUDA-taustaosaa purkua varten ei löytynyt"
+        self.NO_SUITABLE_CUDA_BACKEND_EXTRACTION = (
+            "Sopivaa CUDA-taustaosaa purkua varten ei löytynyt"
+        )
         self.ERROR_FETCHING_RELEASES = "Virhe haettaessa julkaisuja: {0}"
         self.CONFIRM_DELETION_TITLE = "Vahvista poisto"
         self.LOG_FOR = "Loki kohteelle {0}"
@@ -3100,15 +3583,21 @@ class _Finnish(_Localization):
         self.IN_PROGRESS = "Käynnissä"
         self.DOWNLOAD_FINISHED_EXTRACTED_TO = "Lataus valmis. Purettu kansioon: {0}"
         self.LLAMACPP_DOWNLOADED_AND_EXTRACTED = "llama.cpp-binaaritiedosto ladattu ja purettu kansioon {0}\nCUDA-tiedostot purettu kansioon {1}"
-        self.NO_SUITABLE_CUDA_BACKEND_FOUND = "Sopivaa CUDA-taustaosaa purkua varten ei löytynyt"
-        self.LLAMACPP_BINARY_DOWNLOADED_AND_EXTRACTED = "llama.cpp-binaaritiedosto ladattu ja purettu kansioon {0}"
+        self.NO_SUITABLE_CUDA_BACKEND_FOUND = (
+            "Sopivaa CUDA-taustaosaa purkua varten ei löytynyt"
+        )
+        self.LLAMACPP_BINARY_DOWNLOADED_AND_EXTRACTED = (
+            "llama.cpp-binaaritiedosto ladattu ja purettu kansioon {0}"
+        )
         self.REFRESHING_LLAMACPP_RELEASES = "Päivitetään llama.cpp-julkaisuja"
         self.UPDATING_ASSET_LIST = "Päivitetään resurssilistaa"
         self.UPDATING_CUDA_OPTIONS = "Päivitetään CUDA-asetuksia"
         self.STARTING_LLAMACPP_DOWNLOAD = "Aloitetaan llama.cpp:n lataus"
         self.UPDATING_CUDA_BACKENDS = "Päivitetään CUDA-taustaosoja"
         self.NO_CUDA_BACKEND_SELECTED = "Ei CUDA-taustaosaa valittuna purkua varten"
-        self.EXTRACTING_CUDA_FILES = "Puretaan CUDA-tiedostoja kansiosta {0} kansioon {1}"
+        self.EXTRACTING_CUDA_FILES = (
+            "Puretaan CUDA-tiedostoja kansiosta {0} kansioon {1}"
+        )
         self.DOWNLOAD_ERROR = "Latausvirhe: {0}"
         self.SHOWING_TASK_CONTEXT_MENU = "Näytetään tehtäväkontekstivalikko"
         self.SHOWING_PROPERTIES_FOR_TASK = "Näytetään tehtävän ominaisuudet: {0}"
@@ -3134,7 +3623,9 @@ class _Finnish(_Localization):
         self.STARTING_MODEL_QUANTIZATION = "Aloitetaan mallin kvantisointi"
         self.INPUT_FILE_NOT_EXIST = "Syötetiedostoa '{0}' ei ole."
         self.QUANTIZING_MODEL_TO = "Kvantisoidaan mallia {0} muotoon {1}"
-        self.QUANTIZATION_TASK_STARTED = "Kvantisointitehtävä käynnistetty kohteelle {0}"
+        self.QUANTIZATION_TASK_STARTED = (
+            "Kvantisointitehtävä käynnistetty kohteelle {0}"
+        )
         self.ERROR_STARTING_QUANTIZATION = "Virhe kvantisoinnin käynnistyksessä: {0}"
         self.UPDATING_MODEL_INFO = "Päivitetään mallitietoja: {0}"
         self.TASK_FINISHED = "Tehtävä valmis: {0}"
@@ -3148,24 +3639,42 @@ class _Finnish(_Localization):
         self.STARTING_IMATRIX_GENERATION = "Aloitetaan IMatrix-generointi"
         self.BACKEND_PATH_NOT_EXIST = "Taustaosan polkua ei ole: {0}"
         self.GENERATING_IMATRIX = "Generoidaan IMatrixia"
-        self.ERROR_STARTING_IMATRIX_GENERATION = "Virhe IMatrix-generoinnin käynnistyksessä: {0}"
+        self.ERROR_STARTING_IMATRIX_GENERATION = (
+            "Virhe IMatrix-generoinnin käynnistyksessä: {0}"
+        )
         self.IMATRIX_GENERATION_TASK_STARTED = "IMatrix-generointi käynnistetty"
         self.ERROR_MESSAGE = "Virhe: {0}"
         self.TASK_ERROR = "Tehtävävirhe: {0}"
         self.APPLICATION_CLOSING = "Sovellus suljetaan"
         self.APPLICATION_CLOSED = "Sovellus suljettu"
         self.SELECT_QUANTIZATION_TYPE = "Valitse kvantisointityyppi"
-        self.ALLOWS_REQUANTIZING = "Sallii jo kvantisoitujen tensoreiden uudelleenkvantisoinnin"
-        self.LEAVE_OUTPUT_WEIGHT = "Jättää output.weight-tensorin (uudelleen)kvantisoimatta"
+        self.ALLOWS_REQUANTIZING = (
+            "Sallii jo kvantisoitujen tensoreiden uudelleenkvantisoinnin"
+        )
+        self.LEAVE_OUTPUT_WEIGHT = (
+            "Jättää output.weight-tensorin (uudelleen)kvantisoimatta"
+        )
         self.DISABLE_K_QUANT_MIXTURES = "Poista käytöstä k-kvanttisekoitukset ja kvantisoi kaikki tensorit samaan tyyppiin"
-        self.USE_DATA_AS_IMPORTANCE_MATRIX = "Käytä tiedoston tietoja kvantisoinnin optimoinnin tärkeysmatriisina"
-        self.USE_IMPORTANCE_MATRIX_FOR_TENSORS = "Käytä tärkeysmatriisia näille tensoreille"
-        self.DONT_USE_IMPORTANCE_MATRIX_FOR_TENSORS = "Älä käytä tärkeysmatriisia näille tensoreille"
+        self.USE_DATA_AS_IMPORTANCE_MATRIX = (
+            "Käytä tiedoston tietoja kvantisoinnin optimoinnin tärkeysmatriisina"
+        )
+        self.USE_IMPORTANCE_MATRIX_FOR_TENSORS = (
+            "Käytä tärkeysmatriisia näille tensoreille"
+        )
+        self.DONT_USE_IMPORTANCE_MATRIX_FOR_TENSORS = (
+            "Älä käytä tärkeysmatriisia näille tensoreille"
+        )
         self.OUTPUT_TENSOR_TYPE = "Tulostensorin tyyppi:"
-        self.USE_THIS_TYPE_FOR_OUTPUT_WEIGHT = "Käytä tätä tyyppiä output.weight-tensorille"
+        self.USE_THIS_TYPE_FOR_OUTPUT_WEIGHT = (
+            "Käytä tätä tyyppiä output.weight-tensorille"
+        )
         self.TOKEN_EMBEDDING_TYPE = "Token-upotustyyppi:"
-        self.USE_THIS_TYPE_FOR_TOKEN_EMBEDDINGS = "Käytä tätä tyyppiä token-upotustensorille"
-        self.WILL_GENERATE_QUANTIZED_MODEL_IN_SAME_SHARDS = "Generoi kvantisoidun mallin samoihin osiin kuin syöte"
+        self.USE_THIS_TYPE_FOR_TOKEN_EMBEDDINGS = (
+            "Käytä tätä tyyppiä token-upotustensorille"
+        )
+        self.WILL_GENERATE_QUANTIZED_MODEL_IN_SAME_SHARDS = (
+            "Generoi kvantisoidun mallin samoihin osiin kuin syöte"
+        )
         self.OVERRIDE_MODEL_METADATA = "Ohita mallitiedot"
         self.INPUT_DATA_FILE_FOR_IMATRIX = "IMatrix-generoinnin syötedatatiedosto"
         self.MODEL_TO_BE_QUANTIZED = "Kvantisoitava malli"
@@ -3174,6 +3683,7 @@ class _Finnish(_Localization):
         self.SET_GPU_OFFLOAD_VALUE = "Aseta GPU-kuormansiirron arvo (-ngl)"
         self.COMPLETED = "Valmis"
         self.REFRESH_MODELS = "Päivitä mallit"
+
 
 class _Bengali(_Localization):
     def __init__(self):
@@ -3225,7 +3735,9 @@ class _Bengali(_Localization):
         self.RESTART = "পুনরায় আরম্ভ করুন"
         self.DELETE = "মুছে ফেলুন"
         self.CONFIRM_DELETION = "আপনি কি নিশ্চিত যে আপনি এই কাজটি মুছে ফেলতে চান?"
-        self.TASK_RUNNING_WARNING = "কিছু কাজ এখনও চলছে। আপনি কি নিশ্চিত যে আপনি প্রস্থান করতে চান?"
+        self.TASK_RUNNING_WARNING = (
+            "কিছু কাজ এখনও চলছে। আপনি কি নিশ্চিত যে আপনি প্রস্থান করতে চান?"
+        )
         self.YES = "হ্যাঁ"
         self.NO = "না"
         self.DOWNLOAD_COMPLETE = "ডাউনলোড সম্পন্ন"
@@ -3240,7 +3752,9 @@ class _Bengali(_Localization):
         self.NO_SUITABLE_CUDA_BACKENDS = "কোন উপযুক্ত CUDA ব্যাকএন্ড পাওয়া যায়নি"
         self.LLAMACPP_DOWNLOADED_EXTRACTED = "llama.cpp বাইনারি ফাইল ডাউনলোড এবং {0} এ বের করা হয়েছে\nCUDA ফাইলগুলি {1} এ বের করা হয়েছে"
         self.CUDA_FILES_EXTRACTED = "CUDA ফাইলগুলি তে বের করা হয়েছে"
-        self.NO_SUITABLE_CUDA_BACKEND_EXTRACTION = "এক্সট্র্যাকশনের জন্য কোন উপযুক্ত CUDA ব্যাকএন্ড পাওয়া যায়নি"
+        self.NO_SUITABLE_CUDA_BACKEND_EXTRACTION = (
+            "এক্সট্র্যাকশনের জন্য কোন উপযুক্ত CUDA ব্যাকএন্ড পাওয়া যায়নি"
+        )
         self.ERROR_FETCHING_RELEASES = "রিলিজগুলি আনতে ত্রুটি: {0}"
         self.CONFIRM_DELETION_TITLE = "মুছে ফেলা নিশ্চিত করুন"
         self.LOG_FOR = "{0} এর জন্য লগ"
@@ -3266,14 +3780,20 @@ class _Bengali(_Localization):
         self.IN_PROGRESS = "চলছে"
         self.DOWNLOAD_FINISHED_EXTRACTED_TO = "ডাউনলোড সম্পন্ন। বের করা হয়েছে: {0}"
         self.LLAMACPP_DOWNLOADED_AND_EXTRACTED = "llama.cpp বাইনারি ফাইল ডাউনলোড এবং {0} এ বের করা হয়েছে\nCUDA ফাইলগুলি {1} এ বের করা হয়েছে"
-        self.NO_SUITABLE_CUDA_BACKEND_FOUND = "এক্সট্র্যাকশনের জন্য কোন উপযুক্ত CUDA ব্যাকএন্ড পাওয়া যায়নি"
-        self.LLAMACPP_BINARY_DOWNLOADED_AND_EXTRACTED = "llama.cpp বাইনারি ফাইল ডাউনলোড এবং {0} এ বের করা হয়েছে"
+        self.NO_SUITABLE_CUDA_BACKEND_FOUND = (
+            "এক্সট্র্যাকশনের জন্য কোন উপযুক্ত CUDA ব্যাকএন্ড পাওয়া যায়নি"
+        )
+        self.LLAMACPP_BINARY_DOWNLOADED_AND_EXTRACTED = (
+            "llama.cpp বাইনারি ফাইল ডাউনলোড এবং {0} এ বের করা হয়েছে"
+        )
         self.REFRESHING_LLAMACPP_RELEASES = "llama.cpp রিলিজগুলি রিফ্রেশ করা হচ্ছে"
         self.UPDATING_ASSET_LIST = "অ্যাসেট তালিকা আপডেট করা হচ্ছে"
         self.UPDATING_CUDA_OPTIONS = "CUDA অপশনগুলি আপডেট করা হচ্ছে"
         self.STARTING_LLAMACPP_DOWNLOAD = "llama.cpp ডাউনলোড শুরু করা হচ্ছে"
         self.UPDATING_CUDA_BACKENDS = "CUDA ব্যাকএন্ডগুলি আপডেট করা হচ্ছে"
-        self.NO_CUDA_BACKEND_SELECTED = "এক্সট্র্যাকশনের জন্য কোন CUDA ব্যাকএন্ড নির্বাচন করা হয়নি"
+        self.NO_CUDA_BACKEND_SELECTED = (
+            "এক্সট্র্যাকশনের জন্য কোন CUDA ব্যাকএন্ড নির্বাচন করা হয়নি"
+        )
         self.EXTRACTING_CUDA_FILES = "{0} থেকে {1} এ CUDA ফাইলগুলি বের করা হচ্ছে"
         self.DOWNLOAD_ERROR = "ডাউনলোড ত্রুটি: {0}"
         self.SHOWING_TASK_CONTEXT_MENU = "টাস্ক কনটেক্সট মেনু দেখানো হচ্ছে"
@@ -3323,15 +3843,29 @@ class _Bengali(_Localization):
         self.SELECT_QUANTIZATION_TYPE = "কোয়ান্টাইজেশন ধরণ নির্বাচন করুন"
         self.ALLOWS_REQUANTIZING = "যে টেন্সরগুলি ইতিমধ্যে কোয়ান্টাইজ করা হয়েছে তাদের পুনরায় কোয়ান্টাইজ করার অনুমতি দেয়"
         self.LEAVE_OUTPUT_WEIGHT = "output.weight কে (পুনরায়) কোয়ান্টাইজ না করে রেখে দেবে"
-        self.DISABLE_K_QUANT_MIXTURES = "k-কোয়ান্ট মিশ্রণগুলি অক্ষম করুন এবং সমস্ত টেন্সরকে একই ধরণের কোয়ান্টাইজ করুন"
-        self.USE_DATA_AS_IMPORTANCE_MATRIX = "কোয়ান্ট অপ্টিমাইজেশনের জন্য ফাইলের ডেটা গুরুত্বপূর্ণ ম্যাট্রিক্স হিসাবে ব্যবহার করুন"
-        self.USE_IMPORTANCE_MATRIX_FOR_TENSORS = "এই টেন্সরগুলির জন্য গুরুত্বপূর্ণ ম্যাট্রিক্স ব্যবহার করুন"
-        self.DONT_USE_IMPORTANCE_MATRIX_FOR_TENSORS = "এই টেন্সরগুলির জন্য গুরুত্বপূর্ণ ম্যাট্রিক্স ব্যবহার করবেন না"
+        self.DISABLE_K_QUANT_MIXTURES = (
+            "k-কোয়ান্ট মিশ্রণগুলি অক্ষম করুন এবং সমস্ত টেন্সরকে একই ধরণের কোয়ান্টাইজ করুন"
+        )
+        self.USE_DATA_AS_IMPORTANCE_MATRIX = (
+            "কোয়ান্ট অপ্টিমাইজেশনের জন্য ফাইলের ডেটা গুরুত্বপূর্ণ ম্যাট্রিক্স হিসাবে ব্যবহার করুন"
+        )
+        self.USE_IMPORTANCE_MATRIX_FOR_TENSORS = (
+            "এই টেন্সরগুলির জন্য গুরুত্বপূর্ণ ম্যাট্রিক্স ব্যবহার করুন"
+        )
+        self.DONT_USE_IMPORTANCE_MATRIX_FOR_TENSORS = (
+            "এই টেন্সরগুলির জন্য গুরুত্বপূর্ণ ম্যাট্রিক্স ব্যবহার করবেন না"
+        )
         self.OUTPUT_TENSOR_TYPE = "আউটপুট টেন্সর ধরণ:"
-        self.USE_THIS_TYPE_FOR_OUTPUT_WEIGHT = "output.weight টেন্সরের জন্য এই ধরণটি ব্যবহার করুন"
+        self.USE_THIS_TYPE_FOR_OUTPUT_WEIGHT = (
+            "output.weight টেন্সরের জন্য এই ধরণটি ব্যবহার করুন"
+        )
         self.TOKEN_EMBEDDING_TYPE = "টোকেন এম্বেডিং ধরণ:"
-        self.USE_THIS_TYPE_FOR_TOKEN_EMBEDDINGS = "টোকেন এম্বেডিং টেন্সরের জন্য এই ধরণটি ব্যবহার করুন"
-        self.WILL_GENERATE_QUANTIZED_MODEL_IN_SAME_SHARDS = "ইনপুটের মতো একই শার্ডে কোয়ান্টাইজ করা মডেল তৈরি করবে"
+        self.USE_THIS_TYPE_FOR_TOKEN_EMBEDDINGS = (
+            "টোকেন এম্বেডিং টেন্সরের জন্য এই ধরণটি ব্যবহার করুন"
+        )
+        self.WILL_GENERATE_QUANTIZED_MODEL_IN_SAME_SHARDS = (
+            "ইনপুটের মতো একই শার্ডে কোয়ান্টাইজ করা মডেল তৈরি করবে"
+        )
         self.OVERRIDE_MODEL_METADATA = "মডেল মেটাডেটা ওভাররাইড করুন"
         self.INPUT_DATA_FILE_FOR_IMATRIX = "IMatrix জেনারেশনের জন্য ইনপুট ডেটা ফাইল"
         self.MODEL_TO_BE_QUANTIZED = "কোয়ান্টাইজ করার জন্য মডেল"
@@ -3340,7 +3874,8 @@ class _Bengali(_Localization):
         self.SET_GPU_OFFLOAD_VALUE = "GPU অফলোড মান সেট করুন (-ngl)"
         self.COMPLETED = "সম্পন্ন"
         self.REFRESH_MODELS = "মডেল রিফ্রেশ করুন"
-        
+
+
 class _Polish(_Localization):
     def __init__(self):
         super().__init__()
@@ -3391,7 +3926,9 @@ class _Polish(_Localization):
         self.RESTART = "Uruchom ponownie"
         self.DELETE = "Usuń"
         self.CONFIRM_DELETION = "Czy na pewno chcesz usunąć to zadanie?"
-        self.TASK_RUNNING_WARNING = "Niektóre zadania są nadal uruchomione. Czy na pewno chcesz wyjść?"
+        self.TASK_RUNNING_WARNING = (
+            "Niektóre zadania są nadal uruchomione. Czy na pewno chcesz wyjść?"
+        )
         self.YES = "Tak"
         self.NO = "Nie"
         self.DOWNLOAD_COMPLETE = "Pobieranie zakończone"
@@ -3406,7 +3943,9 @@ class _Polish(_Localization):
         self.NO_SUITABLE_CUDA_BACKENDS = "Nie znaleziono odpowiednich backendów CUDA"
         self.LLAMACPP_DOWNLOADED_EXTRACTED = "Plik binarny llama.cpp został pobrany i wyodrębniony do {0}\nPliki CUDA wyodrębnione do {1}"
         self.CUDA_FILES_EXTRACTED = "Pliki CUDA wyodrębnione do"
-        self.NO_SUITABLE_CUDA_BACKEND_EXTRACTION = "Nie znaleziono odpowiedniego backendu CUDA do wyodrębnienia"
+        self.NO_SUITABLE_CUDA_BACKEND_EXTRACTION = (
+            "Nie znaleziono odpowiedniego backendu CUDA do wyodrębnienia"
+        )
         self.ERROR_FETCHING_RELEASES = "Błąd podczas pobierania wersji: {0}"
         self.CONFIRM_DELETION_TITLE = "Potwierdź usunięcie"
         self.LOG_FOR = "Dziennik dla {0}"
@@ -3425,15 +3964,23 @@ class _Polish(_Localization):
         self.LOADING_PRESET = "Wczytywanie ustawień predefiniowanych"
         self.PRESET_LOADED_FROM = "Ustawienia predefiniowane wczytane z {0}"
         self.ADDING_KV_OVERRIDE = "Dodawanie nadpisania KV: {0}"
-        self.SAVING_TASK_PRESET = "Zapisywanie ustawień predefiniowanych zadania dla {0}"
+        self.SAVING_TASK_PRESET = (
+            "Zapisywanie ustawień predefiniowanych zadania dla {0}"
+        )
         self.TASK_PRESET_SAVED = "Ustawienia predefiniowane zadania zapisane"
         self.TASK_PRESET_SAVED_TO = "Ustawienia predefiniowane zadania zapisane do {0}"
         self.RESTARTING_TASK = "Ponowne uruchamianie zadania: {0}"
         self.IN_PROGRESS = "W trakcie"
-        self.DOWNLOAD_FINISHED_EXTRACTED_TO = "Pobieranie zakończone. Wyodrębniono do: {0}"
+        self.DOWNLOAD_FINISHED_EXTRACTED_TO = (
+            "Pobieranie zakończone. Wyodrębniono do: {0}"
+        )
         self.LLAMACPP_DOWNLOADED_AND_EXTRACTED = "Plik binarny llama.cpp został pobrany i wyodrębniony do {0}\nPliki CUDA wyodrębnione do {1}"
-        self.NO_SUITABLE_CUDA_BACKEND_FOUND = "Nie znaleziono odpowiedniego backendu CUDA do wyodrębnienia"
-        self.LLAMACPP_BINARY_DOWNLOADED_AND_EXTRACTED = "Plik binarny llama.cpp został pobrany i wyodrębniony do {0}"
+        self.NO_SUITABLE_CUDA_BACKEND_FOUND = (
+            "Nie znaleziono odpowiedniego backendu CUDA do wyodrębnienia"
+        )
+        self.LLAMACPP_BINARY_DOWNLOADED_AND_EXTRACTED = (
+            "Plik binarny llama.cpp został pobrany i wyodrębniony do {0}"
+        )
         self.REFRESHING_LLAMACPP_RELEASES = "Odświeżanie wersji llama.cpp"
         self.UPDATING_ASSET_LIST = "Aktualizacja listy zasobów"
         self.UPDATING_CUDA_OPTIONS = "Aktualizacja opcji CUDA"
@@ -3480,32 +4027,57 @@ class _Polish(_Localization):
         self.STARTING_IMATRIX_GENERATION = "Rozpoczynanie generowania IMatrix"
         self.BACKEND_PATH_NOT_EXIST = "Ścieżka backendu nie istnieje: {0}"
         self.GENERATING_IMATRIX = "Generowanie IMatrix"
-        self.ERROR_STARTING_IMATRIX_GENERATION = "Błąd podczas uruchamiania generowania IMatrix: {0}"
+        self.ERROR_STARTING_IMATRIX_GENERATION = (
+            "Błąd podczas uruchamiania generowania IMatrix: {0}"
+        )
         self.IMATRIX_GENERATION_TASK_STARTED = "Zadanie generowania IMatrix uruchomione"
         self.ERROR_MESSAGE = "Błąd: {0}"
         self.TASK_ERROR = "Błąd zadania: {0}"
         self.APPLICATION_CLOSING = "Zamykanie aplikacji"
         self.APPLICATION_CLOSED = "Aplikacja zamknięta"
         self.SELECT_QUANTIZATION_TYPE = "Wybierz typ kwantyzacji"
-        self.ALLOWS_REQUANTIZING = "Pozwala na ponowną kwantyzację tensorów, które zostały już skwantyzowane"
-        self.LEAVE_OUTPUT_WEIGHT = "Pozostawi output.weight nieskwantyzowany (lub nieskwantyzowany ponownie)"
-        self.DISABLE_K_QUANT_MIXTURES = "Wyłącz mieszanki k-kwant i kwantyzuj wszystkie tensory do tego samego typu"
-        self.USE_DATA_AS_IMPORTANCE_MATRIX = "Użyj danych w pliku jako macierzy ważności dla optymalizacji kwantyzacji"
-        self.USE_IMPORTANCE_MATRIX_FOR_TENSORS = "Użyj macierzy ważności dla tych tensorów"
-        self.DONT_USE_IMPORTANCE_MATRIX_FOR_TENSORS = "Nie używaj macierzy ważności dla tych tensorów"
+        self.ALLOWS_REQUANTIZING = (
+            "Pozwala na ponowną kwantyzację tensorów, które zostały już skwantyzowane"
+        )
+        self.LEAVE_OUTPUT_WEIGHT = (
+            "Pozostawi output.weight nieskwantyzowany (lub nieskwantyzowany ponownie)"
+        )
+        self.DISABLE_K_QUANT_MIXTURES = (
+            "Wyłącz mieszanki k-kwant i kwantyzuj wszystkie tensory do tego samego typu"
+        )
+        self.USE_DATA_AS_IMPORTANCE_MATRIX = (
+            "Użyj danych w pliku jako macierzy ważności dla optymalizacji kwantyzacji"
+        )
+        self.USE_IMPORTANCE_MATRIX_FOR_TENSORS = (
+            "Użyj macierzy ważności dla tych tensorów"
+        )
+        self.DONT_USE_IMPORTANCE_MATRIX_FOR_TENSORS = (
+            "Nie używaj macierzy ważności dla tych tensorów"
+        )
         self.OUTPUT_TENSOR_TYPE = "Typ tensora wyjściowego:"
-        self.USE_THIS_TYPE_FOR_OUTPUT_WEIGHT = "Użyj tego typu dla tensora output.weight"
+        self.USE_THIS_TYPE_FOR_OUTPUT_WEIGHT = (
+            "Użyj tego typu dla tensora output.weight"
+        )
         self.TOKEN_EMBEDDING_TYPE = "Typ osadzania tokenów:"
-        self.USE_THIS_TYPE_FOR_TOKEN_EMBEDDINGS = "Użyj tego typu dla tensora osadzania tokenów"
-        self.WILL_GENERATE_QUANTIZED_MODEL_IN_SAME_SHARDS = "Wygeneruje skwantyzowany model w tych samych fragmentach co dane wejściowe"
+        self.USE_THIS_TYPE_FOR_TOKEN_EMBEDDINGS = (
+            "Użyj tego typu dla tensora osadzania tokenów"
+        )
+        self.WILL_GENERATE_QUANTIZED_MODEL_IN_SAME_SHARDS = (
+            "Wygeneruje skwantyzowany model w tych samych fragmentach co dane wejściowe"
+        )
         self.OVERRIDE_MODEL_METADATA = "Zastąp metadane modelu"
-        self.INPUT_DATA_FILE_FOR_IMATRIX = "Plik danych wejściowych do generowania IMatrix"
+        self.INPUT_DATA_FILE_FOR_IMATRIX = (
+            "Plik danych wejściowych do generowania IMatrix"
+        )
         self.MODEL_TO_BE_QUANTIZED = "Model do kwantyzacji"
-        self.OUTPUT_PATH_FOR_GENERATED_IMATRIX = "Ścieżka wyjściowa dla wygenerowanego IMatrix"
+        self.OUTPUT_PATH_FOR_GENERATED_IMATRIX = (
+            "Ścieżka wyjściowa dla wygenerowanego IMatrix"
+        )
         self.HOW_OFTEN_TO_SAVE_IMATRIX = "Jak często zapisywać IMatrix"
         self.SET_GPU_OFFLOAD_VALUE = "Ustaw wartość odciążenia GPU (-ngl)"
         self.COMPLETED = "Ukończono"
         self.REFRESH_MODELS = "Obnovit modely"
+
 
 class _Romanian(_Localization):
     def __init__(self):
@@ -3572,7 +4144,9 @@ class _Romanian(_Localization):
         self.NO_SUITABLE_CUDA_BACKENDS = "Nu s-au găsit backends CUDA potrivite"
         self.LLAMACPP_DOWNLOADED_EXTRACTED = "Fișierul binar llama.cpp a fost descărcat și extras în {0}\nFișierele CUDA au fost extrase în {1}"
         self.CUDA_FILES_EXTRACTED = "Fișierele CUDA au fost extrase în"
-        self.NO_SUITABLE_CUDA_BACKEND_EXTRACTION = "Nu s-a găsit un backend CUDA potrivit pentru extragere"
+        self.NO_SUITABLE_CUDA_BACKEND_EXTRACTION = (
+            "Nu s-a găsit un backend CUDA potrivit pentru extragere"
+        )
         self.ERROR_FETCHING_RELEASES = "Eroare la preluarea versiunilor: {0}"
         self.CONFIRM_DELETION_TITLE = "Confirmați ștergerea"
         self.LOG_FOR = "Jurnal pentru {0}"
@@ -3598,8 +4172,12 @@ class _Romanian(_Localization):
         self.IN_PROGRESS = "În curs"
         self.DOWNLOAD_FINISHED_EXTRACTED_TO = "Descărcare finalizată. Extras în: {0}"
         self.LLAMACPP_DOWNLOADED_AND_EXTRACTED = "Fișierul binar llama.cpp a fost descărcat și extras în {0}\nFișierele CUDA au fost extrase în {1}"
-        self.NO_SUITABLE_CUDA_BACKEND_FOUND = "Nu s-a găsit un backend CUDA potrivit pentru extragere"
-        self.LLAMACPP_BINARY_DOWNLOADED_AND_EXTRACTED = "Fișierul binar llama.cpp a fost descărcat și extras în {0}"
+        self.NO_SUITABLE_CUDA_BACKEND_FOUND = (
+            "Nu s-a găsit un backend CUDA potrivit pentru extragere"
+        )
+        self.LLAMACPP_BINARY_DOWNLOADED_AND_EXTRACTED = (
+            "Fișierul binar llama.cpp a fost descărcat și extras în {0}"
+        )
         self.REFRESHING_LLAMACPP_RELEASES = "Reîmprospătarea versiunilor llama.cpp"
         self.UPDATING_ASSET_LIST = "Actualizarea listei de active"
         self.UPDATING_CUDA_OPTIONS = "Actualizarea opțiunilor CUDA"
@@ -3632,7 +4210,9 @@ class _Romanian(_Localization):
         self.STARTING_MODEL_QUANTIZATION = "Pornirea cuantizării modelului"
         self.INPUT_FILE_NOT_EXIST = "Fișierul de intrare '{0}' nu există."
         self.QUANTIZING_MODEL_TO = "Cuantizarea {0} la {1}"
-        self.QUANTIZATION_TASK_STARTED = "Sarcina de cuantizare a fost pornită pentru {0}"
+        self.QUANTIZATION_TASK_STARTED = (
+            "Sarcina de cuantizare a fost pornită pentru {0}"
+        )
         self.ERROR_STARTING_QUANTIZATION = "Eroare la pornirea cuantizării: {0}"
         self.UPDATING_MODEL_INFO = "Actualizarea informațiilor despre model: {0}"
         self.TASK_FINISHED = "Sarcină finalizată: {0}"
@@ -3646,32 +4226,55 @@ class _Romanian(_Localization):
         self.STARTING_IMATRIX_GENERATION = "Pornirea generării IMatrix"
         self.BACKEND_PATH_NOT_EXIST = "Calea backendului nu există: {0}"
         self.GENERATING_IMATRIX = "Generarea IMatrix"
-        self.ERROR_STARTING_IMATRIX_GENERATION = "Eroare la pornirea generării IMatrix: {0}"
-        self.IMATRIX_GENERATION_TASK_STARTED = "Sarcina de generare IMatrix a fost pornită"
+        self.ERROR_STARTING_IMATRIX_GENERATION = (
+            "Eroare la pornirea generării IMatrix: {0}"
+        )
+        self.IMATRIX_GENERATION_TASK_STARTED = (
+            "Sarcina de generare IMatrix a fost pornită"
+        )
         self.ERROR_MESSAGE = "Eroare: {0}"
         self.TASK_ERROR = "Eroare de sarcină: {0}"
         self.APPLICATION_CLOSING = "Închiderea aplicației"
         self.APPLICATION_CLOSED = "Aplicație închisă"
         self.SELECT_QUANTIZATION_TYPE = "Selectați tipul de cuantizare"
-        self.ALLOWS_REQUANTIZING = "Permite recuantizarea tensorilor care au fost deja cuantizați"
+        self.ALLOWS_REQUANTIZING = (
+            "Permite recuantizarea tensorilor care au fost deja cuantizați"
+        )
         self.LEAVE_OUTPUT_WEIGHT = "Va lăsa output.weight necuantizat (sau recuantizat)"
-        self.DISABLE_K_QUANT_MIXTURES = "Dezactivați mixurile k-quant și cuantizați toți tensorii la același tip"
+        self.DISABLE_K_QUANT_MIXTURES = (
+            "Dezactivați mixurile k-quant și cuantizați toți tensorii la același tip"
+        )
         self.USE_DATA_AS_IMPORTANCE_MATRIX = "Utilizați datele din fișier ca matrice de importanță pentru optimizările de cuantizare"
-        self.USE_IMPORTANCE_MATRIX_FOR_TENSORS = "Utilizați matricea de importanță pentru acești tensori"
-        self.DONT_USE_IMPORTANCE_MATRIX_FOR_TENSORS = "Nu utilizați matricea de importanță pentru acești tensori"
+        self.USE_IMPORTANCE_MATRIX_FOR_TENSORS = (
+            "Utilizați matricea de importanță pentru acești tensori"
+        )
+        self.DONT_USE_IMPORTANCE_MATRIX_FOR_TENSORS = (
+            "Nu utilizați matricea de importanță pentru acești tensori"
+        )
         self.OUTPUT_TENSOR_TYPE = "Tipul tensorului de ieșire:"
-        self.USE_THIS_TYPE_FOR_OUTPUT_WEIGHT = "Utilizați acest tip pentru tensorul output.weight"
+        self.USE_THIS_TYPE_FOR_OUTPUT_WEIGHT = (
+            "Utilizați acest tip pentru tensorul output.weight"
+        )
         self.TOKEN_EMBEDDING_TYPE = "Tipul de încorporare a tokenului:"
-        self.USE_THIS_TYPE_FOR_TOKEN_EMBEDDINGS = "Utilizați acest tip pentru tensorul de încorporări ale tokenului"
-        self.WILL_GENERATE_QUANTIZED_MODEL_IN_SAME_SHARDS = "Va genera modelul cuantizat în aceleași fragmente ca și intrarea"
+        self.USE_THIS_TYPE_FOR_TOKEN_EMBEDDINGS = (
+            "Utilizați acest tip pentru tensorul de încorporări ale tokenului"
+        )
+        self.WILL_GENERATE_QUANTIZED_MODEL_IN_SAME_SHARDS = (
+            "Va genera modelul cuantizat în aceleași fragmente ca și intrarea"
+        )
         self.OVERRIDE_MODEL_METADATA = "Suprascrieți metadatele modelului"
-        self.INPUT_DATA_FILE_FOR_IMATRIX = "Fișier de date de intrare pentru generarea IMatrix"
+        self.INPUT_DATA_FILE_FOR_IMATRIX = (
+            "Fișier de date de intrare pentru generarea IMatrix"
+        )
         self.MODEL_TO_BE_QUANTIZED = "Modelul de cuantizat"
-        self.OUTPUT_PATH_FOR_GENERATED_IMATRIX = "Calea de ieșire pentru IMatrix generat"
+        self.OUTPUT_PATH_FOR_GENERATED_IMATRIX = (
+            "Calea de ieșire pentru IMatrix generat"
+        )
         self.HOW_OFTEN_TO_SAVE_IMATRIX = "Cât de des să salvați IMatrix"
         self.SET_GPU_OFFLOAD_VALUE = "Setați valoarea de descărcare GPU (-ngl)"
-        self.COMPLETED = "Finalizat"        
+        self.COMPLETED = "Finalizat"
         self.REFRESH_MODELS = "Odśwież modele"
+
 
 class _Czech(_Localization):
     def __init__(self):
@@ -3723,7 +4326,9 @@ class _Czech(_Localization):
         self.RESTART = "Restartovat"
         self.DELETE = "Smazat"
         self.CONFIRM_DELETION = "Jste si jisti, že chcete smazat tento úkol?"
-        self.TASK_RUNNING_WARNING = "Některé úkoly stále běží. Jste si jisti, že chcete ukončit?"
+        self.TASK_RUNNING_WARNING = (
+            "Některé úkoly stále běží. Jste si jisti, že chcete ukončit?"
+        )
         self.YES = "Ano"
         self.NO = "Ne"
         self.DOWNLOAD_COMPLETE = "Stahování dokončeno"
@@ -3738,7 +4343,9 @@ class _Czech(_Localization):
         self.NO_SUITABLE_CUDA_BACKENDS = "Nebyly nalezeny žádné vhodné backendy CUDA"
         self.LLAMACPP_DOWNLOADED_EXTRACTED = "Binární soubor llama.cpp byl stažen a extrahován do {0}\nSoubory CUDA extrahovány do {1}"
         self.CUDA_FILES_EXTRACTED = "Soubory CUDA extrahovány do"
-        self.NO_SUITABLE_CUDA_BACKEND_EXTRACTION = "Nebyl nalezen žádný vhodný backend CUDA pro extrakci"
+        self.NO_SUITABLE_CUDA_BACKEND_EXTRACTION = (
+            "Nebyl nalezen žádný vhodný backend CUDA pro extrakci"
+        )
         self.ERROR_FETCHING_RELEASES = "Chyba při načítání verzí: {0}"
         self.CONFIRM_DELETION_TITLE = "Potvrdit smazání"
         self.LOG_FOR = "Log pro {0}"
@@ -3764,8 +4371,12 @@ class _Czech(_Localization):
         self.IN_PROGRESS = "Probíhá"
         self.DOWNLOAD_FINISHED_EXTRACTED_TO = "Stahování dokončeno. Extrahováno do: {0}"
         self.LLAMACPP_DOWNLOADED_AND_EXTRACTED = "Binární soubor llama.cpp byl stažen a extrahován do {0}\nSoubory CUDA extrahovány do {1}"
-        self.NO_SUITABLE_CUDA_BACKEND_FOUND = "Nebyl nalezen žádný vhodný backend CUDA pro extrakci"
-        self.LLAMACPP_BINARY_DOWNLOADED_AND_EXTRACTED = "Binární soubor llama.cpp byl stažen a extrahován do {0}"
+        self.NO_SUITABLE_CUDA_BACKEND_FOUND = (
+            "Nebyl nalezen žádný vhodný backend CUDA pro extrakci"
+        )
+        self.LLAMACPP_BINARY_DOWNLOADED_AND_EXTRACTED = (
+            "Binární soubor llama.cpp byl stažen a extrahován do {0}"
+        )
         self.REFRESHING_LLAMACPP_RELEASES = "Obnovování verzí llama.cpp"
         self.UPDATING_ASSET_LIST = "Aktualizace seznamu aktiv"
         self.UPDATING_CUDA_OPTIONS = "Aktualizace možností CUDA"
@@ -3812,26 +4423,48 @@ class _Czech(_Localization):
         self.STARTING_IMATRIX_GENERATION = "Spuštění generování IMatrix"
         self.BACKEND_PATH_NOT_EXIST = "Cesta backendu neexistuje: {0}"
         self.GENERATING_IMATRIX = "Generování IMatrix"
-        self.ERROR_STARTING_IMATRIX_GENERATION = "Chyba při spuštění generování IMatrix: {0}"
+        self.ERROR_STARTING_IMATRIX_GENERATION = (
+            "Chyba při spuštění generování IMatrix: {0}"
+        )
         self.IMATRIX_GENERATION_TASK_STARTED = "Úkol generování IMatrix spuštěn"
         self.ERROR_MESSAGE = "Chyba: {0}"
         self.TASK_ERROR = "Chyba úkolu: {0}"
         self.APPLICATION_CLOSING = "Zavírání aplikace"
         self.APPLICATION_CLOSED = "Aplikace zavřena"
         self.SELECT_QUANTIZATION_TYPE = "Vyberte typ kvantizace"
-        self.ALLOWS_REQUANTIZING = "Umožňuje rekvantizovat tenzory, které již byly kvantizovány"
-        self.LEAVE_OUTPUT_WEIGHT = "Ponechá output.weight nekvantizovaný (nebo rekvantizovaný)"
-        self.DISABLE_K_QUANT_MIXTURES = "Zakázat k-kvantové směsi a kvantizovat všechny tenzory na stejný typ"
-        self.USE_DATA_AS_IMPORTANCE_MATRIX = "Použít data v souboru jako matici důležitosti pro optimalizace kvantizace"
-        self.USE_IMPORTANCE_MATRIX_FOR_TENSORS = "Použít matici důležitosti pro tyto tenzory"
-        self.DONT_USE_IMPORTANCE_MATRIX_FOR_TENSORS = "Nepoužívat matici důležitosti pro tyto tenzory"
+        self.ALLOWS_REQUANTIZING = (
+            "Umožňuje rekvantizovat tenzory, které již byly kvantizovány"
+        )
+        self.LEAVE_OUTPUT_WEIGHT = (
+            "Ponechá output.weight nekvantizovaný (nebo rekvantizovaný)"
+        )
+        self.DISABLE_K_QUANT_MIXTURES = (
+            "Zakázat k-kvantové směsi a kvantizovat všechny tenzory na stejný typ"
+        )
+        self.USE_DATA_AS_IMPORTANCE_MATRIX = (
+            "Použít data v souboru jako matici důležitosti pro optimalizace kvantizace"
+        )
+        self.USE_IMPORTANCE_MATRIX_FOR_TENSORS = (
+            "Použít matici důležitosti pro tyto tenzory"
+        )
+        self.DONT_USE_IMPORTANCE_MATRIX_FOR_TENSORS = (
+            "Nepoužívat matici důležitosti pro tyto tenzory"
+        )
         self.OUTPUT_TENSOR_TYPE = "Typ výstupního tenzoru:"
-        self.USE_THIS_TYPE_FOR_OUTPUT_WEIGHT = "Použít tento typ pro tenzor output.weight"
+        self.USE_THIS_TYPE_FOR_OUTPUT_WEIGHT = (
+            "Použít tento typ pro tenzor output.weight"
+        )
         self.TOKEN_EMBEDDING_TYPE = "Typ vkládání tokenů:"
-        self.USE_THIS_TYPE_FOR_TOKEN_EMBEDDINGS = "Použít tento typ pro tenzor vkládání tokenů"
-        self.WILL_GENERATE_QUANTIZED_MODEL_IN_SAME_SHARDS = "Vygeneruje kvantizovaný model ve stejných fragmentech jako vstup"
+        self.USE_THIS_TYPE_FOR_TOKEN_EMBEDDINGS = (
+            "Použít tento typ pro tenzor vkládání tokenů"
+        )
+        self.WILL_GENERATE_QUANTIZED_MODEL_IN_SAME_SHARDS = (
+            "Vygeneruje kvantizovaný model ve stejných fragmentech jako vstup"
+        )
         self.OVERRIDE_MODEL_METADATA = "Přepsat metadata modelu"
-        self.INPUT_DATA_FILE_FOR_IMATRIX = "Vstupní datový soubor pro generování IMatrix"
+        self.INPUT_DATA_FILE_FOR_IMATRIX = (
+            "Vstupní datový soubor pro generování IMatrix"
+        )
         self.MODEL_TO_BE_QUANTIZED = "Model, který má být kvantizován"
         self.OUTPUT_PATH_FOR_GENERATED_IMATRIX = "Výstupní cesta pro generovaný IMatrix"
         self.HOW_OFTEN_TO_SAVE_IMATRIX = "Jak často ukládat IMatrix"
@@ -3839,47 +4472,48 @@ class _Czech(_Localization):
         self.COMPLETED = "Dokončeno"
         self.REFRESH_MODELS = "Reîmprospătează modelele"
 
+
 class _CanadianFrench(_Localization):
     def __init__(self):
         super().__init__()
         self.WINDOW_TITLE = "AutoGGUF (Quantificateur automatique de modèles GGUF)"
-        self.RAM_USAGE = "Utilisation de la RAM :" # Spacing 
-        self.CPU_USAGE = "Utilisation du CPU :" # Spacing
-        self.BACKEND = "Moteur d'arrière-plan Llama.cpp :" # Spacing and terminology
+        self.RAM_USAGE = "Utilisation de la RAM :"  # Spacing
+        self.CPU_USAGE = "Utilisation du CPU :"  # Spacing
+        self.BACKEND = "Moteur d'arrière-plan Llama.cpp :"  # Spacing and terminology
         self.REFRESH_BACKENDS = "Actualiser les moteurs d'arrière-plan"
-        self.MODELS_PATH = "Chemin des modèles :" # Spacing
-        self.OUTPUT_PATH = "Chemin de sortie :" # Spacing
-        self.LOGS_PATH = "Chemin des journaux :" # Spacing
+        self.MODELS_PATH = "Chemin des modèles :"  # Spacing
+        self.OUTPUT_PATH = "Chemin de sortie :"  # Spacing
+        self.LOGS_PATH = "Chemin des journaux :"  # Spacing
         self.BROWSE = "Parcourir"
-        self.AVAILABLE_MODELS = "Modèles disponibles :" # Spacing
-        self.QUANTIZATION_TYPE = "Type de quantification :" # Spacing
+        self.AVAILABLE_MODELS = "Modèles disponibles :"  # Spacing
+        self.QUANTIZATION_TYPE = "Type de quantification :"  # Spacing
         self.ALLOW_REQUANTIZE = "Autoriser la requantification"
         self.LEAVE_OUTPUT_TENSOR = "Laisser le tenseur de sortie"
         self.PURE = "Pur"
-        self.IMATRIX = "IMatrix :" # Spacing
-        self.INCLUDE_WEIGHTS = "Inclure les poids :" # Spacing
-        self.EXCLUDE_WEIGHTS = "Exclure les poids :" # Spacing
+        self.IMATRIX = "IMatrix :"  # Spacing
+        self.INCLUDE_WEIGHTS = "Inclure les poids :"  # Spacing
+        self.EXCLUDE_WEIGHTS = "Exclure les poids :"  # Spacing
         self.USE_OUTPUT_TENSOR_TYPE = "Utiliser le type de tenseur de sortie"
         self.USE_TOKEN_EMBEDDING_TYPE = "Utiliser le type d'intégration de jeton"
         self.KEEP_SPLIT = "Conserver la division"
-        self.KV_OVERRIDES = "Remplacements KV :" # Spacing
+        self.KV_OVERRIDES = "Remplacements KV :"  # Spacing
         self.ADD_NEW_OVERRIDE = "Ajouter un nouveau remplacement"
         self.QUANTIZE_MODEL = "Quantifier le modèle"
         self.SAVE_PRESET = "Enregistrer le préréglage"
         self.LOAD_PRESET = "Charger le préréglage"
-        self.TASKS = "Tâches :" # Spacing
+        self.TASKS = "Tâches :"  # Spacing
         self.DOWNLOAD_LLAMACPP = "Télécharger llama.cpp"
-        self.SELECT_RELEASE = "Sélectionner la version :" # Spacing
-        self.SELECT_ASSET = "Sélectionner l'actif :" # Spacing
+        self.SELECT_RELEASE = "Sélectionner la version :"  # Spacing
+        self.SELECT_ASSET = "Sélectionner l'actif :"  # Spacing
         self.EXTRACT_CUDA_FILES = "Extraire les fichiers CUDA"
-        self.SELECT_CUDA_BACKEND = "Sélectionner le backend CUDA :" # Spacing
+        self.SELECT_CUDA_BACKEND = "Sélectionner le backend CUDA :"  # Spacing
         self.DOWNLOAD = "Télécharger"
         self.IMATRIX_GENERATION = "Génération d'IMatrix"
-        self.DATA_FILE = "Fichier de données :" # Spacing
-        self.MODEL = "Modèle :" # Spacing
-        self.OUTPUT = "Sortie :" # Spacing
-        self.OUTPUT_FREQUENCY = "Fréquence de sortie :" # Spacing
-        self.GPU_OFFLOAD = "Déchargement GPU :" # Spacing
+        self.DATA_FILE = "Fichier de données :"  # Spacing
+        self.MODEL = "Modèle :"  # Spacing
+        self.OUTPUT = "Sortie :"  # Spacing
+        self.OUTPUT_FREQUENCY = "Fréquence de sortie :"  # Spacing
+        self.GPU_OFFLOAD = "Déchargement GPU :"  # Spacing
         self.AUTO = "Auto"
         self.GENERATE_IMATRIX = "Générer IMatrix"
         self.ERROR = "Erreur"
@@ -3888,8 +4522,10 @@ class _CanadianFrench(_Localization):
         self.CANCEL = "Annuler"
         self.RESTART = "Redémarrer"
         self.DELETE = "Supprimer"
-        self.CONFIRM_DELETION = "Êtes-vous sûr de vouloir supprimer cette tâche ?" # Spacing
-        self.TASK_RUNNING_WARNING = "Certaines tâches sont encore en cours d'exécution. Êtes-vous sûr de vouloir quitter ?" # Spacing
+        self.CONFIRM_DELETION = (
+            "Êtes-vous sûr de vouloir supprimer cette tâche ?"  # Spacing
+        )
+        self.TASK_RUNNING_WARNING = "Certaines tâches sont encore en cours d'exécution. Êtes-vous sûr de vouloir quitter ?"  # Spacing
         self.YES = "Oui"
         self.NO = "Non"
         self.DOWNLOAD_COMPLETE = "Téléchargement terminé"
@@ -3904,15 +4540,19 @@ class _CanadianFrench(_Localization):
         self.NO_SUITABLE_CUDA_BACKENDS = "Aucun backend CUDA approprié trouvé"
         self.LLAMACPP_DOWNLOADED_EXTRACTED = "Le fichier binaire llama.cpp a été téléchargé et extrait dans {0}\nLes fichiers CUDA ont été extraits dans {1}"
         self.CUDA_FILES_EXTRACTED = "Les fichiers CUDA ont été extraits dans"
-        self.NO_SUITABLE_CUDA_BACKEND_EXTRACTION = "Aucun backend CUDA approprié trouvé pour l'extraction"
-        self.ERROR_FETCHING_RELEASES = "Erreur lors de la récupération des versions : {0}" # Spacing
+        self.NO_SUITABLE_CUDA_BACKEND_EXTRACTION = (
+            "Aucun backend CUDA approprié trouvé pour l'extraction"
+        )
+        self.ERROR_FETCHING_RELEASES = (
+            "Erreur lors de la récupération des versions : {0}"  # Spacing
+        )
         self.CONFIRM_DELETION_TITLE = "Confirmer la suppression"
         self.LOG_FOR = "Journal pour {0}"
         self.ALL_FILES = "Tous les fichiers (*)"
         self.GGUF_FILES = "Fichiers GGUF (*.gguf)"
         self.DAT_FILES = "Fichiers DAT (*.dat)"
         self.JSON_FILES = "Fichiers JSON (*.json)"
-        self.FAILED_LOAD_PRESET = "Échec du chargement du préréglage : {0}" # Spacing
+        self.FAILED_LOAD_PRESET = "Échec du chargement du préréglage : {0}"  # Spacing
         self.INITIALIZING_AUTOGGUF = "Initialisation de l'application AutoGGUF"
         self.AUTOGGUF_INITIALIZATION_COMPLETE = "Initialisation d'AutoGGUF terminée"
         self.REFRESHING_BACKENDS = "Actualisation des moteurs d'arrière-plan"
@@ -3922,29 +4562,39 @@ class _CanadianFrench(_Localization):
         self.PRESET_SAVED_TO = "Préréglage enregistré dans {0}"
         self.LOADING_PRESET = "Chargement du préréglage"
         self.PRESET_LOADED_FROM = "Préréglage chargé depuis {0}"
-        self.ADDING_KV_OVERRIDE = "Ajout de remplacement KV : {0}" # Spacing
+        self.ADDING_KV_OVERRIDE = "Ajout de remplacement KV : {0}"  # Spacing
         self.SAVING_TASK_PRESET = "Enregistrement du préréglage de tâche pour {0}"
         self.TASK_PRESET_SAVED = "Préréglage de tâche enregistré"
         self.TASK_PRESET_SAVED_TO = "Préréglage de tâche enregistré dans {0}"
-        self.RESTARTING_TASK = "Redémarrage de la tâche : {0}" # Spacing
+        self.RESTARTING_TASK = "Redémarrage de la tâche : {0}"  # Spacing
         self.IN_PROGRESS = "En cours"
-        self.DOWNLOAD_FINISHED_EXTRACTED_TO = "Téléchargement terminé. Extrait dans : {0}" # Spacing
+        self.DOWNLOAD_FINISHED_EXTRACTED_TO = (
+            "Téléchargement terminé. Extrait dans : {0}"  # Spacing
+        )
         self.LLAMACPP_DOWNLOADED_AND_EXTRACTED = "Le fichier binaire llama.cpp a été téléchargé et extrait dans {0}\nLes fichiers CUDA ont été extraits dans {1}"
-        self.NO_SUITABLE_CUDA_BACKEND_FOUND = "Aucun backend CUDA approprié trouvé pour l'extraction"
-        self.LLAMACPP_BINARY_DOWNLOADED_AND_EXTRACTED = "Le fichier binaire llama.cpp a été téléchargé et extrait dans {0}"
+        self.NO_SUITABLE_CUDA_BACKEND_FOUND = (
+            "Aucun backend CUDA approprié trouvé pour l'extraction"
+        )
+        self.LLAMACPP_BINARY_DOWNLOADED_AND_EXTRACTED = (
+            "Le fichier binaire llama.cpp a été téléchargé et extrait dans {0}"
+        )
         self.REFRESHING_LLAMACPP_RELEASES = "Actualisation des versions de llama.cpp"
         self.UPDATING_ASSET_LIST = "Mise à jour de la liste des actifs"
         self.UPDATING_CUDA_OPTIONS = "Mise à jour des options CUDA"
         self.STARTING_LLAMACPP_DOWNLOAD = "Démarrage du téléchargement de llama.cpp"
         self.UPDATING_CUDA_BACKENDS = "Mise à jour des backends CUDA"
-        self.NO_CUDA_BACKEND_SELECTED = "Aucun backend CUDA sélectionné pour l'extraction"
+        self.NO_CUDA_BACKEND_SELECTED = (
+            "Aucun backend CUDA sélectionné pour l'extraction"
+        )
         self.EXTRACTING_CUDA_FILES = "Extraction des fichiers CUDA de {0} à {1}"
-        self.DOWNLOAD_ERROR = "Erreur de téléchargement : {0}" # Spacing
+        self.DOWNLOAD_ERROR = "Erreur de téléchargement : {0}"  # Spacing
         self.SHOWING_TASK_CONTEXT_MENU = "Affichage du menu contextuel de la tâche"
-        self.SHOWING_PROPERTIES_FOR_TASK = "Affichage des propriétés de la tâche : {0}" # Spacing
-        self.CANCELLING_TASK = "Annulation de la tâche : {0}" # Spacing
+        self.SHOWING_PROPERTIES_FOR_TASK = (
+            "Affichage des propriétés de la tâche : {0}"  # Spacing
+        )
+        self.CANCELLING_TASK = "Annulation de la tâche : {0}"  # Spacing
         self.CANCELED = "Annulée"
-        self.DELETING_TASK = "Suppression de la tâche : {0}" # Spacing
+        self.DELETING_TASK = "Suppression de la tâche : {0}"  # Spacing
         self.LOADING_MODELS = "Chargement des modèles"
         self.LOADED_MODELS = "{0} modèles chargés"
         self.BROWSING_FOR_MODELS_DIRECTORY = "Navigation dans le répertoire des modèles"
@@ -3956,7 +4606,7 @@ class _CanadianFrench(_Localization):
         self.BROWSING_FOR_IMATRIX_FILE = "Navigation dans le fichier IMatrix"
         self.SELECT_IMATRIX_FILE = "Sélectionner le fichier IMatrix"
         self.RAM_USAGE_FORMAT = "{0:.1f}% ({1} Mo / {2} Mo)"
-        self.CPU_USAGE_FORMAT = "Utilisation du CPU : {0:.1f}%" # Spacing
+        self.CPU_USAGE_FORMAT = "Utilisation du CPU : {0:.1f}%"  # Spacing
         self.VALIDATING_QUANTIZATION_INPUTS = "Validation des entrées de quantification"
         self.MODELS_PATH_REQUIRED = "Le chemin des modèles est requis"
         self.OUTPUT_PATH_REQUIRED = "Le chemin de sortie est requis"
@@ -3965,45 +4615,78 @@ class _CanadianFrench(_Localization):
         self.INPUT_FILE_NOT_EXIST = "Le fichier d'entrée '{0}' n'existe pas."
         self.QUANTIZING_MODEL_TO = "Quantification de {0} en {1}"
         self.QUANTIZATION_TASK_STARTED = "Tâche de quantification démarrée pour {0}"
-        self.ERROR_STARTING_QUANTIZATION = "Erreur lors du démarrage de la quantification : {0}" # Spacing
-        self.UPDATING_MODEL_INFO = "Mise à jour des informations sur le modèle : {0}" # Spacing
-        self.TASK_FINISHED = "Tâche terminée : {0}" # Spacing
-        self.SHOWING_TASK_DETAILS_FOR = "Affichage des détails de la tâche pour : {0}" # Spacing
-        self.BROWSING_FOR_IMATRIX_DATA_FILE = "Navigation dans le fichier de données IMatrix"
+        self.ERROR_STARTING_QUANTIZATION = (
+            "Erreur lors du démarrage de la quantification : {0}"  # Spacing
+        )
+        self.UPDATING_MODEL_INFO = (
+            "Mise à jour des informations sur le modèle : {0}"  # Spacing
+        )
+        self.TASK_FINISHED = "Tâche terminée : {0}"  # Spacing
+        self.SHOWING_TASK_DETAILS_FOR = (
+            "Affichage des détails de la tâche pour : {0}"  # Spacing
+        )
+        self.BROWSING_FOR_IMATRIX_DATA_FILE = (
+            "Navigation dans le fichier de données IMatrix"
+        )
         self.SELECT_DATA_FILE = "Sélectionner le fichier de données"
-        self.BROWSING_FOR_IMATRIX_MODEL_FILE = "Navigation dans le fichier de modèle IMatrix"
+        self.BROWSING_FOR_IMATRIX_MODEL_FILE = (
+            "Navigation dans le fichier de modèle IMatrix"
+        )
         self.SELECT_MODEL_FILE = "Sélectionner le fichier de modèle"
-        self.BROWSING_FOR_IMATRIX_OUTPUT_FILE = "Navigation dans le fichier de sortie IMatrix"
+        self.BROWSING_FOR_IMATRIX_OUTPUT_FILE = (
+            "Navigation dans le fichier de sortie IMatrix"
+        )
         self.SELECT_OUTPUT_FILE = "Sélectionner le fichier de sortie"
         self.STARTING_IMATRIX_GENERATION = "Démarrage de la génération d'IMatrix"
-        self.BACKEND_PATH_NOT_EXIST = "Le chemin du backend n'existe pas : {0}" # Spacing
+        self.BACKEND_PATH_NOT_EXIST = (
+            "Le chemin du backend n'existe pas : {0}"  # Spacing
+        )
         self.GENERATING_IMATRIX = "Génération d'IMatrix"
-        self.ERROR_STARTING_IMATRIX_GENERATION = "Erreur lors du démarrage de la génération d'IMatrix : {0}" # Spacing
+        self.ERROR_STARTING_IMATRIX_GENERATION = (
+            "Erreur lors du démarrage de la génération d'IMatrix : {0}"  # Spacing
+        )
         self.IMATRIX_GENERATION_TASK_STARTED = "Tâche de génération d'IMatrix démarrée"
-        self.ERROR_MESSAGE = "Erreur : {0}" # Spacing
-        self.TASK_ERROR = "Erreur de tâche : {0}" # Spacing
+        self.ERROR_MESSAGE = "Erreur : {0}"  # Spacing
+        self.TASK_ERROR = "Erreur de tâche : {0}"  # Spacing
         self.APPLICATION_CLOSING = "Fermeture de l'application"
         self.APPLICATION_CLOSED = "Application fermée"
         self.SELECT_QUANTIZATION_TYPE = "Sélectionnez le type de quantification"
-        self.ALLOWS_REQUANTIZING = "Permet de requantifier les tenseurs qui ont déjà été quantifiés"
+        self.ALLOWS_REQUANTIZING = (
+            "Permet de requantifier les tenseurs qui ont déjà été quantifiés"
+        )
         self.LEAVE_OUTPUT_WEIGHT = "Laissera output.weight non (re)quantifié"
         self.DISABLE_K_QUANT_MIXTURES = "Désactiver les mélanges k-quant et quantifier tous les tenseurs du même type"
         self.USE_DATA_AS_IMPORTANCE_MATRIX = "Utiliser les données du fichier comme matrice d'importance pour les optimisations de quant"
-        self.USE_IMPORTANCE_MATRIX_FOR_TENSORS = "Utiliser la matrice d'importance pour ces tenseurs"
-        self.DONT_USE_IMPORTANCE_MATRIX_FOR_TENSORS = "Ne pas utiliser la matrice d'importance pour ces tenseurs"
-        self.OUTPUT_TENSOR_TYPE = "Type de tenseur de sortie :" # Spacing
-        self.USE_THIS_TYPE_FOR_OUTPUT_WEIGHT = "Utiliser ce type pour le tenseur output.weight"
-        self.TOKEN_EMBEDDING_TYPE = "Type d'intégration de jeton :" # Spacing
-        self.USE_THIS_TYPE_FOR_TOKEN_EMBEDDINGS = "Utiliser ce type pour le tenseur d'intégration de jetons"
-        self.WILL_GENERATE_QUANTIZED_MODEL_IN_SAME_SHARDS = "Générera le modèle quantifié dans les mêmes fragments que l'entrée"
+        self.USE_IMPORTANCE_MATRIX_FOR_TENSORS = (
+            "Utiliser la matrice d'importance pour ces tenseurs"
+        )
+        self.DONT_USE_IMPORTANCE_MATRIX_FOR_TENSORS = (
+            "Ne pas utiliser la matrice d'importance pour ces tenseurs"
+        )
+        self.OUTPUT_TENSOR_TYPE = "Type de tenseur de sortie :"  # Spacing
+        self.USE_THIS_TYPE_FOR_OUTPUT_WEIGHT = (
+            "Utiliser ce type pour le tenseur output.weight"
+        )
+        self.TOKEN_EMBEDDING_TYPE = "Type d'intégration de jeton :"  # Spacing
+        self.USE_THIS_TYPE_FOR_TOKEN_EMBEDDINGS = (
+            "Utiliser ce type pour le tenseur d'intégration de jetons"
+        )
+        self.WILL_GENERATE_QUANTIZED_MODEL_IN_SAME_SHARDS = (
+            "Générera le modèle quantifié dans les mêmes fragments que l'entrée"
+        )
         self.OVERRIDE_MODEL_METADATA = "Remplacer les métadonnées du modèle"
-        self.INPUT_DATA_FILE_FOR_IMATRIX = "Fichier de données d'entrée pour la génération d'IMatrix"
+        self.INPUT_DATA_FILE_FOR_IMATRIX = (
+            "Fichier de données d'entrée pour la génération d'IMatrix"
+        )
         self.MODEL_TO_BE_QUANTIZED = "Modèle à quantifier"
-        self.OUTPUT_PATH_FOR_GENERATED_IMATRIX = "Chemin de sortie pour l'IMatrix généré"
+        self.OUTPUT_PATH_FOR_GENERATED_IMATRIX = (
+            "Chemin de sortie pour l'IMatrix généré"
+        )
         self.HOW_OFTEN_TO_SAVE_IMATRIX = "Fréquence d'enregistrement de l'IMatrix"
         self.SET_GPU_OFFLOAD_VALUE = "Définir la valeur de déchargement GPU (-ngl)"
         self.COMPLETED = "Terminé"
         self.REFRESH_MODELS = "Rafraîchir les modèles"
+
 
 class _Portuguese_PT(_Localization):
     def __init__(self):
@@ -4070,7 +4753,9 @@ class _Portuguese_PT(_Localization):
         self.NO_SUITABLE_CUDA_BACKENDS = "Nenhum backend CUDA adequado encontrado"
         self.LLAMACPP_DOWNLOADED_EXTRACTED = "Binário llama.cpp transferido e extraído para {0}\nFicheiros CUDA extraídos para {1}"
         self.CUDA_FILES_EXTRACTED = "Ficheiros CUDA extraídos para"
-        self.NO_SUITABLE_CUDA_BACKEND_EXTRACTION = "Nenhum backend CUDA adequado encontrado para extração"
+        self.NO_SUITABLE_CUDA_BACKEND_EXTRACTION = (
+            "Nenhum backend CUDA adequado encontrado para extração"
+        )
         self.ERROR_FETCHING_RELEASES = "Erro ao obter versões: {0}"
         self.CONFIRM_DELETION_TITLE = "Confirmar Eliminação"
         self.LOG_FOR = "Log para {0}"
@@ -4094,10 +4779,16 @@ class _Portuguese_PT(_Localization):
         self.TASK_PRESET_SAVED_TO = "Predefinição de tarefa guardada em {0}"
         self.RESTARTING_TASK = "A reiniciar tarefa: {0}"
         self.IN_PROGRESS = "Em Andamento"
-        self.DOWNLOAD_FINISHED_EXTRACTED_TO = "Transferência concluída. Extraído para: {0}"
+        self.DOWNLOAD_FINISHED_EXTRACTED_TO = (
+            "Transferência concluída. Extraído para: {0}"
+        )
         self.LLAMACPP_DOWNLOADED_AND_EXTRACTED = "Binário llama.cpp transferido e extraído para {0}\nFicheiros CUDA extraídos para {1}"
-        self.NO_SUITABLE_CUDA_BACKEND_FOUND = "Nenhum backend CUDA adequado encontrado para extração"
-        self.LLAMACPP_BINARY_DOWNLOADED_AND_EXTRACTED = "Binário llama.cpp transferido e extraído para {0}"
+        self.NO_SUITABLE_CUDA_BACKEND_FOUND = (
+            "Nenhum backend CUDA adequado encontrado para extração"
+        )
+        self.LLAMACPP_BINARY_DOWNLOADED_AND_EXTRACTED = (
+            "Binário llama.cpp transferido e extraído para {0}"
+        )
         self.REFRESHING_LLAMACPP_RELEASES = "A atualizar versões do llama.cpp"
         self.UPDATING_ASSET_LIST = "A atualizar lista de ativos"
         self.UPDATING_CUDA_OPTIONS = "A atualizar opções CUDA"
@@ -4137,39 +4828,64 @@ class _Portuguese_PT(_Localization):
         self.SHOWING_TASK_DETAILS_FOR = "A mostrar detalhes da tarefa para: {0}"
         self.BROWSING_FOR_IMATRIX_DATA_FILE = "A navegar pelo ficheiro de dados IMatrix"
         self.SELECT_DATA_FILE = "Selecionar Ficheiro de Dados"
-        self.BROWSING_FOR_IMATRIX_MODEL_FILE = "A navegar pelo ficheiro de modelo IMatrix"
+        self.BROWSING_FOR_IMATRIX_MODEL_FILE = (
+            "A navegar pelo ficheiro de modelo IMatrix"
+        )
         self.SELECT_MODEL_FILE = "Selecionar Ficheiro de Modelo"
-        self.BROWSING_FOR_IMATRIX_OUTPUT_FILE = "A navegar pelo ficheiro de saída IMatrix"
+        self.BROWSING_FOR_IMATRIX_OUTPUT_FILE = (
+            "A navegar pelo ficheiro de saída IMatrix"
+        )
         self.SELECT_OUTPUT_FILE = "Selecionar Ficheiro de Saída"
         self.STARTING_IMATRIX_GENERATION = "A iniciar a geração de IMatrix"
         self.BACKEND_PATH_NOT_EXIST = "O caminho do backend não existe: {0}"
         self.GENERATING_IMATRIX = "A gerar IMatrix"
-        self.ERROR_STARTING_IMATRIX_GENERATION = "Erro ao iniciar a geração de IMatrix: {0}"
+        self.ERROR_STARTING_IMATRIX_GENERATION = (
+            "Erro ao iniciar a geração de IMatrix: {0}"
+        )
         self.IMATRIX_GENERATION_TASK_STARTED = "Tarefa de geração de IMatrix iniciada"
         self.ERROR_MESSAGE = "Erro: {0}"
         self.TASK_ERROR = "Erro de tarefa: {0}"
         self.APPLICATION_CLOSING = "A fechar a aplicação"
         self.APPLICATION_CLOSED = "Aplicação fechada"
         self.SELECT_QUANTIZATION_TYPE = "Selecione o tipo de quantização"
-        self.ALLOWS_REQUANTIZING = "Permite requantizar tensores que já foram quantizados"
+        self.ALLOWS_REQUANTIZING = (
+            "Permite requantizar tensores que já foram quantizados"
+        )
         self.LEAVE_OUTPUT_WEIGHT = "Deixará output.weight não (re)quantizado"
-        self.DISABLE_K_QUANT_MIXTURES = "Desativar misturas k-quant e quantizar todos os tensores para o mesmo tipo"
+        self.DISABLE_K_QUANT_MIXTURES = (
+            "Desativar misturas k-quant e quantizar todos os tensores para o mesmo tipo"
+        )
         self.USE_DATA_AS_IMPORTANCE_MATRIX = "Usar os dados no ficheiro como matriz de importância para otimizações de quantização"
-        self.USE_IMPORTANCE_MATRIX_FOR_TENSORS = "Usar matriz de importância para estes tensores"
-        self.DONT_USE_IMPORTANCE_MATRIX_FOR_TENSORS = "Não usar matriz de importância para estes tensores"
+        self.USE_IMPORTANCE_MATRIX_FOR_TENSORS = (
+            "Usar matriz de importância para estes tensores"
+        )
+        self.DONT_USE_IMPORTANCE_MATRIX_FOR_TENSORS = (
+            "Não usar matriz de importância para estes tensores"
+        )
         self.OUTPUT_TENSOR_TYPE = "Tipo de Tensor de Saída:"
-        self.USE_THIS_TYPE_FOR_OUTPUT_WEIGHT = "Usar este tipo para o tensor output.weight"
+        self.USE_THIS_TYPE_FOR_OUTPUT_WEIGHT = (
+            "Usar este tipo para o tensor output.weight"
+        )
         self.TOKEN_EMBEDDING_TYPE = "Tipo de Incorporação de Token:"
-        self.USE_THIS_TYPE_FOR_TOKEN_EMBEDDINGS = "Usar este tipo para o tensor de incorporações de token"
-        self.WILL_GENERATE_QUANTIZED_MODEL_IN_SAME_SHARDS = "Irá gerar o modelo quantizado nos mesmos shards da entrada"
+        self.USE_THIS_TYPE_FOR_TOKEN_EMBEDDINGS = (
+            "Usar este tipo para o tensor de incorporações de token"
+        )
+        self.WILL_GENERATE_QUANTIZED_MODEL_IN_SAME_SHARDS = (
+            "Irá gerar o modelo quantizado nos mesmos shards da entrada"
+        )
         self.OVERRIDE_MODEL_METADATA = "Substituir metadados do modelo"
-        self.INPUT_DATA_FILE_FOR_IMATRIX = "Ficheiro de dados de entrada para geração de IMatrix"
+        self.INPUT_DATA_FILE_FOR_IMATRIX = (
+            "Ficheiro de dados de entrada para geração de IMatrix"
+        )
         self.MODEL_TO_BE_QUANTIZED = "Modelo a ser quantizado"
-        self.OUTPUT_PATH_FOR_GENERATED_IMATRIX = "Caminho de saída para o IMatrix gerado"
+        self.OUTPUT_PATH_FOR_GENERATED_IMATRIX = (
+            "Caminho de saída para o IMatrix gerado"
+        )
         self.HOW_OFTEN_TO_SAVE_IMATRIX = "Com que frequência guardar o IMatrix"
         self.SET_GPU_OFFLOAD_VALUE = "Definir valor de offload da GPU (-ngl)"
-        self.COMPLETED = "Concluído"        
+        self.COMPLETED = "Concluído"
         self.REFRESH_MODELS = "Atualizar modelos"
+
 
 class _Greek(_Localization):
     def __init__(self):
@@ -4220,7 +4936,9 @@ class _Greek(_Localization):
         self.CANCEL = "Ακύρωση"
         self.RESTART = "Επανεκκίνηση"
         self.DELETE = "Διαγραφή"
-        self.CONFIRM_DELETION = "Είστε βέβαιοι ότι θέλετε να διαγράψετε αυτήν την εργασία;"
+        self.CONFIRM_DELETION = (
+            "Είστε βέβαιοι ότι θέλετε να διαγράψετε αυτήν την εργασία;"
+        )
         self.TASK_RUNNING_WARNING = "Ορισμένες εργασίες εκτελούνται ακόμη. Είστε βέβαιοι ότι θέλετε να τερματίσετε;"
         self.YES = "Ναι"
         self.NO = "Όχι"
@@ -4236,7 +4954,9 @@ class _Greek(_Localization):
         self.NO_SUITABLE_CUDA_BACKENDS = "Δεν Βρέθηκαν Κατάλληλα Backends CUDA"
         self.LLAMACPP_DOWNLOADED_EXTRACTED = "Το Δυαδικό Αρχείο llama.cpp Λήφθηκε και Εξήχθη στο {0}\nΤα Αρχεία CUDA Εξήχθησαν στο {1}"
         self.CUDA_FILES_EXTRACTED = "Τα Αρχεία CUDA Εξήχθησαν στο"
-        self.NO_SUITABLE_CUDA_BACKEND_EXTRACTION = "Δεν Βρέθηκε Κατάλληλο Backend CUDA για Εξαγωγή"
+        self.NO_SUITABLE_CUDA_BACKEND_EXTRACTION = (
+            "Δεν Βρέθηκε Κατάλληλο Backend CUDA για Εξαγωγή"
+        )
         self.ERROR_FETCHING_RELEASES = "Σφάλμα κατά την Ανάκτηση Εκδόσεων: {0}"
         self.CONFIRM_DELETION_TITLE = "Επιβεβαίωση Διαγραφής"
         self.LOG_FOR = "Αρχείο Καταγραφής για {0}"
@@ -4262,8 +4982,12 @@ class _Greek(_Localization):
         self.IN_PROGRESS = "Σε Εξέλιξη"
         self.DOWNLOAD_FINISHED_EXTRACTED_TO = "Η Λήψη Ολοκληρώθηκε. Εξήχθη στο: {0}"
         self.LLAMACPP_DOWNLOADED_AND_EXTRACTED = "Το Δυαδικό Αρχείο llama.cpp Λήφθηκε και Εξήχθη στο {0}\nΤα Αρχεία CUDA Εξήχθησαν στο {1}"
-        self.NO_SUITABLE_CUDA_BACKEND_FOUND = "Δεν Βρέθηκε Κατάλληλο Backend CUDA για Εξαγωγή"
-        self.LLAMACPP_BINARY_DOWNLOADED_AND_EXTRACTED = "Το Δυαδικό Αρχείο llama.cpp Λήφθηκε και Εξήχθη στο {0}"
+        self.NO_SUITABLE_CUDA_BACKEND_FOUND = (
+            "Δεν Βρέθηκε Κατάλληλο Backend CUDA για Εξαγωγή"
+        )
+        self.LLAMACPP_BINARY_DOWNLOADED_AND_EXTRACTED = (
+            "Το Δυαδικό Αρχείο llama.cpp Λήφθηκε και Εξήχθη στο {0}"
+        )
         self.REFRESHING_LLAMACPP_RELEASES = "Ανανέωση Εκδόσεων llama.cpp"
         self.UPDATING_ASSET_LIST = "Ενημέρωση Λίστας Στοιχείων"
         self.UPDATING_CUDA_OPTIONS = "Ενημέρωση Επιλογών CUDA"
@@ -4310,32 +5034,51 @@ class _Greek(_Localization):
         self.STARTING_IMATRIX_GENERATION = "Έναρξη Δημιουργίας IMatrix"
         self.BACKEND_PATH_NOT_EXIST = "Η Διαδρομή Backend Δεν Υπάρχει: {0}"
         self.GENERATING_IMATRIX = "Δημιουργία IMatrix"
-        self.ERROR_STARTING_IMATRIX_GENERATION = "Σφάλμα κατά την Έναρξη Δημιουργίας IMatrix: {0}"
+        self.ERROR_STARTING_IMATRIX_GENERATION = (
+            "Σφάλμα κατά την Έναρξη Δημιουργίας IMatrix: {0}"
+        )
         self.IMATRIX_GENERATION_TASK_STARTED = "Η Εργασία Δημιουργίας IMatrix Ξεκίνησε"
         self.ERROR_MESSAGE = "Σφάλμα: {0}"
         self.TASK_ERROR = "Σφάλμα Εργασίας: {0}"
         self.APPLICATION_CLOSING = "Κλείσιμο Εφαρμογής"
         self.APPLICATION_CLOSED = "Η Εφαρμογή Έκλεισε"
         self.SELECT_QUANTIZATION_TYPE = "Επιλέξτε τον τύπο κβαντισμού"
-        self.ALLOWS_REQUANTIZING = "Επιτρέπει την επανακβάντιση τανυστών που έχουν ήδη κβαντιστεί"
+        self.ALLOWS_REQUANTIZING = (
+            "Επιτρέπει την επανακβάντιση τανυστών που έχουν ήδη κβαντιστεί"
+        )
         self.LEAVE_OUTPUT_WEIGHT = "Θα αφήσει το output.weight χωρίς (επανα)κβάντιση"
         self.DISABLE_K_QUANT_MIXTURES = "Απενεργοποιήστε τα μείγματα k-quant και κβαντίστε όλους τους τανυστές στον ίδιο τύπο"
         self.USE_DATA_AS_IMPORTANCE_MATRIX = "Χρησιμοποιήστε τα δεδομένα στο αρχείο ως πίνακα σημασίας για βελτιστοποιήσεις κβαντισμού"
-        self.USE_IMPORTANCE_MATRIX_FOR_TENSORS = "Χρησιμοποιήστε τον πίνακα σημασίας για αυτούς τους τανυστές"
-        self.DONT_USE_IMPORTANCE_MATRIX_FOR_TENSORS = "Μην χρησιμοποιείτε τον πίνακα σημασίας για αυτούς τους τανυστές"
+        self.USE_IMPORTANCE_MATRIX_FOR_TENSORS = (
+            "Χρησιμοποιήστε τον πίνακα σημασίας για αυτούς τους τανυστές"
+        )
+        self.DONT_USE_IMPORTANCE_MATRIX_FOR_TENSORS = (
+            "Μην χρησιμοποιείτε τον πίνακα σημασίας για αυτούς τους τανυστές"
+        )
         self.OUTPUT_TENSOR_TYPE = "Τύπος Tensor Εξόδου:"
-        self.USE_THIS_TYPE_FOR_OUTPUT_WEIGHT = "Χρησιμοποιήστε αυτόν τον τύπο για τον τανυστή output.weight"
+        self.USE_THIS_TYPE_FOR_OUTPUT_WEIGHT = (
+            "Χρησιμοποιήστε αυτόν τον τύπο για τον τανυστή output.weight"
+        )
         self.TOKEN_EMBEDDING_TYPE = "Τύπος Ενσωμάτωσης Token:"
-        self.USE_THIS_TYPE_FOR_TOKEN_EMBEDDINGS = "Χρησιμοποιήστε αυτόν τον τύπο για τον τανυστή ενσωματώσεων token"
-        self.WILL_GENERATE_QUANTIZED_MODEL_IN_SAME_SHARDS = "Θα δημιουργήσει το κβαντισμένο μοντέλο στα ίδια θραύσματα με την είσοδο"
+        self.USE_THIS_TYPE_FOR_TOKEN_EMBEDDINGS = (
+            "Χρησιμοποιήστε αυτόν τον τύπο για τον τανυστή ενσωματώσεων token"
+        )
+        self.WILL_GENERATE_QUANTIZED_MODEL_IN_SAME_SHARDS = (
+            "Θα δημιουργήσει το κβαντισμένο μοντέλο στα ίδια θραύσματα με την είσοδο"
+        )
         self.OVERRIDE_MODEL_METADATA = "Αντικατάσταση μεταδεδομένων μοντέλου"
-        self.INPUT_DATA_FILE_FOR_IMATRIX = "Αρχείο δεδομένων εισόδου για τη δημιουργία IMatrix"
+        self.INPUT_DATA_FILE_FOR_IMATRIX = (
+            "Αρχείο δεδομένων εισόδου για τη δημιουργία IMatrix"
+        )
         self.MODEL_TO_BE_QUANTIZED = "Μοντέλο προς κβάντιση"
-        self.OUTPUT_PATH_FOR_GENERATED_IMATRIX = "Διαδρομή εξόδου για το δημιουργημένο IMatrix"
+        self.OUTPUT_PATH_FOR_GENERATED_IMATRIX = (
+            "Διαδρομή εξόδου για το δημιουργημένο IMatrix"
+        )
         self.HOW_OFTEN_TO_SAVE_IMATRIX = "Πόσο συχνά να αποθηκεύεται το IMatrix"
         self.SET_GPU_OFFLOAD_VALUE = "Ορίστε την τιμή εκφόρτωσης GPU (-ngl)"
         self.COMPLETED = "Ολοκληρώθηκε"
         self.REFRESH_MODELS = "Ανανέωση μοντέλων"
+
 
 class _Hungarian(_Localization):
     def __init__(self):
@@ -4402,7 +5145,9 @@ class _Hungarian(_Localization):
         self.NO_SUITABLE_CUDA_BACKENDS = "Nem található megfelelő CUDA háttérrendszer"
         self.LLAMACPP_DOWNLOADED_EXTRACTED = "A llama.cpp bináris fájl letöltve és kibontva ide: {0}\nA CUDA fájlok kibontva ide: {1}"
         self.CUDA_FILES_EXTRACTED = "A CUDA fájlok kibontva ide:"
-        self.NO_SUITABLE_CUDA_BACKEND_EXTRACTION = "Nem található megfelelő CUDA háttérrendszer a kibontáshoz"
+        self.NO_SUITABLE_CUDA_BACKEND_EXTRACTION = (
+            "Nem található megfelelő CUDA háttérrendszer a kibontáshoz"
+        )
         self.ERROR_FETCHING_RELEASES = "Hiba a kiadások lekérdezésekor: {0}"
         self.CONFIRM_DELETION_TITLE = "Törlés megerősítése"
         self.LOG_FOR = "Napló a következőhöz: {0}"
@@ -4412,7 +5157,9 @@ class _Hungarian(_Localization):
         self.JSON_FILES = "JSON fájlok (*.json)"
         self.FAILED_LOAD_PRESET = "Az esetbeállítás betöltése sikertelen: {0}"
         self.INITIALIZING_AUTOGGUF = "Az AutoGGUF alkalmazás inicializálása"
-        self.AUTOGGUF_INITIALIZATION_COMPLETE = "Az AutoGGUF inicializálása befejeződött"
+        self.AUTOGGUF_INITIALIZATION_COMPLETE = (
+            "Az AutoGGUF inicializálása befejeződött"
+        )
         self.REFRESHING_BACKENDS = "Háttérrendszerek frissítése"
         self.NO_BACKENDS_AVAILABLE = "Nincsenek elérhető háttérrendszerek"
         self.FOUND_VALID_BACKENDS = "{0} érvényes háttérrendszer található"
@@ -4428,14 +5175,20 @@ class _Hungarian(_Localization):
         self.IN_PROGRESS = "Folyamatban"
         self.DOWNLOAD_FINISHED_EXTRACTED_TO = "Letöltés befejeződött. Kibontva ide: {0}"
         self.LLAMACPP_DOWNLOADED_AND_EXTRACTED = "A llama.cpp bináris fájl letöltve és kibontva ide: {0}\nA CUDA fájlok kibontva ide: {1}"
-        self.NO_SUITABLE_CUDA_BACKEND_FOUND = "Nem található megfelelő CUDA háttérrendszer a kibontáshoz"
-        self.LLAMACPP_BINARY_DOWNLOADED_AND_EXTRACTED = "A llama.cpp bináris fájl letöltve és kibontva ide: {0}"
+        self.NO_SUITABLE_CUDA_BACKEND_FOUND = (
+            "Nem található megfelelő CUDA háttérrendszer a kibontáshoz"
+        )
+        self.LLAMACPP_BINARY_DOWNLOADED_AND_EXTRACTED = (
+            "A llama.cpp bináris fájl letöltve és kibontva ide: {0}"
+        )
         self.REFRESHING_LLAMACPP_RELEASES = "A llama.cpp kiadások frissítése"
         self.UPDATING_ASSET_LIST = "Eszközlista frissítése"
         self.UPDATING_CUDA_OPTIONS = "CUDA beállítások frissítése"
         self.STARTING_LLAMACPP_DOWNLOAD = "A llama.cpp letöltésének megkezdése"
         self.UPDATING_CUDA_BACKENDS = "CUDA háttérrendszerek frissítése"
-        self.NO_CUDA_BACKEND_SELECTED = "Nincs kiválasztott CUDA háttérrendszer a kibontáshoz"
+        self.NO_CUDA_BACKEND_SELECTED = (
+            "Nincs kiválasztott CUDA háttérrendszer a kibontáshoz"
+        )
         self.EXTRACTING_CUDA_FILES = "CUDA fájlok kibontása innen: {0} ide: {1}"
         self.DOWNLOAD_ERROR = "Letöltési hiba: {0}"
         self.SHOWING_TASK_CONTEXT_MENU = "Feladat helyi menüjének megjelenítése"
@@ -4476,23 +5229,35 @@ class _Hungarian(_Localization):
         self.STARTING_IMATRIX_GENERATION = "IMatrix generálásának indítása"
         self.BACKEND_PATH_NOT_EXIST = "A háttérrendszer elérési útja nem létezik: {0}"
         self.GENERATING_IMATRIX = "IMatrix generálása"
-        self.ERROR_STARTING_IMATRIX_GENERATION = "Hiba az IMatrix generálásának indításakor: {0}"
+        self.ERROR_STARTING_IMATRIX_GENERATION = (
+            "Hiba az IMatrix generálásának indításakor: {0}"
+        )
         self.IMATRIX_GENERATION_TASK_STARTED = "IMatrix generálási feladat elindítva"
         self.ERROR_MESSAGE = "Hiba: {0}"
         self.TASK_ERROR = "Feladat hiba: {0}"
         self.APPLICATION_CLOSING = "Alkalmazás bezárása"
         self.APPLICATION_CLOSED = "Alkalmazás bezárva"
         self.SELECT_QUANTIZATION_TYPE = "Válassza ki a kvantálási típust"
-        self.ALLOWS_REQUANTIZING = "Lehetővé teszi a már kvantált tenzorok újrakvantálását"
+        self.ALLOWS_REQUANTIZING = (
+            "Lehetővé teszi a már kvantált tenzorok újrakvantálását"
+        )
         self.LEAVE_OUTPUT_WEIGHT = "Az output.weight-et (újra)kvantálatlanul hagyja"
         self.DISABLE_K_QUANT_MIXTURES = "Tiltsa le a k-kvant keverékeket, és kvantálja az összes tenzort ugyanarra a típusra"
         self.USE_DATA_AS_IMPORTANCE_MATRIX = "Használja a fájlban lévő adatokat fontossági mátrixként a kvantálási optimalizálásokhoz"
-        self.USE_IMPORTANCE_MATRIX_FOR_TENSORS = "Használja a fontossági mátrixot ezekre a tenzorokra"
-        self.DONT_USE_IMPORTANCE_MATRIX_FOR_TENSORS = "Ne használja a fontossági mátrixot ezekre a tenzorokra"
+        self.USE_IMPORTANCE_MATRIX_FOR_TENSORS = (
+            "Használja a fontossági mátrixot ezekre a tenzorokra"
+        )
+        self.DONT_USE_IMPORTANCE_MATRIX_FOR_TENSORS = (
+            "Ne használja a fontossági mátrixot ezekre a tenzorokra"
+        )
         self.OUTPUT_TENSOR_TYPE = "Kimeneti tenzor típusa:"
-        self.USE_THIS_TYPE_FOR_OUTPUT_WEIGHT = "Használja ezt a típust az output.weight tenzorhoz"
+        self.USE_THIS_TYPE_FOR_OUTPUT_WEIGHT = (
+            "Használja ezt a típust az output.weight tenzorhoz"
+        )
         self.TOKEN_EMBEDDING_TYPE = "Token beágyazási típusa:"
-        self.USE_THIS_TYPE_FOR_TOKEN_EMBEDDINGS = "Használja ezt a típust a token beágyazási tenzorhoz"
+        self.USE_THIS_TYPE_FOR_TOKEN_EMBEDDINGS = (
+            "Használja ezt a típust a token beágyazási tenzorhoz"
+        )
         self.WILL_GENERATE_QUANTIZED_MODEL_IN_SAME_SHARDS = "A kvantált modellt ugyanazokban a szegmensekben fogja generálni, mint a bemenet"
         self.OVERRIDE_MODEL_METADATA = "Modell metaadatok felülbírálása"
         self.INPUT_DATA_FILE_FOR_IMATRIX = "IMatrix generáláshoz bemeneti adatfájl"
@@ -4503,10 +5268,11 @@ class _Hungarian(_Localization):
         self.COMPLETED = "Befejezve"
         self.REFRESH_MODELS = "Modellek frissítése"
 
+
 class _BritishEnglish(_Localization):
     def __init__(self):
         super().__init__()
-        self.WINDOW_TITLE = "AutoGGUF (automated GGUF model quantiser)" 
+        self.WINDOW_TITLE = "AutoGGUF (automated GGUF model quantiser)"
         self.RAM_USAGE = "RAM Usage:"
         self.CPU_USAGE = "CPU Usage:"
         self.BACKEND = "Llama.cpp Backend:"
@@ -4516,7 +5282,7 @@ class _BritishEnglish(_Localization):
         self.LOGS_PATH = "Logs Path:"
         self.BROWSE = "Browse"
         self.AVAILABLE_MODELS = "Available Models:"
-        self.QUANTIZATION_TYPE = "Quantisation Type:" # Note the British spelling
+        self.QUANTIZATION_TYPE = "Quantisation Type:"  # Note the British spelling
         self.ALLOW_REQUANTIZE = "Allow Requantise"
         self.LEAVE_OUTPUT_TENSOR = "Leave Output Tensor"
         self.PURE = "Pure"
@@ -4528,7 +5294,7 @@ class _BritishEnglish(_Localization):
         self.KEEP_SPLIT = "Keep Split"
         self.KV_OVERRIDES = "KV Overrides:"
         self.ADD_NEW_OVERRIDE = "Add new override"
-        self.QUANTIZE_MODEL = "Quantise Model" # Note the British spelling
+        self.QUANTIZE_MODEL = "Quantise Model"  # Note the British spelling
         self.SAVE_PRESET = "Save Preset"
         self.LOAD_PRESET = "Load Preset"
         self.TASKS = "Tasks:"
@@ -4553,7 +5319,9 @@ class _BritishEnglish(_Localization):
         self.RESTART = "Restart"
         self.DELETE = "Delete"
         self.CONFIRM_DELETION = "Are you sure you want to delete this task?"
-        self.TASK_RUNNING_WARNING = "Some tasks are still running. Are you sure you want to quit?"
+        self.TASK_RUNNING_WARNING = (
+            "Some tasks are still running. Are you sure you want to quit?"
+        )
         self.YES = "Yes"
         self.NO = "No"
         self.DOWNLOAD_COMPLETE = "Download Complete"
@@ -4568,7 +5336,9 @@ class _BritishEnglish(_Localization):
         self.NO_SUITABLE_CUDA_BACKENDS = "No suitable CUDA backends found"
         self.LLAMACPP_DOWNLOADED_EXTRACTED = "llama.cpp binary downloaded and extracted to {0}\nCUDA files extracted to {1}"
         self.CUDA_FILES_EXTRACTED = "CUDA files extracted to"
-        self.NO_SUITABLE_CUDA_BACKEND_EXTRACTION = "No suitable CUDA backend found for extraction"
+        self.NO_SUITABLE_CUDA_BACKEND_EXTRACTION = (
+            "No suitable CUDA backend found for extraction"
+        )
         self.ERROR_FETCHING_RELEASES = "Error fetching releases: {0}"
         self.CONFIRM_DELETION_TITLE = "Confirm Deletion"
         self.LOG_FOR = "Log for {0}"
@@ -4577,8 +5347,12 @@ class _BritishEnglish(_Localization):
         self.DAT_FILES = "DAT Files (*.dat)"
         self.JSON_FILES = "JSON Files (*.json)"
         self.FAILED_LOAD_PRESET = "Failed to load preset: {0}"
-        self.INITIALIZING_AUTOGGUF = "Initialising AutoGGUF application" # Note the British spelling
-        self.AUTOGGUF_INITIALIZATION_COMPLETE = "AutoGGUF initialisation complete" # Note the British spelling
+        self.INITIALIZING_AUTOGGUF = (
+            "Initialising AutoGGUF application"  # Note the British spelling
+        )
+        self.AUTOGGUF_INITIALIZATION_COMPLETE = (
+            "AutoGGUF initialisation complete"  # Note the British spelling
+        )
         self.REFRESHING_BACKENDS = "Refreshing backends"
         self.NO_BACKENDS_AVAILABLE = "No backends available"
         self.FOUND_VALID_BACKENDS = "Found {0} valid backends"
@@ -4594,8 +5368,12 @@ class _BritishEnglish(_Localization):
         self.IN_PROGRESS = "In Progress"
         self.DOWNLOAD_FINISHED_EXTRACTED_TO = "Download finished. Extracted to: {0}"
         self.LLAMACPP_DOWNLOADED_AND_EXTRACTED = "llama.cpp binary downloaded and extracted to {0}\nCUDA files extracted to {1}"
-        self.NO_SUITABLE_CUDA_BACKEND_FOUND = "No suitable CUDA backend found for extraction"
-        self.LLAMACPP_BINARY_DOWNLOADED_AND_EXTRACTED = "llama.cpp binary downloaded and extracted to {0}"
+        self.NO_SUITABLE_CUDA_BACKEND_FOUND = (
+            "No suitable CUDA backend found for extraction"
+        )
+        self.LLAMACPP_BINARY_DOWNLOADED_AND_EXTRACTED = (
+            "llama.cpp binary downloaded and extracted to {0}"
+        )
         self.REFRESHING_LLAMACPP_RELEASES = "Refreshing llama.cpp releases"
         self.UPDATING_ASSET_LIST = "Updating asset list"
         self.UPDATING_CUDA_OPTIONS = "Updating CUDA options"
@@ -4621,15 +5399,23 @@ class _BritishEnglish(_Localization):
         self.SELECT_IMATRIX_FILE = "Select IMatrix File"
         self.RAM_USAGE_FORMAT = "{0:.1f}% ({1} MB / {2} MB)"
         self.CPU_USAGE_FORMAT = "CPU Usage: {0:.1f}%"
-        self.VALIDATING_QUANTIZATION_INPUTS = "Validating quantisation inputs" # Note the British spelling
+        self.VALIDATING_QUANTIZATION_INPUTS = (
+            "Validating quantisation inputs"  # Note the British spelling
+        )
         self.MODELS_PATH_REQUIRED = "Models path is required"
         self.OUTPUT_PATH_REQUIRED = "Output path is required"
         self.LOGS_PATH_REQUIRED = "Logs path is required"
-        self.STARTING_MODEL_QUANTIZATION = "Starting model quantisation" # Note the British spelling
+        self.STARTING_MODEL_QUANTIZATION = (
+            "Starting model quantisation"  # Note the British spelling
+        )
         self.INPUT_FILE_NOT_EXIST = "Input file '{0}' does not exist."
         self.QUANTIZING_MODEL_TO = "Quantizing {0} to {1}"
-        self.QUANTIZATION_TASK_STARTED = "Quantisation task started for {0}" # Note the British spelling
-        self.ERROR_STARTING_QUANTIZATION = "Error starting quantisation: {0}" # Note the British spelling
+        self.QUANTIZATION_TASK_STARTED = (
+            "Quantisation task started for {0}"  # Note the British spelling
+        )
+        self.ERROR_STARTING_QUANTIZATION = (
+            "Error starting quantisation: {0}"  # Note the British spelling
+        )
         self.UPDATING_MODEL_INFO = "Updating model info: {0}"
         self.TASK_FINISHED = "Task finished: {0}"
         self.SHOWING_TASK_DETAILS_FOR = "Showing task details for: {0}"
@@ -4642,32 +5428,47 @@ class _BritishEnglish(_Localization):
         self.STARTING_IMATRIX_GENERATION = "Starting IMatrix generation"
         self.BACKEND_PATH_NOT_EXIST = "Backend path does not exist: {0}"
         self.GENERATING_IMATRIX = "Generating IMatrix"
-        self.ERROR_STARTING_IMATRIX_GENERATION = "Error starting IMatrix generation: {0}"
+        self.ERROR_STARTING_IMATRIX_GENERATION = (
+            "Error starting IMatrix generation: {0}"
+        )
         self.IMATRIX_GENERATION_TASK_STARTED = "IMatrix generation task started"
         self.ERROR_MESSAGE = "Error: {0}"
         self.TASK_ERROR = "Task error: {0}"
         self.APPLICATION_CLOSING = "Application closing"
         self.APPLICATION_CLOSED = "Application closed"
-        self.SELECT_QUANTIZATION_TYPE = "Select the quantisation type" # Note the British spelling
-        self.ALLOWS_REQUANTIZING = "Allows requantising tensors that have already been quantised" # Note the British spelling
+        self.SELECT_QUANTIZATION_TYPE = (
+            "Select the quantisation type"  # Note the British spelling
+        )
+        self.ALLOWS_REQUANTIZING = "Allows requantising tensors that have already been quantised"  # Note the British spelling
         self.LEAVE_OUTPUT_WEIGHT = "Will leave output.weight un(re)quantised"
-        self.DISABLE_K_QUANT_MIXTURES = "Disable k-quant mixtures and quantise all tensors to the same type" # Note the British spelling
-        self.USE_DATA_AS_IMPORTANCE_MATRIX = "Use data in file as importance matrix for quant optimisations" # Note the British spelling
-        self.USE_IMPORTANCE_MATRIX_FOR_TENSORS = "Use importance matrix for these tensors"
-        self.DONT_USE_IMPORTANCE_MATRIX_FOR_TENSORS = "Don't use importance matrix for these tensors"
+        self.DISABLE_K_QUANT_MIXTURES = "Disable k-quant mixtures and quantise all tensors to the same type"  # Note the British spelling
+        self.USE_DATA_AS_IMPORTANCE_MATRIX = "Use data in file as importance matrix for quant optimisations"  # Note the British spelling
+        self.USE_IMPORTANCE_MATRIX_FOR_TENSORS = (
+            "Use importance matrix for these tensors"
+        )
+        self.DONT_USE_IMPORTANCE_MATRIX_FOR_TENSORS = (
+            "Don't use importance matrix for these tensors"
+        )
         self.OUTPUT_TENSOR_TYPE = "Output Tensor Type:"
-        self.USE_THIS_TYPE_FOR_OUTPUT_WEIGHT = "Use this type for the output.weight tensor"
+        self.USE_THIS_TYPE_FOR_OUTPUT_WEIGHT = (
+            "Use this type for the output.weight tensor"
+        )
         self.TOKEN_EMBEDDING_TYPE = "Token Embedding Type:"
-        self.USE_THIS_TYPE_FOR_TOKEN_EMBEDDINGS = "Use this type for the token embeddings tensor"
-        self.WILL_GENERATE_QUANTIZED_MODEL_IN_SAME_SHARDS = "Will generate quantised model in the same shards as input" # Note the British spelling
+        self.USE_THIS_TYPE_FOR_TOKEN_EMBEDDINGS = (
+            "Use this type for the token embeddings tensor"
+        )
+        self.WILL_GENERATE_QUANTIZED_MODEL_IN_SAME_SHARDS = "Will generate quantised model in the same shards as input"  # Note the British spelling
         self.OVERRIDE_MODEL_METADATA = "Override model metadata"
         self.INPUT_DATA_FILE_FOR_IMATRIX = "Input data file for IMatrix generation"
-        self.MODEL_TO_BE_QUANTIZED = "Model to be quantised" # Note the British spelling
+        self.MODEL_TO_BE_QUANTIZED = (
+            "Model to be quantised"  # Note the British spelling
+        )
         self.OUTPUT_PATH_FOR_GENERATED_IMATRIX = "Output path for the generated IMatrix"
         self.HOW_OFTEN_TO_SAVE_IMATRIX = "How often to save the IMatrix"
         self.SET_GPU_OFFLOAD_VALUE = "Set GPU offload value (-ngl)"
         self.COMPLETED = "Completed"
         self.REFRESH_MODELS = "Refresh Models"
+
 
 class _IndianEnglish(_Localization):
     def __init__(self):
@@ -4682,7 +5483,7 @@ class _IndianEnglish(_Localization):
         self.LOGS_PATH = "Logs Path:"
         self.BROWSE = "Browse"
         self.AVAILABLE_MODELS = "Available Models:"
-        self.QUANTIZATION_TYPE = "Quantization Type:" 
+        self.QUANTIZATION_TYPE = "Quantization Type:"
         self.ALLOW_REQUANTIZE = "Allow Requantize"
         self.LEAVE_OUTPUT_TENSOR = "Leave Output Tensor"
         self.PURE = "Pure"
@@ -4694,7 +5495,7 @@ class _IndianEnglish(_Localization):
         self.KEEP_SPLIT = "Keep Split"
         self.KV_OVERRIDES = "KV Overrides:"
         self.ADD_NEW_OVERRIDE = "Add new override"
-        self.QUANTIZE_MODEL = "Quantize Model" 
+        self.QUANTIZE_MODEL = "Quantize Model"
         self.SAVE_PRESET = "Save Preset"
         self.LOAD_PRESET = "Load Preset"
         self.TASKS = "Tasks:"
@@ -4719,7 +5520,9 @@ class _IndianEnglish(_Localization):
         self.RESTART = "Restart"
         self.DELETE = "Delete"
         self.CONFIRM_DELETION = "Are you sure you want to delete this task?"
-        self.TASK_RUNNING_WARNING = "Some tasks are still running. Are you sure you want to quit?"
+        self.TASK_RUNNING_WARNING = (
+            "Some tasks are still running. Are you sure you want to quit?"
+        )
         self.YES = "Yes"
         self.NO = "No"
         self.DOWNLOAD_COMPLETE = "Download Complete"
@@ -4734,7 +5537,9 @@ class _IndianEnglish(_Localization):
         self.NO_SUITABLE_CUDA_BACKENDS = "No suitable CUDA backends found"
         self.LLAMACPP_DOWNLOADED_EXTRACTED = "llama.cpp binary downloaded and extracted to {0}\nCUDA files extracted to {1}"
         self.CUDA_FILES_EXTRACTED = "CUDA files extracted to"
-        self.NO_SUITABLE_CUDA_BACKEND_EXTRACTION = "No suitable CUDA backend found for extraction"
+        self.NO_SUITABLE_CUDA_BACKEND_EXTRACTION = (
+            "No suitable CUDA backend found for extraction"
+        )
         self.ERROR_FETCHING_RELEASES = "Error fetching releases: {0}"
         self.CONFIRM_DELETION_TITLE = "Confirm Deletion"
         self.LOG_FOR = "Log for {0}"
@@ -4760,174 +5565,12 @@ class _IndianEnglish(_Localization):
         self.IN_PROGRESS = "In Progress"
         self.DOWNLOAD_FINISHED_EXTRACTED_TO = "Download finished. Extracted to: {0}"
         self.LLAMACPP_DOWNLOADED_AND_EXTRACTED = "llama.cpp binary downloaded and extracted to {0}\nCUDA files extracted to {1}"
-        self.NO_SUITABLE_CUDA_BACKEND_FOUND = "No suitable CUDA backend found for extraction"
-        self.LLAMACPP_BINARY_DOWNLOADED_AND_EXTRACTED = "llama.cpp binary downloaded and extracted to {0}"
-        self.REFRESHING_LLAMACPP_RELEASES = "Refreshing llama.cpp releases"
-        self.UPDATING_ASSET_LIST = "Updating asset list"
-        self.UPDATING_CUDA_OPTIONS = "Updating CUDA options"
-        self.STARTING_LLAMACPP_DOWNLOAD = "Starting llama.cpp download"
-        self.UPDATING_CUDA_BACKENDS = "Updating CUDA backends"
-        self.NO_CUDA_BACKEND_SELECTED = "No CUDA backend selected for extraction"
-        self.EXTRACTING_CUDA_FILES = "Extracting CUDA files from {0} to {1}"
-        self.DOWNLOAD_ERROR = "Download error: {0}"
-        self.SHOWING_TASK_CONTEXT_MENU = "Showing task context menu"
-        self.SHOWING_PROPERTIES_FOR_TASK = "Showing properties for task: {0}"
-        self.CANCELLING_TASK = "Cancelling task: {0}"
-        self.CANCELED = "Cancelled" 
-        self.DELETING_TASK = "Deleting task: {0}"
-        self.LOADING_MODELS = "Loading models"
-        self.LOADED_MODELS = "Loaded {0} models"
-        self.BROWSING_FOR_MODELS_DIRECTORY = "Browsing for models directory"
-        self.SELECT_MODELS_DIRECTORY = "Select Models Directory"
-        self.BROWSING_FOR_OUTPUT_DIRECTORY = "Browsing for output directory"
-        self.SELECT_OUTPUT_DIRECTORY = "Select Output Directory"
-        self.BROWSING_FOR_LOGS_DIRECTORY = "Browsing for logs directory"
-        self.SELECT_LOGS_DIRECTORY = "Select Logs Directory"
-        self.BROWSING_FOR_IMATRIX_FILE = "Browsing for IMatrix file"
-        self.SELECT_IMATRIX_FILE = "Select IMatrix File"
-        self.RAM_USAGE_FORMAT = "{0:.1f}% ({1} MB / {2} MB)"
-        self.CPU_USAGE_FORMAT = "CPU Usage: {0:.1f}%"
-        self.VALIDATING_QUANTIZATION_INPUTS = "Validating quantization inputs" 
-        self.MODELS_PATH_REQUIRED = "Models path is required"
-        self.OUTPUT_PATH_REQUIRED = "Output path is required"
-        self.LOGS_PATH_REQUIRED = "Logs path is required"
-        self.STARTING_MODEL_QUANTIZATION = "Starting model quantization" 
-        self.INPUT_FILE_NOT_EXIST = "Input file '{0}' does not exist."
-        self.QUANTIZING_MODEL_TO = "Quantizing {0} to {1}"
-        self.QUANTIZATION_TASK_STARTED = "Quantization task started for {0}" 
-        self.ERROR_STARTING_QUANTIZATION = "Error starting quantization: {0}" 
-        self.UPDATING_MODEL_INFO = "Updating model info: {0}"
-        self.TASK_FINISHED = "Task finished: {0}"
-        self.SHOWING_TASK_DETAILS_FOR = "Showing task details for: {0}"
-        self.BROWSING_FOR_IMATRIX_DATA_FILE = "Browsing for IMatrix data file"
-        self.SELECT_DATA_FILE = "Select Data File"
-        self.BROWSING_FOR_IMATRIX_MODEL_FILE = "Browsing for IMatrix model file"
-        self.SELECT_MODEL_FILE = "Select Model File"
-        self.BROWSING_FOR_IMATRIX_OUTPUT_FILE = "Browsing for IMatrix output file"
-        self.SELECT_OUTPUT_FILE = "Select Output File"
-        self.STARTING_IMATRIX_GENERATION = "Starting IMatrix generation"
-        self.BACKEND_PATH_NOT_EXIST = "Backend path does not exist: {0}"
-        self.GENERATING_IMATRIX = "Generating IMatrix"
-        self.ERROR_STARTING_IMATRIX_GENERATION = "Error starting IMatrix generation: {0}"
-        self.IMATRIX_GENERATION_TASK_STARTED = "IMatrix generation task started"
-        self.ERROR_MESSAGE = "Error: {0}"
-        self.TASK_ERROR = "Task error: {0}"
-        self.APPLICATION_CLOSING = "Application closing"
-        self.APPLICATION_CLOSED = "Application closed"
-        self.SELECT_QUANTIZATION_TYPE = "Select the quantization type" 
-        self.ALLOWS_REQUANTIZING = "Allows requantizing tensors that have already been quantized" 
-        self.LEAVE_OUTPUT_WEIGHT = "Will leave output.weight un(re)quantized"
-        self.DISABLE_K_QUANT_MIXTURES = "Disable k-quant mixtures and quantize all tensors to the same type" 
-        self.USE_DATA_AS_IMPORTANCE_MATRIX = "Use data in file as importance matrix for quant optimisations" 
-        self.USE_IMPORTANCE_MATRIX_FOR_TENSORS = "Use importance matrix for these tensors"
-        self.DONT_USE_IMPORTANCE_MATRIX_FOR_TENSORS = "Don't use importance matrix for these tensors"
-        self.OUTPUT_TENSOR_TYPE = "Output Tensor Type:"
-        self.USE_THIS_TYPE_FOR_OUTPUT_WEIGHT = "Use this type for the output.weight tensor"
-        self.TOKEN_EMBEDDING_TYPE = "Token Embedding Type:"
-        self.USE_THIS_TYPE_FOR_TOKEN_EMBEDDINGS = "Use this type for the token embeddings tensor"
-        self.WILL_GENERATE_QUANTIZED_MODEL_IN_SAME_SHARDS = "Will generate quantized model in the same shards as input" 
-        self.OVERRIDE_MODEL_METADATA = "Override model metadata"
-        self.INPUT_DATA_FILE_FOR_IMATRIX = "Input data file for IMatrix generation"
-        self.MODEL_TO_BE_QUANTIZED = "Model to be quantized" 
-        self.OUTPUT_PATH_FOR_GENERATED_IMATRIX = "Output path for the generated IMatrix"
-        self.HOW_OFTEN_TO_SAVE_IMATRIX = "How often to save the IMatrix"
-        self.SET_GPU_OFFLOAD_VALUE = "Set GPU offload value (-ngl)"
-        self.COMPLETED = "Completed"
-        self.REFRESH_MODELS = "Refresh Models"
-        
-class _CanadianEnglish(_Localization):
-    def __init__(self):
-        super().__init__()
-        self.WINDOW_TITLE = "AutoGGUF (automated GGUF model quantizer)"
-        self.RAM_USAGE = "RAM Usage:"
-        self.CPU_USAGE = "CPU Usage:"
-        self.BACKEND = "Llama.cpp Backend:"
-        self.REFRESH_BACKENDS = "Refresh Backends"
-        self.MODELS_PATH = "Models Path:"
-        self.OUTPUT_PATH = "Output Path:"
-        self.LOGS_PATH = "Logs Path:"
-        self.BROWSE = "Browse"
-        self.AVAILABLE_MODELS = "Available Models:"
-        self.QUANTIZATION_TYPE = "Quantization Type:" 
-        self.ALLOW_REQUANTIZE = "Allow Requantize"
-        self.LEAVE_OUTPUT_TENSOR = "Leave Output Tensor"
-        self.PURE = "Pure"
-        self.IMATRIX = "IMatrix:"
-        self.INCLUDE_WEIGHTS = "Include Weights:"
-        self.EXCLUDE_WEIGHTS = "Exclude Weights:"
-        self.USE_OUTPUT_TENSOR_TYPE = "Use Output Tensor Type"
-        self.USE_TOKEN_EMBEDDING_TYPE = "Use Token Embedding Type"
-        self.KEEP_SPLIT = "Keep Split"
-        self.KV_OVERRIDES = "KV Overrides:"
-        self.ADD_NEW_OVERRIDE = "Add new override"
-        self.QUANTIZE_MODEL = "Quantize Model" 
-        self.SAVE_PRESET = "Save Preset"
-        self.LOAD_PRESET = "Load Preset"
-        self.TASKS = "Tasks:"
-        self.DOWNLOAD_LLAMACPP = "Download llama.cpp"
-        self.SELECT_RELEASE = "Select Release:"
-        self.SELECT_ASSET = "Select Asset:"
-        self.EXTRACT_CUDA_FILES = "Extract CUDA files"
-        self.SELECT_CUDA_BACKEND = "Select CUDA Backend:"
-        self.DOWNLOAD = "Download"
-        self.IMATRIX_GENERATION = "IMatrix Generation"
-        self.DATA_FILE = "Data File:"
-        self.MODEL = "Model:"
-        self.OUTPUT = "Output:"
-        self.OUTPUT_FREQUENCY = "Output Frequency:"
-        self.GPU_OFFLOAD = "GPU Offload:"
-        self.AUTO = "Auto"
-        self.GENERATE_IMATRIX = "Generate IMatrix"
-        self.ERROR = "Error"
-        self.WARNING = "Warning"
-        self.PROPERTIES = "Properties"
-        self.CANCEL = "Cancel"
-        self.RESTART = "Restart"
-        self.DELETE = "Delete"
-        self.CONFIRM_DELETION = "Are you sure you want to delete this task?"
-        self.TASK_RUNNING_WARNING = "Some tasks are still running. Are you sure you want to quit?"
-        self.YES = "Yes"
-        self.NO = "No"
-        self.DOWNLOAD_COMPLETE = "Download Complete"
-        self.CUDA_EXTRACTION_FAILED = "CUDA Extraction Failed"
-        self.PRESET_SAVED = "Preset Saved"
-        self.PRESET_LOADED = "Preset Loaded"
-        self.NO_ASSET_SELECTED = "No asset selected"
-        self.DOWNLOAD_FAILED = "Download failed"
-        self.NO_BACKEND_SELECTED = "No backend selected"
-        self.NO_MODEL_SELECTED = "No model selected"
-        self.REFRESH_RELEASES = "Refresh Releases"
-        self.NO_SUITABLE_CUDA_BACKENDS = "No suitable CUDA backends found"
-        self.LLAMACPP_DOWNLOADED_EXTRACTED = "llama.cpp binary downloaded and extracted to {0}\nCUDA files extracted to {1}"
-        self.CUDA_FILES_EXTRACTED = "CUDA files extracted to"
-        self.NO_SUITABLE_CUDA_BACKEND_EXTRACTION = "No suitable CUDA backend found for extraction"
-        self.ERROR_FETCHING_RELEASES = "Error fetching releases: {0}"
-        self.CONFIRM_DELETION_TITLE = "Confirm Deletion"
-        self.LOG_FOR = "Log for {0}"
-        self.ALL_FILES = "All Files (*)"
-        self.GGUF_FILES = "GGUF Files (*.gguf)"
-        self.DAT_FILES = "DAT Files (*.dat)"
-        self.JSON_FILES = "JSON Files (*.json)"
-        self.FAILED_LOAD_PRESET = "Failed to load preset: {0}"
-        self.INITIALIZING_AUTOGGUF = "Initializing AutoGGUF application" 
-        self.AUTOGGUF_INITIALIZATION_COMPLETE = "AutoGGUF initialization complete" 
-        self.REFRESHING_BACKENDS = "Refreshing backends"
-        self.NO_BACKENDS_AVAILABLE = "No backends available"
-        self.FOUND_VALID_BACKENDS = "Found {0} valid backends"
-        self.SAVING_PRESET = "Saving preset"
-        self.PRESET_SAVED_TO = "Preset saved to {0}"
-        self.LOADING_PRESET = "Loading preset"
-        self.PRESET_LOADED_FROM = "Preset loaded from {0}"
-        self.ADDING_KV_OVERRIDE = "Adding KV override: {0}"
-        self.SAVING_TASK_PRESET = "Saving task preset for {0}"
-        self.TASK_PRESET_SAVED = "Task Preset Saved"
-        self.TASK_PRESET_SAVED_TO = "Task preset saved to {0}"
-        self.RESTARTING_TASK = "Restarting task: {0}"
-        self.IN_PROGRESS = "In Progress"
-        self.DOWNLOAD_FINISHED_EXTRACTED_TO = "Download finished. Extracted to: {0}"
-        self.LLAMACPP_DOWNLOADED_AND_EXTRACTED = "llama.cpp binary downloaded and extracted to {0}\nCUDA files extracted to {1}"
-        self.NO_SUITABLE_CUDA_BACKEND_FOUND = "No suitable CUDA backend found for extraction"
-        self.LLAMACPP_BINARY_DOWNLOADED_AND_EXTRACTED = "llama.cpp binary downloaded and extracted to {0}"
+        self.NO_SUITABLE_CUDA_BACKEND_FOUND = (
+            "No suitable CUDA backend found for extraction"
+        )
+        self.LLAMACPP_BINARY_DOWNLOADED_AND_EXTRACTED = (
+            "llama.cpp binary downloaded and extracted to {0}"
+        )
         self.REFRESHING_LLAMACPP_RELEASES = "Refreshing llama.cpp releases"
         self.UPDATING_ASSET_LIST = "Updating asset list"
         self.UPDATING_CUDA_OPTIONS = "Updating CUDA options"
@@ -4953,15 +5596,15 @@ class _CanadianEnglish(_Localization):
         self.SELECT_IMATRIX_FILE = "Select IMatrix File"
         self.RAM_USAGE_FORMAT = "{0:.1f}% ({1} MB / {2} MB)"
         self.CPU_USAGE_FORMAT = "CPU Usage: {0:.1f}%"
-        self.VALIDATING_QUANTIZATION_INPUTS = "Validating quantization inputs" 
+        self.VALIDATING_QUANTIZATION_INPUTS = "Validating quantization inputs"
         self.MODELS_PATH_REQUIRED = "Models path is required"
         self.OUTPUT_PATH_REQUIRED = "Output path is required"
         self.LOGS_PATH_REQUIRED = "Logs path is required"
-        self.STARTING_MODEL_QUANTIZATION = "Starting model quantization" 
+        self.STARTING_MODEL_QUANTIZATION = "Starting model quantization"
         self.INPUT_FILE_NOT_EXIST = "Input file '{0}' does not exist."
         self.QUANTIZING_MODEL_TO = "Quantizing {0} to {1}"
-        self.QUANTIZATION_TASK_STARTED = "Quantization task started for {0}" 
-        self.ERROR_STARTING_QUANTIZATION = "Error starting quantization: {0}" 
+        self.QUANTIZATION_TASK_STARTED = "Quantization task started for {0}"
+        self.ERROR_STARTING_QUANTIZATION = "Error starting quantization: {0}"
         self.UPDATING_MODEL_INFO = "Updating model info: {0}"
         self.TASK_FINISHED = "Task finished: {0}"
         self.SHOWING_TASK_DETAILS_FOR = "Showing task details for: {0}"
@@ -4974,32 +5617,244 @@ class _CanadianEnglish(_Localization):
         self.STARTING_IMATRIX_GENERATION = "Starting IMatrix generation"
         self.BACKEND_PATH_NOT_EXIST = "Backend path does not exist: {0}"
         self.GENERATING_IMATRIX = "Generating IMatrix"
-        self.ERROR_STARTING_IMATRIX_GENERATION = "Error starting IMatrix generation: {0}"
+        self.ERROR_STARTING_IMATRIX_GENERATION = (
+            "Error starting IMatrix generation: {0}"
+        )
         self.IMATRIX_GENERATION_TASK_STARTED = "IMatrix generation task started"
         self.ERROR_MESSAGE = "Error: {0}"
         self.TASK_ERROR = "Task error: {0}"
         self.APPLICATION_CLOSING = "Application closing"
         self.APPLICATION_CLOSED = "Application closed"
-        self.SELECT_QUANTIZATION_TYPE = "Select the quantization type" 
-        self.ALLOWS_REQUANTIZING = "Allows requantizing tensors that have already been quantized"
+        self.SELECT_QUANTIZATION_TYPE = "Select the quantization type"
+        self.ALLOWS_REQUANTIZING = (
+            "Allows requantizing tensors that have already been quantized"
+        )
         self.LEAVE_OUTPUT_WEIGHT = "Will leave output.weight un(re)quantized"
-        self.DISABLE_K_QUANT_MIXTURES = "Disable k-quant mixtures and quantize all tensors to the same type" 
-        self.USE_DATA_AS_IMPORTANCE_MATRIX = "Use data in file as importance matrix for quant optimisations" 
-        self.USE_IMPORTANCE_MATRIX_FOR_TENSORS = "Use importance matrix for these tensors"
-        self.DONT_USE_IMPORTANCE_MATRIX_FOR_TENSORS = "Don't use importance matrix for these tensors"
+        self.DISABLE_K_QUANT_MIXTURES = (
+            "Disable k-quant mixtures and quantize all tensors to the same type"
+        )
+        self.USE_DATA_AS_IMPORTANCE_MATRIX = (
+            "Use data in file as importance matrix for quant optimisations"
+        )
+        self.USE_IMPORTANCE_MATRIX_FOR_TENSORS = (
+            "Use importance matrix for these tensors"
+        )
+        self.DONT_USE_IMPORTANCE_MATRIX_FOR_TENSORS = (
+            "Don't use importance matrix for these tensors"
+        )
         self.OUTPUT_TENSOR_TYPE = "Output Tensor Type:"
-        self.USE_THIS_TYPE_FOR_OUTPUT_WEIGHT = "Use this type for the output.weight tensor"
+        self.USE_THIS_TYPE_FOR_OUTPUT_WEIGHT = (
+            "Use this type for the output.weight tensor"
+        )
         self.TOKEN_EMBEDDING_TYPE = "Token Embedding Type:"
-        self.USE_THIS_TYPE_FOR_TOKEN_EMBEDDINGS = "Use this type for the token embeddings tensor"
-        self.WILL_GENERATE_QUANTIZED_MODEL_IN_SAME_SHARDS = "Will generate quantized model in the same shards as input" 
+        self.USE_THIS_TYPE_FOR_TOKEN_EMBEDDINGS = (
+            "Use this type for the token embeddings tensor"
+        )
+        self.WILL_GENERATE_QUANTIZED_MODEL_IN_SAME_SHARDS = (
+            "Will generate quantized model in the same shards as input"
+        )
         self.OVERRIDE_MODEL_METADATA = "Override model metadata"
         self.INPUT_DATA_FILE_FOR_IMATRIX = "Input data file for IMatrix generation"
-        self.MODEL_TO_BE_QUANTIZED = "Model to be quantized" 
+        self.MODEL_TO_BE_QUANTIZED = "Model to be quantized"
         self.OUTPUT_PATH_FOR_GENERATED_IMATRIX = "Output path for the generated IMatrix"
         self.HOW_OFTEN_TO_SAVE_IMATRIX = "How often to save the IMatrix"
         self.SET_GPU_OFFLOAD_VALUE = "Set GPU offload value (-ngl)"
-        self.COMPLETED = "Completed"        
+        self.COMPLETED = "Completed"
         self.REFRESH_MODELS = "Refresh Models"
+
+
+class _CanadianEnglish(_Localization):
+    def __init__(self):
+        super().__init__()
+        self.WINDOW_TITLE = "AutoGGUF (automated GGUF model quantizer)"
+        self.RAM_USAGE = "RAM Usage:"
+        self.CPU_USAGE = "CPU Usage:"
+        self.BACKEND = "Llama.cpp Backend:"
+        self.REFRESH_BACKENDS = "Refresh Backends"
+        self.MODELS_PATH = "Models Path:"
+        self.OUTPUT_PATH = "Output Path:"
+        self.LOGS_PATH = "Logs Path:"
+        self.BROWSE = "Browse"
+        self.AVAILABLE_MODELS = "Available Models:"
+        self.QUANTIZATION_TYPE = "Quantization Type:"
+        self.ALLOW_REQUANTIZE = "Allow Requantize"
+        self.LEAVE_OUTPUT_TENSOR = "Leave Output Tensor"
+        self.PURE = "Pure"
+        self.IMATRIX = "IMatrix:"
+        self.INCLUDE_WEIGHTS = "Include Weights:"
+        self.EXCLUDE_WEIGHTS = "Exclude Weights:"
+        self.USE_OUTPUT_TENSOR_TYPE = "Use Output Tensor Type"
+        self.USE_TOKEN_EMBEDDING_TYPE = "Use Token Embedding Type"
+        self.KEEP_SPLIT = "Keep Split"
+        self.KV_OVERRIDES = "KV Overrides:"
+        self.ADD_NEW_OVERRIDE = "Add new override"
+        self.QUANTIZE_MODEL = "Quantize Model"
+        self.SAVE_PRESET = "Save Preset"
+        self.LOAD_PRESET = "Load Preset"
+        self.TASKS = "Tasks:"
+        self.DOWNLOAD_LLAMACPP = "Download llama.cpp"
+        self.SELECT_RELEASE = "Select Release:"
+        self.SELECT_ASSET = "Select Asset:"
+        self.EXTRACT_CUDA_FILES = "Extract CUDA files"
+        self.SELECT_CUDA_BACKEND = "Select CUDA Backend:"
+        self.DOWNLOAD = "Download"
+        self.IMATRIX_GENERATION = "IMatrix Generation"
+        self.DATA_FILE = "Data File:"
+        self.MODEL = "Model:"
+        self.OUTPUT = "Output:"
+        self.OUTPUT_FREQUENCY = "Output Frequency:"
+        self.GPU_OFFLOAD = "GPU Offload:"
+        self.AUTO = "Auto"
+        self.GENERATE_IMATRIX = "Generate IMatrix"
+        self.ERROR = "Error"
+        self.WARNING = "Warning"
+        self.PROPERTIES = "Properties"
+        self.CANCEL = "Cancel"
+        self.RESTART = "Restart"
+        self.DELETE = "Delete"
+        self.CONFIRM_DELETION = "Are you sure you want to delete this task?"
+        self.TASK_RUNNING_WARNING = (
+            "Some tasks are still running. Are you sure you want to quit?"
+        )
+        self.YES = "Yes"
+        self.NO = "No"
+        self.DOWNLOAD_COMPLETE = "Download Complete"
+        self.CUDA_EXTRACTION_FAILED = "CUDA Extraction Failed"
+        self.PRESET_SAVED = "Preset Saved"
+        self.PRESET_LOADED = "Preset Loaded"
+        self.NO_ASSET_SELECTED = "No asset selected"
+        self.DOWNLOAD_FAILED = "Download failed"
+        self.NO_BACKEND_SELECTED = "No backend selected"
+        self.NO_MODEL_SELECTED = "No model selected"
+        self.REFRESH_RELEASES = "Refresh Releases"
+        self.NO_SUITABLE_CUDA_BACKENDS = "No suitable CUDA backends found"
+        self.LLAMACPP_DOWNLOADED_EXTRACTED = "llama.cpp binary downloaded and extracted to {0}\nCUDA files extracted to {1}"
+        self.CUDA_FILES_EXTRACTED = "CUDA files extracted to"
+        self.NO_SUITABLE_CUDA_BACKEND_EXTRACTION = (
+            "No suitable CUDA backend found for extraction"
+        )
+        self.ERROR_FETCHING_RELEASES = "Error fetching releases: {0}"
+        self.CONFIRM_DELETION_TITLE = "Confirm Deletion"
+        self.LOG_FOR = "Log for {0}"
+        self.ALL_FILES = "All Files (*)"
+        self.GGUF_FILES = "GGUF Files (*.gguf)"
+        self.DAT_FILES = "DAT Files (*.dat)"
+        self.JSON_FILES = "JSON Files (*.json)"
+        self.FAILED_LOAD_PRESET = "Failed to load preset: {0}"
+        self.INITIALIZING_AUTOGGUF = "Initializing AutoGGUF application"
+        self.AUTOGGUF_INITIALIZATION_COMPLETE = "AutoGGUF initialization complete"
+        self.REFRESHING_BACKENDS = "Refreshing backends"
+        self.NO_BACKENDS_AVAILABLE = "No backends available"
+        self.FOUND_VALID_BACKENDS = "Found {0} valid backends"
+        self.SAVING_PRESET = "Saving preset"
+        self.PRESET_SAVED_TO = "Preset saved to {0}"
+        self.LOADING_PRESET = "Loading preset"
+        self.PRESET_LOADED_FROM = "Preset loaded from {0}"
+        self.ADDING_KV_OVERRIDE = "Adding KV override: {0}"
+        self.SAVING_TASK_PRESET = "Saving task preset for {0}"
+        self.TASK_PRESET_SAVED = "Task Preset Saved"
+        self.TASK_PRESET_SAVED_TO = "Task preset saved to {0}"
+        self.RESTARTING_TASK = "Restarting task: {0}"
+        self.IN_PROGRESS = "In Progress"
+        self.DOWNLOAD_FINISHED_EXTRACTED_TO = "Download finished. Extracted to: {0}"
+        self.LLAMACPP_DOWNLOADED_AND_EXTRACTED = "llama.cpp binary downloaded and extracted to {0}\nCUDA files extracted to {1}"
+        self.NO_SUITABLE_CUDA_BACKEND_FOUND = (
+            "No suitable CUDA backend found for extraction"
+        )
+        self.LLAMACPP_BINARY_DOWNLOADED_AND_EXTRACTED = (
+            "llama.cpp binary downloaded and extracted to {0}"
+        )
+        self.REFRESHING_LLAMACPP_RELEASES = "Refreshing llama.cpp releases"
+        self.UPDATING_ASSET_LIST = "Updating asset list"
+        self.UPDATING_CUDA_OPTIONS = "Updating CUDA options"
+        self.STARTING_LLAMACPP_DOWNLOAD = "Starting llama.cpp download"
+        self.UPDATING_CUDA_BACKENDS = "Updating CUDA backends"
+        self.NO_CUDA_BACKEND_SELECTED = "No CUDA backend selected for extraction"
+        self.EXTRACTING_CUDA_FILES = "Extracting CUDA files from {0} to {1}"
+        self.DOWNLOAD_ERROR = "Download error: {0}"
+        self.SHOWING_TASK_CONTEXT_MENU = "Showing task context menu"
+        self.SHOWING_PROPERTIES_FOR_TASK = "Showing properties for task: {0}"
+        self.CANCELLING_TASK = "Cancelling task: {0}"
+        self.CANCELED = "Cancelled"
+        self.DELETING_TASK = "Deleting task: {0}"
+        self.LOADING_MODELS = "Loading models"
+        self.LOADED_MODELS = "Loaded {0} models"
+        self.BROWSING_FOR_MODELS_DIRECTORY = "Browsing for models directory"
+        self.SELECT_MODELS_DIRECTORY = "Select Models Directory"
+        self.BROWSING_FOR_OUTPUT_DIRECTORY = "Browsing for output directory"
+        self.SELECT_OUTPUT_DIRECTORY = "Select Output Directory"
+        self.BROWSING_FOR_LOGS_DIRECTORY = "Browsing for logs directory"
+        self.SELECT_LOGS_DIRECTORY = "Select Logs Directory"
+        self.BROWSING_FOR_IMATRIX_FILE = "Browsing for IMatrix file"
+        self.SELECT_IMATRIX_FILE = "Select IMatrix File"
+        self.RAM_USAGE_FORMAT = "{0:.1f}% ({1} MB / {2} MB)"
+        self.CPU_USAGE_FORMAT = "CPU Usage: {0:.1f}%"
+        self.VALIDATING_QUANTIZATION_INPUTS = "Validating quantization inputs"
+        self.MODELS_PATH_REQUIRED = "Models path is required"
+        self.OUTPUT_PATH_REQUIRED = "Output path is required"
+        self.LOGS_PATH_REQUIRED = "Logs path is required"
+        self.STARTING_MODEL_QUANTIZATION = "Starting model quantization"
+        self.INPUT_FILE_NOT_EXIST = "Input file '{0}' does not exist."
+        self.QUANTIZING_MODEL_TO = "Quantizing {0} to {1}"
+        self.QUANTIZATION_TASK_STARTED = "Quantization task started for {0}"
+        self.ERROR_STARTING_QUANTIZATION = "Error starting quantization: {0}"
+        self.UPDATING_MODEL_INFO = "Updating model info: {0}"
+        self.TASK_FINISHED = "Task finished: {0}"
+        self.SHOWING_TASK_DETAILS_FOR = "Showing task details for: {0}"
+        self.BROWSING_FOR_IMATRIX_DATA_FILE = "Browsing for IMatrix data file"
+        self.SELECT_DATA_FILE = "Select Data File"
+        self.BROWSING_FOR_IMATRIX_MODEL_FILE = "Browsing for IMatrix model file"
+        self.SELECT_MODEL_FILE = "Select Model File"
+        self.BROWSING_FOR_IMATRIX_OUTPUT_FILE = "Browsing for IMatrix output file"
+        self.SELECT_OUTPUT_FILE = "Select Output File"
+        self.STARTING_IMATRIX_GENERATION = "Starting IMatrix generation"
+        self.BACKEND_PATH_NOT_EXIST = "Backend path does not exist: {0}"
+        self.GENERATING_IMATRIX = "Generating IMatrix"
+        self.ERROR_STARTING_IMATRIX_GENERATION = (
+            "Error starting IMatrix generation: {0}"
+        )
+        self.IMATRIX_GENERATION_TASK_STARTED = "IMatrix generation task started"
+        self.ERROR_MESSAGE = "Error: {0}"
+        self.TASK_ERROR = "Task error: {0}"
+        self.APPLICATION_CLOSING = "Application closing"
+        self.APPLICATION_CLOSED = "Application closed"
+        self.SELECT_QUANTIZATION_TYPE = "Select the quantization type"
+        self.ALLOWS_REQUANTIZING = (
+            "Allows requantizing tensors that have already been quantized"
+        )
+        self.LEAVE_OUTPUT_WEIGHT = "Will leave output.weight un(re)quantized"
+        self.DISABLE_K_QUANT_MIXTURES = (
+            "Disable k-quant mixtures and quantize all tensors to the same type"
+        )
+        self.USE_DATA_AS_IMPORTANCE_MATRIX = (
+            "Use data in file as importance matrix for quant optimisations"
+        )
+        self.USE_IMPORTANCE_MATRIX_FOR_TENSORS = (
+            "Use importance matrix for these tensors"
+        )
+        self.DONT_USE_IMPORTANCE_MATRIX_FOR_TENSORS = (
+            "Don't use importance matrix for these tensors"
+        )
+        self.OUTPUT_TENSOR_TYPE = "Output Tensor Type:"
+        self.USE_THIS_TYPE_FOR_OUTPUT_WEIGHT = (
+            "Use this type for the output.weight tensor"
+        )
+        self.TOKEN_EMBEDDING_TYPE = "Token Embedding Type:"
+        self.USE_THIS_TYPE_FOR_TOKEN_EMBEDDINGS = (
+            "Use this type for the token embeddings tensor"
+        )
+        self.WILL_GENERATE_QUANTIZED_MODEL_IN_SAME_SHARDS = (
+            "Will generate quantized model in the same shards as input"
+        )
+        self.OVERRIDE_MODEL_METADATA = "Override model metadata"
+        self.INPUT_DATA_FILE_FOR_IMATRIX = "Input data file for IMatrix generation"
+        self.MODEL_TO_BE_QUANTIZED = "Model to be quantized"
+        self.OUTPUT_PATH_FOR_GENERATED_IMATRIX = "Output path for the generated IMatrix"
+        self.HOW_OFTEN_TO_SAVE_IMATRIX = "How often to save the IMatrix"
+        self.SET_GPU_OFFLOAD_VALUE = "Set GPU offload value (-ngl)"
+        self.COMPLETED = "Completed"
+        self.REFRESH_MODELS = "Refresh Models"
+
 
 class _TraditionalChinese(_Localization):
     def __init__(self):
@@ -5064,7 +5919,9 @@ class _TraditionalChinese(_Localization):
         self.NO_MODEL_SELECTED = "未選擇模型"
         self.REFRESH_RELEASES = "重新整理版本"
         self.NO_SUITABLE_CUDA_BACKENDS = "找不到合適的 CUDA 後端"
-        self.LLAMACPP_DOWNLOADED_EXTRACTED = "llama.cpp 二進位檔案已下載並解壓縮至 {0}\nCUDA 檔案已解壓縮至 {1}"
+        self.LLAMACPP_DOWNLOADED_EXTRACTED = (
+            "llama.cpp 二進位檔案已下載並解壓縮至 {0}\nCUDA 檔案已解壓縮至 {1}"
+        )
         self.CUDA_FILES_EXTRACTED = "CUDA 檔案已解壓縮至"
         self.NO_SUITABLE_CUDA_BACKEND_EXTRACTION = "找不到合適的 CUDA 後端進行解壓縮"
         self.ERROR_FETCHING_RELEASES = "擷取版本時發生錯誤：{0}"
@@ -5091,9 +5948,13 @@ class _TraditionalChinese(_Localization):
         self.RESTARTING_TASK = "正在重新啟動任務：{0}"
         self.IN_PROGRESS = "處理中"
         self.DOWNLOAD_FINISHED_EXTRACTED_TO = "下載完成。已解壓縮至：{0}"
-        self.LLAMACPP_DOWNLOADED_AND_EXTRACTED = "llama.cpp 二進位檔案已下載並解壓縮至 {0}\nCUDA 檔案已解壓縮至 {1}"
+        self.LLAMACPP_DOWNLOADED_AND_EXTRACTED = (
+            "llama.cpp 二進位檔案已下載並解壓縮至 {0}\nCUDA 檔案已解壓縮至 {1}"
+        )
         self.NO_SUITABLE_CUDA_BACKEND_FOUND = "找不到合適的 CUDA 後端進行解壓縮"
-        self.LLAMACPP_BINARY_DOWNLOADED_AND_EXTRACTED = "llama.cpp 二進位檔案已下載並解壓縮至 {0}"
+        self.LLAMACPP_BINARY_DOWNLOADED_AND_EXTRACTED = (
+            "llama.cpp 二進位檔案已下載並解壓縮至 {0}"
+        )
         self.REFRESHING_LLAMACPP_RELEASES = "正在重新整理 llama.cpp 版本"
         self.UPDATING_ASSET_LIST = "正在更新資源清單"
         self.UPDATING_CUDA_OPTIONS = "正在更新 CUDA 選項"
@@ -5150,14 +6011,18 @@ class _TraditionalChinese(_Localization):
         self.ALLOWS_REQUANTIZING = "允許重新量化已量化的張量"
         self.LEAVE_OUTPUT_WEIGHT = "將保留 output.weight 不被（重新）量化"
         self.DISABLE_K_QUANT_MIXTURES = "停用 k-quant 混合並將所有張量量化為相同類型"
-        self.USE_DATA_AS_IMPORTANCE_MATRIX = "使用檔案中的資料作為量化最佳化的重要性矩陣"
+        self.USE_DATA_AS_IMPORTANCE_MATRIX = (
+            "使用檔案中的資料作為量化最佳化的重要性矩陣"
+        )
         self.USE_IMPORTANCE_MATRIX_FOR_TENSORS = "對這些張量使用重要性矩陣"
         self.DONT_USE_IMPORTANCE_MATRIX_FOR_TENSORS = "不要對這些張量使用重要性矩陣"
         self.OUTPUT_TENSOR_TYPE = "輸出張量類型："
         self.USE_THIS_TYPE_FOR_OUTPUT_WEIGHT = "對 output.weight 張量使用此類型"
         self.TOKEN_EMBEDDING_TYPE = "權杖嵌入類型："
         self.USE_THIS_TYPE_FOR_TOKEN_EMBEDDINGS = "對權杖嵌入張量使用此類型"
-        self.WILL_GENERATE_QUANTIZED_MODEL_IN_SAME_SHARDS = "將在與輸入相同的分片中產生量化模型"
+        self.WILL_GENERATE_QUANTIZED_MODEL_IN_SAME_SHARDS = (
+            "將在與輸入相同的分片中產生量化模型"
+        )
         self.OVERRIDE_MODEL_METADATA = "覆蓋模型中繼資料"
         self.INPUT_DATA_FILE_FOR_IMATRIX = "IMatrix 產生的輸入資料檔案"
         self.MODEL_TO_BE_QUANTIZED = "要量化的模型"
@@ -5167,37 +6032,39 @@ class _TraditionalChinese(_Localization):
         self.COMPLETED = "已完成"
         self.REFRESH_MODELS = "重新整理模型"
 
+
 # Dictionary to map language codes to classes
 _languages = {
-    'en-US': _English,              # American English
-    'fr-FR': _French,               # Metropolitan French
-    'zh-CN': _SimplifiedChinese,    # Simplified Chinese
-    'es-ES': _Spanish,              # Spanish (Spain)
-    'hi-IN': _Hindi,                # Hindi (India)
-    'ru-RU': _Russian,              # Russian (Russia)
-    'uk-UA': _Ukrainian,            # Ukrainian (Ukraine)
-    'ja-JP': _Japanese,             # Japanese (Japan)
-    'de-DE': _German,               # German (Germany)
-    'pt-BR': _Portuguese,           # Portuguese (Brazil)
-    'ar-SA': _Arabic,               # Arabic (Saudi Arabia)
-    'ko-KR': _Korean,               # Korean (Korea)    
-    'it-IT': _Italian,              # Italian (Italy)
-    'tr-TR': _Turkish,              # Turkish (Turkey)
-    'nl-NL': _Dutch,                # Dutch (Netherlands)
-    'fi-FI': _Finnish,              # Finnish (Finland)
-    'bn-BD': _Bengali,              # Bengali (Bangladesh) 
-    'cs-CZ': _Czech,                # Czech (Czech Republic)
-    'pl-PL': _Polish,               # Polish (Poland)
-    'ro-RO': _Romanian,             # Romanian (Romania)
-    'el-GR': _Greek,                # Greek (Greece)
-    'pt-PT': _Portuguese_PT,        # Portuguese (Portugal)
-    'hu-HU': _Hungarian,            # Hungarian (Hungary)
-    'en-GB': _BritishEnglish,       # British English
-    'fr-CA': _CanadianFrench,       # Canadian French
-    'en-IN': _IndianEnglish,        # Indian English
-    'en-CA': _CanadianEnglish,      # Canadian English
-    'zh-TW': _TraditionalChinese,   # Traditional Chinese (Taiwan)
+    "en-US": _English,  # American English
+    "fr-FR": _French,  # Metropolitan French
+    "zh-CN": _SimplifiedChinese,  # Simplified Chinese
+    "es-ES": _Spanish,  # Spanish (Spain)
+    "hi-IN": _Hindi,  # Hindi (India)
+    "ru-RU": _Russian,  # Russian (Russia)
+    "uk-UA": _Ukrainian,  # Ukrainian (Ukraine)
+    "ja-JP": _Japanese,  # Japanese (Japan)
+    "de-DE": _German,  # German (Germany)
+    "pt-BR": _Portuguese,  # Portuguese (Brazil)
+    "ar-SA": _Arabic,  # Arabic (Saudi Arabia)
+    "ko-KR": _Korean,  # Korean (Korea)
+    "it-IT": _Italian,  # Italian (Italy)
+    "tr-TR": _Turkish,  # Turkish (Turkey)
+    "nl-NL": _Dutch,  # Dutch (Netherlands)
+    "fi-FI": _Finnish,  # Finnish (Finland)
+    "bn-BD": _Bengali,  # Bengali (Bangladesh)
+    "cs-CZ": _Czech,  # Czech (Czech Republic)
+    "pl-PL": _Polish,  # Polish (Poland)
+    "ro-RO": _Romanian,  # Romanian (Romania)
+    "el-GR": _Greek,  # Greek (Greece)
+    "pt-PT": _Portuguese_PT,  # Portuguese (Portugal)
+    "hu-HU": _Hungarian,  # Hungarian (Hungary)
+    "en-GB": _BritishEnglish,  # British English
+    "fr-CA": _CanadianFrench,  # Canadian French
+    "en-IN": _IndianEnglish,  # Indian English
+    "en-CA": _CanadianEnglish,  # Canadian English
+    "zh-TW": _TraditionalChinese,  # Traditional Chinese (Taiwan)
 }
+
 
 def set_language(lang_code):
     # Globals
@@ -5215,7 +6082,7 @@ def set_language(lang_code):
     global REFRESHING_BACKENDS, NO_BACKENDS_AVAILABLE, FOUND_VALID_BACKENDS, SAVING_PRESET, PRESET_SAVED_TO, LOADING_PRESET
     global PRESET_LOADED_FROM, ADDING_KV_OVERRIDE, SAVING_TASK_PRESET, TASK_PRESET_SAVED, TASK_PRESET_SAVED_TO, RESTARTING_TASK
     global IN_PROGRESS, DOWNLOAD_FINISHED_EXTRACTED_TO, LLAMACPP_DOWNLOADED_AND_EXTRACTED, NO_SUITABLE_CUDA_BACKEND_FOUND
-    global LLAMACPP_BINARY_DOWNLOADED_AND_EXTRACTED, REFRESHING_LLAMACPP_RELEASES, UPDATING_ASSET_LIST, UPDATING_CUDA_OPTIONS 
+    global LLAMACPP_BINARY_DOWNLOADED_AND_EXTRACTED, REFRESHING_LLAMACPP_RELEASES, UPDATING_ASSET_LIST, UPDATING_CUDA_OPTIONS
     global STARTING_LLAMACPP_DOWNLOAD, UPDATING_CUDA_BACKENDS, NO_CUDA_BACKEND_SELECTED, EXTRACTING_CUDA_FILES, DOWNLOAD_ERROR
     global SHOWING_TASK_CONTEXT_MENU, SHOWING_PROPERTIES_FOR_TASK, CANCELLING_TASK, CANCELED, DELETING_TASK, LOADING_MODELS, LOADED_MODELS
     global BROWSING_FOR_MODELS_DIRECTORY, SELECT_MODELS_DIRECTORY, BROWSING_FOR_OUTPUT_DIRECTORY, SELECT_OUTPUT_DIRECTORY
@@ -5243,16 +6110,17 @@ def set_language(lang_code):
     global BASE_MODEL_PATH_REQUIRED, BROWSING_FOR_BASE_MODEL_FILE, SELECT_BASE_MODEL_FOLDER, BROWSING_FOR_BASE_MODEL_FOLDER
     global LORA_CONVERSION_FROM_TO, GENERATING_IMATRIX_FOR, MODEL_PATH_REQUIRED_FOR_IMATRIX, NO_ASSET_SELECTED_FOR_CUDA_CHECK, QUANTIZATION_COMMAND
     global IMATRIX_GENERATION_COMMAND, LORA_CONVERSION_COMMAND, LORA_EXPORT_COMMAND
-        
+
     loc = _languages.get(lang_code, _English)()
     english_loc = _English()  # Create an instance of English localization for fallback
 
     for key in dir(english_loc):
-        if not key.startswith('_'):
+        if not key.startswith("_"):
             globals()[key] = getattr(loc, key, getattr(english_loc, key))
-            
+
+
 # Get the language from the AUTOGGUF_LANGUAGE environment variable, default to 'en'
-language_code = os.getenv('AUTOGGUF_LANGUAGE', 'en-US')
+language_code = os.getenv("AUTOGGUF_LANGUAGE", "en-US")
 
 # Set default language
 set_language(language_code)

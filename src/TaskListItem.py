@@ -13,6 +13,7 @@ import requests
 import zipfile
 from datetime import datetime
 
+
 class TaskListItem(QWidget):
     def __init__(self, task_name, log_file, show_progress_bar=True, parent=None):
         super().__init__(parent)

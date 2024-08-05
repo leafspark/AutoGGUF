@@ -12,8 +12,8 @@ from typing import Any, BinaryIO, Sequence
 import numpy as np
 import torch
 
-if 'NO_LOCAL_GGUF' not in os.environ:
-    sys.path.insert(1, str(Path(__file__).parent / 'gguf-py' / 'gguf'))
+if "NO_LOCAL_GGUF" not in os.environ:
+    sys.path.insert(1, str(Path(__file__).parent / "gguf-py" / "gguf"))
 import gguf
 
 logging.basicConfig(level=logging.DEBUG)
@@ -35,7 +35,9 @@ def write_file_header(fout: BinaryIO, params: dict[str, Any]) -> None:
     fout.write(struct.pack("i", int(params["lora_alpha"])))
 
 
-def write_tensor_header(fout: BinaryIO, name: str, shape: Sequence[int], data_type: np.dtype[Any]) -> None:
+def write_tensor_header(
+    fout: BinaryIO, name: str, shape: Sequence[int], data_type: np.dtype[Any]
+) -> None:
     sname = name.encode("utf-8")
     fout.write(
         struct.pack(
@@ -49,15 +51,21 @@ def write_tensor_header(fout: BinaryIO, name: str, shape: Sequence[int], data_ty
     fout.write(sname)
     fout.seek((fout.tell() + 31) & -32)
 
+
 def pyinstaller_include():
     # PyInstaller import
     pass
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     if len(sys.argv) < 2:
         logger.info(f"Usage: python {sys.argv[0]} <path> [arch]")
-        logger.info("Path must contain HuggingFace PEFT LoRA files 'adapter_config.json' and 'adapter_model.bin'")
-        logger.info(f"Arch must be one of {list(gguf.MODEL_ARCH_NAMES.values())} (default: llama)")
+        logger.info(
+            "Path must contain HuggingFace PEFT LoRA files 'adapter_config.json' and 'adapter_model.bin'"
+        )
+        logger.info(
+            f"Arch must be one of {list(gguf.MODEL_ARCH_NAMES.values())} (default: llama)"
+        )
         sys.exit(1)
 
     input_json = os.path.join(sys.argv[1], "adapter_config.json")
@@ -70,6 +78,7 @@ if __name__ == '__main__':
         input_model = os.path.join(sys.argv[1], "adapter_model.safetensors")
         # lazy import load_file only if lora is in safetensors format.
         from safetensors.torch import load_file
+
         model = load_file(input_model, device="cpu")
 
     arch_name = sys.argv[2] if len(sys.argv) == 3 else "llama"
@@ -78,14 +87,18 @@ if __name__ == '__main__':
         logger.error(f"Error: unsupported architecture {arch_name}")
         sys.exit(1)
 
-    arch = list(gguf.MODEL_ARCH_NAMES.keys())[list(gguf.MODEL_ARCH_NAMES.values()).index(arch_name)]
-    name_map = gguf.TensorNameMap(arch, 200) # 200 layers ought to be enough for anyone
+    arch = list(gguf.MODEL_ARCH_NAMES.keys())[
+        list(gguf.MODEL_ARCH_NAMES.values()).index(arch_name)
+    ]
+    name_map = gguf.TensorNameMap(arch, 200)  # 200 layers ought to be enough for anyone
 
     with open(input_json, "r") as f:
         params = json.load(f)
 
     if params["peft_type"] != "LORA":
-        logger.error(f"Error: unsupported adapter type {params['peft_type']}, expected LORA")
+        logger.error(
+            f"Error: unsupported adapter type {params['peft_type']}, expected LORA"
+        )
         sys.exit(1)
 
     if params["fan_in_fan_out"] is True:
@@ -127,7 +140,7 @@ if __name__ == '__main__':
 
             lora_suffixes = (".lora_A.weight", ".lora_B.weight")
             if k.endswith(lora_suffixes):
-                suffix = k[-len(lora_suffixes[0]):]
+                suffix = k[-len(lora_suffixes[0]) :]
                 k = k[: -len(lora_suffixes[0])]
             else:
                 logger.error(f"Error: unrecognized tensor name {orig_k}")
@@ -136,7 +149,9 @@ if __name__ == '__main__':
             tname = name_map.get_name(k)
             if tname is None:
                 logger.error(f"Error: could not map tensor name {orig_k}")
-                logger.error(" Note: the arch parameter must be specified if the model is not llama")
+                logger.error(
+                    " Note: the arch parameter must be specified if the model is not llama"
+                )
                 sys.exit(1)
 
             if suffix == ".lora_A.weight":
@@ -146,7 +161,9 @@ if __name__ == '__main__':
             else:
                 assert False
 
-            logger.info(f"{k} => {tname} {t.shape} {t.dtype} {t.nbytes/1024/1024:.2f}MB")
+            logger.info(
+                f"{k} => {tname} {t.shape} {t.dtype} {t.nbytes/1024/1024:.2f}MB"
+            )
             write_tensor_header(fout, tname, t.shape, t.dtype)
             t.tofile(fout)
 

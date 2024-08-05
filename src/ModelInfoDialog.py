@@ -13,6 +13,7 @@ import requests
 import zipfile
 from datetime import datetime
 
+
 class ModelInfoDialog(QDialog):
     def __init__(self, model_info, parent=None):
         super().__init__(parent)
@@ -39,10 +40,9 @@ class ModelInfoDialog(QDialog):
         html += f"<p><b>Quantization Type:</b> {model_info.get('quantization_type', 'N/A')}</p>"
         html += f"<p><b>KV Pairs:</b> {model_info.get('kv_pairs', 'N/A')}</p>"
         html += f"<p><b>Tensors:</b> {model_info.get('tensors', 'N/A')}</p>"
-        
+
         html += "<h3>Key-Value Pairs:</h3>"
-        for key, value in model_info.get('kv_data', {}).items():
+        for key, value in model_info.get("kv_data", {}).items():
             html += f"<p><b>{key}:</b> {value}</p>"
 
-        return html        
-        
+        return html
