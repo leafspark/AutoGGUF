@@ -48,39 +48,8 @@ Find exe in `build/<type>/dist/AutoGGUF.exe`.
 
 ## Localizations:
 
-The following languages are currently supported (machine translated, except for English):
-```python
-{
-    'en-US': _English,              # American English
-    'fr-FR': _French,               # Metropolitan French
-    'zh-CN': _SimplifiedChinese,    # Simplified Chinese
-    'es-ES': _Spanish,              # Spanish (Spain)
-    'hi-IN': _Hindi,                # Hindi (India)
-    'ru-RU': _Russian,              # Russian (Russia)
-    'uk-UA': _Ukrainian,            # Ukrainian (Ukraine)
-    'ja-JP': _Japanese,             # Japanese (Japan)
-    'de-DE': _German,               # German (Germany)
-    'pt-BR': _Portuguese,           # Portuguese (Brazil)
-    'ar-SA': _Arabic,               # Arabic (Saudi Arabia)
-    'ko-KR': _Korean,               # Korean (Korea)    
-    'it-IT': _Italian,              # Italian (Italy)
-    'tr-TR': _Turkish,              # Turkish (Turkey)
-    'nl-NL': _Dutch,                # Dutch (Netherlands)
-    'fi-FI': _Finnish,              # Finnish (Finland)
-    'bn-BD': _Bengali,              # Bengali (Bangladesh) 
-    'cs-CZ': _Czech,                # Czech (Czech Republic)
-    'pl-PL': _Polish,               # Polish (Poland)
-    'ro-RO': _Romanian,             # Romanian (Romania)
-    'el-GR': _Greek,                # Greek (Greece)
-    'pt-PT': _Portuguese_PT,        # Portuguese (Portugal)
-    'hu-HU': _Hungarian,            # Hungarian (Hungary)
-    'en-GB': _BritishEnglish,       # British English
-    'fr-CA': _CanadianFrench,       # Canadian French
-    'en-IN': _IndianEnglish,        # Indian English
-    'en-CA': _CanadianEnglish,      # Canadian English
-    'zh-TW': _TraditionalChinese,   # Traditional Chinese (Taiwan)
-}
-```
+View the list of languages supported at [AutoGGUF/wiki/Installation#configuration](https://github.com/leafspark/AutoGGUF/wiki/Installation#configuration) (LLM translated, except for English)
+
 In order to use them, please set the `AUTOGGUF_LANGUAGE` environment variable to one of the listed language codes.
 
 ## Issues:
@@ -113,7 +82,7 @@ In order to use them, please set the `AUTOGGUF_LANGUAGE` environment variable to
 Simply fork the repo and make your changes; when merging make sure to have the latest commits. Description should contain a changelog of what's new.
 
 ## User interface:
-![image](https://github.com/user-attachments/assets/906bf9cb-38ed-4945-a32e-179acfdcc529)
+![image](https://github.com/user-attachments/assets/2660c841-07ba-4c3f-ae3a-e63c7068bdc1)
 
 ## Stargazers:
 [![Star History Chart](https://api.star-history.com/svg?repos=leafspark/AutoGGUF&type=Date)](https://star-history.com/#leafspark/AutoGGUF&Date)
