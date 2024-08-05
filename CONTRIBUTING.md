@@ -31,6 +31,21 @@ First off, thanks for taking the time to contribute! 🎉👍
 - Use the imperative mood ("Move cursor to..." not "Moves cursor to...")
 - Limit the first line to 72 characters or less
 
+### Commit Types:
+
+```
+feat: Added new feature
+fix: Fixed a bug
+docs: Updated documentation
+style: Code style changes (formatting, etc.)
+refactor: Code refactoring
+perf: Performance improvements
+test: Added or modified tests
+build: Changes to build system or external dependencies
+ci: Changes to CI configuration files and scripts
+chore: Other changes that don't modify src or test files
+```
+
 ### Python Styleguide
 
 - Follow PEP 8
