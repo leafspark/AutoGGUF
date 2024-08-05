@@ -31,6 +31,8 @@ AutoGGUF provides a graphical user interface for quantizing GGUF models using th
 - Select and quantize GGUF models
 - Configure quantization parameters
 - Monitor system resources during quantization
+- Parallel quantization + imatrix generation
+- LoRA conversion and merging
 
 ## Usage
 
@@ -41,7 +43,7 @@ AutoGGUF provides a graphical user interface for quantizing GGUF models using th
    ```
    or
    ```
-   pip install PyQt6 requests psutil shutil
+   pip install PyQt6 requests psutil shutil numpy torch safetensors gguf
    ```
 2. Run the application:
    ```
@@ -91,17 +93,16 @@ To use a specific language, set the `AUTOGGUF_LANGUAGE` environment variable to 
 
 - Saving preset while quantizing causes UI thread crash (planned fix: remove this feature)
 - Cannot delete task while processing (planned fix: disallow deletion before cancelling or cancel automatically)
-- ~~Base Model text still shows when GGML is selected as LoRA type (fix: include text in show/hide Qt layout)~~ (fixed in v1.4.2)
 
 ## Planned Features
 
 - Actual progress bar tracking
 - Download safetensors from HF and convert to unquantized GGUF
 - Perplexity testing
-- Managing shards (coming in the next release)
+- ~~Managing shards (coming in the next release)~~ (added in v1.4.3)
 - Time estimation for quantization
-- Dynamic values for KV cache (coming in the next release)
-- Ability to select and start multiple quants at once (saved in presets, coming in the next release)
+- ~~Dynamic values for KV cache (coming in the next release)~~ (added in v1.4.3)
+- ~~Ability to select and start multiple quants at once (saved in presets, coming in the next release)~~ (added in v1.4.3)
 
 ## Troubleshooting
 
