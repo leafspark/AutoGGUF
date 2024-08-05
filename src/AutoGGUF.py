@@ -597,7 +597,7 @@ class AutoGGUF(QMainWindow):
             "token_embedding_type": self.token_embedding_type.currentText(),
             "keep_split": self.keep_split.isChecked(),
             "kv_overrides": [
-                entry.get_override_string() for entry in self.kv_override_entries
+                entry.get_raw_override_string() for entry in self.kv_override_entries
             ],
             "extra_arguments": self.extra_arguments.text(),
         }
@@ -795,6 +795,9 @@ class AutoGGUF(QMainWindow):
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
             log_file = os.path.join(logs_path, f"lora_export_{timestamp}.log")
 
+            command_str = " ".join(command)
+            self.logger.info(f"{LORA_EXPORT_COMMAND}: {command_str}")
+
             thread = QuantizationThread(command, backend_path, log_file)
             self.quant_threads.append(thread)
 
@@ -883,6 +886,9 @@ class AutoGGUF(QMainWindow):
 
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
             log_file = os.path.join(logs_path, f"lora_conversion_{timestamp}.log")
+
+            command_str = " ".join(command)
+            self.logger.info(f"{LORA_CONVERSION_COMMAND}: {command_str}")
 
             thread = QuantizationThread(command, os.getcwd(), log_file)
             self.quant_threads.append(thread)
@@ -1186,15 +1192,24 @@ class AutoGGUF(QMainWindow):
             QMessageBox.StandardButton.No,
         )
         if reply == QMessageBox.StandardButton.Yes:
+            # Retrieve the task_item before removing it from the list
+            task_item = self.task_list.itemWidget(item)
+            
+            # Remove the item from the list
             row = self.task_list.row(item)
             self.task_list.takeItem(row)
+            
             # If the task is still running, terminate it
-            task_item = self.task_list.itemWidget(item)
-            for thread in self.quant_threads:
-                if thread.log_file == task_item.log_file:
-                    thread.terminate()
-                    self.quant_threads.remove(thread)
-                    break
+            if task_item and task_item.log_file:
+                for thread in self.quant_threads:
+                    if thread.log_file == task_item.log_file:
+                        thread.terminate()
+                        self.quant_threads.remove(thread)
+                        break       
+            
+            # Delete the task_item widget
+            if task_item:
+                task_item.deleteLater()
 
     def create_label(self, text, tooltip):
         label = QLabel(text)
@@ -1369,9 +1384,13 @@ class AutoGGUF(QMainWindow):
                 )
             if self.keep_split.isChecked():
                 command.append("--keep-split")
-            if self.override_kv.text():
+            if self.kv_override_entries:
                 for entry in self.kv_override_entries:
-                    override_string = entry.get_override_string()
+                    override_string = entry.get_override_string(
+                        model_name=model_name,
+                        quant_type=quant_type,
+                        output_path=output_path
+                    )
                     if override_string:
                         command.extend(["--override-kv", override_string])
 
@@ -1388,6 +1407,10 @@ class AutoGGUF(QMainWindow):
             log_file = os.path.join(
                 logs_path, f"{model_name}_{timestamp}_{quant_type}.log"
             )
+            
+            # Log quant command
+            command_str = " ".join(command)
+            self.logger.info(f"{QUANTIZATION_COMMAND}: {command_str}")
 
             thread = QuantizationThread(command, backend_path, log_file)
             self.quant_threads.append(thread)
@@ -1527,6 +1550,10 @@ class AutoGGUF(QMainWindow):
 
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
             log_file = os.path.join(self.logs_input.text(), f"imatrix_{timestamp}.log")
+            
+            # Log command
+            command_str = " ".join(command)
+            self.logger.info(f"{IMATRIX_GENERATION_COMMAND}: {command_str}")
 
             thread = QuantizationThread(command, backend_path, log_file)
             self.quant_threads.append(thread)
@@ -1552,10 +1579,11 @@ class AutoGGUF(QMainWindow):
         self.logger.error(ERROR_MESSAGE.format(message))
         QMessageBox.critical(self, ERROR, message)
 
-    def handle_error(self, error_message, task_item):
+    def handle_error(self, error_message, task_item, task_exists=True):
         self.logger.error(TASK_ERROR.format(error_message))
         self.show_error(error_message)
-        task_item.set_error()
+        if task_exists:
+            task_item.set_error()
 
     def closeEvent(self, event: QCloseEvent):
         self.logger.info(APPLICATION_CLOSING)
