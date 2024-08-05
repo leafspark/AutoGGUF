@@ -56,6 +56,31 @@ AutoGGUF provides a graphical user interface for quantizing GGUF models using th
 2. Extract all files to a folder
 3. Run `AutoGGUF.exe`
 
+### Verifying Releases
+
+#### Linux/macOS:
+```bash
+gpg --import AutoGGUF-v1.5.0-prerel.asc
+gpg --verify AutoGGUF-v1.5.0-Windows-avx2-prerel.zip.sig AutoGGUF-v1.5.0-Windows-avx2-prerel.zip
+sha256sum -c AutoGGUF-v1.5.0-prerel.sha256
+```
+
+#### Windows (PowerShell):
+```powershell
+# Import the public key
+gpg --import AutoGGUF-v1.5.0-prerel.asc
+
+# Verify the signature
+gpg --verify AutoGGUF-v1.5.0-Windows-avx2-prerel.zip.sig AutoGGUF-v1.5.0-Windows-avx2-prerel.zip
+
+# Check SHA256
+$fileHash = (Get-FileHash -Algorithm SHA256 AutoGGUF-v1.5.0-Windows-avx2-prerel.zip).Hash.ToLower()
+$storedHash = (Get-Content AutoGGUF-v1.5.0-prerel.sha256 | Select-String AutoGGUF-v1.5.0-Windows-avx2-prerel.zip).Line.Split()[0]
+if ($fileHash -eq $storedHash) { "SHA256 Match" } else { "SHA256 Mismatch" }
+```
+
+Release keys are identical to ones used for commiting.
+
 ## Building
 
 ### Cross-platform
@@ -97,12 +122,9 @@ To use a specific language, set the `AUTOGGUF_LANGUAGE` environment variable to 
 ## Planned Features
 
 - Actual progress bar tracking
-- Download safetensors from HF and convert to unquantized GGUF
+- ~~Download safetensors from HF and convert to unquantized GGUF~~ (added in v1.5.0 prerelease)
 - Perplexity testing
-- ~~Managing shards (coming in the next release)~~ (added in v1.4.3)
 - Time estimation for quantization
-- ~~Dynamic values for KV cache (coming in the next release)~~ (added in v1.4.3)
-- ~~Ability to select and start multiple quants at once (saved in presets, coming in the next release)~~ (added in v1.4.3)
 
 ## Troubleshooting
 
