@@ -35,6 +35,7 @@ class AutoGGUF(QMainWindow):
         self.setGeometry(100, 100, 1600, 1200)
 
         ensure_directory(os.path.abspath("quantized_models"))
+        ensure_directory(os.path.abspath("models"))
 
         main_layout = QHBoxLayout()
         left_layout = QVBoxLayout()
@@ -128,10 +129,10 @@ class AutoGGUF(QMainWindow):
         left_layout.addLayout(logs_layout)
 
         # Model list
-        self.model_list = QListWidget()
-        self.load_models()
+        self.model_tree = QTreeWidget()
+        self.model_tree.setHeaderHidden(True)
         left_layout.addWidget(QLabel(AVAILABLE_MODELS))
-        left_layout.addWidget(self.model_list)
+        left_layout.addWidget(self.model_tree)
 
         # Refresh models button
         refresh_models_button = QPushButton(REFRESH_MODELS)
@@ -1233,11 +1234,46 @@ class AutoGGUF(QMainWindow):
         self.logger.info(LOADING_MODELS)
         models_dir = self.models_input.text()
         ensure_directory(models_dir)
-        self.model_list.clear()
+        self.model_tree.clear()
+
+        sharded_models = {}
+        single_models = []
+
+        # Regex pattern to match sharded model filenames
+        shard_pattern = re.compile(r'(.*)-(\d+)-of-(\d+)\.gguf$')
+
         for file in os.listdir(models_dir):
             if file.endswith(".gguf"):
-                self.model_list.addItem(file)
-        self.logger.info(LOADED_MODELS.format(self.model_list.count()))
+                match = shard_pattern.match(file)
+                if match:
+                    # This is a sharded model
+                    base_name, shard_num, total_shards = match.groups()
+                    if base_name not in sharded_models:
+                        sharded_models[base_name] = []
+                    sharded_models[base_name].append((int(shard_num), file))
+                else:
+                    single_models.append(file)
+
+        # Add sharded models
+        for base_name, shards in sharded_models.items():
+            parent_item = QTreeWidgetItem(self.model_tree)
+            parent_item.setText(0, f"{base_name} (sharded)")
+            # Sort shards by shard number and get the first one
+            first_shard = sorted(shards, key=lambda x: x[0])[0][1]
+            parent_item.setData(0, Qt.ItemDataRole.UserRole, first_shard)
+            for _, shard_file in sorted(shards):
+                child_item = QTreeWidgetItem(parent_item)
+                child_item.setText(0, shard_file)
+                child_item.setData(0, Qt.ItemDataRole.UserRole, shard_file)
+
+        # Add single models
+        for model in sorted(single_models):
+            item = QTreeWidgetItem(self.model_tree)
+            item.setText(0, model)
+            item.setData(0, Qt.ItemDataRole.UserRole, model)
+
+        self.model_tree.expandAll()
+        self.logger.info(LOADED_MODELS.format(len(single_models) + len(sharded_models)))
 
     def browse_models(self):
         self.logger.info(BROWSING_FOR_MODELS_DIRECTORY)
@@ -1291,7 +1327,7 @@ class AutoGGUF(QMainWindow):
             errors.append(OUTPUT_PATH_REQUIRED)
         if not self.logs_input.text():
             errors.append(LOGS_PATH_REQUIRED)
-        if not self.model_list.currentItem():
+        if not self.model_tree.currentItem():
             errors.append(NO_MODEL_SELECTED)
 
         if errors:
@@ -1318,20 +1354,20 @@ class AutoGGUF(QMainWindow):
         self.logger.info(STARTING_MODEL_QUANTIZATION)
         try:
             self.validate_quantization_inputs()
-            selected_model = self.model_list.currentItem()
-            if not selected_model:
+            selected_item = self.model_tree.currentItem()
+            if not selected_item:
                 raise ValueError(NO_MODEL_SELECTED)
 
-            model_name = selected_model.text()
+            model_file = selected_item.data(0, Qt.ItemDataRole.UserRole)
+            model_name = selected_item.text(0).replace(" (sharded)", "")
+
             backend_path = self.backend_combo.currentData()
             if not backend_path:
                 raise ValueError(NO_BACKEND_SELECTED)
             quant_type = self.quant_type.currentText()
 
-            input_path = os.path.join(self.models_input.text(), model_name)
-            model_name = selected_model.text()
-            quant_type = self.quant_type.currentText()
-
+            input_path = os.path.join(self.models_input.text(), model_file)
+            
             # Start building the output name
             output_name_parts = [
                 os.path.splitext(model_name)[0],
@@ -1340,10 +1376,7 @@ class AutoGGUF(QMainWindow):
             ]
 
             # Check for output tensor options
-            if (
-                self.use_output_tensor_type.isChecked()
-                or self.leave_output_tensor.isChecked()
-            ):
+            if self.use_output_tensor_type.isChecked() or self.leave_output_tensor.isChecked():
                 output_tensor_part = "o"
                 if self.use_output_tensor_type.isChecked():
                     output_tensor_part += "." + self.output_tensor_type.currentText()
@@ -1388,13 +1421,9 @@ class AutoGGUF(QMainWindow):
             if self.exclude_weights.text():
                 command.extend(["--exclude-weights", self.exclude_weights.text()])
             if self.use_output_tensor_type.isChecked():
-                command.extend(
-                    ["--output-tensor-type", self.output_tensor_type.currentText()]
-                )
+                command.extend(["--output-tensor-type", self.output_tensor_type.currentText()])
             if self.use_token_embedding_type.isChecked():
-                command.extend(
-                    ["--token-embedding-type", self.token_embedding_type.currentText()]
-                )
+                command.extend(["--token-embedding-type", self.token_embedding_type.currentText()])
             if self.keep_split.isChecked():
                 command.append("--keep-split")
             if self.kv_override_entries:
@@ -1417,9 +1446,7 @@ class AutoGGUF(QMainWindow):
             ensure_directory(logs_path)
 
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-            log_file = os.path.join(
-                logs_path, f"{model_name}_{timestamp}_{quant_type}.log"
-            )
+            log_file = os.path.join(logs_path, f"{model_name}_{timestamp}_{quant_type}.log")
 
             # Log quant command
             command_str = " ".join(command)
@@ -1428,18 +1455,14 @@ class AutoGGUF(QMainWindow):
             thread = QuantizationThread(command, backend_path, log_file)
             self.quant_threads.append(thread)
 
-            task_item = TaskListItem(
-                QUANTIZING_MODEL_TO.format(model_name, quant_type), log_file
-            )
+            task_item = TaskListItem(QUANTIZING_MODEL_TO.format(model_name, quant_type), log_file)
             list_item = QListWidgetItem(self.task_list)
             list_item.setSizeHint(task_item.sizeHint())
             self.task_list.addItem(list_item)
             self.task_list.setItemWidget(list_item, task_item)
 
             # Connect the output signal to the new progress parsing function
-            thread.output_signal.connect(
-                lambda line: self.parse_progress(line, task_item)
-            )
+            thread.output_signal.connect(lambda line: self.parse_progress(line, task_item))
             thread.status_signal.connect(task_item.update_status)
             thread.finished_signal.connect(lambda: self.task_finished(thread))
             thread.error_signal.connect(lambda err: self.handle_error(err, task_item))

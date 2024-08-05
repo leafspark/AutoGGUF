@@ -4,8 +4,7 @@ __pycache__/
 # Ignore everything
 *
 
-# But allow these file types
-!*.py
+# Allow specific file types globally
 !*.bat
 !*.txt
 !*.md
@@ -15,9 +14,24 @@ __pycache__/
 # Allow these files
 !.pre-commit-config.yaml
 
-# Allow assets folder
+# Allow src folder and its .py files
+!src/
+src/*
+!src/*.py
+
+# Allow docs folder and its .py files
+!docs/
+docs/*
+!docs/*.py
+
+# Allow assets folder, but only .svg, .png, and .ico files
 !assets/
-!assets/**
+assets/*
+!assets/*.svg
+!assets/*.png
+!assets/*.ico
+
+# Allow .github folder and its contents
 !.github/
 !.github/**
 
