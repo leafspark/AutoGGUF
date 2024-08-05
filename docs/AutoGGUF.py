@@ -1,7 +1,7 @@
 class AutoGGUF(QMainWindow):
     """
     AutoGGUF is a PyQt6-based graphical user interface for managing and quantizing large language models.
-    
+
     This class provides functionality for:
     - Loading and displaying models (including sharded models)
     - Quantizing models with various options
@@ -9,7 +9,7 @@ class AutoGGUF(QMainWindow):
     - Generating importance matrices
     - Converting and exporting LoRA models
     - Managing quantization tasks
-    
+
     The GUI allows users to interact with these features in an intuitive way, providing
     options for model selection, quantization parameters, and task management.
     """

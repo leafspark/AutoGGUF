@@ -1240,7 +1240,7 @@ class AutoGGUF(QMainWindow):
         single_models = []
 
         # Regex pattern to match sharded model filenames
-        shard_pattern = re.compile(r'(.*)-(\d+)-of-(\d+)\.gguf$')
+        shard_pattern = re.compile(r"(.*)-(\d+)-of-(\d+)\.gguf$")
 
         for file in os.listdir(models_dir):
             if file.endswith(".gguf"):
@@ -1367,7 +1367,7 @@ class AutoGGUF(QMainWindow):
             quant_type = self.quant_type.currentText()
 
             input_path = os.path.join(self.models_input.text(), model_file)
-            
+
             # Start building the output name
             output_name_parts = [
                 os.path.splitext(model_name)[0],
@@ -1376,7 +1376,10 @@ class AutoGGUF(QMainWindow):
             ]
 
             # Check for output tensor options
-            if self.use_output_tensor_type.isChecked() or self.leave_output_tensor.isChecked():
+            if (
+                self.use_output_tensor_type.isChecked()
+                or self.leave_output_tensor.isChecked()
+            ):
                 output_tensor_part = "o"
                 if self.use_output_tensor_type.isChecked():
                     output_tensor_part += "." + self.output_tensor_type.currentText()
@@ -1421,9 +1424,13 @@ class AutoGGUF(QMainWindow):
             if self.exclude_weights.text():
                 command.extend(["--exclude-weights", self.exclude_weights.text()])
             if self.use_output_tensor_type.isChecked():
-                command.extend(["--output-tensor-type", self.output_tensor_type.currentText()])
+                command.extend(
+                    ["--output-tensor-type", self.output_tensor_type.currentText()]
+                )
             if self.use_token_embedding_type.isChecked():
-                command.extend(["--token-embedding-type", self.token_embedding_type.currentText()])
+                command.extend(
+                    ["--token-embedding-type", self.token_embedding_type.currentText()]
+                )
             if self.keep_split.isChecked():
                 command.append("--keep-split")
             if self.kv_override_entries:
@@ -1446,7 +1453,9 @@ class AutoGGUF(QMainWindow):
             ensure_directory(logs_path)
 
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-            log_file = os.path.join(logs_path, f"{model_name}_{timestamp}_{quant_type}.log")
+            log_file = os.path.join(
+                logs_path, f"{model_name}_{timestamp}_{quant_type}.log"
+            )
 
             # Log quant command
             command_str = " ".join(command)
@@ -1455,14 +1464,18 @@ class AutoGGUF(QMainWindow):
             thread = QuantizationThread(command, backend_path, log_file)
             self.quant_threads.append(thread)
 
-            task_item = TaskListItem(QUANTIZING_MODEL_TO.format(model_name, quant_type), log_file)
+            task_item = TaskListItem(
+                QUANTIZING_MODEL_TO.format(model_name, quant_type), log_file
+            )
             list_item = QListWidgetItem(self.task_list)
             list_item.setSizeHint(task_item.sizeHint())
             self.task_list.addItem(list_item)
             self.task_list.setItemWidget(list_item, task_item)
 
             # Connect the output signal to the new progress parsing function
-            thread.output_signal.connect(lambda line: self.parse_progress(line, task_item))
+            thread.output_signal.connect(
+                lambda line: self.parse_progress(line, task_item)
+            )
             thread.status_signal.connect(task_item.update_status)
             thread.finished_signal.connect(lambda: self.task_finished(thread))
             thread.error_signal.connect(lambda err: self.handle_error(err, task_item))
