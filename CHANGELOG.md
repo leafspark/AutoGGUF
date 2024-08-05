@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.4.3] - 2024-08-05
+
+### Changed
+- Updated src file in release to be Black formatted
+- Modifying the quantize_model function to process all selected types
+- Updating preset saving and loading to handle multiple quantization types
+- Use ERROR and IN_PROGRESS constants from localizations in QuantizationThread
+- Minor repository changes
+
+### Added
+- Added model sharding management support
+- Allow multiple quantization types to be selected and started simultaneously
+
 ## [1.4.2] - 2024-08-04
 
 ### Fixed
