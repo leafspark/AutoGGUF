@@ -9,6 +9,7 @@ __pycache__/
 !*.bat
 !*.txt
 !*.md
+!*.sh
 !LICENSE
 
 # Allow assets folder
