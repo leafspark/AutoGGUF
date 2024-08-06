@@ -47,9 +47,30 @@ class AutoGGUF(QMainWindow):
         ensure_directory(os.path.abspath("quantized_models"))
         ensure_directory(os.path.abspath("models"))
 
-        main_layout = QHBoxLayout()
-        left_layout = QVBoxLayout()
-        right_layout = QVBoxLayout()
+        # Create a central widget and main layout
+        central_widget = QWidget()
+        main_layout = QHBoxLayout(central_widget)
+
+        # Create a scroll area and set it as the central widget
+        scroll = QScrollArea()
+        scroll.setWidgetResizable(True)
+        scroll.setWidget(central_widget)
+        self.setCentralWidget(scroll)
+
+        # Create left and right widgets
+        left_widget = QWidget()
+        right_widget = QWidget()
+
+        # Set minimum widths to maintain proportions
+        left_widget.setMinimumWidth(800)
+        right_widget.setMinimumWidth(400)
+
+        left_layout = QVBoxLayout(left_widget)
+        right_layout = QVBoxLayout(right_widget)
+
+        # Add left and right widgets to the main layout
+        main_layout.addWidget(left_widget, 2)
+        main_layout.addWidget(right_widget, 1)
 
         # System info
         self.ram_bar = QProgressBar()
@@ -446,12 +467,6 @@ class AutoGGUF(QMainWindow):
 
         imatrix_group.setLayout(imatrix_layout)
         right_layout.addWidget(imatrix_group)
-
-        main_widget = QWidget()
-        main_layout.addLayout(left_layout, 2)
-        main_layout.addLayout(right_layout, 1)
-        main_widget.setLayout(main_layout)
-        self.setCentralWidget(main_widget)
 
         # LoRA Conversion Section
         lora_group = QGroupBox(LORA_CONVERSION)
