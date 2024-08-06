@@ -837,15 +837,15 @@ class AutoGGUF(QMainWindow):
                 break
 
     def browse_hf_model_input(self):
-        self.logger.info("Browsing for HuggingFace model directory")
+        self.logger.info(BROWSE_FOR_HF_MODEL_DIRECTORY)
         model_dir = QFileDialog.getExistingDirectory(self, SELECT_HF_MODEL_DIRECTORY)
         if model_dir:
             self.hf_model_input.setText(os.path.abspath(model_dir))
 
     def browse_hf_outfile(self):
-        self.logger.info("Browsing for HuggingFace to GGUF output file")
+        self.logger.info(BROWSE_FOR_HF_TO_GGUF_OUTPUT)
         outfile, _ = QFileDialog.getSaveFileName(
-            self, "Select Output File", "", "GGUF Files (*.gguf)"
+            self, SELECT_OUTPUT_FILE, "", GGUF_FILES
         )
         if outfile:
             self.hf_outfile.setText(os.path.abspath(outfile))
@@ -1425,7 +1425,7 @@ class AutoGGUF(QMainWindow):
         # Add sharded models
         for base_name, shards in sharded_models.items():
             parent_item = QTreeWidgetItem(self.model_tree)
-            parent_item.setText(0, f"{base_name} (sharded)")
+            parent_item.setText(0, f"{base_name} ({SHARDED})")
             # Sort shards by shard number and get the first one
             first_shard = sorted(shards, key=lambda x: x[0])[0][1]
             parent_item.setData(0, Qt.ItemDataRole.UserRole, first_shard)

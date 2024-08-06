@@ -3,275 +3,7 @@ import os
 
 class _Localization:
     def __init__(self):
-        super().__init__()
-
-        # General UI
-        self.WINDOW_TITLE = ""
-        self.RAM_USAGE = ""
-        self.CPU_USAGE = ""
-        self.BACKEND = ""
-        self.REFRESH_BACKENDS = ""
-        self.MODELS_PATH = ""
-        self.OUTPUT_PATH = ""
-        self.LOGS_PATH = ""
-        self.BROWSE = ""
-        self.AVAILABLE_MODELS = ""
-        self.REFRESH_MODELS = ""
-
-        # Quantization
-        self.QUANTIZATION_TYPE = ""
-        self.ALLOW_REQUANTIZE = ""
-        self.LEAVE_OUTPUT_TENSOR = ""
-        self.PURE = ""
-        self.IMATRIX = ""
-        self.INCLUDE_WEIGHTS = ""
-        self.EXCLUDE_WEIGHTS = ""
-        self.USE_OUTPUT_TENSOR_TYPE = ""
-        self.USE_TOKEN_EMBEDDING_TYPE = ""
-        self.KEEP_SPLIT = ""
-        self.KV_OVERRIDES = ""
-        self.ADD_NEW_OVERRIDE = ""
-        self.QUANTIZE_MODEL = ""
-        self.EXTRA_ARGUMENTS = ""
-        self.EXTRA_ARGUMENTS_LABEL = ""
-        self.QUANTIZATION_COMMAND = ""
-
-        # Presets
-        self.SAVE_PRESET = ""
-        self.LOAD_PRESET = ""
-
-        # Tasks
-        self.TASKS = ""
-
-        # llama.cpp Download
-        self.DOWNLOAD_LLAMACPP = ""
-        self.SELECT_RELEASE = ""
-        self.SELECT_ASSET = ""
-        self.EXTRACT_CUDA_FILES = ""
-        self.SELECT_CUDA_BACKEND = ""
-        self.DOWNLOAD = ""
-        self.REFRESH_RELEASES = ""
-
-        # IMatrix Generation
-        self.IMATRIX_GENERATION = ""
-        self.DATA_FILE = ""
-        self.MODEL = ""
-        self.OUTPUT = ""
-        self.OUTPUT_FREQUENCY = ""
-        self.GPU_OFFLOAD = ""
-        self.AUTO = ""
-        self.GENERATE_IMATRIX = ""
-        self.CONTEXT_SIZE = ""
-        self.CONTEXT_SIZE_FOR_IMATRIX = ""
-        self.THREADS = ""
-        self.NUMBER_OF_THREADS_FOR_IMATRIX = ""
-        self.IMATRIX_GENERATION_COMMAND = ""
-
-        # LoRA Conversion
-        self.LORA_CONVERSION = ""
-        self.LORA_INPUT_PATH = ""
-        self.LORA_OUTPUT_PATH = ""
-        self.SELECT_LORA_INPUT_DIRECTORY = ""
-        self.SELECT_LORA_OUTPUT_FILE = ""
-        self.CONVERT_LORA = ""
-        self.LORA_CONVERSION_COMMAND = ""
-
-        # LoRA Export
-        self.EXPORT_LORA = ""
-        self.GGML_LORA_ADAPTERS = ""
-        self.SELECT_LORA_ADAPTER_FILES = ""
-        self.ADD_ADAPTER = ""
-        self.DELETE_ADAPTER = ""
-        self.LORA_SCALE = ""
-        self.ENTER_LORA_SCALE_VALUE = ""
-        self.NUMBER_OF_THREADS_FOR_LORA_EXPORT = ""
-        self.LORA_EXPORT_COMMAND = ""
-
-        # HuggingFace to GGUF Conversion
-        self.HF_TO_GGUF_CONVERSION = ""
-        self.MODEL_DIRECTORY = ""
-        self.OUTPUT_FILE = ""
-        self.OUTPUT_TYPE = ""
-        self.VOCAB_ONLY = ""
-        self.USE_TEMP_FILE = ""
-        self.NO_LAZY_EVALUATION = ""
-        self.MODEL_NAME = ""
-        self.VERBOSE = ""
-        self.SPLIT_MAX_SIZE = ""
-        self.DRY_RUN = ""
-        self.CONVERT_HF_TO_GGUF = ""
-        self.SELECT_HF_MODEL_DIRECTORY = ""
-
-        # General Messages
-        self.ERROR = ""
-        self.WARNING = ""
-        self.PROPERTIES = ""
-        self.CANCEL = ""
-        self.RESTART = ""
-        self.DELETE = ""
-        self.CONFIRM_DELETION = ""
-        self.TASK_RUNNING_WARNING = ""
-        self.YES = ""
-        self.NO = ""
-        self.COMPLETED = ""
-
-        # File Types
-        self.ALL_FILES = ""
-        self.GGUF_FILES = ""
-        self.DAT_FILES = ""
-        self.JSON_FILES = ""
-        self.BIN_FILES = ""
-        self.LORA_FILES = ""
-        self.GGUF_AND_BIN_FILES = ""
-
-        # Status Messages
-        self.DOWNLOAD_COMPLETE = ""
-        self.CUDA_EXTRACTION_FAILED = ""
-        self.PRESET_SAVED = ""
-        self.PRESET_LOADED = ""
-        self.NO_ASSET_SELECTED = ""
-        self.DOWNLOAD_FAILED = ""
-        self.NO_BACKEND_SELECTED = ""
-        self.NO_MODEL_SELECTED = ""
-        self.NO_SUITABLE_CUDA_BACKENDS = ""
-        self.IN_PROGRESS = ""
-        self.LLAMACPP_DOWNLOADED_EXTRACTED = ""
-        self.CUDA_FILES_EXTRACTED = ""
-        self.NO_SUITABLE_CUDA_BACKEND_EXTRACTION = ""
-        self.ERROR_FETCHING_RELEASES = ""
-        self.CONFIRM_DELETION_TITLE = ""
-        self.LOG_FOR = ""
-        self.FAILED_LOAD_PRESET = ""
-        self.INITIALIZING_AUTOGGUF = ""
-        self.AUTOGGUF_INITIALIZATION_COMPLETE = ""
-        self.REFRESHING_BACKENDS = ""
-        self.NO_BACKENDS_AVAILABLE = ""
-        self.FOUND_VALID_BACKENDS = ""
-        self.SAVING_PRESET = ""
-        self.PRESET_SAVED_TO = ""
-        self.LOADING_PRESET = ""
-        self.PRESET_LOADED_FROM = ""
-        self.ADDING_KV_OVERRIDE = ""
-        self.SAVING_TASK_PRESET = ""
-        self.TASK_PRESET_SAVED = ""
-        self.TASK_PRESET_SAVED_TO = ""
-        self.RESTARTING_TASK = ""
-        self.DOWNLOAD_FINISHED_EXTRACTED_TO = ""
-        self.LLAMACPP_DOWNLOADED_AND_EXTRACTED = ""
-        self.NO_SUITABLE_CUDA_BACKEND_FOUND = ""
-        self.LLAMACPP_BINARY_DOWNLOADED_AND_EXTRACTED = ""
-        self.REFRESHING_LLAMACPP_RELEASES = ""
-        self.UPDATING_ASSET_LIST = ""
-        self.UPDATING_CUDA_OPTIONS = ""
-        self.STARTING_LLAMACPP_DOWNLOAD = ""
-        self.UPDATING_CUDA_BACKENDS = ""
-        self.NO_CUDA_BACKEND_SELECTED = ""
-        self.EXTRACTING_CUDA_FILES = ""
-        self.DOWNLOAD_ERROR = ""
-        self.SHOWING_TASK_CONTEXT_MENU = ""
-        self.SHOWING_PROPERTIES_FOR_TASK = ""
-        self.CANCELLING_TASK = ""
-        self.CANCELED = ""
-        self.DELETING_TASK = ""
-        self.LOADING_MODELS = ""
-        self.LOADED_MODELS = ""
-        self.BROWSING_FOR_MODELS_DIRECTORY = ""
-        self.SELECT_MODELS_DIRECTORY = ""
-        self.BROWSING_FOR_OUTPUT_DIRECTORY = ""
-        self.SELECT_OUTPUT_DIRECTORY = ""
-        self.BROWSING_FOR_LOGS_DIRECTORY = ""
-        self.SELECT_LOGS_DIRECTORY = ""
-        self.BROWSING_FOR_IMATRIX_FILE = ""
-        self.SELECT_IMATRIX_FILE = ""
-        self.RAM_USAGE_FORMAT = ""
-        self.CPU_USAGE_FORMAT = ""
-        self.VALIDATING_QUANTIZATION_INPUTS = ""
-        self.MODELS_PATH_REQUIRED = ""
-        self.OUTPUT_PATH_REQUIRED = ""
-        self.LOGS_PATH_REQUIRED = ""
-        self.STARTING_MODEL_QUANTIZATION = ""
-        self.INPUT_FILE_NOT_EXIST = ""
-        self.QUANTIZING_MODEL_TO = ""
-        self.QUANTIZATION_TASK_STARTED = ""
-        self.ERROR_STARTING_QUANTIZATION = ""
-        self.UPDATING_MODEL_INFO = ""
-        self.TASK_FINISHED = ""
-        self.SHOWING_TASK_DETAILS_FOR = ""
-        self.BROWSING_FOR_IMATRIX_DATA_FILE = ""
-        self.SELECT_DATA_FILE = ""
-        self.BROWSING_FOR_IMATRIX_MODEL_FILE = ""
-        self.SELECT_MODEL_FILE = ""
-        self.BROWSING_FOR_IMATRIX_OUTPUT_FILE = ""
-        self.SELECT_OUTPUT_FILE = ""
-        self.STARTING_IMATRIX_GENERATION = ""
-        self.BACKEND_PATH_NOT_EXIST = ""
-        self.GENERATING_IMATRIX = ""
-        self.ERROR_STARTING_IMATRIX_GENERATION = ""
-        self.IMATRIX_GENERATION_TASK_STARTED = ""
-        self.ERROR_MESSAGE = ""
-        self.TASK_ERROR = ""
-        self.APPLICATION_CLOSING = ""
-        self.APPLICATION_CLOSED = ""
-        self.SELECT_QUANTIZATION_TYPE = ""
-        self.ALLOWS_REQUANTIZING = ""
-        self.LEAVE_OUTPUT_WEIGHT = ""
-        self.DISABLE_K_QUANT_MIXTURES = ""
-        self.USE_DATA_AS_IMPORTANCE_MATRIX = ""
-        self.USE_IMPORTANCE_MATRIX_FOR_TENSORS = ""
-        self.DONT_USE_IMPORTANCE_MATRIX_FOR_TENSORS = ""
-        self.OUTPUT_TENSOR_TYPE = ""
-        self.USE_THIS_TYPE_FOR_OUTPUT_WEIGHT = ""
-        self.TOKEN_EMBEDDING_TYPE = ""
-        self.USE_THIS_TYPE_FOR_TOKEN_EMBEDDINGS = ""
-        self.WILL_GENERATE_QUANTIZED_MODEL_IN_SAME_SHARDS = ""
-        self.OVERRIDE_MODEL_METADATA = ""
-        self.INPUT_DATA_FILE_FOR_IMATRIX = ""
-        self.MODEL_TO_BE_QUANTIZED = ""
-        self.OUTPUT_PATH_FOR_GENERATED_IMATRIX = ""
-        self.HOW_OFTEN_TO_SAVE_IMATRIX = ""
-        self.SET_GPU_OFFLOAD_VALUE = ""
-        self.STARTING_LORA_CONVERSION = ""
-        self.LORA_INPUT_PATH_REQUIRED = ""
-        self.LORA_OUTPUT_PATH_REQUIRED = ""
-        self.ERROR_STARTING_LORA_CONVERSION = ""
-        self.LORA_CONVERSION_TASK_STARTED = ""
-        self.BROWSING_FOR_LORA_INPUT_DIRECTORY = ""
-        self.BROWSING_FOR_LORA_OUTPUT_FILE = ""
-        self.CONVERTING_LORA = ""
-        self.LORA_CONVERSION_FINISHED = ""
-        self.LORA_FILE_MOVED = ""
-        self.LORA_FILE_NOT_FOUND = ""
-        self.ERROR_MOVING_LORA_FILE = ""
-        self.MODEL_PATH_REQUIRED = ""
-        self.AT_LEAST_ONE_LORA_ADAPTER_REQUIRED = ""
-        self.INVALID_LORA_SCALE_VALUE = ""
-        self.ERROR_STARTING_LORA_EXPORT = ""
-        self.LORA_EXPORT_TASK_STARTED = ""
-        self.EXPORTING_LORA = ""
-        self.BROWSING_FOR_EXPORT_LORA_MODEL_FILE = ""
-        self.BROWSING_FOR_EXPORT_LORA_OUTPUT_FILE = ""
-        self.ADDING_LORA_ADAPTER = ""
-        self.DELETING_LORA_ADAPTER = ""
-        self.SELECT_LORA_ADAPTER_FILE = ""
-        self.STARTING_LORA_EXPORT = ""
-        self.SELECT_OUTPUT_TYPE = ""
-        self.BASE_MODEL = ""
-        self.SELECT_BASE_MODEL_FILE = ""
-        self.BASE_MODEL_PATH_REQUIRED = ""
-        self.BROWSING_FOR_BASE_MODEL_FILE = ""
-        self.SELECT_BASE_MODEL_FOLDER = ""
-        self.BROWSING_FOR_BASE_MODEL_FOLDER = ""
-        self.LORA_CONVERSION_FROM_TO = ""
-        self.GENERATING_IMATRIX_FOR = ""
-        self.MODEL_PATH_REQUIRED_FOR_IMATRIX = ""
-        self.NO_ASSET_SELECTED_FOR_CUDA_CHECK = ""
-        self.NO_QUANTIZATION_TYPE_SELECTED = ""
-        self.STARTING_HF_TO_GGUF_CONVERSION = ""
-        self.MODEL_DIRECTORY_REQUIRED = ""
-        self.HF_TO_GGUF_CONVERSION_COMMAND = ""
-        self.CONVERTING_TO_GGUF = ""
-        self.ERROR_STARTING_HF_TO_GGUF_CONVERSION = ""
-        self.HF_TO_GGUF_CONVERSION_TASK_STARTED = ""
+        pass
 
 
 class _English(_Localization):
@@ -374,6 +106,10 @@ class _English(_Localization):
         self.DRY_RUN = "Dry Run"
         self.CONVERT_HF_TO_GGUF = "Convert HF to GGUF"
         self.SELECT_HF_MODEL_DIRECTORY = "Select HuggingFace Model Directory"
+        self.BROWSE_FOR_HF_MODEL_DIRECTORY = "Browsing for HuggingFace model directory"
+        self.BROWSE_FOR_HF_TO_GGUF_OUTPUT = (
+            "Browsing for HuggingFace to GGUF output file"
+        )
 
         # General Messages
         self.ERROR = "Error"
@@ -398,6 +134,7 @@ class _English(_Localization):
         self.BIN_FILES = "Binary Files (*.bin)"
         self.LORA_FILES = "LoRA Files (*.bin)"
         self.GGUF_AND_BIN_FILES = "GGUF and Binary Files (*.gguf *.bin)"
+        self.SHARDED = "sharded"
 
         # Status Messages
         self.DOWNLOAD_COMPLETE = "Download Complete"
@@ -591,50 +328,118 @@ class _English(_Localization):
         )
 
 
-class _French:
-    # French localization
+class _French(_Localization):
     def __init__(self):
         super().__init__()
-        self.WINDOW_TITLE = "AutoGGUF (quantificateur automatisé de modèles GGUF)"
+
+        # Interface utilisateur générale
+        self.WINDOW_TITLE = "AutoGGUF (quantificateur automatique de modèles GGUF)"
         self.RAM_USAGE = "Utilisation RAM :"
         self.CPU_USAGE = "Utilisation CPU :"
         self.BACKEND = "Backend Llama.cpp :"
-        self.REFRESH_BACKENDS = "Actualiser les Backends"
-        self.MODELS_PATH = "Chemin des Modèles :"
-        self.OUTPUT_PATH = "Chemin de Sortie :"
-        self.LOGS_PATH = "Chemin des Logs :"
+        self.REFRESH_BACKENDS = "Rafraîchir les backends"
+        self.MODELS_PATH = "Chemin des modèles :"
+        self.OUTPUT_PATH = "Chemin de sortie :"
+        self.LOGS_PATH = "Chemin des logs :"
         self.BROWSE = "Parcourir"
-        self.AVAILABLE_MODELS = "Modèles Disponibles :"
-        self.QUANTIZATION_TYPE = "Type de Quantification :"
-        self.ALLOW_REQUANTIZE = "Autoriser la Requantification"
-        self.LEAVE_OUTPUT_TENSOR = "Laisser le Tenseur de Sortie"
+        self.AVAILABLE_MODELS = "Modèles disponibles :"
+        self.REFRESH_MODELS = "Rafraîchir les modèles"
+
+        # Quantification
+        self.QUANTIZATION_TYPE = "Type de quantification :"
+        self.ALLOW_REQUANTIZE = "Autoriser la requantification"
+        self.LEAVE_OUTPUT_TENSOR = "Laisser le tenseur de sortie"
         self.PURE = "Pur"
         self.IMATRIX = "IMatrix :"
-        self.INCLUDE_WEIGHTS = "Inclure les Poids :"
-        self.EXCLUDE_WEIGHTS = "Exclure les Poids :"
-        self.USE_OUTPUT_TENSOR_TYPE = "Utiliser le Type de Tenseur de Sortie"
-        self.USE_TOKEN_EMBEDDING_TYPE = "Utiliser le Type d'Embedding de Token"
-        self.KEEP_SPLIT = "Garder la Division"
+        self.INCLUDE_WEIGHTS = "Inclure les poids :"
+        self.EXCLUDE_WEIGHTS = "Exclure les poids :"
+        self.USE_OUTPUT_TENSOR_TYPE = "Utiliser le type de tenseur de sortie"
+        self.USE_TOKEN_EMBEDDING_TYPE = "Utiliser le type d'embedding de token"
+        self.KEEP_SPLIT = "Garder la séparation"
         self.KV_OVERRIDES = "Remplacements KV :"
         self.ADD_NEW_OVERRIDE = "Ajouter un nouveau remplacement"
-        self.QUANTIZE_MODEL = "Quantifier le Modèle"
-        self.SAVE_PRESET = "Sauvegarder le Préréglage"
-        self.LOAD_PRESET = "Charger le Préréglage"
+        self.QUANTIZE_MODEL = "Quantifier le modèle"
+        self.EXTRA_ARGUMENTS = "Arguments supplémentaires :"
+        self.EXTRA_ARGUMENTS_LABEL = "Arguments de ligne de commande supplémentaires"
+        self.QUANTIZATION_COMMAND = "Commande de quantification"
+
+        # Préréglages
+        self.SAVE_PRESET = "Sauvegarder le préréglage"
+        self.LOAD_PRESET = "Charger le préréglage"
+
+        # Tâches
         self.TASKS = "Tâches :"
+
+        # Téléchargement de llama.cpp
         self.DOWNLOAD_LLAMACPP = "Télécharger llama.cpp"
-        self.SELECT_RELEASE = "Sélectionner la Version :"
-        self.SELECT_ASSET = "Sélectionner l'Asset :"
+        self.SELECT_RELEASE = "Sélectionner la version :"
+        self.SELECT_ASSET = "Sélectionner l'asset :"
         self.EXTRACT_CUDA_FILES = "Extraire les fichiers CUDA"
-        self.SELECT_CUDA_BACKEND = "Sélectionner le Backend CUDA :"
+        self.SELECT_CUDA_BACKEND = "Sélectionner le backend CUDA :"
         self.DOWNLOAD = "Télécharger"
+        self.REFRESH_RELEASES = "Rafraîchir les versions"
+
+        # Génération IMatrix
         self.IMATRIX_GENERATION = "Génération IMatrix"
-        self.DATA_FILE = "Fichier de Données :"
+        self.DATA_FILE = "Fichier de données :"
         self.MODEL = "Modèle :"
         self.OUTPUT = "Sortie :"
-        self.OUTPUT_FREQUENCY = "Fréquence de Sortie :"
+        self.OUTPUT_FREQUENCY = "Fréquence de sortie :"
         self.GPU_OFFLOAD = "Déchargement GPU :"
         self.AUTO = "Auto"
         self.GENERATE_IMATRIX = "Générer IMatrix"
+        self.CONTEXT_SIZE = "Taille du contexte :"
+        self.CONTEXT_SIZE_FOR_IMATRIX = "Taille du contexte pour la génération IMatrix"
+        self.THREADS = "Threads :"
+        self.NUMBER_OF_THREADS_FOR_IMATRIX = (
+            "Nombre de threads pour la génération IMatrix"
+        )
+        self.IMATRIX_GENERATION_COMMAND = "Commande de génération IMatrix"
+
+        # Conversion LoRA
+        self.LORA_CONVERSION = "Conversion LoRA"
+        self.LORA_INPUT_PATH = "Chemin d'entrée LoRA"
+        self.LORA_OUTPUT_PATH = "Chemin de sortie LoRA"
+        self.SELECT_LORA_INPUT_DIRECTORY = "Sélectionner le répertoire d'entrée LoRA"
+        self.SELECT_LORA_OUTPUT_FILE = "Sélectionner le fichier de sortie LoRA"
+        self.CONVERT_LORA = "Convertir LoRA"
+        self.LORA_CONVERSION_COMMAND = "Commande de conversion LoRA"
+
+        # Export LoRA
+        self.EXPORT_LORA = "Exporter LoRA"
+        self.GGML_LORA_ADAPTERS = "Adaptateurs LoRA GGML"
+        self.SELECT_LORA_ADAPTER_FILES = "Sélectionner les fichiers d'adaptateur LoRA"
+        self.ADD_ADAPTER = "Ajouter un adaptateur"
+        self.DELETE_ADAPTER = "Supprimer"
+        self.LORA_SCALE = "Échelle LoRA"
+        self.ENTER_LORA_SCALE_VALUE = "Entrer la valeur d'échelle LoRA (Optionnel)"
+        self.NUMBER_OF_THREADS_FOR_LORA_EXPORT = "Nombre de threads pour l'export LoRA"
+        self.LORA_EXPORT_COMMAND = "Commande d'export LoRA"
+
+        # Conversion HuggingFace vers GGUF
+        self.HF_TO_GGUF_CONVERSION = "Conversion HuggingFace vers GGUF"
+        self.MODEL_DIRECTORY = "Répertoire du modèle :"
+        self.OUTPUT_FILE = "Fichier de sortie :"
+        self.OUTPUT_TYPE = "Type de sortie :"
+        self.VOCAB_ONLY = "Vocabulaire uniquement"
+        self.USE_TEMP_FILE = "Utiliser un fichier temporaire"
+        self.NO_LAZY_EVALUATION = "Pas d'évaluation paresseuse"
+        self.MODEL_NAME = "Nom du modèle :"
+        self.VERBOSE = "Verbeux"
+        self.SPLIT_MAX_SIZE = "Taille max de séparation :"
+        self.DRY_RUN = "Simulation"
+        self.CONVERT_HF_TO_GGUF = "Convertir HF vers GGUF"
+        self.SELECT_HF_MODEL_DIRECTORY = (
+            "Sélectionner le répertoire du modèle HuggingFace"
+        )
+        self.BROWSE_FOR_HF_MODEL_DIRECTORY = (
+            "Parcourir pour le répertoire du modèle HuggingFace"
+        )
+        self.BROWSE_FOR_HF_TO_GGUF_OUTPUT = (
+            "Parcourir pour le fichier de sortie HuggingFace vers GGUF"
+        )
+
+        # Messages généraux
         self.ERROR = "Erreur"
         self.WARNING = "Avertissement"
         self.PROPERTIES = "Propriétés"
@@ -647,17 +452,32 @@ class _French:
         )
         self.YES = "Oui"
         self.NO = "Non"
-        self.DOWNLOAD_COMPLETE = "Téléchargement Terminé"
-        self.CUDA_EXTRACTION_FAILED = "Échec de l'Extraction CUDA"
-        self.PRESET_SAVED = "Préréglage Sauvegardé"
-        self.PRESET_LOADED = "Préréglage Chargé"
+        self.COMPLETED = "Terminé"
+
+        # Types de fichiers
+        self.ALL_FILES = "Tous les fichiers (*)"
+        self.GGUF_FILES = "Fichiers GGUF (*.gguf)"
+        self.DAT_FILES = "Fichiers DAT (*.dat)"
+        self.JSON_FILES = "Fichiers JSON (*.json)"
+        self.BIN_FILES = "Fichiers binaires (*.bin)"
+        self.LORA_FILES = "Fichiers LoRA (*.bin)"
+        self.GGUF_AND_BIN_FILES = "Fichiers GGUF et binaires (*.gguf *.bin)"
+        self.SHARDED = "fragmenté"
+
+        # Messages de statut
+        self.DOWNLOAD_COMPLETE = "Téléchargement terminé"
+        self.CUDA_EXTRACTION_FAILED = "Échec de l'extraction CUDA"
+        self.PRESET_SAVED = "Préréglage sauvegardé"
+        self.PRESET_LOADED = "Préréglage chargé"
         self.NO_ASSET_SELECTED = "Aucun asset sélectionné"
         self.DOWNLOAD_FAILED = "Échec du téléchargement"
         self.NO_BACKEND_SELECTED = "Aucun backend sélectionné"
         self.NO_MODEL_SELECTED = "Aucun modèle sélectionné"
-        self.REFRESH_RELEASES = "Actualiser les Versions"
         self.NO_SUITABLE_CUDA_BACKENDS = "Aucun backend CUDA approprié trouvé"
-        self.LLAMACPP_DOWNLOADED_EXTRACTED = "Binaire llama.cpp téléchargé et extrait vers {0}\nFichiers CUDA extraits vers {1}"
+        self.IN_PROGRESS = "En cours"
+        self.LLAMACPP_DOWNLOADED_EXTRACTED = (
+            "Binaire llama.cpp téléchargé et extrait vers {0}"
+        )
         self.CUDA_FILES_EXTRACTED = "Fichiers CUDA extraits vers"
         self.NO_SUITABLE_CUDA_BACKEND_EXTRACTION = (
             "Aucun backend CUDA approprié trouvé pour l'extraction"
@@ -665,39 +485,36 @@ class _French:
         self.ERROR_FETCHING_RELEASES = (
             "Erreur lors de la récupération des versions : {0}"
         )
-        self.CONFIRM_DELETION_TITLE = "Confirmer la Suppression"
+        self.CONFIRM_DELETION_TITLE = "Confirmer la suppression"
         self.LOG_FOR = "Log pour {0}"
-        self.ALL_FILES = "Tous les Fichiers (*)"
-        self.GGUF_FILES = "Fichiers GGUF (*.gguf)"
-        self.DAT_FILES = "Fichiers DAT (*.dat)"
-        self.JSON_FILES = "Fichiers JSON (*.json)"
         self.FAILED_LOAD_PRESET = "Échec du chargement du préréglage : {0}"
         self.INITIALIZING_AUTOGGUF = "Initialisation de l'application AutoGGUF"
         self.AUTOGGUF_INITIALIZATION_COMPLETE = "Initialisation d'AutoGGUF terminée"
-        self.REFRESHING_BACKENDS = "Actualisation des backends"
+        self.REFRESHING_BACKENDS = "Rafraîchissement des backends"
         self.NO_BACKENDS_AVAILABLE = "Aucun backend disponible"
         self.FOUND_VALID_BACKENDS = "{0} backends valides trouvés"
         self.SAVING_PRESET = "Sauvegarde du préréglage"
-        self.PRESET_SAVED_TO = "Préréglage sauvegardé dans {0}"
+        self.PRESET_SAVED_TO = "Préréglage sauvegardé vers {0}"
         self.LOADING_PRESET = "Chargement du préréglage"
         self.PRESET_LOADED_FROM = "Préréglage chargé depuis {0}"
         self.ADDING_KV_OVERRIDE = "Ajout du remplacement KV : {0}"
         self.SAVING_TASK_PRESET = "Sauvegarde du préréglage de tâche pour {0}"
-        self.TASK_PRESET_SAVED = "Préréglage de Tâche Sauvegardé"
-        self.TASK_PRESET_SAVED_TO = "Préréglage de tâche sauvegardé dans {0}"
+        self.TASK_PRESET_SAVED = "Préréglage de tâche sauvegardé"
+        self.TASK_PRESET_SAVED_TO = "Préréglage de tâche sauvegardé vers {0}"
         self.RESTARTING_TASK = "Redémarrage de la tâche : {0}"
-        self.IN_PROGRESS = "En Cours"
         self.DOWNLOAD_FINISHED_EXTRACTED_TO = (
             "Téléchargement terminé. Extrait vers : {0}"
         )
-        self.LLAMACPP_DOWNLOADED_AND_EXTRACTED = "Binaire llama.cpp téléchargé et extrait vers {0}\nFichiers CUDA extraits vers {1}"
+        self.LLAMACPP_DOWNLOADED_AND_EXTRACTED = (
+            "Binaire llama.cpp téléchargé et extrait vers {0}"
+        )
         self.NO_SUITABLE_CUDA_BACKEND_FOUND = (
             "Aucun backend CUDA approprié trouvé pour l'extraction"
         )
         self.LLAMACPP_BINARY_DOWNLOADED_AND_EXTRACTED = (
             "Binaire llama.cpp téléchargé et extrait vers {0}"
         )
-        self.REFRESHING_LLAMACPP_RELEASES = "Actualisation des versions de llama.cpp"
+        self.REFRESHING_LLAMACPP_RELEASES = "Rafraîchissement des versions llama.cpp"
         self.UPDATING_ASSET_LIST = "Mise à jour de la liste des assets"
         self.UPDATING_CUDA_OPTIONS = "Mise à jour des options CUDA"
         self.STARTING_LLAMACPP_DOWNLOAD = "Démarrage du téléchargement de llama.cpp"
@@ -716,14 +533,14 @@ class _French:
         self.DELETING_TASK = "Suppression de la tâche : {0}"
         self.LOADING_MODELS = "Chargement des modèles"
         self.LOADED_MODELS = "{0} modèles chargés"
-        self.BROWSING_FOR_MODELS_DIRECTORY = "Recherche du répertoire des modèles"
-        self.SELECT_MODELS_DIRECTORY = "Sélectionner le Répertoire des Modèles"
-        self.BROWSING_FOR_OUTPUT_DIRECTORY = "Recherche du répertoire de sortie"
-        self.SELECT_OUTPUT_DIRECTORY = "Sélectionner le Répertoire de Sortie"
-        self.BROWSING_FOR_LOGS_DIRECTORY = "Recherche du répertoire des logs"
-        self.SELECT_LOGS_DIRECTORY = "Sélectionner le Répertoire des Logs"
-        self.BROWSING_FOR_IMATRIX_FILE = "Recherche du fichier IMatrix"
-        self.SELECT_IMATRIX_FILE = "Sélectionner le Fichier IMatrix"
+        self.BROWSING_FOR_MODELS_DIRECTORY = "Parcourir pour le répertoire des modèles"
+        self.SELECT_MODELS_DIRECTORY = "Sélectionner le répertoire des modèles"
+        self.BROWSING_FOR_OUTPUT_DIRECTORY = "Parcourir pour le répertoire de sortie"
+        self.SELECT_OUTPUT_DIRECTORY = "Sélectionner le répertoire de sortie"
+        self.BROWSING_FOR_LOGS_DIRECTORY = "Parcourir pour le répertoire des logs"
+        self.SELECT_LOGS_DIRECTORY = "Sélectionner le répertoire des logs"
+        self.BROWSING_FOR_IMATRIX_FILE = "Parcourir pour le fichier IMatrix"
+        self.SELECT_IMATRIX_FILE = "Sélectionner le fichier IMatrix"
         self.RAM_USAGE_FORMAT = "{0:.1f}% ({1} Mo / {2} Mo)"
         self.CPU_USAGE_FORMAT = "Utilisation CPU : {0:.1f}%"
         self.VALIDATING_QUANTIZATION_INPUTS = "Validation des entrées de quantification"
@@ -735,29 +552,35 @@ class _French:
         self.QUANTIZING_MODEL_TO = "Quantification de {0} vers {1}"
         self.QUANTIZATION_TASK_STARTED = "Tâche de quantification démarrée pour {0}"
         self.ERROR_STARTING_QUANTIZATION = (
-            "Erreur au démarrage de la quantification : {0}"
+            "Erreur lors du démarrage de la quantification : {0}"
         )
-        self.UPDATING_MODEL_INFO = "Mise à jour des infos du modèle : {0}"
+        self.UPDATING_MODEL_INFO = "Mise à jour des informations du modèle : {0}"
         self.TASK_FINISHED = "Tâche terminée : {0}"
         self.SHOWING_TASK_DETAILS_FOR = "Affichage des détails de la tâche pour : {0}"
-        self.BROWSING_FOR_IMATRIX_DATA_FILE = "Recherche du fichier de données IMatrix"
-        self.SELECT_DATA_FILE = "Sélectionner le Fichier de Données"
-        self.BROWSING_FOR_IMATRIX_MODEL_FILE = "Recherche du fichier modèle IMatrix"
-        self.SELECT_MODEL_FILE = "Sélectionner le Fichier Modèle"
-        self.BROWSING_FOR_IMATRIX_OUTPUT_FILE = "Recherche du fichier de sortie IMatrix"
-        self.SELECT_OUTPUT_FILE = "Sélectionner le Fichier de Sortie"
+        self.BROWSING_FOR_IMATRIX_DATA_FILE = (
+            "Parcourir pour le fichier de données IMatrix"
+        )
+        self.SELECT_DATA_FILE = "Sélectionner le fichier de données"
+        self.BROWSING_FOR_IMATRIX_MODEL_FILE = (
+            "Parcourir pour le fichier de modèle IMatrix"
+        )
+        self.SELECT_MODEL_FILE = "Sélectionner le fichier de modèle"
+        self.BROWSING_FOR_IMATRIX_OUTPUT_FILE = (
+            "Parcourir pour le fichier de sortie IMatrix"
+        )
+        self.SELECT_OUTPUT_FILE = "Sélectionner le fichier de sortie"
         self.STARTING_IMATRIX_GENERATION = "Démarrage de la génération IMatrix"
         self.BACKEND_PATH_NOT_EXIST = "Le chemin du backend n'existe pas : {0}"
         self.GENERATING_IMATRIX = "Génération de l'IMatrix"
         self.ERROR_STARTING_IMATRIX_GENERATION = (
-            "Erreur au démarrage de la génération IMatrix : {0}"
+            "Erreur lors du démarrage de la génération IMatrix : {0}"
         )
         self.IMATRIX_GENERATION_TASK_STARTED = "Tâche de génération IMatrix démarrée"
         self.ERROR_MESSAGE = "Erreur : {0}"
         self.TASK_ERROR = "Erreur de tâche : {0}"
         self.APPLICATION_CLOSING = "Fermeture de l'application"
         self.APPLICATION_CLOSED = "Application fermée"
-        self.SELECT_QUANTIZATION_TYPE = "Sélectionnez le type de quantification"
+        self.SELECT_QUANTIZATION_TYPE = "Sélectionner le type de quantification"
         self.ALLOWS_REQUANTIZING = "Permet de requantifier les tenseurs déjà quantifiés"
         self.LEAVE_OUTPUT_WEIGHT = "Laissera output.weight non (re)quantifié"
         self.DISABLE_K_QUANT_MIXTURES = (
@@ -765,21 +588,21 @@ class _French:
         )
         self.USE_DATA_AS_IMPORTANCE_MATRIX = "Utilise les données du fichier comme matrice d'importance pour les optimisations de quant"
         self.USE_IMPORTANCE_MATRIX_FOR_TENSORS = (
-            "Utiliser la matrice d'importance pour ces tenseurs"
+            "Utilise la matrice d'importance pour ces tenseurs"
         )
         self.DONT_USE_IMPORTANCE_MATRIX_FOR_TENSORS = (
-            "Ne pas utiliser la matrice d'importance pour ces tenseurs"
+            "N'utilise pas la matrice d'importance pour ces tenseurs"
         )
-        self.OUTPUT_TENSOR_TYPE = "Type de Tenseur de Sortie :"
+        self.OUTPUT_TENSOR_TYPE = "Type de tenseur de sortie :"
         self.USE_THIS_TYPE_FOR_OUTPUT_WEIGHT = (
-            "Utiliser ce type pour le tenseur output.weight"
+            "Utilise ce type pour le tenseur output.weight"
         )
-        self.TOKEN_EMBEDDING_TYPE = "Type d'Embedding de Token :"
+        self.TOKEN_EMBEDDING_TYPE = "Type d'embedding de token :"
         self.USE_THIS_TYPE_FOR_TOKEN_EMBEDDINGS = (
-            "Utiliser ce type pour le tenseur des embeddings de token"
+            "Utilise ce type pour le tenseur d'embeddings de token"
         )
         self.WILL_GENERATE_QUANTIZED_MODEL_IN_SAME_SHARDS = (
-            "Générera le modèle quantifié dans les mêmes shards que l'entrée"
+            "Générera le modèle quantifié dans les mêmes fragments que l'entrée"
         )
         self.OVERRIDE_MODEL_METADATA = "Remplacer les métadonnées du modèle"
         self.INPUT_DATA_FILE_FOR_IMATRIX = (
@@ -791,25 +614,6 @@ class _French:
         )
         self.HOW_OFTEN_TO_SAVE_IMATRIX = "Fréquence de sauvegarde de l'IMatrix"
         self.SET_GPU_OFFLOAD_VALUE = "Définir la valeur de déchargement GPU (-ngl)"
-        self.COMPLETED = "Terminé"
-        self.REFRESH_MODELS = "Actualiser les modèles"
-        self.REFRESH_MODELS = "Actualiser les modèles"
-        self.EXTRA_ARGUMENTS = "Arguments supplémentaires :"
-        self.EXTRA_ARGUMENTS_LABEL = "Arguments supplémentaires en ligne de commande"
-        self.CONTEXT_SIZE = "Taille du contexte :"
-        self.CONTEXT_SIZE_FOR_IMATRIX = (
-            "Taille du contexte pour la génération d'IMatrix"
-        )
-        self.THREADS = "Threads :"
-        self.NUMBER_OF_THREADS_FOR_IMATRIX = (
-            "Nombre de threads pour la génération d'IMatrix"
-        )
-        self.LORA_CONVERSION = "Conversion LoRA"
-        self.LORA_INPUT_PATH = "Chemin d'entrée LoRA"
-        self.LORA_OUTPUT_PATH = "Chemin de sortie LoRA"
-        self.SELECT_LORA_INPUT_DIRECTORY = "Sélectionner le répertoire d'entrée LoRA"
-        self.SELECT_LORA_OUTPUT_FILE = "Sélectionner le fichier de sortie LoRA"
-        self.CONVERT_LORA = "Convertir LoRA"
         self.STARTING_LORA_CONVERSION = "Démarrage de la conversion LoRA"
         self.LORA_INPUT_PATH_REQUIRED = "Le chemin d'entrée LoRA est requis."
         self.LORA_OUTPUT_PATH_REQUIRED = "Le chemin de sortie LoRA est requis."
@@ -817,73 +621,80 @@ class _French:
             "Erreur lors du démarrage de la conversion LoRA : {}"
         )
         self.LORA_CONVERSION_TASK_STARTED = "Tâche de conversion LoRA démarrée."
-        self.BIN_FILES = "Fichiers binaires (*.bin)"
         self.BROWSING_FOR_LORA_INPUT_DIRECTORY = (
-            "Recherche du répertoire d'entrée LoRA..."
+            "Parcourir pour le répertoire d'entrée LoRA..."
         )
-        self.BROWSING_FOR_LORA_OUTPUT_FILE = "Recherche du fichier de sortie LoRA..."
+        self.BROWSING_FOR_LORA_OUTPUT_FILE = (
+            "Parcourir pour le fichier de sortie LoRA..."
+        )
         self.CONVERTING_LORA = "Conversion LoRA"
         self.LORA_CONVERSION_FINISHED = "Conversion LoRA terminée."
-        self.LORA_FILE_MOVED = "Fichier LoRA déplacé de {} à {}."
+        self.LORA_FILE_MOVED = "Fichier LoRA déplacé de {} vers {}."
         self.LORA_FILE_NOT_FOUND = "Fichier LoRA non trouvé : {}."
         self.ERROR_MOVING_LORA_FILE = "Erreur lors du déplacement du fichier LoRA : {}"
-        self.EXPORT_LORA = "Exporter LoRA"
         self.MODEL_PATH_REQUIRED = "Le chemin du modèle est requis."
-        self.OUTPUT_PATH_REQUIRED = "Le chemin de sortie est requis."
         self.AT_LEAST_ONE_LORA_ADAPTER_REQUIRED = (
             "Au moins un adaptateur LoRA est requis."
         )
         self.INVALID_LORA_SCALE_VALUE = "Valeur d'échelle LoRA invalide."
         self.ERROR_STARTING_LORA_EXPORT = (
-            "Erreur lors du démarrage de l'exportation LoRA : {}"
+            "Erreur lors du démarrage de l'export LoRA : {}"
         )
-        self.LORA_EXPORT_TASK_STARTED = "Tâche d'exportation LoRA démarrée."
-        self.GGML_LORA_ADAPTERS = "Adaptateurs LoRA GGML"
-        self.SELECT_LORA_ADAPTER_FILES = "Sélectionner les fichiers d'adaptateur LoRA"
-        self.ADD_ADAPTER = "Ajouter un adaptateur"
-        self.DELETE_ADAPTER = "Supprimer"
-        self.LORA_SCALE = "Échelle LoRA"
-        self.ENTER_LORA_SCALE_VALUE = "Entrez la valeur d'échelle LoRA (Optionnel)"
-        self.NUMBER_OF_THREADS_FOR_LORA_EXPORT = (
-            "Nombre de threads pour l'exportation LoRA"
-        )
-        self.EXPORTING_LORA = "Exportation de LoRA..."
+        self.LORA_EXPORT_TASK_STARTED = "Tâche d'export LoRA démarrée."
+        self.EXPORTING_LORA = "Export LoRA..."
         self.BROWSING_FOR_EXPORT_LORA_MODEL_FILE = (
-            "Recherche du fichier de modèle LoRA à exporter..."
+            "Parcourir pour le fichier de modèle d'export LoRA..."
         )
         self.BROWSING_FOR_EXPORT_LORA_OUTPUT_FILE = (
-            "Recherche du fichier de sortie LoRA à exporter..."
+            "Parcourir pour le fichier de sortie d'export LoRA..."
         )
         self.ADDING_LORA_ADAPTER = "Ajout d'un adaptateur LoRA..."
         self.DELETING_LORA_ADAPTER = "Suppression de l'adaptateur LoRA..."
-        self.LORA_FILES = "Fichiers LoRA (*.bin)"
         self.SELECT_LORA_ADAPTER_FILE = "Sélectionner le fichier d'adaptateur LoRA"
-        self.STARTING_LORA_EXPORT = "Démarrage de l'exportation LoRA..."
-        self.OUTPUT_TYPE = "Type de sortie"
+        self.STARTING_LORA_EXPORT = "Démarrage de l'export LoRA..."
         self.SELECT_OUTPUT_TYPE = "Sélectionner le type de sortie (GGUF ou GGML)"
-        self.GGUF_AND_BIN_FILES = "Fichiers GGUF et binaires (*.gguf *.bin)"
         self.BASE_MODEL = "Modèle de base"
-        self.SELECT_BASE_MODEL_FILE = "Sélectionner le fichier du modèle de base (GGUF)"
+        self.SELECT_BASE_MODEL_FILE = "Sélectionner le fichier de modèle de base (GGUF)"
         self.BASE_MODEL_PATH_REQUIRED = (
             "Le chemin du modèle de base est requis pour la sortie GGUF."
         )
-        self.BROWSING_FOR_BASE_MODEL_FILE = "Recherche du fichier du modèle de base..."
+        self.BROWSING_FOR_BASE_MODEL_FILE = (
+            "Parcourir pour le fichier de modèle de base..."
+        )
         self.SELECT_BASE_MODEL_FOLDER = (
-            "Sélectionner le dossier du modèle de base (contenant safetensors)"
+            "Sélectionner le dossier du modèle de base (contenant les safetensors)"
         )
         self.BROWSING_FOR_BASE_MODEL_FOLDER = (
-            "Recherche du dossier du modèle de base..."
+            "Parcourir pour le dossier du modèle de base..."
         )
-        self.LORA_CONVERSION_FROM_TO = "Conversion LoRA de {} à {}"
-        self.GENERATING_IMATRIX_FOR = "Génération d'IMatrix pour {}"
+        self.LORA_CONVERSION_FROM_TO = "Conversion LoRA de {} vers {}"
+        self.GENERATING_IMATRIX_FOR = "Génération de l'IMatrix pour {}"
         self.MODEL_PATH_REQUIRED_FOR_IMATRIX = (
-            "Le chemin du modèle est requis pour la génération d'IMatrix."
+            "Le chemin du modèle est requis pour la génération IMatrix."
+        )
+        self.NO_ASSET_SELECTED_FOR_CUDA_CHECK = (
+            "Aucun asset sélectionné pour la vérification CUDA"
+        )
+        self.NO_QUANTIZATION_TYPE_SELECTED = "Aucun type de quantification sélectionné. Veuillez sélectionner au moins un type de quantification."
+        self.STARTING_HF_TO_GGUF_CONVERSION = (
+            "Démarrage de la conversion HuggingFace vers GGUF"
+        )
+        self.MODEL_DIRECTORY_REQUIRED = "Le répertoire du modèle est requis"
+        self.HF_TO_GGUF_CONVERSION_COMMAND = "Commande de conversion HF vers GGUF : {}"
+        self.CONVERTING_TO_GGUF = "Conversion de {} vers GGUF"
+        self.ERROR_STARTING_HF_TO_GGUF_CONVERSION = (
+            "Erreur lors du démarrage de la conversion HuggingFace vers GGUF : {}"
+        )
+        self.HF_TO_GGUF_CONVERSION_TASK_STARTED = (
+            "Tâche de conversion HuggingFace vers GGUF démarrée"
         )
 
 
 class _SimplifiedChinese(_Localization):
     def __init__(self):
         super().__init__()
+
+        # 通用界面
         self.WINDOW_TITLE = "AutoGGUF（自动GGUF模型量化器）"
         self.RAM_USAGE = "内存使用率："
         self.CPU_USAGE = "CPU使用率："
@@ -894,28 +705,43 @@ class _SimplifiedChinese(_Localization):
         self.LOGS_PATH = "日志路径："
         self.BROWSE = "浏览"
         self.AVAILABLE_MODELS = "可用模型："
+        self.REFRESH_MODELS = "刷新模型"
+
+        # 量化
         self.QUANTIZATION_TYPE = "量化类型："
         self.ALLOW_REQUANTIZE = "允许重新量化"
         self.LEAVE_OUTPUT_TENSOR = "保留输出张量"
         self.PURE = "纯净"
-        self.IMATRIX = "IMatrix："
+        self.IMATRIX = "重要性矩阵："
         self.INCLUDE_WEIGHTS = "包含权重："
         self.EXCLUDE_WEIGHTS = "排除权重："
         self.USE_OUTPUT_TENSOR_TYPE = "使用输出张量类型"
-        self.USE_TOKEN_EMBEDDING_TYPE = "使用令牌嵌入类型"
+        self.USE_TOKEN_EMBEDDING_TYPE = "使用词元嵌入类型"
         self.KEEP_SPLIT = "保持分割"
         self.KV_OVERRIDES = "KV覆盖："
         self.ADD_NEW_OVERRIDE = "添加新覆盖"
         self.QUANTIZE_MODEL = "量化模型"
+        self.EXTRA_ARGUMENTS = "额外参数："
+        self.EXTRA_ARGUMENTS_LABEL = "附加命令行参数"
+        self.QUANTIZATION_COMMAND = "量化命令"
+
+        # 预设
         self.SAVE_PRESET = "保存预设"
         self.LOAD_PRESET = "加载预设"
+
+        # 任务
         self.TASKS = "任务："
+
+        # llama.cpp下载
         self.DOWNLOAD_LLAMACPP = "下载llama.cpp"
-        self.SELECT_RELEASE = "选择发布版本："
+        self.SELECT_RELEASE = "选择版本："
         self.SELECT_ASSET = "选择资源："
         self.EXTRACT_CUDA_FILES = "提取CUDA文件"
         self.SELECT_CUDA_BACKEND = "选择CUDA后端："
         self.DOWNLOAD = "下载"
+        self.REFRESH_RELEASES = "刷新版本"
+
+        # IMatrix生成
         self.IMATRIX_GENERATION = "IMatrix生成"
         self.DATA_FILE = "数据文件："
         self.MODEL = "模型："
@@ -924,6 +750,50 @@ class _SimplifiedChinese(_Localization):
         self.GPU_OFFLOAD = "GPU卸载："
         self.AUTO = "自动"
         self.GENERATE_IMATRIX = "生成IMatrix"
+        self.CONTEXT_SIZE = "上下文大小："
+        self.CONTEXT_SIZE_FOR_IMATRIX = "IMatrix生成的上下文大小"
+        self.THREADS = "线程数："
+        self.NUMBER_OF_THREADS_FOR_IMATRIX = "IMatrix生成的线程数"
+        self.IMATRIX_GENERATION_COMMAND = "IMatrix生成命令"
+
+        # LoRA转换
+        self.LORA_CONVERSION = "LoRA转换"
+        self.LORA_INPUT_PATH = "LoRA输入路径"
+        self.LORA_OUTPUT_PATH = "LoRA输出路径"
+        self.SELECT_LORA_INPUT_DIRECTORY = "选择LoRA输入目录"
+        self.SELECT_LORA_OUTPUT_FILE = "选择LoRA输出文件"
+        self.CONVERT_LORA = "转换LoRA"
+        self.LORA_CONVERSION_COMMAND = "LoRA转换命令"
+
+        # LoRA导出
+        self.EXPORT_LORA = "导出LoRA"
+        self.GGML_LORA_ADAPTERS = "GGML LoRA适配器"
+        self.SELECT_LORA_ADAPTER_FILES = "选择LoRA适配器文件"
+        self.ADD_ADAPTER = "添加适配器"
+        self.DELETE_ADAPTER = "删除"
+        self.LORA_SCALE = "LoRA比例"
+        self.ENTER_LORA_SCALE_VALUE = "输入LoRA比例值（可选）"
+        self.NUMBER_OF_THREADS_FOR_LORA_EXPORT = "LoRA导出的线程数"
+        self.LORA_EXPORT_COMMAND = "LoRA导出命令"
+
+        # HuggingFace到GGUF转换
+        self.HF_TO_GGUF_CONVERSION = "HuggingFace到GGUF转换"
+        self.MODEL_DIRECTORY = "模型目录："
+        self.OUTPUT_FILE = "输出文件："
+        self.OUTPUT_TYPE = "输出类型："
+        self.VOCAB_ONLY = "仅词汇表"
+        self.USE_TEMP_FILE = "使用临时文件"
+        self.NO_LAZY_EVALUATION = "不使用延迟评估"
+        self.MODEL_NAME = "模型名称："
+        self.VERBOSE = "详细模式"
+        self.SPLIT_MAX_SIZE = "最大分割大小："
+        self.DRY_RUN = "试运行"
+        self.CONVERT_HF_TO_GGUF = "转换HF到GGUF"
+        self.SELECT_HF_MODEL_DIRECTORY = "选择HuggingFace模型目录"
+        self.BROWSE_FOR_HF_MODEL_DIRECTORY = "浏览HuggingFace模型目录"
+        self.BROWSE_FOR_HF_TO_GGUF_OUTPUT = "浏览HuggingFace到GGUF输出文件"
+
+        # 通用消息
         self.ERROR = "错误"
         self.WARNING = "警告"
         self.PROPERTIES = "属性"
@@ -931,9 +801,22 @@ class _SimplifiedChinese(_Localization):
         self.RESTART = "重启"
         self.DELETE = "删除"
         self.CONFIRM_DELETION = "您确定要删除此任务吗？"
-        self.TASK_RUNNING_WARNING = "某些任务仍在运行。您确定要退出吗？"
+        self.TASK_RUNNING_WARNING = "一些任务仍在运行。您确定要退出吗？"
         self.YES = "是"
         self.NO = "否"
+        self.COMPLETED = "已完成"
+
+        # 文件类型
+        self.ALL_FILES = "所有文件 (*)"
+        self.GGUF_FILES = "GGUF文件 (*.gguf)"
+        self.DAT_FILES = "DAT文件 (*.dat)"
+        self.JSON_FILES = "JSON文件 (*.json)"
+        self.BIN_FILES = "二进制文件 (*.bin)"
+        self.LORA_FILES = "LoRA文件 (*.bin)"
+        self.GGUF_AND_BIN_FILES = "GGUF和二进制文件 (*.gguf *.bin)"
+        self.SHARDED = "分片"
+
+        # 状态消息
         self.DOWNLOAD_COMPLETE = "下载完成"
         self.CUDA_EXTRACTION_FAILED = "CUDA提取失败"
         self.PRESET_SAVED = "预设已保存"
@@ -942,20 +825,14 @@ class _SimplifiedChinese(_Localization):
         self.DOWNLOAD_FAILED = "下载失败"
         self.NO_BACKEND_SELECTED = "未选择后端"
         self.NO_MODEL_SELECTED = "未选择模型"
-        self.REFRESH_RELEASES = "刷新发布版本"
         self.NO_SUITABLE_CUDA_BACKENDS = "未找到合适的CUDA后端"
-        self.LLAMACPP_DOWNLOADED_EXTRACTED = (
-            "llama.cpp二进制文件已下载并提取到{0}\nCUDA文件已提取到{1}"
-        )
+        self.IN_PROGRESS = "进行中"
+        self.LLAMACPP_DOWNLOADED_EXTRACTED = "llama.cpp二进制文件已下载并解压到{0}"
         self.CUDA_FILES_EXTRACTED = "CUDA文件已提取到"
-        self.NO_SUITABLE_CUDA_BACKEND_EXTRACTION = "未找到适合提取的CUDA后端"
-        self.ERROR_FETCHING_RELEASES = "获取发布版本时出错：{0}"
+        self.NO_SUITABLE_CUDA_BACKEND_EXTRACTION = "未找到合适的CUDA后端进行提取"
+        self.ERROR_FETCHING_RELEASES = "获取版本时出错：{0}"
         self.CONFIRM_DELETION_TITLE = "确认删除"
         self.LOG_FOR = "{0}的日志"
-        self.ALL_FILES = "所有文件 (*)"
-        self.GGUF_FILES = "GGUF文件 (*.gguf)"
-        self.DAT_FILES = "DAT文件 (*.dat)"
-        self.JSON_FILES = "JSON文件 (*.json)"
         self.FAILED_LOAD_PRESET = "加载预设失败：{0}"
         self.INITIALIZING_AUTOGGUF = "初始化AutoGGUF应用程序"
         self.AUTOGGUF_INITIALIZATION_COMPLETE = "AutoGGUF初始化完成"
@@ -965,27 +842,24 @@ class _SimplifiedChinese(_Localization):
         self.SAVING_PRESET = "保存预设"
         self.PRESET_SAVED_TO = "预设已保存到{0}"
         self.LOADING_PRESET = "加载预设"
-        self.PRESET_LOADED_FROM = "从{0}加载了预设"
+        self.PRESET_LOADED_FROM = "预设已从{0}加载"
         self.ADDING_KV_OVERRIDE = "添加KV覆盖：{0}"
         self.SAVING_TASK_PRESET = "保存{0}的任务预设"
         self.TASK_PRESET_SAVED = "任务预设已保存"
         self.TASK_PRESET_SAVED_TO = "任务预设已保存到{0}"
         self.RESTARTING_TASK = "重启任务：{0}"
-        self.IN_PROGRESS = "进行中"
-        self.DOWNLOAD_FINISHED_EXTRACTED_TO = "下载完成。已提取到：{0}"
-        self.LLAMACPP_DOWNLOADED_AND_EXTRACTED = (
-            "llama.cpp二进制文件已下载并提取到{0}\nCUDA文件已提取到{1}"
-        )
-        self.NO_SUITABLE_CUDA_BACKEND_FOUND = "未找到适合提取的CUDA后端"
+        self.DOWNLOAD_FINISHED_EXTRACTED_TO = "下载完成。已解压到：{0}"
+        self.LLAMACPP_DOWNLOADED_AND_EXTRACTED = "llama.cpp二进制文件已下载并解压到{0}"
+        self.NO_SUITABLE_CUDA_BACKEND_FOUND = "未找到合适的CUDA后端进行提取"
         self.LLAMACPP_BINARY_DOWNLOADED_AND_EXTRACTED = (
-            "llama.cpp二进制文件已下载并提取到{0}"
+            "llama.cpp二进制文件已下载并解压到{0}"
         )
-        self.REFRESHING_LLAMACPP_RELEASES = "刷新llama.cpp发布版本"
+        self.REFRESHING_LLAMACPP_RELEASES = "刷新llama.cpp版本"
         self.UPDATING_ASSET_LIST = "更新资源列表"
         self.UPDATING_CUDA_OPTIONS = "更新CUDA选项"
         self.STARTING_LLAMACPP_DOWNLOAD = "开始下载llama.cpp"
         self.UPDATING_CUDA_BACKENDS = "更新CUDA后端"
-        self.NO_CUDA_BACKEND_SELECTED = "未选择要提取的CUDA后端"
+        self.NO_CUDA_BACKEND_SELECTED = "未选择CUDA后端进行提取"
         self.EXTRACTING_CUDA_FILES = "从{0}提取CUDA文件到{1}"
         self.DOWNLOAD_ERROR = "下载错误：{0}"
         self.SHOWING_TASK_CONTEXT_MENU = "显示任务上下文菜单"
@@ -1003,7 +877,7 @@ class _SimplifiedChinese(_Localization):
         self.SELECT_LOGS_DIRECTORY = "选择日志目录"
         self.BROWSING_FOR_IMATRIX_FILE = "浏览IMatrix文件"
         self.SELECT_IMATRIX_FILE = "选择IMatrix文件"
-        self.RAM_USAGE_FORMAT = "{0:.1f}%（{1} MB / {2} MB）"
+        self.RAM_USAGE_FORMAT = "{0:.1f}% ({1} MB / {2} MB)"
         self.CPU_USAGE_FORMAT = "CPU使用率：{0:.1f}%"
         self.VALIDATING_QUANTIZATION_INPUTS = "验证量化输入"
         self.MODELS_PATH_REQUIRED = "需要模型路径"
@@ -1012,7 +886,7 @@ class _SimplifiedChinese(_Localization):
         self.STARTING_MODEL_QUANTIZATION = "开始模型量化"
         self.INPUT_FILE_NOT_EXIST = "输入文件'{0}'不存在。"
         self.QUANTIZING_MODEL_TO = "将{0}量化为{1}"
-        self.QUANTIZATION_TASK_STARTED = "已启动{0}的量化任务"
+        self.QUANTIZATION_TASK_STARTED = "已开始{0}的量化任务"
         self.ERROR_STARTING_QUANTIZATION = "启动量化时出错：{0}"
         self.UPDATING_MODEL_INFO = "更新模型信息：{0}"
         self.TASK_FINISHED = "任务完成：{0}"
@@ -1027,24 +901,24 @@ class _SimplifiedChinese(_Localization):
         self.BACKEND_PATH_NOT_EXIST = "后端路径不存在：{0}"
         self.GENERATING_IMATRIX = "生成IMatrix"
         self.ERROR_STARTING_IMATRIX_GENERATION = "启动IMatrix生成时出错：{0}"
-        self.IMATRIX_GENERATION_TASK_STARTED = "IMatrix生成任务已启动"
+        self.IMATRIX_GENERATION_TASK_STARTED = "IMatrix生成任务已开始"
         self.ERROR_MESSAGE = "错误：{0}"
         self.TASK_ERROR = "任务错误：{0}"
         self.APPLICATION_CLOSING = "应用程序正在关闭"
         self.APPLICATION_CLOSED = "应用程序已关闭"
         self.SELECT_QUANTIZATION_TYPE = "选择量化类型"
-        self.ALLOWS_REQUANTIZING = "允许重新量化已经量化的张量"
-        self.LEAVE_OUTPUT_WEIGHT = "将保留output.weight不被（重新）量化"
+        self.ALLOWS_REQUANTIZING = "允许重新量化已量化的张量"
+        self.LEAVE_OUTPUT_WEIGHT = "将保持output.weight不被（重新）量化"
         self.DISABLE_K_QUANT_MIXTURES = "禁用k-quant混合并将所有张量量化为相同类型"
         self.USE_DATA_AS_IMPORTANCE_MATRIX = "使用文件中的数据作为量化优化的重要性矩阵"
         self.USE_IMPORTANCE_MATRIX_FOR_TENSORS = "对这些张量使用重要性矩阵"
         self.DONT_USE_IMPORTANCE_MATRIX_FOR_TENSORS = "不对这些张量使用重要性矩阵"
         self.OUTPUT_TENSOR_TYPE = "输出张量类型："
         self.USE_THIS_TYPE_FOR_OUTPUT_WEIGHT = "对output.weight张量使用此类型"
-        self.TOKEN_EMBEDDING_TYPE = "令牌嵌入类型："
-        self.USE_THIS_TYPE_FOR_TOKEN_EMBEDDINGS = "对令牌嵌入张量使用此类型"
+        self.TOKEN_EMBEDDING_TYPE = "词元嵌入类型："
+        self.USE_THIS_TYPE_FOR_TOKEN_EMBEDDINGS = "对词元嵌入张量使用此类型"
         self.WILL_GENERATE_QUANTIZED_MODEL_IN_SAME_SHARDS = (
-            "将在与输入相同的分片中生成量化模型"
+            "将生成与输入相同分片的量化模型"
         )
         self.OVERRIDE_MODEL_METADATA = "覆盖模型元数据"
         self.INPUT_DATA_FILE_FOR_IMATRIX = "IMatrix生成的输入数据文件"
@@ -1052,146 +926,208 @@ class _SimplifiedChinese(_Localization):
         self.OUTPUT_PATH_FOR_GENERATED_IMATRIX = "生成的IMatrix的输出路径"
         self.HOW_OFTEN_TO_SAVE_IMATRIX = "保存IMatrix的频率"
         self.SET_GPU_OFFLOAD_VALUE = "设置GPU卸载值（-ngl）"
-        self.COMPLETED = "已完成"
-        self.REFRESH_MODELS = "刷新模型"
-        self.REFRESH_MODELS = "刷新模型"
-        self.EXTRA_ARGUMENTS = "额外参数："
-        self.EXTRA_ARGUMENTS_LABEL = "附加命令行参数"
-        self.CONTEXT_SIZE = "上下文大小："
-        self.CONTEXT_SIZE_FOR_IMATRIX = "IMatrix生成的上下文大小"
-        self.THREADS = "线程数："
-        self.NUMBER_OF_THREADS_FOR_IMATRIX = "IMatrix生成的线程数"
-        self.LORA_CONVERSION = "LoRA转换"
-        self.LORA_INPUT_PATH = "LoRA输入路径"
-        self.LORA_OUTPUT_PATH = "LoRA输出路径"
-        self.SELECT_LORA_INPUT_DIRECTORY = "选择LoRA输入目录"
-        self.SELECT_LORA_OUTPUT_FILE = "选择LoRA输出文件"
-        self.CONVERT_LORA = "转换LoRA"
         self.STARTING_LORA_CONVERSION = "开始LoRA转换"
         self.LORA_INPUT_PATH_REQUIRED = "需要LoRA输入路径。"
         self.LORA_OUTPUT_PATH_REQUIRED = "需要LoRA输出路径。"
         self.ERROR_STARTING_LORA_CONVERSION = "启动LoRA转换时出错：{}"
-        self.LORA_CONVERSION_TASK_STARTED = "LoRA转换任务已启动。"
-        self.BIN_FILES = "二进制文件 (*.bin)"
-        self.BROWSING_FOR_LORA_INPUT_DIRECTORY = "正在浏览LoRA输入目录..."
-        self.BROWSING_FOR_LORA_OUTPUT_FILE = "正在浏览LoRA输出文件..."
+        self.LORA_CONVERSION_TASK_STARTED = "LoRA转换任务已开始。"
+        self.BROWSING_FOR_LORA_INPUT_DIRECTORY = "浏览LoRA输入目录..."
+        self.BROWSING_FOR_LORA_OUTPUT_FILE = "浏览LoRA输出文件..."
         self.CONVERTING_LORA = "LoRA转换"
         self.LORA_CONVERSION_FINISHED = "LoRA转换完成。"
         self.LORA_FILE_MOVED = "LoRA文件已从{}移动到{}。"
         self.LORA_FILE_NOT_FOUND = "未找到LoRA文件：{}。"
         self.ERROR_MOVING_LORA_FILE = "移动LoRA文件时出错：{}"
-        self.EXPORT_LORA = "导出LoRA"
         self.MODEL_PATH_REQUIRED = "需要模型路径。"
-        self.OUTPUT_PATH_REQUIRED = "需要输出路径。"
         self.AT_LEAST_ONE_LORA_ADAPTER_REQUIRED = "至少需要一个LoRA适配器。"
         self.INVALID_LORA_SCALE_VALUE = "无效的LoRA比例值。"
         self.ERROR_STARTING_LORA_EXPORT = "启动LoRA导出时出错：{}"
-        self.LORA_EXPORT_TASK_STARTED = "LoRA导出任务已启动。"
-        self.GGML_LORA_ADAPTERS = "GGML LoRA适配器"
-        self.SELECT_LORA_ADAPTER_FILES = "选择LoRA适配器文件"
-        self.ADD_ADAPTER = "添加适配器"
-        self.DELETE_ADAPTER = "删除"
-        self.LORA_SCALE = "LoRA比例"
-        self.ENTER_LORA_SCALE_VALUE = "输入LoRA比例值（可选）"
-        self.NUMBER_OF_THREADS_FOR_LORA_EXPORT = "LoRA导出的线程数"
-        self.EXPORTING_LORA = "正在导出LoRA..."
-        self.BROWSING_FOR_EXPORT_LORA_MODEL_FILE = "正在浏览导出LoRA模型文件..."
-        self.BROWSING_FOR_EXPORT_LORA_OUTPUT_FILE = "正在浏览导出LoRA输出文件..."
-        self.ADDING_LORA_ADAPTER = "正在添加LoRA适配器..."
-        self.DELETING_LORA_ADAPTER = "正在删除LoRA适配器..."
-        self.LORA_FILES = "LoRA文件 (*.bin)"
+        self.LORA_EXPORT_TASK_STARTED = "LoRA导出任务已开始。"
+        self.EXPORTING_LORA = "导出LoRA..."
+        self.BROWSING_FOR_EXPORT_LORA_MODEL_FILE = "浏览导出LoRA模型文件..."
+        self.BROWSING_FOR_EXPORT_LORA_OUTPUT_FILE = "浏览导出LoRA输出文件..."
+        self.ADDING_LORA_ADAPTER = "添加LoRA适配器..."
+        self.DELETING_LORA_ADAPTER = "删除LoRA适配器..."
         self.SELECT_LORA_ADAPTER_FILE = "选择LoRA适配器文件"
         self.STARTING_LORA_EXPORT = "开始LoRA导出..."
-        self.OUTPUT_TYPE = "输出类型"
         self.SELECT_OUTPUT_TYPE = "选择输出类型（GGUF或GGML）"
-        self.GGUF_AND_BIN_FILES = "GGUF和二进制文件 (*.gguf *.bin)"
         self.BASE_MODEL = "基础模型"
         self.SELECT_BASE_MODEL_FILE = "选择基础模型文件（GGUF）"
         self.BASE_MODEL_PATH_REQUIRED = "GGUF输出需要基础模型路径。"
-        self.BROWSING_FOR_BASE_MODEL_FILE = "正在浏览基础模型文件..."
+        self.BROWSING_FOR_BASE_MODEL_FILE = "浏览基础模型文件..."
         self.SELECT_BASE_MODEL_FOLDER = "选择基础模型文件夹（包含safetensors）"
-        self.BROWSING_FOR_BASE_MODEL_FOLDER = "正在浏览基础模型文件夹..."
-        self.LORA_CONVERSION_FROM_TO = "LoRA从{}转换到{}"
-        self.GENERATING_IMATRIX_FOR = "正在为{}生成IMatrix"
+        self.BROWSING_FOR_BASE_MODEL_FOLDER = "浏览基础模型文件夹..."
+        self.LORA_CONVERSION_FROM_TO = "LoRA转换从{}到{}"
+        self.GENERATING_IMATRIX_FOR = "为{}生成IMatrix"
         self.MODEL_PATH_REQUIRED_FOR_IMATRIX = "IMatrix生成需要模型路径。"
+        self.NO_ASSET_SELECTED_FOR_CUDA_CHECK = "未选择用于CUDA检查的资源"
+        self.NO_QUANTIZATION_TYPE_SELECTED = "未选择量化类型。请至少选择一种量化类型。"
+        self.STARTING_HF_TO_GGUF_CONVERSION = "开始HuggingFace到GGUF转换"
+        self.MODEL_DIRECTORY_REQUIRED = "需要模型目录"
+        self.HF_TO_GGUF_CONVERSION_COMMAND = "HF到GGUF转换命令：{}"
+        self.CONVERTING_TO_GGUF = "将{}转换为GGUF"
+        self.ERROR_STARTING_HF_TO_GGUF_CONVERSION = (
+            "启动HuggingFace到GGUF转换时出错：{}"
+        )
+        self.HF_TO_GGUF_CONVERSION_TASK_STARTED = "HuggingFace到GGUF转换任务已开始"
 
 
 class _Spanish(_Localization):
     def __init__(self):
         super().__init__()
-        self.WINDOW_TITLE = "AutoGGUF (cuantizador automático de modelos GGUF)"
+
+        # Interfaz de usuario general
+        self.WINDOW_TITLE = "AutoGGUF (cuantificador automático de modelos GGUF)"
         self.RAM_USAGE = "Uso de RAM:"
         self.CPU_USAGE = "Uso de CPU:"
         self.BACKEND = "Backend de Llama.cpp:"
-        self.REFRESH_BACKENDS = "Actualizar Backends"
-        self.MODELS_PATH = "Ruta de Modelos:"
-        self.OUTPUT_PATH = "Ruta de Salida:"
-        self.LOGS_PATH = "Ruta de Registros:"
+        self.REFRESH_BACKENDS = "Actualizar backends"
+        self.MODELS_PATH = "Ruta de modelos:"
+        self.OUTPUT_PATH = "Ruta de salida:"
+        self.LOGS_PATH = "Ruta de registros:"
         self.BROWSE = "Explorar"
-        self.AVAILABLE_MODELS = "Modelos Disponibles:"
-        self.QUANTIZATION_TYPE = "Tipo de Cuantización:"
-        self.ALLOW_REQUANTIZE = "Permitir Recuantización"
-        self.LEAVE_OUTPUT_TENSOR = "Dejar Tensor de Salida"
+        self.AVAILABLE_MODELS = "Modelos disponibles:"
+        self.REFRESH_MODELS = "Actualizar modelos"
+
+        # Cuantificación
+        self.QUANTIZATION_TYPE = "Tipo de cuantificación:"
+        self.ALLOW_REQUANTIZE = "Permitir recuantificación"
+        self.LEAVE_OUTPUT_TENSOR = "Dejar tensor de salida"
         self.PURE = "Puro"
         self.IMATRIX = "IMatrix:"
-        self.INCLUDE_WEIGHTS = "Incluir Pesos:"
-        self.EXCLUDE_WEIGHTS = "Excluir Pesos:"
-        self.USE_OUTPUT_TENSOR_TYPE = "Usar Tipo de Tensor de Salida"
-        self.USE_TOKEN_EMBEDDING_TYPE = "Usar Tipo de Incrustación de Token"
-        self.KEEP_SPLIT = "Mantener División"
+        self.INCLUDE_WEIGHTS = "Incluir pesos:"
+        self.EXCLUDE_WEIGHTS = "Excluir pesos:"
+        self.USE_OUTPUT_TENSOR_TYPE = "Usar tipo de tensor de salida"
+        self.USE_TOKEN_EMBEDDING_TYPE = "Usar tipo de embedding de token"
+        self.KEEP_SPLIT = "Mantener división"
         self.KV_OVERRIDES = "Anulaciones KV:"
-        self.ADD_NEW_OVERRIDE = "Agregar nueva anulación"
-        self.QUANTIZE_MODEL = "Cuantizar Modelo"
-        self.SAVE_PRESET = "Guardar Preajuste"
-        self.LOAD_PRESET = "Cargar Preajuste"
+        self.ADD_NEW_OVERRIDE = "Añadir nueva anulación"
+        self.QUANTIZE_MODEL = "Cuantificar modelo"
+        self.EXTRA_ARGUMENTS = "Argumentos extra:"
+        self.EXTRA_ARGUMENTS_LABEL = "Argumentos adicionales de línea de comandos"
+        self.QUANTIZATION_COMMAND = "Comando de cuantificación"
+
+        # Preajustes
+        self.SAVE_PRESET = "Guardar preajuste"
+        self.LOAD_PRESET = "Cargar preajuste"
+
+        # Tareas
         self.TASKS = "Tareas:"
+
+        # Descarga de llama.cpp
         self.DOWNLOAD_LLAMACPP = "Descargar llama.cpp"
-        self.SELECT_RELEASE = "Seleccionar Versión:"
-        self.SELECT_ASSET = "Seleccionar Activo:"
+        self.SELECT_RELEASE = "Seleccionar versión:"
+        self.SELECT_ASSET = "Seleccionar asset:"
         self.EXTRACT_CUDA_FILES = "Extraer archivos CUDA"
-        self.SELECT_CUDA_BACKEND = "Seleccionar Backend CUDA:"
+        self.SELECT_CUDA_BACKEND = "Seleccionar backend CUDA:"
         self.DOWNLOAD = "Descargar"
+        self.REFRESH_RELEASES = "Actualizar versiones"
+
+        # Generación de IMatrix
         self.IMATRIX_GENERATION = "Generación de IMatrix"
-        self.DATA_FILE = "Archivo de Datos:"
+        self.DATA_FILE = "Archivo de datos:"
         self.MODEL = "Modelo:"
         self.OUTPUT = "Salida:"
-        self.OUTPUT_FREQUENCY = "Frecuencia de Salida:"
-        self.GPU_OFFLOAD = "Descarga GPU:"
+        self.OUTPUT_FREQUENCY = "Frecuencia de salida:"
+        self.GPU_OFFLOAD = "Descarga en GPU:"
         self.AUTO = "Auto"
         self.GENERATE_IMATRIX = "Generar IMatrix"
+        self.CONTEXT_SIZE = "Tamaño de contexto:"
+        self.CONTEXT_SIZE_FOR_IMATRIX = "Tamaño de contexto para generación de IMatrix"
+        self.THREADS = "Hilos:"
+        self.NUMBER_OF_THREADS_FOR_IMATRIX = (
+            "Número de hilos para generación de IMatrix"
+        )
+        self.IMATRIX_GENERATION_COMMAND = "Comando de generación de IMatrix"
+
+        # Conversión LoRA
+        self.LORA_CONVERSION = "Conversión LoRA"
+        self.LORA_INPUT_PATH = "Ruta de entrada LoRA"
+        self.LORA_OUTPUT_PATH = "Ruta de salida LoRA"
+        self.SELECT_LORA_INPUT_DIRECTORY = "Seleccionar directorio de entrada LoRA"
+        self.SELECT_LORA_OUTPUT_FILE = "Seleccionar archivo de salida LoRA"
+        self.CONVERT_LORA = "Convertir LoRA"
+        self.LORA_CONVERSION_COMMAND = "Comando de conversión LoRA"
+
+        # Exportación LoRA
+        self.EXPORT_LORA = "Exportar LoRA"
+        self.GGML_LORA_ADAPTERS = "Adaptadores LoRA GGML"
+        self.SELECT_LORA_ADAPTER_FILES = "Seleccionar archivos de adaptador LoRA"
+        self.ADD_ADAPTER = "Añadir adaptador"
+        self.DELETE_ADAPTER = "Eliminar"
+        self.LORA_SCALE = "Escala LoRA"
+        self.ENTER_LORA_SCALE_VALUE = "Introducir valor de escala LoRA (Opcional)"
+        self.NUMBER_OF_THREADS_FOR_LORA_EXPORT = "Número de hilos para exportación LoRA"
+        self.LORA_EXPORT_COMMAND = "Comando de exportación LoRA"
+
+        # Conversión de HuggingFace a GGUF
+        self.HF_TO_GGUF_CONVERSION = "Conversión de HuggingFace a GGUF"
+        self.MODEL_DIRECTORY = "Directorio del modelo:"
+        self.OUTPUT_FILE = "Archivo de salida:"
+        self.OUTPUT_TYPE = "Tipo de salida:"
+        self.VOCAB_ONLY = "Solo vocabulario"
+        self.USE_TEMP_FILE = "Usar archivo temporal"
+        self.NO_LAZY_EVALUATION = "Sin evaluación perezosa"
+        self.MODEL_NAME = "Nombre del modelo:"
+        self.VERBOSE = "Detallado"
+        self.SPLIT_MAX_SIZE = "Tamaño máximo de división:"
+        self.DRY_RUN = "Simulación"
+        self.CONVERT_HF_TO_GGUF = "Convertir HF a GGUF"
+        self.SELECT_HF_MODEL_DIRECTORY = "Seleccionar directorio del modelo HuggingFace"
+        self.BROWSE_FOR_HF_MODEL_DIRECTORY = (
+            "Explorar directorio del modelo HuggingFace"
+        )
+        self.BROWSE_FOR_HF_TO_GGUF_OUTPUT = (
+            "Explorar archivo de salida HuggingFace a GGUF"
+        )
+
+        # Mensajes generales
         self.ERROR = "Error"
         self.WARNING = "Advertencia"
         self.PROPERTIES = "Propiedades"
         self.CANCEL = "Cancelar"
         self.RESTART = "Reiniciar"
         self.DELETE = "Eliminar"
-        self.CONFIRM_DELETION = "¿Estás seguro de que quieres eliminar esta tarea?"
-        self.TASK_RUNNING_WARNING = "Algunas tareas aún se están ejecutando. ¿Estás seguro de que quieres salir?"
+        self.CONFIRM_DELETION = "¿Está seguro de que desea eliminar esta tarea?"
+        self.TASK_RUNNING_WARNING = (
+            "Algunas tareas aún están en ejecución. ¿Está seguro de que desea salir?"
+        )
         self.YES = "Sí"
         self.NO = "No"
-        self.DOWNLOAD_COMPLETE = "Descarga Completa"
-        self.CUDA_EXTRACTION_FAILED = "Extracción de CUDA Fallida"
-        self.PRESET_SAVED = "Preajuste Guardado"
-        self.PRESET_LOADED = "Preajuste Cargado"
-        self.NO_ASSET_SELECTED = "Ningún activo seleccionado"
-        self.DOWNLOAD_FAILED = "Descarga fallida"
-        self.NO_BACKEND_SELECTED = "Ningún backend seleccionado"
-        self.NO_MODEL_SELECTED = "Ningún modelo seleccionado"
-        self.REFRESH_RELEASES = "Actualizar Versiones"
+        self.COMPLETED = "Completado"
+
+        # Tipos de archivo
+        self.ALL_FILES = "Todos los archivos (*)"
+        self.GGUF_FILES = "Archivos GGUF (*.gguf)"
+        self.DAT_FILES = "Archivos DAT (*.dat)"
+        self.JSON_FILES = "Archivos JSON (*.json)"
+        self.BIN_FILES = "Archivos binarios (*.bin)"
+        self.LORA_FILES = "Archivos LoRA (*.bin)"
+        self.GGUF_AND_BIN_FILES = "Archivos GGUF y binarios (*.gguf *.bin)"
+        self.SHARDED = "fragmentado"
+
+        # Mensajes de estado
+        self.DOWNLOAD_COMPLETE = "Descarga completa"
+        self.CUDA_EXTRACTION_FAILED = "Falló la extracción de CUDA"
+        self.PRESET_SAVED = "Preajuste guardado"
+        self.PRESET_LOADED = "Preajuste cargado"
+        self.NO_ASSET_SELECTED = "No se seleccionó ningún asset"
+        self.DOWNLOAD_FAILED = "Falló la descarga"
+        self.NO_BACKEND_SELECTED = "No se seleccionó ningún backend"
+        self.NO_MODEL_SELECTED = "No se seleccionó ningún modelo"
         self.NO_SUITABLE_CUDA_BACKENDS = "No se encontraron backends CUDA adecuados"
-        self.LLAMACPP_DOWNLOADED_EXTRACTED = "Binario de llama.cpp descargado y extraído en {0}\nArchivos CUDA extraídos en {1}"
+        self.IN_PROGRESS = "En progreso"
+        self.LLAMACPP_DOWNLOADED_EXTRACTED = (
+            "Binario de llama.cpp descargado y extraído en {0}"
+        )
         self.CUDA_FILES_EXTRACTED = "Archivos CUDA extraídos en"
         self.NO_SUITABLE_CUDA_BACKEND_EXTRACTION = (
             "No se encontró un backend CUDA adecuado para la extracción"
         )
         self.ERROR_FETCHING_RELEASES = "Error al obtener versiones: {0}"
-        self.CONFIRM_DELETION_TITLE = "Confirmar Eliminación"
+        self.CONFIRM_DELETION_TITLE = "Confirmar eliminación"
         self.LOG_FOR = "Registro para {0}"
-        self.ALL_FILES = "Todos los Archivos (*)"
-        self.GGUF_FILES = "Archivos GGUF (*.gguf)"
-        self.DAT_FILES = "Archivos DAT (*.dat)"
-        self.JSON_FILES = "Archivos JSON (*.json)"
-        self.FAILED_LOAD_PRESET = "Error al cargar el preajuste: {0}"
+        self.FAILED_LOAD_PRESET = "Falló la carga del preajuste: {0}"
         self.INITIALIZING_AUTOGGUF = "Inicializando aplicación AutoGGUF"
         self.AUTOGGUF_INITIALIZATION_COMPLETE = "Inicialización de AutoGGUF completa"
         self.REFRESHING_BACKENDS = "Actualizando backends"
@@ -1201,14 +1137,15 @@ class _Spanish(_Localization):
         self.PRESET_SAVED_TO = "Preajuste guardado en {0}"
         self.LOADING_PRESET = "Cargando preajuste"
         self.PRESET_LOADED_FROM = "Preajuste cargado desde {0}"
-        self.ADDING_KV_OVERRIDE = "Agregando anulación KV: {0}"
+        self.ADDING_KV_OVERRIDE = "Añadiendo anulación KV: {0}"
         self.SAVING_TASK_PRESET = "Guardando preajuste de tarea para {0}"
-        self.TASK_PRESET_SAVED = "Preajuste de Tarea Guardado"
+        self.TASK_PRESET_SAVED = "Preajuste de tarea guardado"
         self.TASK_PRESET_SAVED_TO = "Preajuste de tarea guardado en {0}"
         self.RESTARTING_TASK = "Reiniciando tarea: {0}"
-        self.IN_PROGRESS = "En Progreso"
         self.DOWNLOAD_FINISHED_EXTRACTED_TO = "Descarga finalizada. Extraído en: {0}"
-        self.LLAMACPP_DOWNLOADED_AND_EXTRACTED = "Binario de llama.cpp descargado y extraído en {0}\nArchivos CUDA extraídos en {1}"
+        self.LLAMACPP_DOWNLOADED_AND_EXTRACTED = (
+            "Binario de llama.cpp descargado y extraído en {0}"
+        )
         self.NO_SUITABLE_CUDA_BACKEND_FOUND = (
             "No se encontró un backend CUDA adecuado para la extracción"
         )
@@ -1216,11 +1153,13 @@ class _Spanish(_Localization):
             "Binario de llama.cpp descargado y extraído en {0}"
         )
         self.REFRESHING_LLAMACPP_RELEASES = "Actualizando versiones de llama.cpp"
-        self.UPDATING_ASSET_LIST = "Actualizando lista de activos"
+        self.UPDATING_ASSET_LIST = "Actualizando lista de assets"
         self.UPDATING_CUDA_OPTIONS = "Actualizando opciones de CUDA"
         self.STARTING_LLAMACPP_DOWNLOAD = "Iniciando descarga de llama.cpp"
         self.UPDATING_CUDA_BACKENDS = "Actualizando backends CUDA"
-        self.NO_CUDA_BACKEND_SELECTED = "No se seleccionó backend CUDA para extracción"
+        self.NO_CUDA_BACKEND_SELECTED = (
+            "No se seleccionó ningún backend CUDA para la extracción"
+        )
         self.EXTRACTING_CUDA_FILES = "Extrayendo archivos CUDA de {0} a {1}"
         self.DOWNLOAD_ERROR = "Error de descarga: {0}"
         self.SHOWING_TASK_CONTEXT_MENU = "Mostrando menú contextual de tarea"
@@ -1229,35 +1168,35 @@ class _Spanish(_Localization):
         self.CANCELED = "Cancelado"
         self.DELETING_TASK = "Eliminando tarea: {0}"
         self.LOADING_MODELS = "Cargando modelos"
-        self.LOADED_MODELS = "Cargados {0} modelos"
+        self.LOADED_MODELS = "Se cargaron {0} modelos"
         self.BROWSING_FOR_MODELS_DIRECTORY = "Explorando directorio de modelos"
-        self.SELECT_MODELS_DIRECTORY = "Seleccionar Directorio de Modelos"
+        self.SELECT_MODELS_DIRECTORY = "Seleccionar directorio de modelos"
         self.BROWSING_FOR_OUTPUT_DIRECTORY = "Explorando directorio de salida"
-        self.SELECT_OUTPUT_DIRECTORY = "Seleccionar Directorio de Salida"
+        self.SELECT_OUTPUT_DIRECTORY = "Seleccionar directorio de salida"
         self.BROWSING_FOR_LOGS_DIRECTORY = "Explorando directorio de registros"
-        self.SELECT_LOGS_DIRECTORY = "Seleccionar Directorio de Registros"
+        self.SELECT_LOGS_DIRECTORY = "Seleccionar directorio de registros"
         self.BROWSING_FOR_IMATRIX_FILE = "Explorando archivo IMatrix"
-        self.SELECT_IMATRIX_FILE = "Seleccionar Archivo IMatrix"
+        self.SELECT_IMATRIX_FILE = "Seleccionar archivo IMatrix"
         self.RAM_USAGE_FORMAT = "{0:.1f}% ({1} MB / {2} MB)"
         self.CPU_USAGE_FORMAT = "Uso de CPU: {0:.1f}%"
-        self.VALIDATING_QUANTIZATION_INPUTS = "Validando entradas de cuantización"
+        self.VALIDATING_QUANTIZATION_INPUTS = "Validando entradas de cuantificación"
         self.MODELS_PATH_REQUIRED = "Se requiere la ruta de modelos"
         self.OUTPUT_PATH_REQUIRED = "Se requiere la ruta de salida"
         self.LOGS_PATH_REQUIRED = "Se requiere la ruta de registros"
-        self.STARTING_MODEL_QUANTIZATION = "Iniciando cuantización de modelo"
+        self.STARTING_MODEL_QUANTIZATION = "Iniciando cuantificación del modelo"
         self.INPUT_FILE_NOT_EXIST = "El archivo de entrada '{0}' no existe."
-        self.QUANTIZING_MODEL_TO = "Cuantizando {0} a {1}"
-        self.QUANTIZATION_TASK_STARTED = "Tarea de cuantización iniciada para {0}"
-        self.ERROR_STARTING_QUANTIZATION = "Error al iniciar la cuantización: {0}"
+        self.QUANTIZING_MODEL_TO = "Cuantificando {0} a {1}"
+        self.QUANTIZATION_TASK_STARTED = "Tarea de cuantificación iniciada para {0}"
+        self.ERROR_STARTING_QUANTIZATION = "Error al iniciar la cuantificación: {0}"
         self.UPDATING_MODEL_INFO = "Actualizando información del modelo: {0}"
         self.TASK_FINISHED = "Tarea finalizada: {0}"
         self.SHOWING_TASK_DETAILS_FOR = "Mostrando detalles de la tarea para: {0}"
         self.BROWSING_FOR_IMATRIX_DATA_FILE = "Explorando archivo de datos IMatrix"
-        self.SELECT_DATA_FILE = "Seleccionar Archivo de Datos"
+        self.SELECT_DATA_FILE = "Seleccionar archivo de datos"
         self.BROWSING_FOR_IMATRIX_MODEL_FILE = "Explorando archivo de modelo IMatrix"
-        self.SELECT_MODEL_FILE = "Seleccionar Archivo de Modelo"
+        self.SELECT_MODEL_FILE = "Seleccionar archivo de modelo"
         self.BROWSING_FOR_IMATRIX_OUTPUT_FILE = "Explorando archivo de salida IMatrix"
-        self.SELECT_OUTPUT_FILE = "Seleccionar Archivo de Salida"
+        self.SELECT_OUTPUT_FILE = "Seleccionar archivo de salida"
         self.STARTING_IMATRIX_GENERATION = "Iniciando generación de IMatrix"
         self.BACKEND_PATH_NOT_EXIST = "La ruta del backend no existe: {0}"
         self.GENERATING_IMATRIX = "Generando IMatrix"
@@ -1269,119 +1208,103 @@ class _Spanish(_Localization):
         self.TASK_ERROR = "Error de tarea: {0}"
         self.APPLICATION_CLOSING = "Cerrando aplicación"
         self.APPLICATION_CLOSED = "Aplicación cerrada"
-        self.SELECT_QUANTIZATION_TYPE = "Seleccione el tipo de cuantización"
+        self.SELECT_QUANTIZATION_TYPE = "Seleccione el tipo de cuantificación"
         self.ALLOWS_REQUANTIZING = (
-            "Permite recuantizar tensores que ya han sido cuantizados"
+            "Permite recuantificar tensores que ya han sido cuantificados"
         )
-        self.LEAVE_OUTPUT_WEIGHT = "Dejará output.weight sin (re)cuantizar"
-        self.DISABLE_K_QUANT_MIXTURES = (
-            "Desactiva las mezclas k-quant y cuantiza todos los tensores al mismo tipo"
-        )
-        self.USE_DATA_AS_IMPORTANCE_MATRIX = "Usa los datos en el archivo como matriz de importancia para optimizaciones de cuantización"
+        self.LEAVE_OUTPUT_WEIGHT = "Dejará output.weight sin (re)cuantificar"
+        self.DISABLE_K_QUANT_MIXTURES = "Deshabilita las mezclas k-quant y cuantifica todos los tensores al mismo tipo"
+        self.USE_DATA_AS_IMPORTANCE_MATRIX = "Usa los datos en el archivo como matriz de importancia para optimizaciones de cuantificación"
         self.USE_IMPORTANCE_MATRIX_FOR_TENSORS = (
-            "Usar matriz de importancia para estos tensores"
+            "Usa matriz de importancia para estos tensores"
         )
         self.DONT_USE_IMPORTANCE_MATRIX_FOR_TENSORS = (
-            "No usar matriz de importancia para estos tensores"
+            "No usa matriz de importancia para estos tensores"
         )
-        self.OUTPUT_TENSOR_TYPE = "Tipo de Tensor de Salida:"
+        self.OUTPUT_TENSOR_TYPE = "Tipo de tensor de salida:"
         self.USE_THIS_TYPE_FOR_OUTPUT_WEIGHT = (
-            "Usar este tipo para el tensor output.weight"
+            "Usa este tipo para el tensor output.weight"
         )
-        self.TOKEN_EMBEDDING_TYPE = "Tipo de Incrustación de Token:"
+        self.TOKEN_EMBEDDING_TYPE = "Tipo de embedding de token:"
         self.USE_THIS_TYPE_FOR_TOKEN_EMBEDDINGS = (
-            "Usar este tipo para el tensor de incrustaciones de token"
+            "Usa este tipo para el tensor de embeddings de token"
         )
         self.WILL_GENERATE_QUANTIZED_MODEL_IN_SAME_SHARDS = (
-            "Generará el modelo cuantizado en los mismos fragmentos que la entrada"
+            "Generará el modelo cuantificado en los mismos fragmentos que la entrada"
         )
         self.OVERRIDE_MODEL_METADATA = "Anular metadatos del modelo"
         self.INPUT_DATA_FILE_FOR_IMATRIX = (
             "Archivo de datos de entrada para generación de IMatrix"
         )
-        self.MODEL_TO_BE_QUANTIZED = "Modelo a cuantizar"
+        self.MODEL_TO_BE_QUANTIZED = "Modelo a cuantificar"
         self.OUTPUT_PATH_FOR_GENERATED_IMATRIX = (
             "Ruta de salida para el IMatrix generado"
         )
         self.HOW_OFTEN_TO_SAVE_IMATRIX = "Con qué frecuencia guardar el IMatrix"
         self.SET_GPU_OFFLOAD_VALUE = "Establecer valor de descarga GPU (-ngl)"
-        self.COMPLETED = "Completado"
-        self.REFRESH_MODELS = "Actualizar modelos"
-        self.REFRESH_MODELS = "Actualizar modelos"
-        self.EXTRA_ARGUMENTS = "Argumentos adicionales:"
-        self.EXTRA_ARGUMENTS_LABEL = "Argumentos adicionales de línea de comandos"
-        self.CONTEXT_SIZE = "Tamaño del contexto:"
-        self.CONTEXT_SIZE_FOR_IMATRIX = "Tamaño del contexto para generación de IMatrix"
-        self.THREADS = "Hilos:"
-        self.NUMBER_OF_THREADS_FOR_IMATRIX = (
-            "Número de hilos para generación de IMatrix"
-        )
-        self.LORA_CONVERSION = "Conversión LoRA"
-        self.LORA_INPUT_PATH = "Ruta de entrada LoRA"
-        self.LORA_OUTPUT_PATH = "Ruta de salida LoRA"
-        self.SELECT_LORA_INPUT_DIRECTORY = "Seleccionar directorio de entrada LoRA"
-        self.SELECT_LORA_OUTPUT_FILE = "Seleccionar archivo de salida LoRA"
-        self.CONVERT_LORA = "Convertir LoRA"
         self.STARTING_LORA_CONVERSION = "Iniciando conversión LoRA"
         self.LORA_INPUT_PATH_REQUIRED = "Se requiere la ruta de entrada LoRA."
         self.LORA_OUTPUT_PATH_REQUIRED = "Se requiere la ruta de salida LoRA."
         self.ERROR_STARTING_LORA_CONVERSION = "Error al iniciar la conversión LoRA: {}"
         self.LORA_CONVERSION_TASK_STARTED = "Tarea de conversión LoRA iniciada."
-        self.BIN_FILES = "Archivos binarios (*.bin)"
         self.BROWSING_FOR_LORA_INPUT_DIRECTORY = (
-            "Buscando directorio de entrada LoRA..."
+            "Explorando directorio de entrada LoRA..."
         )
-        self.BROWSING_FOR_LORA_OUTPUT_FILE = "Buscando archivo de salida LoRA..."
-        self.CONVERTING_LORA = "Convirtiendo LoRA"
+        self.BROWSING_FOR_LORA_OUTPUT_FILE = "Explorando archivo de salida LoRA..."
+        self.CONVERTING_LORA = "Conversión LoRA"
         self.LORA_CONVERSION_FINISHED = "Conversión LoRA finalizada."
         self.LORA_FILE_MOVED = "Archivo LoRA movido de {} a {}."
         self.LORA_FILE_NOT_FOUND = "Archivo LoRA no encontrado: {}."
         self.ERROR_MOVING_LORA_FILE = "Error al mover el archivo LoRA: {}"
-        self.EXPORT_LORA = "Exportar LoRA"
         self.MODEL_PATH_REQUIRED = "Se requiere la ruta del modelo."
-        self.OUTPUT_PATH_REQUIRED = "Se requiere la ruta de salida."
         self.AT_LEAST_ONE_LORA_ADAPTER_REQUIRED = (
             "Se requiere al menos un adaptador LoRA."
         )
         self.INVALID_LORA_SCALE_VALUE = "Valor de escala LoRA inválido."
         self.ERROR_STARTING_LORA_EXPORT = "Error al iniciar la exportación LoRA: {}"
         self.LORA_EXPORT_TASK_STARTED = "Tarea de exportación LoRA iniciada."
-        self.GGML_LORA_ADAPTERS = "Adaptadores LoRA GGML"
-        self.SELECT_LORA_ADAPTER_FILES = "Seleccionar archivos de adaptador LoRA"
-        self.ADD_ADAPTER = "Añadir adaptador"
-        self.DELETE_ADAPTER = "Eliminar"
-        self.LORA_SCALE = "Escala LoRA"
-        self.ENTER_LORA_SCALE_VALUE = "Ingresar valor de escala LoRA (Opcional)"
-        self.NUMBER_OF_THREADS_FOR_LORA_EXPORT = "Número de hilos para exportación LoRA"
         self.EXPORTING_LORA = "Exportando LoRA..."
         self.BROWSING_FOR_EXPORT_LORA_MODEL_FILE = (
-            "Buscando archivo de modelo LoRA para exportar..."
+            "Explorando archivo de modelo para exportación LoRA..."
         )
         self.BROWSING_FOR_EXPORT_LORA_OUTPUT_FILE = (
-            "Buscando archivo de salida LoRA para exportar..."
+            "Explorando archivo de salida para exportación LoRA..."
         )
         self.ADDING_LORA_ADAPTER = "Añadiendo adaptador LoRA..."
         self.DELETING_LORA_ADAPTER = "Eliminando adaptador LoRA..."
-        self.LORA_FILES = "Archivos LoRA (*.bin)"
         self.SELECT_LORA_ADAPTER_FILE = "Seleccionar archivo de adaptador LoRA"
         self.STARTING_LORA_EXPORT = "Iniciando exportación LoRA..."
-        self.OUTPUT_TYPE = "Tipo de salida"
         self.SELECT_OUTPUT_TYPE = "Seleccionar tipo de salida (GGUF o GGML)"
-        self.GGUF_AND_BIN_FILES = "Archivos GGUF y binarios (*.gguf *.bin)"
         self.BASE_MODEL = "Modelo base"
         self.SELECT_BASE_MODEL_FILE = "Seleccionar archivo de modelo base (GGUF)"
         self.BASE_MODEL_PATH_REQUIRED = (
             "Se requiere la ruta del modelo base para la salida GGUF."
         )
-        self.BROWSING_FOR_BASE_MODEL_FILE = "Buscando archivo de modelo base..."
+        self.BROWSING_FOR_BASE_MODEL_FILE = "Explorando archivo de modelo base..."
         self.SELECT_BASE_MODEL_FOLDER = (
             "Seleccionar carpeta de modelo base (que contiene safetensors)"
         )
-        self.BROWSING_FOR_BASE_MODEL_FOLDER = "Buscando carpeta de modelo base..."
+        self.BROWSING_FOR_BASE_MODEL_FOLDER = "Explorando carpeta de modelo base..."
         self.LORA_CONVERSION_FROM_TO = "Conversión LoRA de {} a {}"
         self.GENERATING_IMATRIX_FOR = "Generando IMatrix para {}"
         self.MODEL_PATH_REQUIRED_FOR_IMATRIX = (
             "Se requiere la ruta del modelo para la generación de IMatrix."
+        )
+        self.NO_ASSET_SELECTED_FOR_CUDA_CHECK = (
+            "No se seleccionó ningún asset para la verificación CUDA"
+        )
+        self.NO_QUANTIZATION_TYPE_SELECTED = "No se seleccionó ningún tipo de cuantificación. Por favor, seleccione al menos un tipo de cuantificación."
+        self.STARTING_HF_TO_GGUF_CONVERSION = (
+            "Iniciando conversión de HuggingFace a GGUF"
+        )
+        self.MODEL_DIRECTORY_REQUIRED = "Se requiere el directorio del modelo"
+        self.HF_TO_GGUF_CONVERSION_COMMAND = "Comando de conversión de HF a GGUF: {}"
+        self.CONVERTING_TO_GGUF = "Convirtiendo {} a GGUF"
+        self.ERROR_STARTING_HF_TO_GGUF_CONVERSION = (
+            "Error al iniciar la conversión de HuggingFace a GGUF: {}"
+        )
+        self.HF_TO_GGUF_CONVERSION_TASK_STARTED = (
+            "Tarea de conversión de HuggingFace a GGUF iniciada"
         )
 
 
@@ -6197,6 +6120,12 @@ def set_language(lang_code):
     global BASE_MODEL_PATH_REQUIRED, BROWSING_FOR_BASE_MODEL_FILE, SELECT_BASE_MODEL_FOLDER, BROWSING_FOR_BASE_MODEL_FOLDER
     global LORA_CONVERSION_FROM_TO, GENERATING_IMATRIX_FOR, MODEL_PATH_REQUIRED_FOR_IMATRIX, NO_ASSET_SELECTED_FOR_CUDA_CHECK, QUANTIZATION_COMMAND
     global IMATRIX_GENERATION_COMMAND, LORA_CONVERSION_COMMAND, LORA_EXPORT_COMMAND
+    global NO_QUANTIZATION_TYPE_SELECTED, STARTING_HF_TO_GGUF_CONVERSION, MODEL_DIRECTORY_REQUIRED
+    global HF_TO_GGUF_CONVERSION_COMMAND, CONVERTING_TO_GGUF, ERROR_STARTING_HF_TO_GGUF_CONVERSION
+    global HF_TO_GGUF_CONVERSION_TASK_STARTED, HF_TO_GGUF_CONVERSION, MODEL_DIRECTORY, OUTPUT_FILE
+    global VOCAB_ONLY, USE_TEMP_FILE, NO_LAZY_EVALUATION, MODEL_NAME, VERBOSE, SPLIT_MAX_SIZE
+    global DRY_RUN, CONVERT_HF_TO_GGUF, SELECT_HF_MODEL_DIRECTORY, BROWSE_FOR_HF_MODEL_DIRECTORY
+    global BROWSE_FOR_HF_TO_GGUF_OUTPUT, SHARDED
 
     loc = _languages.get(lang_code, _English)()
     english_loc = _English()  # Create an instance of English localization for fallback
