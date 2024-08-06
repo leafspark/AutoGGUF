@@ -237,11 +237,30 @@ class AutoGGUF(QMainWindow):
             self.exclude_weights,
         )
 
+        tensor_types = [
+            "Q2_K",
+            "Q2_K_S",
+            "Q3_K_S",
+            "Q3_K_M",
+            "Q3_K_L",
+            "Q4_K_S",
+            "Q4_K_M",
+            "Q5_K_S",
+            "Q5_K_M",
+            "Q6_K",
+            "Q8_0",
+            "Q4_0",
+            "Q4_1",
+            "Q5_0",
+            "Q5_1",
+            "BF16",
+            "F16",
+            "F32",
+        ]
+
         self.use_output_tensor_type = QCheckBox(USE_OUTPUT_TENSOR_TYPE)
         self.output_tensor_type = QComboBox()
-        self.output_tensor_type.addItems(
-            ["F32", "F16", "Q4_0", "Q4_1", "Q5_0", "Q5_1", "Q8_0"]
-        )
+        self.output_tensor_type.addItems(tensor_types)
         self.output_tensor_type.setEnabled(False)
         self.use_output_tensor_type.toggled.connect(
             lambda checked: self.output_tensor_type.setEnabled(checked)
@@ -256,9 +275,7 @@ class AutoGGUF(QMainWindow):
 
         self.use_token_embedding_type = QCheckBox(USE_TOKEN_EMBEDDING_TYPE)
         self.token_embedding_type = QComboBox()
-        self.token_embedding_type.addItems(
-            ["F32", "F16", "Q4_0", "Q4_1", "Q5_0", "Q5_1", "Q8_0"]
-        )
+        self.token_embedding_type.addItems(tensor_types)
         self.token_embedding_type.setEnabled(False)
         self.use_token_embedding_type.toggled.connect(
             lambda checked: self.token_embedding_type.setEnabled(checked)
