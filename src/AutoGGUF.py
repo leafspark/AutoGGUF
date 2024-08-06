@@ -1,28 +1,24 @@
-from PyQt6.QtWidgets import *
+import json
+import re
+import shutil
+import sys
+from datetime import datetime
+
+import psutil
+import requests
 from PyQt6.QtCore import *
 from PyQt6.QtGui import *
-import os
-import sys
-import psutil
-import shutil
-import subprocess
-import time
-import signal
-import json
-import platform
-import requests
-import zipfile
-import re
-from datetime import datetime
-from imports_and_globals import ensure_directory, open_file_safe, resource_path
+from PyQt6.QtWidgets import *
+
 from DownloadThread import DownloadThread
-from ModelInfoDialog import ModelInfoDialog
-from TaskListItem import TaskListItem
-from QuantizationThread import QuantizationThread
 from KVOverrideEntry import KVOverrideEntry
 from Logger import Logger
-from localizations import *
+from ModelInfoDialog import ModelInfoDialog
+from QuantizationThread import QuantizationThread
+from TaskListItem import TaskListItem
 from error_handling import show_error, handle_error
+from imports_and_globals import ensure_directory, open_file_safe, resource_path
+from localizations import *
 
 
 class AutoGGUF(QMainWindow):
