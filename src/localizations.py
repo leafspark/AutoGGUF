@@ -100,6 +100,7 @@ class _Localization:
         self.SPLIT_MAX_SIZE = ""
         self.DRY_RUN = ""
         self.CONVERT_HF_TO_GGUF = ""
+        self.SELECT_HF_MODEL_DIRECTORY = ""
 
         # General Messages
         self.ERROR = ""
@@ -372,6 +373,7 @@ class _English(_Localization):
         self.SPLIT_MAX_SIZE = "Split Max Size:"
         self.DRY_RUN = "Dry Run"
         self.CONVERT_HF_TO_GGUF = "Convert HF to GGUF"
+        self.SELECT_HF_MODEL_DIRECTORY = "Select HuggingFace Model Directory"
 
         # General Messages
         self.ERROR = "Error"

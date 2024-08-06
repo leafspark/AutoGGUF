@@ -1,6 +1,7 @@
 from PyQt6.QtWidgets import QMessageBox
 from localizations import *
 
+
 def show_error(logger, message):
     logger.error(ERROR_MESSAGE.format(message))
     QMessageBox.critical(None, ERROR, message)
