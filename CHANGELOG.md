@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.5.0] - 2024-08-06
+
+### Changed
+Refactor localizations to use them in HF conversion area
+Organize localizations
+
+### Added
+Add sha256 and PGP signatures (same as commit ones)
+Add HuggingFace to GGUF conversion support
+
+### Fixed
+Fix scaling on low resolution screens, interface now scrolls
+
 ## [1.4.3] - 2024-08-05
 
 ### Changed
