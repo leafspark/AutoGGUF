@@ -16,6 +16,7 @@
 <!-- Repository Stats -->
 ![GitHub stars](https://img.shields.io/github/stars/leafspark/AutoGGUF.svg)
 ![GitHub forks](https://img.shields.io/github/forks/leafspark/AutoGGUF.svg)
+![GitHub release (latest by date)](https://img.shields.io/github/downloads/leafspark/AutoGGUF/latest/total?color=green)
 ![GitHub repo size](https://img.shields.io/github/repo-size/leafspark/AutoGGUF.svg)
 
 <!-- Contribution -->
@@ -112,7 +113,7 @@ Find the executable in `build/<type>/dist/AutoGGUF.exe`.
 
 View the list of supported languages at [AutoGGUF/wiki/Installation#configuration](https://github.com/leafspark/AutoGGUF/wiki/Installation#configuration) (LLM translated, except for English).
 
-To use a specific language, set the `AUTOGGUF_LANGUAGE` environment variable to one of the listed language codes.
+To use a specific language, set the `AUTOGGUF_LANGUAGE` environment variable to one of the listed language codes (note: some languages may not be fully supported yet, those will fallback to English).
 
 ## Known Issues
 
@@ -121,8 +122,7 @@ To use a specific language, set the `AUTOGGUF_LANGUAGE` environment variable to 
 
 ## Planned Features
 
-- Actual progress bar tracking
-- ~~Download safetensors from HF and convert to unquantized GGUF~~ (added in v1.5.0 prerelease)
+- Actual progress bar tracking 
 - Perplexity testing
 - Time estimation for quantization
 
