@@ -113,7 +113,7 @@ To use a specific language, set the `AUTOGGUF_LANGUAGE` environment variable to 
 - Actual progress bar tracking 
 - Perplexity testing
 - Time estimation for quantization
-- `nvidia-smi` monitoring support
+- ~~`nvidia-smi` monitoring support~~ (added in v1.6.0)
 
 ## Troubleshooting
 
