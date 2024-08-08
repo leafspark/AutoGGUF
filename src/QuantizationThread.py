@@ -1,29 +1,19 @@
-from PyQt6.QtWidgets import *
-from PyQt6.QtCore import *
-from PyQt6.QtGui import *
-import os
-import sys
-import psutil
-import subprocess
-import time
 import signal
-import json
-import platform
-import requests
-import zipfile
-import traceback
-from datetime import datetime
+import subprocess
+
+from PySide6.QtCore import *
+
 from imports_and_globals import open_file_safe
 from localizations import *
 
 
 class QuantizationThread(QThread):
     # Define custom signals for communication with the main thread
-    output_signal = pyqtSignal(str)
-    status_signal = pyqtSignal(str)
-    finished_signal = pyqtSignal()
-    error_signal = pyqtSignal(str)
-    model_info_signal = pyqtSignal(dict)
+    output_signal = Signal(str)
+    status_signal = Signal(str)
+    finished_signal = Signal()
+    error_signal = Signal(str)
+    model_info_signal = Signal(dict)
 
     def __init__(self, command, cwd, log_file):
         super().__init__()

@@ -2,13 +2,13 @@ import os
 import zipfile
 
 import requests
-from PyQt6.QtCore import *
+from PySide6.QtCore import *
 
 
 class DownloadThread(QThread):
-    progress_signal = pyqtSignal(int)
-    finished_signal = pyqtSignal(str)
-    error_signal = pyqtSignal(str)
+    progress_signal = Signal(int)
+    finished_signal = Signal(str)
+    error_signal = Signal(str)
 
     def __init__(self, url, save_path):
         super().__init__()

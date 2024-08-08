@@ -6,9 +6,9 @@ from datetime import datetime
 
 import psutil
 import requests
-from PyQt6.QtCore import *
-from PyQt6.QtGui import *
-from PyQt6.QtWidgets import *
+from PySide6.QtCore import *
+from PySide6.QtGui import *
+from PySide6.QtWidgets import *
 
 
 from DownloadThread import DownloadThread

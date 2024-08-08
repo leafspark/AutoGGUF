@@ -9,7 +9,7 @@ import platform
 import requests
 import zipfile
 from datetime import datetime
-from PyQt6.QtWidgets import (
+from PySide6.QtWidgets import (
     QApplication,
     QMainWindow,
     QVBoxLayout,
@@ -35,8 +35,8 @@ from PyQt6.QtWidgets import (
     QPlainTextEdit,
     QMenu,
 )
-from PyQt6.QtCore import QTimer, QThread, pyqtSignal, Qt, QSize
-from PyQt6.QtGui import QCloseEvent, QAction
+from PySide6.QtCore import QTimer, Signal, QThread, Qt, QSize
+from PySide6.QtGui import QCloseEvent, QAction
 
 
 def ensure_directory(path):

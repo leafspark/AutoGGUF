@@ -1,17 +1,5 @@
-from PyQt6.QtWidgets import *
-from PyQt6.QtCore import *
-from PyQt6.QtGui import *
-import os
-import sys
-import psutil
-import subprocess
-import time
-import signal
-import json
-import platform
-import requests
-import zipfile
-from datetime import datetime
+from PySide6.QtCore import *
+from PySide6.QtWidgets import *
 
 
 class TaskListItem(QWidget):

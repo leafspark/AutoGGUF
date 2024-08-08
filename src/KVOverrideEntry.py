@@ -1,6 +1,6 @@
-from PyQt6.QtWidgets import QWidget, QHBoxLayout, QLineEdit, QComboBox, QPushButton
-from PyQt6.QtCore import pyqtSignal, QRegularExpression
-from PyQt6.QtGui import QDoubleValidator, QIntValidator, QRegularExpressionValidator
+from PySide6.QtWidgets import QWidget, QHBoxLayout, QLineEdit, QComboBox, QPushButton
+from PySide6.QtCore import Signal, QRegularExpression
+from PySide6.QtGui import QDoubleValidator, QIntValidator, QRegularExpressionValidator
 from datetime import datetime
 import time
 import os
@@ -9,7 +9,7 @@ import platform
 
 
 class KVOverrideEntry(QWidget):
-    deleted = pyqtSignal(QWidget)
+    deleted = Signal(QWidget)
 
     def __init__(self, parent=None):
         super().__init__(parent)
