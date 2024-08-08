@@ -132,7 +132,7 @@ class _English(_Localization):
         self.DAT_FILES = "DAT Files (*.dat)"
         self.JSON_FILES = "JSON Files (*.json)"
         self.BIN_FILES = "Binary Files (*.bin)"
-        self.LORA_FILES = "LoRA Files (*.bin)"
+        self.LORA_FILES = "LoRA Files (*.bin *.gguf)"
         self.GGUF_AND_BIN_FILES = "GGUF and Binary Files (*.gguf *.bin)"
         self.SHARDED = "sharded"
 
@@ -157,7 +157,7 @@ class _English(_Localization):
         self.ERROR_FETCHING_RELEASES = "Error fetching releases: {0}"
         self.CONFIRM_DELETION_TITLE = "Confirm Deletion"
         self.LOG_FOR = "Log for {0}"
-        self.FAILED_LOAD_PRESET = "Failed to load preset: {0}"
+        self.FAILED_TO_LOAD_PRESET = "Failed to load preset: {0}"
         self.INITIALIZING_AUTOGGUF = "Initializing AutoGGUF application"
         self.AUTOGGUF_INITIALIZATION_COMPLETE = "AutoGGUF initialization complete"
         self.REFRESHING_BACKENDS = "Refreshing backends"

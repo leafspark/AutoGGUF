@@ -20,19 +20,6 @@ from error_handling import show_error, handle_error
 from imports_and_globals import ensure_directory, open_file_safe, resource_path
 from localizations import *
 
-from functools import wraps
-
-
-def handle_load_preset_error(func):
-    @wraps(func)
-    def wrapper(self, *args, **kwargs):
-        try:
-            return func(self, *args, **kwargs)
-        except Exception as e:
-            QMessageBox.critical(self, ERROR, FAILED_TO_LOAD_PRESET.format(str(e)))
-
-    return wrapper
-
 
 class AutoGGUF(QMainWindow):
     def __init__(self):
@@ -724,7 +711,6 @@ class AutoGGUF(QMainWindow):
             )
         self.logger.info(PRESET_SAVED_TO.format(file_name))
 
-    @handle_load_preset_error
     def load_preset(self):
         self.logger.info(LOADING_PRESET)
         file_name, _ = QFileDialog.getOpenFileName(self, LOAD_PRESET, "", JSON_FILES)
@@ -1331,12 +1317,6 @@ class AutoGGUF(QMainWindow):
                 restart_action = QAction(RESTART, self)
                 restart_action.triggered.connect(lambda: self.restart_task(task_item))
                 context_menu.addAction(restart_action)
-
-            save_preset_action = QAction(SAVE_PRESET, self)
-            save_preset_action.triggered.connect(
-                lambda: self.save_task_preset(task_item)
-            )
-            context_menu.addAction(save_preset_action)
 
             delete_action = QAction(DELETE, self)
             delete_action.triggered.connect(lambda: self.delete_task(item))
