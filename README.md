@@ -42,10 +42,6 @@ AutoGGUF provides a graphical user interface for quantizing GGUF models using th
    ```
    pip install -r requirements.txt
    ```
-   or
-   ```
-   pip install PyQt6 requests psutil shutil numpy torch safetensors gguf
-   ```
 2. Run the application:
    ```
    python src/main.py
@@ -86,11 +82,10 @@ Release keys are identical to ones used for commiting.
 
 ### Cross-platform
 ```bash
-cd src
 pip install -U pyinstaller
-pyinstaller main.py --onefile
-cd dist/main
-./main
+./build.sh RELEASE | DEV
+cd build/<type>/dist/
+./AutoGGUF
 ```
 
 ### Windows
@@ -101,13 +96,7 @@ Find the executable in `build/<type>/dist/AutoGGUF.exe`.
 
 ## Dependencies
 
-- PyQt6
-- psutil
-- shutil
-- numpy
-- torch
-- safetensors
-- gguf (bundled)
+Find them in `requirements.txt`.
 
 ## Localizations
 
@@ -117,7 +106,6 @@ To use a specific language, set the `AUTOGGUF_LANGUAGE` environment variable to 
 
 ## Known Issues
 
-- Saving preset while quantizing causes UI thread crash (planned fix: remove this feature)
 - Cannot delete task while processing (planned fix: disallow deletion before cancelling or cancel automatically)
 
 ## Planned Features
@@ -125,6 +113,7 @@ To use a specific language, set the `AUTOGGUF_LANGUAGE` environment variable to 
 - Actual progress bar tracking 
 - Perplexity testing
 - Time estimation for quantization
+- `nvidia-smi` monitoring support
 
 ## Troubleshooting
 
@@ -136,7 +125,7 @@ Fork the repo, make your changes, and ensure you have the latest commits when me
 
 ## User Interface
 
-![image](https://github.com/user-attachments/assets/2660c841-07ba-4c3f-ae3a-e63c7068bdc1)
+![image](https://github.com/user-attachments/assets/a327afb9-950d-420b-b07f-46658ffb0822)
 
 ## Stargazers
 
