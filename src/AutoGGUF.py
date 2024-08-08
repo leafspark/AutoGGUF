@@ -10,12 +10,14 @@ from PyQt6.QtCore import *
 from PyQt6.QtGui import *
 from PyQt6.QtWidgets import *
 
+
 from DownloadThread import DownloadThread
 from KVOverrideEntry import KVOverrideEntry
 from Logger import Logger
 from ModelInfoDialog import ModelInfoDialog
 from QuantizationThread import QuantizationThread
 from TaskListItem import TaskListItem
+from GPUMonitor import GPUMonitor
 from error_handling import show_error, handle_error
 from imports_and_globals import ensure_directory, open_file_safe, resource_path
 from localizations import *
@@ -62,9 +64,12 @@ class AutoGGUF(QMainWindow):
         # System info
         self.ram_bar = QProgressBar()
         self.cpu_label = QLabel(CPU_USAGE)
+        self.gpu_monitor = GPUMonitor()
         left_layout.addWidget(QLabel(RAM_USAGE))
         left_layout.addWidget(self.ram_bar)
         left_layout.addWidget(self.cpu_label)
+        left_layout.addWidget(QLabel(GPU_USAGE))
+        left_layout.addWidget(self.gpu_monitor)
 
         # Modify the backend selection
         backend_layout = QHBoxLayout()

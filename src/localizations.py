@@ -23,6 +23,18 @@ class _English(_Localization):
         self.AVAILABLE_MODELS = "Available Models:"
         self.REFRESH_MODELS = "Refresh Models"
 
+        # GPU Monitoring
+        self.GPU_USAGE = "GPU Usage:"
+        self.GPU_USAGE_FORMAT = "GPU: {:.1f}% | VRAM: {:.1f}% ({} MB / {} MB)"
+        self.GPU_DETAILS = "GPU Details"
+        self.GPU_USAGE_OVER_TIME = "GPU Usage Over Time"
+        self.VRAM_USAGE_OVER_TIME = "VRAM Usage Over Time"
+        self.PERCENTAGE = "Percentage"
+        self.TIME = "Time (s)"
+        self.NO_GPU_DETECTED = "No GPU detected"
+        self.SELECT_GPU = "Select GPU"
+        self.AMD_GPU_NOT_SUPPORTED = "AMD GPU detected, but not supported"
+
         # Quantization
         self.QUANTIZATION_TYPE = "Quantization Type:"
         self.ALLOW_REQUANTIZE = "Allow Requantize"
@@ -344,6 +356,18 @@ class _French(_Localization):
         self.BROWSE = "Parcourir"
         self.AVAILABLE_MODELS = "Modèles disponibles :"
         self.REFRESH_MODELS = "Rafraîchir les modèles"
+
+        # Surveillance GPU
+        self.GPU_USAGE = "Utilisation GPU :"
+        self.GPU_USAGE_FORMAT = "GPU : {:.1f}% | VRAM : {:.1f}% ({} Mo / {} Mo)"
+        self.GPU_DETAILS = "Détails GPU"
+        self.GPU_USAGE_OVER_TIME = "Utilisation GPU dans le temps"
+        self.VRAM_USAGE_OVER_TIME = "Utilisation VRAM dans le temps"
+        self.PERCENTAGE = "Pourcentage"
+        self.TIME = "Temps (s)"
+        self.NO_GPU_DETECTED = "Aucun GPU détecté"
+        self.SELECT_GPU = "Sélectionner GPU"
+        self.AMD_GPU_NOT_SUPPORTED = "GPU AMD détecté, mais non pris en charge"
 
         # Quantification
         self.QUANTIZATION_TYPE = "Type de quantification :"
