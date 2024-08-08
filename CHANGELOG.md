@@ -2,18 +2,38 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.6.0] - 2024-08-08
+
+### Changed
+- Resolve licensing issues by using PySide6
+
+### Added
+- Add GPU monitoring support for NVIDIA GPUs
+
+## [1.5.1] - 2024-08-08
+
+### Changed
+- Refactor localizations to use them in HF conversion area
+- Rename FAILED_LOAD_PRESET to FAILED_TO_LOAD_PRESET localization key
+
+### Removed
+- Remove Save Preset context menu action
+
+### Added
+- Support loading *.gguf file types
+
 ## [1.5.0] - 2024-08-06
 
 ### Changed
-Refactor localizations to use them in HF conversion area
-Organize localizations
+- Refactor localizations to use them in HF conversion area
+- Organize localizations
 
 ### Added
-Add sha256 and PGP signatures (same as commit ones)
-Add HuggingFace to GGUF conversion support
+- Add sha256 and PGP signatures (same as commit ones)
+- Add HuggingFace to GGUF conversion support
 
 ### Fixed
-Fix scaling on low resolution screens, interface now scrolls
+- Fix scaling on low resolution screens, interface now scrolls
 
 ## [1.4.3] - 2024-08-05
 
