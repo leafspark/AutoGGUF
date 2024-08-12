@@ -1355,17 +1355,25 @@ class AutoGGUF(QMainWindow):
         self.gpu_offload_slider.setEnabled(not is_auto)
         self.gpu_offload_spinbox.setEnabled(not is_auto)
 
-    def cancel_task(self, item):
-        self.logger.info(CANCELLING_TASK.format(item.text()))
+    def cancel_task_by_item(self, item):
         task_item = self.task_list.itemWidget(item)
         for thread in self.quant_threads:
             if thread.log_file == task_item.log_file:
                 thread.terminate()
                 task_item.update_status(CANCELED)
+                self.quant_threads.remove(thread)
                 break
+
+    def cancel_task(self, item):
+        self.logger.info(CANCELLING_TASK.format(item.text()))
+        self.cancel_task_by_item(item)
 
     def delete_task(self, item):
         self.logger.info(DELETING_TASK.format(item.text()))
+
+        # Cancel the task first
+        self.cancel_task_by_item(item)
+
         reply = QMessageBox.question(
             self,
             CONFIRM_DELETION_TITLE,
@@ -1374,22 +1382,10 @@ class AutoGGUF(QMainWindow):
             QMessageBox.StandardButton.No,
         )
         if reply == QMessageBox.StandardButton.Yes:
-            # Retrieve the task_item before removing it from the list
             task_item = self.task_list.itemWidget(item)
-
-            # Remove the item from the list
             row = self.task_list.row(item)
             self.task_list.takeItem(row)
 
-            # If the task is still running, terminate it
-            if task_item and task_item.log_file:
-                for thread in self.quant_threads:
-                    if thread.log_file == task_item.log_file:
-                        thread.terminate()
-                        self.quant_threads.remove(thread)
-                        break
-
-            # Delete the task_item widget
             if task_item:
                 task_item.deleteLater()
 
