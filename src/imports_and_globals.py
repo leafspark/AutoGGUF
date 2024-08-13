@@ -57,10 +57,14 @@ def open_file_safe(file_path, mode="r"):
 
 
 def resource_path(relative_path):
-    try:
-        # PyInstaller creates a temp folder and stores path in _MEIPASS
+    if hasattr(sys, "_MEIPASS"):
+        # PyInstaller path
         base_path = sys._MEIPASS
-    except Exception:
+    elif "__compiled__" in globals():
+        # Nuitka path
+        base_path = os.path.dirname(sys.executable)
+    else:
+        # Regular Python path
         base_path = os.path.abspath(".")
 
     return os.path.join(base_path, relative_path)

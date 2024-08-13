@@ -24,12 +24,14 @@ src/*
 docs/*
 !docs/*.py
 
-# Allow assets folder, but only .svg, .png, and .ico files
+# Allow assets folder, but only .svg, .png, .rc and .ico files
 !assets/
 assets/*
 !assets/*.svg
 !assets/*.png
 !assets/*.ico
+!assets/*.rc
+!assets/*.res
 
 # Allow .github folder and its contents
 !.github/
