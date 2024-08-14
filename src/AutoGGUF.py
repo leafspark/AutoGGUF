@@ -1600,13 +1600,16 @@ class AutoGGUF(QMainWindow):
                     command.extend(["--exclude-weights", self.exclude_weights.text()])
                 if self.use_output_tensor_type.isChecked():
                     command.extend(
-                        ["--output-tensor-type", self.output_tensor_type.currentText()]
+                        [
+                            "--output-tensor-type",
+                            self.output_tensor_type.currentText().lower(),
+                        ]
                     )
                 if self.use_token_embedding_type.isChecked():
                     command.extend(
                         [
                             "--token-embedding-type",
-                            self.token_embedding_type.currentText(),
+                            self.token_embedding_type.currentText().lower(),
                         ]
                     )
                 if self.keep_split.isChecked():
