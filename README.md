@@ -94,6 +94,11 @@ build RELEASE | DEV
 ```
 Find the executable in `build/<type>/dist/AutoGGUF.exe`.
 
+You can also use the slower build but faster executable script (Nuitka):
+```bash
+build_optimized RELEASE | DEV
+```
+
 ## Dependencies
 
 Find them in `requirements.txt`.
