@@ -1,6 +1,6 @@
 class AutoGGUF(QMainWindow):
     """
-    AutoGGUF is a PyQt6-based graphical user interface for managing and quantizing large language models.
+    AutoGGUF is a PySide6-based graphical user interface for managing and quantizing large language models.
 
     This class provides functionality for:
     - Loading and displaying models (including sharded models)
@@ -9,9 +9,23 @@ class AutoGGUF(QMainWindow):
     - Generating importance matrices
     - Converting and exporting LoRA models
     - Managing quantization tasks
+    - Converting Hugging Face models to GGUF format
 
     The GUI allows users to interact with these features in an intuitive way, providing
     options for model selection, quantization parameters, and task management.
+
+    Attributes:
+        logger (Logger): Instance of the Logger class for logging operations.
+        ram_bar (QProgressBar): Progress bar for displaying RAM usage.
+        cpu_label (QLabel): Label for displaying CPU usage.
+        gpu_monitor (GPUMonitor): Widget for monitoring GPU usage.
+        backend_combo (QComboBox): Dropdown for selecting the backend.
+        model_tree (QTreeWidget): Tree widget for displaying available models.
+        task_list (QListWidget): List widget for displaying ongoing tasks.
+        quant_threads (list): List to store active quantization threads.
+
+    The class also contains numerous UI elements for user input and interaction,
+    including text inputs, checkboxes, and buttons for various operations.
     """
 
     def __init__(self):
@@ -20,488 +34,112 @@ class AutoGGUF(QMainWindow):
 
         This method sets up the main window, initializes the UI components,
         sets up layouts, and connects various signals to their respective slots.
-        It also initializes the logger and sets up the system info update timer.
+        It also initializes the logger, sets up the system info update timer,
+        and prepares the application for model management and quantization tasks.
+
+        The initialization process includes:
+        - Setting up the main window properties (title, icon, size)
+        - Creating and arranging UI components for different functionalities
+        - Initializing backend and release information
+        - Setting up file browsers for various inputs
+        - Preparing quantization options and task management interface
+        - Initializing iMatrix generation interface
+        - Setting up LoRA conversion and export interfaces
+        - Preparing Hugging Face to GGUF conversion interface
         """
 
     def refresh_backends(self):
         """
-        Refresh the list of available llama.cpp backends.
+        Refresh the list of available backends.
 
         This method scans the 'llama_bin' directory for valid backends,
-        populates the backend combo box with the found backends, and
-        enables/disables the combo box based on the availability of backends.
-        """
-
-    def update_base_model_visibility(self, index):
-        """
-        Update the visibility of the base model selection widgets.
-
-        Args:
-            index (int): The current index of the LoRA output type combo box.
-
-        This method shows or hides the base model selection widgets based on
-        whether the selected LoRA output type is GGUF or not.
-        """
-
-    def save_preset(self):
-        """
-        Save the current quantization settings as a preset.
-
-        This method collects all the current quantization settings and saves
-        them to a JSON file. The user is prompted to choose the save location.
-        """
-
-    def load_preset(self):
-        """
-        Load a previously saved quantization preset.
-
-        This method prompts the user to select a preset JSON file and then
-        applies the saved settings to the current UI state.
-        """
-
-    def save_task_preset(self, task_item):
-        """
-        Save the settings of a specific quantization task as a preset.
-
-        Args:
-            task_item (TaskListItem): The task item to save as a preset.
-
-        This method saves the command, backend path, and log file of the
-        specified task to a JSON file.
-        """
-
-    def browse_export_lora_model(self):
-        """
-        Open a file dialog to select a model file for LoRA export.
-
-        This method updates the LoRA model input field with the selected file path.
-        """
-
-    def browse_export_lora_output(self):
-        """
-        Open a file dialog to select an output file for LoRA export.
-
-        This method updates the LoRA output input field with the selected file path.
-        """
-
-    def add_lora_adapter(self):
-        """
-        Add a new LoRA adapter to the list of adapters for export.
-
-        This method opens a file dialog to select a LoRA adapter file and adds
-        it to the list with an associated scale input.
-        """
-
-    def browse_base_model(self):
-        """
-        Open a file dialog to select a base model folder for LoRA conversion.
-
-        This method updates the base model path input field with the selected folder path.
-        """
-
-    def delete_lora_adapter_item(self, adapter_widget):
-        """
-        Remove a LoRA adapter item from the list of adapters.
-
-        Args:
-            adapter_widget (QWidget): The widget representing the adapter to be removed.
-        """
-
-    def export_lora(self):
-        """
-        Start the LoRA export process.
-
-        This method collects all the necessary information for LoRA export,
-        constructs the export command, and starts a new thread to run the export process.
-        """
-
-    def load_models(self):
-        """
-        Load and display the available models in the model tree.
-
-        This method scans the models directory, detects sharded and single models,
-        and populates the model tree widget with the found models.
-        """
-
-    def quantize_model(self):
-        """
-        Initiates the quantization process for the selected model with the chosen quantization types.
-
-        This function performs the following steps:
-        1. Validates the input parameters and selected model.
-        2. Retrieves the backend path and selected quantization types.
-        3. For each selected quantization type:
-            a. Constructs the output file name based on the quantization options.
-            b. Builds the quantization command with all selected options.
-            c. Creates a new thread for the quantization process.
-            d. Sets up a task item in the GUI to display progress and status.
-            e. Connects the thread signals to update the GUI and handle errors.
-            f. Starts the quantization thread.
-
-        The function handles various exceptions and displays error messages if any step fails.
-
-        Raises:
-            ValueError: If required inputs are missing or invalid.
-            FileNotFoundError: If the input model file doesn't exist.
-            Exception: For any other unexpected errors during the process.
-        """
-
-    def update_model_info(self, model_info):
-        """
-        Update the model information.
-
-        Args:
-            model_info (dict): A dictionary containing updated model information.
-
-        This method is a placeholder for future functionality to update and display
-        model information during or after quantization.
-        """
-
-    def parse_progress(self, line, task_item):
-        """
-        Parse the output of the quantization process to update the progress bar.
-
-        Args:
-            line (str): A line of output from the quantization process.
-            task_item (TaskListItem): The task item to update.
-
-        This method looks for progress information in the output and updates
-        the task item's progress bar accordingly.
-        """
-
-    def task_finished(self, thread):
-        """
-        Handle the completion of a quantization task.
-
-        Args:
-            thread (QuantizationThread): The thread that has finished.
-
-        This method removes the finished thread from the list of active threads.
-        """
-
-    def show_task_details(self, item):
-        """
-        Display the details of a quantization task.
-
-        Args:
-            item (QListWidgetItem): The list item representing the task.
-
-        This method opens a dialog showing the log file contents for the selected task.
-        """
-
-    def browse_imatrix_datafile(self):
-        """
-        Open a file dialog to select a data file for importance matrix generation.
-
-        This method updates the imatrix data file input field with the selected file path.
-        """
-
-    def browse_imatrix_model(self):
-        """
-        Open a file dialog to select a model file for importance matrix generation.
-
-        This method updates the imatrix model input field with the selected file path.
-        """
-
-    def browse_imatrix_output(self):
-        """
-        Open a file dialog to select an output file for importance matrix generation.
-
-        This method updates the imatrix output input field with the selected file path.
-        """
-
-    def update_gpu_offload_spinbox(self, value):
-        """
-        Update the GPU offload spinbox value.
-
-        Args:
-            value (int): The new value for the GPU offload spinbox.
-        """
-
-    def update_gpu_offload_slider(self, value):
-        """
-        Update the GPU offload slider value.
-
-        Args:
-            value (int): The new value for the GPU offload slider.
-        """
-
-    def toggle_gpu_offload_auto(self, state):
-        """
-        Toggle the automatic GPU offload option.
-
-        Args:
-            state (Qt.CheckState): The new state of the auto checkbox.
-
-        This method enables or disables the GPU offload slider and spinbox
-        based on the state of the auto checkbox.
-        """
-
-    def generate_imatrix(self):
-        """
-        Start the importance matrix generation process.
-
-        This method collects all the necessary information for imatrix generation,
-        constructs the generation command, and starts a new thread to run the process.
-        """
-
-    def show_error(self, message):
-        """
-        Display an error message to the user.
-
-        Args:
-            message (str): The error message to display.
-
-        This method logs the error and shows a message box with the error details.
-        """
-
-    def handle_error(self, error_message, task_item, task_exists=True):
-        """
-        Handle an error that occurred during a task.
-
-        Args:
-            error_message (str): The error message.
-            task_item (TaskListItem): The task item associated with the error.
-            task_exists (bool): Whether the task still exists in the UI.
-
-        This method logs the error, displays it to the user, and updates the
-        task item's status if it still exists.
-        """
-
-    def closeEvent(self, event: QCloseEvent):
-        """
-        Handle the window close event.
-
-        Args:
-            event (QCloseEvent): The close event.
-
-        This method checks if there are any running tasks before closing the
-        application. If tasks are running, it prompts the user for confirmation.
-        """
-
-    def refresh_releases(self):
-        """
-        Refresh the list of available llama.cpp releases from GitHub.
-
-        This method fetches the latest releases from the llama.cpp GitHub repository
-        and populates the release combo box with the fetched information.
+        updates the backend selection combo box, and enables/disables
+        it based on the availability of backends.
+
+        The method logs the refresh operation and the number of valid
+        backends found.
         """
 
     def update_assets(self):
         """
         Update the list of assets for the selected llama.cpp release.
 
-        This method populates the asset combo box with the available assets
-        for the currently selected release.
+        This method clears the current asset list and populates it with
+        the assets of the selected release. It also updates the CUDA
+        option visibility based on the selected asset.
         """
 
     def download_llama_cpp(self):
         """
-        Start the download process for the selected llama.cpp asset.
+        Initiate the download of the selected llama.cpp release asset.
 
-        This method initiates the download of the selected llama.cpp asset,
-        sets up a progress bar, and manages the download thread.
+        This method starts a download thread for the selected asset,
+        updates the UI to show download progress, and sets up signal
+        connections for download completion and error handling.
         """
 
-    def update_cuda_option(self):
+    def load_models(self):
         """
-        Update the visibility and options for CUDA-related widgets.
+        Load and display the list of available models.
 
-        This method shows or hides CUDA-related options based on whether
-        the selected asset is CUDA-compatible.
-        """
-
-    def update_cuda_backends(self):
-        """
-        Update the list of available CUDA-capable backends.
-
-        This method populates the CUDA backend combo box with the available
-        CUDA-capable backends found in the llama_bin directory.
+        This method scans the specified models directory for .gguf files,
+        organizes them into sharded and single models, and populates
+        the model tree widget with this information.
         """
 
-    def update_download_progress(self, progress):
+    def quantize_model(self):
         """
-        Update the download progress bar.
+        Start the quantization process for the selected model.
+
+        This method prepares the quantization command based on user-selected
+        options, creates a new quantization thread, and sets up a task item
+        in the task list to track the quantization progress.
+        """
+
+    def generate_imatrix(self):
+        """
+        Start the importance matrix generation process.
+
+        This method prepares the iMatrix generation command based on user inputs,
+        creates a new thread for the operation, and sets up a task item
+        in the task list to track the generation progress.
+        """
+
+    def convert_lora(self):
+        """
+        Start the LoRA conversion process.
+
+        This method prepares the LoRA conversion command based on user inputs,
+        creates a new thread for the conversion, and sets up a task item
+        in the task list to track the conversion progress.
+        """
+
+    def export_lora(self):
+        """
+        Start the LoRA export process.
+
+        This method prepares the LoRA export command based on user inputs,
+        creates a new thread for the export operation, and sets up a task item
+        in the task list to track the export progress.
+        """
+
+    def convert_hf_to_gguf(self):
+        """
+        Start the process of converting a Hugging Face model to GGUF format.
+
+        This method prepares the conversion command based on user inputs,
+        creates a new thread for the conversion, and sets up a task item
+        in the task list to track the conversion progress.
+        """
+
+    def closeEvent(self, event: QCloseEvent):
+        """
+        Handle the window close event.
+
+        This method is called when the user attempts to close the application.
+        It checks for any running tasks and prompts the user for confirmation
+        before closing if tasks are still in progress.
 
         Args:
-            progress (int): The current progress percentage.
-
-        This method updates the download progress bar with the given percentage.
-        """
-
-    def download_finished(self, extract_dir):
-        """
-        Handle the completion of a llama.cpp download.
-
-        Args:
-            extract_dir (str): The directory where the download was extracted.
-
-        This method updates the UI after a successful download, handles CUDA
-        file extraction if applicable, and refreshes the backend list.
-        """
-
-    def extract_cuda_files(self, extract_dir, destination):
-        """
-        Extract CUDA-related files from the downloaded archive.
-
-        Args:
-            extract_dir (str): The directory containing the extracted files.
-            destination (str): The destination directory for CUDA files.
-
-        This method copies CUDA-related DLL files to the specified destination.
-        """
-
-    def download_error(self, error_message):
-        """
-        Handle errors that occur during the llama.cpp download process.
-
-        Args:
-            error_message (str): The error message describing the download failure.
-
-        This method displays the error message, resets the download UI elements,
-        and cleans up any partially downloaded files.
-        """
-
-    def show_task_context_menu(self, position):
-        """
-        Display a context menu for a task in the task list.
-
-        Args:
-            position (QPoint): The position where the context menu should be displayed.
-
-        This method creates and shows a context menu with options to view properties,
-        cancel, restart, save preset, or delete a task.
-        """
-
-    def show_task_properties(self, item):
-        """
-        Display the properties of a quantization task.
-
-        Args:
-            item (QListWidgetItem): The list item representing the task.
-
-        This method opens a dialog showing detailed information about the selected task.
-        """
-
-    def update_threads_spinbox(self, value):
-        """
-        Update the threads spinbox value.
-
-        Args:
-            value (int): The new value for the threads spinbox.
-        """
-
-    def update_threads_slider(self, value):
-        """
-        Update the threads slider value.
-
-        Args:
-            value (int): The new value for the threads slider.
-        """
-
-    def cancel_task(self, item):
-        """
-        Cancel a running quantization task.
-
-        Args:
-            item (QListWidgetItem): The list item representing the task to cancel.
-
-        This method terminates the thread associated with the task and updates its status.
-        """
-
-    def retry_task(self, item):
-        """
-        Retry a failed or canceled quantization task.
-
-        Args:
-            item (QListWidgetItem): The list item representing the task to retry.
-
-        This method is a placeholder for future implementation of task retry functionality.
-        """
-
-    def delete_task(self, item):
-        """
-        Delete a task from the task list.
-
-        Args:
-            item (QListWidgetItem): The list item representing the task to delete.
-
-        This method removes the task from the UI and terminates any associated thread.
-        """
-
-    def create_label(self, text, tooltip):
-        """
-        Create a QLabel with text and tooltip.
-
-        Args:
-            text (str): The text to display on the label.
-            tooltip (str): The tooltip text for the label.
-
-        Returns:
-            QLabel: A new QLabel instance with the specified text and tooltip.
-        """
-
-    def browse_models(self):
-        """
-        Open a file dialog to select the models directory.
-
-        This method updates the models input field with the selected directory path
-        and reloads the list of available models.
-        """
-
-    def browse_output(self):
-        """
-        Open a file dialog to select the output directory for quantized models.
-
-        This method updates the output input field with the selected directory path.
-        """
-
-    def browse_logs(self):
-        """
-        Open a file dialog to select the logs directory.
-
-        This method updates the logs input field with the selected directory path.
-        """
-
-    def browse_imatrix(self):
-        """
-        Open a file dialog to select an importance matrix file.
-
-        This method updates the imatrix input field with the selected file path.
-        """
-
-    def update_system_info(self):
-        """
-        Update the displayed system information (RAM and CPU usage).
-
-        This method is called periodically to refresh the RAM usage bar and CPU usage label.
-        """
-
-    def validate_quantization_inputs(self):
-        """
-        Validate the inputs required for model quantization.
-
-        This method checks if all necessary inputs for quantization are provided
-        and raises a ValueError with details of any missing inputs.
-        """
-
-    def add_kv_override(self, override_string=None):
-        """
-        Add a new key-value override entry to the UI.
-
-        Args:
-            override_string (str, optional): A string representation of an existing override.
-
-        This method adds a new KVOverrideEntry widget to the UI, optionally populating
-        it with values from the provided override string.
-        """
-
-    def remove_kv_override(self, entry):
-        """
-        Remove a key-value override entry from the UI.
-
-        Args:
-            entry (KVOverrideEntry): The entry widget to remove.
-
-        This method removes the specified KVOverrideEntry widget from the UI.
+            event (QCloseEvent): The close event object.
         """

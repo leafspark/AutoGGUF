@@ -1,3 +1,4 @@
+import os
 import sys
 import threading
 
@@ -42,7 +43,13 @@ def get_backends():
 
 
 def run_flask():
-    server.run(host="0.0.0.0", port=5000, debug=False, use_reloader=False)
+    if os.environ.get("AUTOGGUF_SERVER", "").lower() == "true":
+        server.run(
+            host="0.0.0.0",
+            port=int(os.environ.get("AUTOGGUF_SERVER_PORT", 5000)),
+            debug=False,
+            use_reloader=False,
+        )
 
 
 app = QApplication(sys.argv)
