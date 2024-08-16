@@ -5,6 +5,7 @@ from datetime import datetime
 
 import psutil
 import requests
+from functools import partial
 from PySide6.QtCore import *
 from PySide6.QtGui import *
 from PySide6.QtWidgets import *
@@ -19,6 +20,7 @@ from TaskListItem import TaskListItem
 from error_handling import show_error, handle_error
 from imports_and_globals import ensure_directory, open_file_safe, resource_path
 from localizations import *
+from ui_update import *
 
 
 class AutoGGUF(QMainWindow):
@@ -33,6 +35,19 @@ class AutoGGUF(QMainWindow):
 
         ensure_directory(os.path.abspath("quantized_models"))
         ensure_directory(os.path.abspath("models"))
+
+        # References
+        self.update_base_model_visibility = partial(update_base_model_visibility, self)
+        self.update_assets = update_assets.__get__(self)
+        self.update_cuda_option = update_cuda_option.__get__(self)
+        self.update_cuda_backends = update_cuda_backends.__get__(self)
+        self.update_threads_spinbox = partial(update_threads_spinbox, self)
+        self.update_threads_slider = partial(update_threads_slider, self)
+        self.update_gpu_offload_spinbox = partial(update_gpu_offload_spinbox, self)
+        self.update_gpu_offload_slider = partial(update_gpu_offload_slider, self)
+        self.update_model_info = partial(update_model_info, self.logger, self)
+        self.update_system_info = partial(update_system_info, self)
+        self.update_download_progress = partial(update_download_progress, self)
 
         # Create a central widget and main layout
         central_widget = QWidget()
@@ -51,6 +66,23 @@ class AutoGGUF(QMainWindow):
         # Set minimum widths to maintain proportions
         left_widget.setMinimumWidth(800)
         right_widget.setMinimumWidth(400)
+
+        menubar = QMenuBar(self)
+        self.layout().setMenuBar(menubar)
+
+        # File menu
+        file_menu = menubar.addMenu("&File")
+        close_action = QAction("&Close", self)
+        close_action.setShortcut(QKeySequence.Quit)
+        close_action.triggered.connect(self.close)
+        file_menu.addAction(close_action)
+
+        # Help menu
+        help_menu = menubar.addMenu("&Help")
+        about_action = QAction("&About", self)
+        about_action.setShortcut(QKeySequence("Ctrl+Q"))
+        about_action.triggered.connect(self.show_about)
+        help_menu.addAction(about_action)
 
         left_layout = QVBoxLayout(left_widget)
         right_layout = QVBoxLayout(right_widget)
@@ -679,9 +711,13 @@ class AutoGGUF(QMainWindow):
             self.backend_combo.setEnabled(False)
         self.logger.info(FOUND_VALID_BACKENDS.format(self.backend_combo.count()))
 
-    def update_base_model_visibility(self, index):
-        is_gguf = self.lora_output_type_combo.itemText(index) == "GGUF"
-        self.base_model_wrapper.setVisible(is_gguf)
+    def show_about(self):
+        about_text = (
+            "AutoGGUF\n\n"
+            f"Version: {AUTOGGUF_VERSION}\n\n"
+            "A tool for managing and converting GGUF models."
+        )
+        QMessageBox.about(self, "About AutoGGUF", about_text)
 
     def save_preset(self):
         self.logger.info(SAVING_PRESET)
@@ -1174,20 +1210,6 @@ class AutoGGUF(QMainWindow):
         except requests.exceptions.RequestException as e:
             show_error(self.logger, ERROR_FETCHING_RELEASES.format(str(e)))
 
-    def update_assets(self):
-        self.logger.debug(UPDATING_ASSET_LIST)
-        self.asset_combo.clear()
-        release = self.release_combo.currentData()
-        if release:
-            if "assets" in release:
-                for asset in release["assets"]:
-                    self.asset_combo.addItem(asset["name"], userData=asset)
-            else:
-                show_error(
-                    self.logger, NO_ASSETS_FOUND_FOR_RELEASE.format(release["tag_name"])
-                )
-        self.update_cuda_option()
-
     def download_llama_cpp(self):
         self.logger.info(STARTING_LLAMACPP_DOWNLOAD)
         asset = self.asset_combo.currentData()
@@ -1208,45 +1230,6 @@ class AutoGGUF(QMainWindow):
 
         self.download_button.setEnabled(False)
         self.download_progress.setValue(0)
-
-    def update_cuda_option(self):
-        self.logger.debug(UPDATING_CUDA_OPTIONS)
-        asset = self.asset_combo.currentData()
-
-        # Handle the case where asset is None
-        if asset is None:
-            self.logger.warning(NO_ASSET_SELECTED_FOR_CUDA_CHECK)
-            self.cuda_extract_checkbox.setVisible(False)
-            self.cuda_backend_label.setVisible(False)
-            self.backend_combo_cuda.setVisible(False)
-            return  # Exit the function early
-
-        is_cuda = asset and "cudart" in asset["name"].lower()
-        self.cuda_extract_checkbox.setVisible(is_cuda)
-        self.cuda_backend_label.setVisible(is_cuda)
-        self.backend_combo_cuda.setVisible(is_cuda)
-        if is_cuda:
-            self.update_cuda_backends()
-
-    def update_cuda_backends(self):
-        self.logger.debug(UPDATING_CUDA_BACKENDS)
-        self.backend_combo_cuda.clear()
-        llama_bin = os.path.abspath("llama_bin")
-        if os.path.exists(llama_bin):
-            for item in os.listdir(llama_bin):
-                item_path = os.path.join(llama_bin, item)
-                if os.path.isdir(item_path) and "cudart-llama" not in item.lower():
-                    if "cu1" in item.lower():  # Only include CUDA-capable backends
-                        self.backend_combo_cuda.addItem(item, userData=item_path)
-
-        if self.backend_combo_cuda.count() == 0:
-            self.backend_combo_cuda.addItem(NO_SUITABLE_CUDA_BACKENDS)
-            self.backend_combo_cuda.setEnabled(False)
-        else:
-            self.backend_combo_cuda.setEnabled(True)
-
-    def update_download_progress(self, progress):
-        self.download_progress.setValue(progress)
 
     def download_finished(self, extract_dir):
         self.download_button.setEnabled(True)
@@ -1334,18 +1317,6 @@ class AutoGGUF(QMainWindow):
                 model_info_dialog = ModelInfoDialog(thread.model_info, self)
                 model_info_dialog.exec()
                 break
-
-    def update_threads_spinbox(self, value):
-        self.threads_spinbox.setValue(value)
-
-    def update_threads_slider(self, value):
-        self.threads_slider.setValue(value)
-
-    def update_gpu_offload_spinbox(self, value):
-        self.gpu_offload_spinbox.setValue(value)
-
-    def update_gpu_offload_slider(self, value):
-        self.gpu_offload_slider.setValue(value)
 
     def toggle_gpu_offload_auto(self, state):
         is_auto = state == Qt.CheckState.Checked
@@ -1482,17 +1453,6 @@ class AutoGGUF(QMainWindow):
 
         if errors:
             raise ValueError("\n".join(errors))
-
-    def update_system_info(self):
-        ram = psutil.virtual_memory()
-        cpu = psutil.cpu_percent()
-        self.ram_bar.setValue(int(ram.percent))
-        self.ram_bar.setFormat(
-            RAM_USAGE_FORMAT.format(
-                ram.percent, ram.used // 1024 // 1024, ram.total // 1024 // 1024
-            )
-        )
-        self.cpu_label.setText(CPU_USAGE_FORMAT.format(cpu))
 
     def add_kv_override(self, override_string=None):
         entry = KVOverrideEntry()
@@ -1678,10 +1638,6 @@ class AutoGGUF(QMainWindow):
             show_error(self.logger, str(e))
         except Exception as e:
             show_error(self.logger, ERROR_STARTING_QUANTIZATION.format(str(e)))
-
-    def update_model_info(self, model_info):
-        self.logger.debug(UPDATING_MODEL_INFO.format(model_info))
-        pass
 
     def parse_progress(self, line, task_item):
         # Parses the output line for progress information and updates the task item.
