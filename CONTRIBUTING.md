@@ -17,6 +17,8 @@ First off, thanks for taking the time to contribute! 🎉👍
 
 ### Your First Code Contribution
 
+You can find issues labeled with "good first issue" in the Issues tab as a starting point. Code refactors and optimizations are also appreciated, although if there's a vulnrability please report it privately in the Security tab. For feature PRs, please make a discussion first to make sure your feature can be added and continously maintained.
+
 1. Fork the repo
 2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
 3. Install pre-commit: (`pip install pre-commit`)
