@@ -130,7 +130,7 @@ Fork the repo, make your changes, and ensure you have the latest commits when me
 
 ## User Interface
 
-![AutoGGUF-v1 6 2-screenshot-blue](https://github.com/user-attachments/assets/75844d79-bbda-43ea-8c11-d9f9551f787c)
+![rsz_1autogguf-v162-screenshot-blue](https://github.com/user-attachments/assets/0e69dd3d-95b0-4bc6-b29e-df308bf027c4)
 
 ## Stargazers
 
