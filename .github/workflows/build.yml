@@ -17,6 +17,10 @@ jobs:
     strategy:
       matrix:
         os: [windows-latest, ubuntu-latest, macos-latest]
+        arch: [x64]
+        include:
+          - os: windows-latest
+            arch: x86
     runs-on: ${{ matrix.os }}
 
     steps:
@@ -26,6 +30,7 @@ jobs:
       uses: actions/setup-python@v2
       with:
         python-version: '3.x'
+        architecture: ${{ matrix.arch }}
 
     - name: Install dependencies
       run: |
@@ -36,19 +41,20 @@ jobs:
     - name: Build with PyInstaller (Windows)
       if: matrix.os == 'windows-latest'
       run: |
+        $archSuffix = if ("${{ matrix.arch }}" -eq "x86") { "-x86" } else { "-x64" }
         if ("${{ github.event.inputs.build_type }}" -eq "RELEASE") {
-          pyinstaller --windowed --onefile --name=AutoGGUF --icon=../../assets/favicon_large.png --add-data "../../assets;assets" --distpath=build\release\dist --workpath=build\release\build --specpath=build\release src\main.py
+          pyinstaller --windowed --onefile --name=AutoGGUF$archSuffix --icon=../../assets/favicon_large.png --add-data "../../assets;assets" --distpath=build\release\dist --workpath=build\release\build --specpath=build\release src\main.py
         } else {
-          pyinstaller --onefile --name=AutoGGUF --icon=../../assets/favicon_large.png --add-data "../../assets;assets" --distpath=build\dev\dist --workpath=build\dev\build --specpath=build\dev src\main.py
+          pyinstaller --onefile --name=AutoGGUF$archSuffix --icon=../../assets/favicon_large.png --add-data "../../assets;assets" --distpath=build\dev\dist --workpath=build\dev\build --specpath=build\dev src\main.py
         }
 
     - name: Build with PyInstaller (Linux/macOS)
       if: matrix.os != 'windows-latest'
       run: |
         if [ "${{ github.event.inputs.build_type }}" = "RELEASE" ]; then
-          pyinstaller --windowed --onefile --name=AutoGGUF --icon=../../assets/favicon_large.png --add-data "../../assets:assets" --distpath=build/release/dist --workpath=build/release/build --specpath=build/release src/main.py
+          pyinstaller --windowed --onefile --name=AutoGGUF-x64 --icon=../../assets/favicon_large.png --add-data "../../assets:assets" --distpath=build/release/dist --workpath=build/release/build --specpath=build/release src/main.py
         else
-          pyinstaller --onefile --name=AutoGGUF --icon=../../assets/favicon_large.png --add-data "../../assets:assets" --distpath=build/dev/dist --workpath=build/dev/build --specpath=build/dev src/main.py
+          pyinstaller --onefile --name=AutoGGUF-x64 --icon=../../assets/favicon_large.png --add-data "../../assets:assets" --distpath=build/dev/dist --workpath=build/dev/build --specpath=build/dev src/main.py
         fi
 
     - name: Copy additional files (Windows)
@@ -72,6 +78,6 @@ jobs:
     - name: Upload Artifact
       uses: actions/upload-artifact@v2
       with:
-        name: AutoGGUF-${{ matrix.os }}-${{ github.event.inputs.build_type }}-${{ github.sha }}
+        name: AutoGGUF-${{ matrix.os }}-${{ matrix.arch }}-${{ github.event.inputs.build_type }}-${{ github.sha }}
         path: build/${{ github.event.inputs.build_type == 'RELEASE' && 'release' || 'dev' }}/dist
 
