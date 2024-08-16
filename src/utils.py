@@ -4,8 +4,8 @@ from error_handling import show_error
 from Localizations import *
 import requests
 
-from src.DownloadThread import DownloadThread
-from src.imports_and_globals import ensure_directory
+from DownloadThread import DownloadThread
+from imports_and_globals import ensure_directory
 
 
 def browse_lora_input(self):

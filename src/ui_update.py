@@ -1,4 +1,4 @@
-from src.Localizations import *
+from Localizations import *
 import psutil
 
 

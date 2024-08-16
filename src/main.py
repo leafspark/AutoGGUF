@@ -4,7 +4,7 @@ import threading
 
 from PySide6.QtCore import QTimer
 from PySide6.QtWidgets import QApplication
-from src.AutoGGUF import AutoGGUF
+from AutoGGUF import AutoGGUF
 from flask import Flask, jsonify
 
 server = Flask(__name__)

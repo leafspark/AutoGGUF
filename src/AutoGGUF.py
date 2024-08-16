@@ -7,20 +7,20 @@ from PySide6.QtCore import *
 from PySide6.QtGui import *
 from PySide6.QtWidgets import *
 
-from src.GPUMonitor import GPUMonitor
-from src.KVOverrideEntry import KVOverrideEntry
-from src.Logger import Logger
-from src.ModelInfoDialog import ModelInfoDialog
-from src.imports_and_globals import (
+from GPUMonitor import GPUMonitor
+from KVOverrideEntry import KVOverrideEntry
+from Logger import Logger
+from ModelInfoDialog import ModelInfoDialog
+from imports_and_globals import (
     open_file_safe,
     resource_path,
     show_about,
     ensure_directory,
 )
-from src.Localizations import *
-import src.ui_update
-import src.lora_conversion
-import src.utils
+from Localizations import *
+import ui_update
+import lora_conversion
+import utils
 
 
 class AutoGGUF(QMainWindow):
@@ -38,33 +38,29 @@ class AutoGGUF(QMainWindow):
 
         # References
         self.update_base_model_visibility = partial(
-            src.ui_update.update_base_model_visibility, self
+            ui_update.update_base_model_visibility, self
         )
-        self.update_assets = src.ui_update.update_assets.__get__(self)
-        self.update_cuda_option = src.ui_update.update_cuda_option.__get__(self)
-        self.update_cuda_backends = src.ui_update.update_cuda_backends.__get__(self)
-        self.download_llama_cpp = src.utils.download_llama_cpp.__get__(self)
-        self.refresh_releases = src.utils.refresh_releases.__get__(self)
-        self.browse_lora_input = src.utils.browse_lora_input.__get__(self)
-        self.browse_lora_output = src.utils.browse_lora_output.__get__(self)
-        self.convert_lora = src.lora_conversion.convert_lora.__get__(self)
+        self.update_assets = ui_update.update_assets.__get__(self)
+        self.update_cuda_option = ui_update.update_cuda_option.__get__(self)
+        self.update_cuda_backends = ui_update.update_cuda_backends.__get__(self)
+        self.download_llama_cpp = utils.download_llama_cpp.__get__(self)
+        self.refresh_releases = utils.refresh_releases.__get__(self)
+        self.browse_lora_input = utils.browse_lora_input.__get__(self)
+        self.browse_lora_output = utils.browse_lora_output.__get__(self)
+        self.convert_lora = lora_conversion.convert_lora.__get__(self)
         self.show_about = show_about.__get__(self)
-        self.update_threads_spinbox = partial(
-            src.ui_update.update_threads_spinbox, self
-        )
-        self.update_threads_slider = partial(src.ui_update.update_threads_slider, self)
+        self.update_threads_spinbox = partial(ui_update.update_threads_spinbox, self)
+        self.update_threads_slider = partial(ui_update.update_threads_slider, self)
         self.update_gpu_offload_spinbox = partial(
-            src.ui_update.update_gpu_offload_spinbox, self
+            ui_update.update_gpu_offload_spinbox, self
         )
         self.update_gpu_offload_slider = partial(
-            src.ui_update.update_gpu_offload_slider, self
+            ui_update.update_gpu_offload_slider, self
         )
-        self.update_model_info = partial(
-            src.ui_update.update_model_info, self.logger, self
-        )
-        self.update_system_info = partial(src.ui_update.update_system_info, self)
+        self.update_model_info = partial(ui_update.update_model_info, self.logger, self)
+        self.update_system_info = partial(ui_update.update_system_info, self)
         self.update_download_progress = partial(
-            src.ui_update.update_download_progress, self
+            ui_update.update_download_progress, self
         )
 
         # Create a central widget and main layout

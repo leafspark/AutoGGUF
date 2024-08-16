@@ -2,11 +2,11 @@ from datetime import datetime
 
 from PySide6.QtWidgets import QListWidgetItem
 
-from src.QuantizationThread import QuantizationThread
-from src.TaskListItem import TaskListItem
-from src.error_handling import handle_error, show_error
-from src.imports_and_globals import ensure_directory
-from src.Localizations import *
+from QuantizationThread import QuantizationThread
+from TaskListItem import TaskListItem
+from error_handling import handle_error, show_error
+from imports_and_globals import ensure_directory
+from Localizations import *
 
 
 def convert_lora(self):
