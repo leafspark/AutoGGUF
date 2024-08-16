@@ -1,6 +1,39 @@
 # Changelog
 
-All notable changes to this project will be documented in this file.
+## [v1.6.2] - 2024-08-15
+
+### Added
+- Server functionality with new endpoints:
+  - `/v1/backends`: Lists all backends and their paths
+  - `/v1/health`: Heartbeat endpoint
+  - `/v1/tasks`: Provides current task info (name, status, progress, log file)
+  - `/v1/models`: Retrieves model details (name, type, path, shard status)
+- Environment variable support for server configuration:
+  - `AUTOGGUF_SERVER`: Enable/disable server (true/false)
+  - `AUTOGGUF_SERVER_PORT`: Set server port (integer)
+
+### Changed
+- Updated AutoGGUF docstrings
+- Refactored build scripts
+
+### Fixed
+- Set GGML types to lowercase in command builder
+
+## [v1.6.1] - 2024-08-12
+
+### Added
+- Optimized build scripts
+- Nuitka for building
+
+### Changed
+- Updated .gitignore
+
+### Fixed
+- Bug where deletion while a task is running crashes the program
+
+### Notes
+- Fast build: Higher unzipped size (97MB), smaller download (38MB)
+- Standard build: Created with PyInstaller, medium download and unzipped size (50MB), potentially slower
 
 ## [1.6.0] - 2024-08-08
 

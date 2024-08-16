@@ -111,14 +111,14 @@ To use a specific language, set the `AUTOGGUF_LANGUAGE` environment variable to 
 
 ## Known Issues
 
-- Cannot delete task while processing (planned fix: disallow deletion before cancelling or cancel automatically)
+- ~~Cannot delete task while processing (planned fix: disallow deletion before cancelling or cancel automatically)~~ (fixed in v1.6.2)
 
 ## Planned Features
 
+- Time estimation for quantization
 - Actual progress bar tracking 
 - Perplexity testing
-- Time estimation for quantization
-- ~~`nvidia-smi` monitoring support~~ (added in v1.6.0)
+- Web API and management (partially implemented in v1.6.2)
 
 ## Troubleshooting
 
@@ -130,7 +130,7 @@ Fork the repo, make your changes, and ensure you have the latest commits when me
 
 ## User Interface
 
-![image](https://github.com/user-attachments/assets/a327afb9-950d-420b-b07f-46658ffb0822)
+![rsz_1autogguf-v162-screenshot-blue](https://github.com/user-attachments/assets/0e69dd3d-95b0-4bc6-b29e-df308bf027c4)
 
 ## Stargazers
 
