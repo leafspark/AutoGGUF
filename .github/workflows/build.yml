@@ -54,5 +54,5 @@ jobs:
     - name: Upload Artifact
       uses: actions/upload-artifact@v2
       with:
-        name: AutoGGUF-${{ matrix.os }}-${{ github.event.inputs.build_type }}-${{ github.sha::7 }}
+        name: AutoGGUF-${{ matrix.os }}-${{ github.event.inputs.build_type }}-${{ github.sha }}
         path: build/${{ github.event.inputs.build_type == 'RELEASE' && 'release' || 'dev' }}/dist/AutoGGUF*
