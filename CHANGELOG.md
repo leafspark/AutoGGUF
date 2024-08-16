@@ -1,5 +1,26 @@
 # Changelog
 
+## [v1.7.0] - 2024-08-16
+
+### Added
+- Menu bar with Close and About options
+- Program version in localizations.py
+- Support for 32-bit builds
+- Added dependency audit
+- Implemented radon, dependabot, and pre-commit workflows
+
+### Changed
+- Updated torch requirement from `~=1.13.1` to `~=2.4.0`
+- Updated psutil requirement from `~=5.9.8` to `~=6.0.0`
+- Refactored functions out of AutoGGUF.py and moved to ui_update.py
+- Changed filenames to follow PEP 8 conventions
+- Disabled .md and .txt CodeQL analysis
+
+### Fixed
+- Optimized imports in AutoGGUF.py
+- Updated README with new version and styled screenshot
+- Fixed image blur in documentation
+
 ## [v1.6.2] - 2024-08-15
 
 ### Added
