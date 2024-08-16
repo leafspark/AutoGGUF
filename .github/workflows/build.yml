@@ -1,0 +1,58 @@
+name: Build PyInstaller App
+
+on:
+  workflow_dispatch:
+    inputs:
+      build_type:
+        description: 'Build type (RELEASE or DEV)'
+        required: true
+        default: 'RELEASE'
+        type: choice
+        options:
+        - RELEASE
+        - DEV
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        os: [windows-latest, ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install pyinstaller
+
+    - name: Build with PyInstaller (Windows)
+      if: matrix.os == 'windows-latest'
+      run: |
+        if ("${{ github.event.inputs.build_type }}" -eq "RELEASE") {
+          pyinstaller --windowed --onefile --name=AutoGGUF --icon=../../assets/favicon_large.png --add-data "../../assets;assets" --distpath=build\release\dist --workpath=build\release\build --specpath=build\release src\main.py
+        } else {
+          pyinstaller --onefile --name=AutoGGUF --icon=../../assets/favicon_large.png --add-data "../../assets;assets" --distpath=build\dev\dist --workpath=build\dev\build --specpath=build\dev src\main.py
+        }
+
+    - name: Build with PyInstaller (Linux/macOS)
+      if: matrix.os != 'windows-latest'
+      run: |
+        if [ "${{ github.event.inputs.build_type }}" = "RELEASE" ]; then
+          pyinstaller --windowed --onefile --name=AutoGGUF --icon=../../assets/favicon_large.png --add-data "../../assets:assets" --distpath=build/release/dist --workpath=build/release/build --specpath=build/release src/main.py
+        else
+          pyinstaller --onefile --name=AutoGGUF --icon=../../assets/favicon_large.png --add-data "../../assets:assets" --distpath=build/dev/dist --workpath=build/dev/build --specpath=build/dev src/main.py
+        fi
+
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: AutoGGUF-${{ matrix.os }}-${{ github.event.inputs.build_type }}-${{ github.sha::7 }}
+        path: build/${{ github.event.inputs.build_type == 'RELEASE' && 'release' || 'dev' }}/dist/AutoGGUF*
