@@ -1,26 +1,26 @@
 import json
 import re
 import shutil
-from datetime import datetime
 
-import psutil
-import requests
 from functools import partial
 from PySide6.QtCore import *
 from PySide6.QtGui import *
 from PySide6.QtWidgets import *
 
-from DownloadThread import DownloadThread
-from GPUMonitor import GPUMonitor
-from KVOverrideEntry import KVOverrideEntry
-from Logger import Logger
-from ModelInfoDialog import ModelInfoDialog
-from QuantizationThread import QuantizationThread
-from TaskListItem import TaskListItem
-from error_handling import show_error, handle_error
-from imports_and_globals import ensure_directory, open_file_safe, resource_path
-from localizations import *
-from ui_update import *
+from src.GPUMonitor import GPUMonitor
+from src.KVOverrideEntry import KVOverrideEntry
+from src.Logger import Logger
+from src.ModelInfoDialog import ModelInfoDialog
+from src.imports_and_globals import (
+    open_file_safe,
+    resource_path,
+    show_about,
+    ensure_directory,
+)
+from src.localizations import *
+import src.ui_update
+import src.lora_conversion
+import src.utils
 
 
 class AutoGGUF(QMainWindow):
@@ -37,17 +37,35 @@ class AutoGGUF(QMainWindow):
         ensure_directory(os.path.abspath("models"))
 
         # References
-        self.update_base_model_visibility = partial(update_base_model_visibility, self)
-        self.update_assets = update_assets.__get__(self)
-        self.update_cuda_option = update_cuda_option.__get__(self)
-        self.update_cuda_backends = update_cuda_backends.__get__(self)
-        self.update_threads_spinbox = partial(update_threads_spinbox, self)
-        self.update_threads_slider = partial(update_threads_slider, self)
-        self.update_gpu_offload_spinbox = partial(update_gpu_offload_spinbox, self)
-        self.update_gpu_offload_slider = partial(update_gpu_offload_slider, self)
-        self.update_model_info = partial(update_model_info, self.logger, self)
-        self.update_system_info = partial(update_system_info, self)
-        self.update_download_progress = partial(update_download_progress, self)
+        self.update_base_model_visibility = partial(
+            src.ui_update.update_base_model_visibility, self
+        )
+        self.update_assets = src.ui_update.update_assets.__get__(self)
+        self.update_cuda_option = src.ui_update.update_cuda_option.__get__(self)
+        self.update_cuda_backends = src.ui_update.update_cuda_backends.__get__(self)
+        self.download_llama_cpp = src.utils.download_llama_cpp.__get__(self)
+        self.refresh_releases = src.utils.refresh_releases.__get__(self)
+        self.browse_lora_input = src.utils.browse_lora_input.__get__(self)
+        self.browse_lora_output = src.utils.browse_lora_output.__get__(self)
+        self.convert_lora = src.lora_conversion.convert_lora.__get__(self)
+        self.show_about = show_about.__get__(self)
+        self.update_threads_spinbox = partial(
+            src.ui_update.update_threads_spinbox, self
+        )
+        self.update_threads_slider = partial(src.ui_update.update_threads_slider, self)
+        self.update_gpu_offload_spinbox = partial(
+            src.ui_update.update_gpu_offload_spinbox, self
+        )
+        self.update_gpu_offload_slider = partial(
+            src.ui_update.update_gpu_offload_slider, self
+        )
+        self.update_model_info = partial(
+            src.ui_update.update_model_info, self.logger, self
+        )
+        self.update_system_info = partial(src.ui_update.update_system_info, self)
+        self.update_download_progress = partial(
+            src.ui_update.update_download_progress, self
+        )
 
         # Create a central widget and main layout
         central_widget = QWidget()
@@ -711,14 +729,6 @@ class AutoGGUF(QMainWindow):
             self.backend_combo.setEnabled(False)
         self.logger.info(FOUND_VALID_BACKENDS.format(self.backend_combo.count()))
 
-    def show_about(self):
-        about_text = (
-            "AutoGGUF\n\n"
-            f"Version: {AUTOGGUF_VERSION}\n\n"
-            "A tool for managing and converting GGUF models."
-        )
-        QMessageBox.about(self, "About AutoGGUF", about_text)
-
     def save_preset(self):
         self.logger.info(SAVING_PRESET)
         preset = {
@@ -1060,87 +1070,6 @@ class AutoGGUF(QMainWindow):
                 task_item.update_status(IN_PROGRESS)
                 break
 
-    def browse_lora_input(self):
-        self.logger.info(BROWSING_FOR_LORA_INPUT_DIRECTORY)
-        lora_input_path = QFileDialog.getExistingDirectory(
-            self, SELECT_LORA_INPUT_DIRECTORY
-        )
-        if lora_input_path:
-            self.lora_input.setText(os.path.abspath(lora_input_path))
-            ensure_directory(lora_input_path)
-
-    def browse_lora_output(self):
-        self.logger.info(BROWSING_FOR_LORA_OUTPUT_FILE)
-        lora_output_file, _ = QFileDialog.getSaveFileName(
-            self, SELECT_LORA_OUTPUT_FILE, "", GGUF_AND_BIN_FILES
-        )
-        if lora_output_file:
-            self.lora_output.setText(os.path.abspath(lora_output_file))
-
-    def convert_lora(self):
-        self.logger.info(STARTING_LORA_CONVERSION)
-        try:
-            lora_input_path = self.lora_input.text()
-            lora_output_path = self.lora_output.text()
-            lora_output_type = self.lora_output_type_combo.currentText()
-
-            if not lora_input_path:
-                raise ValueError(LORA_INPUT_PATH_REQUIRED)
-            if not lora_output_path:
-                raise ValueError(LORA_OUTPUT_PATH_REQUIRED)
-
-            if lora_output_type == "GGUF":  # Use new file and parameters for GGUF
-                command = [
-                    "python",
-                    "src/convert_lora_to_gguf.py",
-                    "--outfile",
-                    lora_output_path,
-                    lora_input_path,
-                ]
-                base_model_path = self.base_model_path.text()
-                if not base_model_path:
-                    raise ValueError(BASE_MODEL_PATH_REQUIRED)
-                command.extend(["--base", base_model_path])
-            else:  # Use old GGML parameters for GGML
-                command = ["python", "src/convert_lora_to_ggml.py", lora_input_path]
-
-            logs_path = self.logs_input.text()
-            ensure_directory(logs_path)
-
-            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-            log_file = os.path.join(logs_path, f"lora_conversion_{timestamp}.log")
-
-            command_str = " ".join(command)
-            self.logger.info(f"{LORA_CONVERSION_COMMAND}: {command_str}")
-
-            thread = QuantizationThread(command, os.getcwd(), log_file)
-            self.quant_threads.append(thread)
-
-            task_name = LORA_CONVERSION_FROM_TO.format(
-                os.path.basename(lora_input_path), os.path.basename(lora_output_path)
-            )
-            task_item = TaskListItem(task_name, log_file, show_progress_bar=False)
-            list_item = QListWidgetItem(self.task_list)
-            list_item.setSizeHint(task_item.sizeHint())
-            self.task_list.addItem(list_item)
-            self.task_list.setItemWidget(list_item, task_item)
-
-            thread.status_signal.connect(task_item.update_status)
-            thread.finished_signal.connect(
-                lambda: self.lora_conversion_finished(
-                    thread, lora_input_path, lora_output_path
-                )
-            )
-            thread.error_signal.connect(
-                lambda err: handle_error(self.logger, err, task_item)
-            )
-            thread.start()
-            self.logger.info(LORA_CONVERSION_TASK_STARTED)
-        except ValueError as e:
-            show_error(self.logger, str(e))
-        except Exception as e:
-            show_error(self.logger, ERROR_STARTING_LORA_CONVERSION.format(str(e)))
-
     def lora_conversion_finished(self, thread, input_path, output_path):
         self.logger.info(LORA_CONVERSION_FINISHED)
         if thread in self.quant_threads:
@@ -1193,43 +1122,6 @@ class AutoGGUF(QMainWindow):
         index = self.backend_combo.findText(new_backend_name)
         if index >= 0:
             self.backend_combo.setCurrentIndex(index)
-
-    def refresh_releases(self):
-        self.logger.info(REFRESHING_LLAMACPP_RELEASES)
-        try:
-            response = requests.get(
-                "https://api.github.com/repos/ggerganov/llama.cpp/releases"
-            )
-            response.raise_for_status()  # Raise an exception for bad status codes
-            releases = response.json()
-            self.release_combo.clear()
-            for release in releases:
-                self.release_combo.addItem(release["tag_name"], userData=release)
-            self.release_combo.currentIndexChanged.connect(self.update_assets)
-            self.update_assets()
-        except requests.exceptions.RequestException as e:
-            show_error(self.logger, ERROR_FETCHING_RELEASES.format(str(e)))
-
-    def download_llama_cpp(self):
-        self.logger.info(STARTING_LLAMACPP_DOWNLOAD)
-        asset = self.asset_combo.currentData()
-        if not asset:
-            show_error(self.logger, NO_ASSET_SELECTED)
-            return
-
-        llama_bin = os.path.abspath("llama_bin")
-        os.makedirs(llama_bin, exist_ok=True)
-
-        save_path = os.path.join(llama_bin, asset["name"])
-
-        self.download_thread = DownloadThread(asset["browser_download_url"], save_path)
-        self.download_thread.progress_signal.connect(self.update_download_progress)
-        self.download_thread.finished_signal.connect(self.download_finished)
-        self.download_thread.error_signal.connect(self.download_error)
-        self.download_thread.start()
-
-        self.download_button.setEnabled(False)
-        self.download_progress.setValue(0)
 
     def download_finished(self, extract_dir):
         self.download_button.setEnabled(True)

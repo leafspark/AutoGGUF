@@ -1,5 +1,5 @@
 from PySide6.QtWidgets import QMessageBox
-from localizations import *
+from src.localizations import *
 
 
 def show_error(logger, message):

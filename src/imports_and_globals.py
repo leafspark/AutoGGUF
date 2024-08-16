@@ -38,6 +38,17 @@ from PySide6.QtWidgets import (
 from PySide6.QtCore import QTimer, Signal, QThread, Qt, QSize
 from PySide6.QtGui import QCloseEvent, QAction
 
+from src.localizations import *
+
+
+def show_about(self):
+    about_text = (
+        "AutoGGUF\n\n"
+        f"Version: {AUTOGGUF_VERSION}\n\n"
+        "A tool for managing and converting GGUF models."
+    )
+    QMessageBox.about(self, "About AutoGGUF", about_text)
+
 
 def ensure_directory(path):
     if not os.path.exists(path):

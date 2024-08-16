@@ -15,7 +15,7 @@ from PySide6.QtWidgets import (
     QComboBox,
 )
 
-from localizations import (
+from src.localizations import (
     GPU_USAGE_FORMAT,
     GPU_DETAILS,
     GPU_USAGE_OVER_TIME,
