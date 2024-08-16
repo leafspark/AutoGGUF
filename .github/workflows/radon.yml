@@ -1,0 +1,75 @@
+name: Radon Code Metrics
+
+on:
+  workflow_dispatch:  # This allows manual triggering
+  push:
+    paths:
+      - '**.py'  # This will run the workflow only when Python files are changed
+  pull_request:
+    paths:
+      - '**.py'  # This will run the workflow only when Python files are changed
+
+jobs:
+  radon:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        fetch-depth: 0  # This is important to fetch all history for comparing changes
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.x'
+
+    - name: Install radon
+      run: pip install radon
+
+    - name: Run radon
+      run: |
+        # Get the list of changed Python files
+        if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+          CHANGED_FILES=$(git ls-files '*.py')
+        else
+          CHANGED_FILES=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep '\.py$' || echo "")
+        fi
+        
+        if [ -n "$CHANGED_FILES" ]; then
+          # Run Cyclomatic Complexity check
+          echo "Running Cyclomatic Complexity check..."
+          radon cc $CHANGED_FILES -a -s -n D
+          
+          # Run Maintainability Index check
+          echo "Running Maintainability Index check..."
+          radon mi $CHANGED_FILES -s -n D
+        else
+          echo "No Python files to analyze."
+        fi
+      continue-on-error: true
+
+    - name: Check radon output
+      run: |
+        # Get the list of changed Python files
+        if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+          CHANGED_FILES=$(git ls-files '*.py')
+        else
+          CHANGED_FILES=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep '\.py$' || echo "")
+        fi
+        
+        if [ -n "$CHANGED_FILES" ]; then
+          # Run checks and capture output
+          CC_OUTPUT=$(radon cc $CHANGED_FILES -a -s -n D)
+          MI_OUTPUT=$(radon mi $CHANGED_FILES -s -n D)
+          
+          # Check if there's any output (which indicates issues)
+          if [ -n "$CC_OUTPUT" ] || [ -n "$MI_OUTPUT" ]; then
+            echo "Radon detected code complexity or maintainability issues:"
+            [ -n "$CC_OUTPUT" ] && echo "$CC_OUTPUT"
+            [ -n "$MI_OUTPUT" ] && echo "$MI_OUTPUT"
+            exit 1
+          else
+            echo "No code complexity or maintainability issues detected."
+          fi
+        else
+          echo "No Python files to analyze."
+        fi
