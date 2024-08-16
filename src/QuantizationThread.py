@@ -4,7 +4,7 @@ import subprocess
 from PySide6.QtCore import *
 
 from imports_and_globals import open_file_safe
-from localizations import *
+from Localizations import *
 
 
 class QuantizationThread(QThread):

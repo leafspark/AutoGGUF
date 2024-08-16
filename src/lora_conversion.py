@@ -6,7 +6,7 @@ from src.QuantizationThread import QuantizationThread
 from src.TaskListItem import TaskListItem
 from src.error_handling import handle_error, show_error
 from src.imports_and_globals import ensure_directory
-from src.localizations import *
+from src.Localizations import *
 
 
 def convert_lora(self):

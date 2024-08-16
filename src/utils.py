@@ -1,7 +1,7 @@
 from PySide6.QtWidgets import QFileDialog
 
 from error_handling import show_error
-from localizations import *
+from Localizations import *
 import requests
 
 from src.DownloadThread import DownloadThread

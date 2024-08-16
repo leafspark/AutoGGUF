@@ -17,7 +17,7 @@ from src.imports_and_globals import (
     show_about,
     ensure_directory,
 )
-from src.localizations import *
+from src.Localizations import *
 import src.ui_update
 import src.lora_conversion
 import src.utils

@@ -38,7 +38,7 @@ from PySide6.QtWidgets import (
 from PySide6.QtCore import QTimer, Signal, QThread, Qt, QSize
 from PySide6.QtGui import QCloseEvent, QAction
 
-from src.localizations import *
+from src.Localizations import *
 
 
 def show_about(self):
