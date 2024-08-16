@@ -1,7 +1,7 @@
 psutil~=5.9.8
 requests~=2.32.3
 numpy<2.0.0
-torch~=1.13.1
+torch~=2.4.0
 sentencepiece~=0.2.0
 PyYAML~=6.0.2
 pynvml~=11.5.3
