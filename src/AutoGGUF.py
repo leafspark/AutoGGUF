@@ -3,6 +3,7 @@ import re
 import shutil
 
 from functools import partial
+from datetime import datetime
 from PySide6.QtCore import *
 from PySide6.QtGui import *
 from PySide6.QtWidgets import *
@@ -12,6 +13,8 @@ from KVOverrideEntry import KVOverrideEntry
 from Logger import Logger
 from ModelInfoDialog import ModelInfoDialog
 from error_handling import show_error, handle_error
+from TaskListItem import TaskListItem
+from QuantizationThread import QuantizationThread
 from imports_and_globals import (
     open_file_safe,
     resource_path,
