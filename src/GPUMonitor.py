@@ -24,6 +24,8 @@ from Localizations import (
     AMD_GPU_NOT_SUPPORTED,
 )
 
+from ui_update import animate_bar
+
 
 class SimpleGraph(QGraphicsView):
     def __init__(self, title, parent=None):
@@ -143,7 +145,7 @@ class GPUMonitor(QWidget):
                 gpu_usage = utilization.gpu
                 vram_usage = (memory.used / memory.total) * 100
 
-                self.gpu_bar.setValue(int(vram_usage))
+                animate_bar(self, self.gpu_bar, int(vram_usage))
                 self.gpu_label.setText(
                     GPU_USAGE_FORMAT.format(
                         gpu_usage,

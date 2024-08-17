@@ -1,3 +1,5 @@
+from PySide6.QtCore import QTimer
+
 from Localizations import *
 import psutil
 from error_handling import show_error
@@ -11,14 +13,42 @@ def update_model_info(logger, self, model_info):
 def update_system_info(self):
     ram = psutil.virtual_memory()
     cpu = psutil.cpu_percent()
-    self.ram_bar.setValue(int(ram.percent))
+
+    # Smooth transition for RAM bar
+    animate_bar(self, self.ram_bar, ram.percent)
+
+    # Smooth transition for CPU bar
+    animate_bar(self, self.cpu_bar, cpu)
+
     self.ram_bar.setFormat(
         RAM_USAGE_FORMAT.format(
             ram.percent, ram.used // 1024 // 1024, ram.total // 1024 // 1024
         )
     )
     self.cpu_label.setText(CPU_USAGE_FORMAT.format(cpu))
-    self.cpu_bar.setValue(int(cpu))
+
+def animate_bar(self, bar, target_value):
+    current_value = bar.value()
+    difference = target_value - current_value
+
+    if abs(difference) <= 1:  # Avoid animation for small changes
+        bar.setValue(target_value)
+        return
+
+    step = 1 if difference > 0 else -1  # Increment or decrement based on difference
+    timer = QTimer(self)
+    timer.timeout.connect(lambda: _animate_step(bar, target_value, step, timer))
+    timer.start(10)  # Adjust the interval for animation speed
+
+def _animate_step(bar, target_value, step, timer):
+    current_value = bar.value()
+    new_value = current_value + step
+
+    if (step > 0 and new_value > target_value) or (step < 0 and new_value < target_value):
+        bar.setValue(target_value)
+        timer.stop()
+    else:
+        bar.setValue(new_value)
 
 
 def update_download_progress(self, progress):
