@@ -17,6 +17,7 @@ def update_system_info(self):
         )
     )
     self.cpu_label.setText(CPU_USAGE_FORMAT.format(cpu))
+    self.cpu_bar.setValue(int(cpu))
 
 
 def update_download_progress(self, progress):

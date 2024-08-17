@@ -150,7 +150,15 @@ class AutoGGUF(QMainWindow):
         close_action = QAction("&Close", self)
         close_action.setShortcut(QKeySequence("Alt+F4"))
         close_action.triggered.connect(self.close)
+        save_preset_action = QAction("&Save Preset", self)
+        save_preset_action.setShortcut(QKeySequence("Ctrl+S"))
+        save_preset_action.triggered.connect(self.save_preset)
+        load_preset_action = QAction("&Load Preset", self)
+        load_preset_action.setShortcut(QKeySequence("Ctrl+S"))
+        load_preset_action.triggered.connect(self.load_preset)
         file_menu.addAction(close_action)
+        file_menu.addAction(save_preset_action)
+        file_menu.addAction(load_preset_action)
 
         # Help menu
         help_menu = self.menubar.addMenu("&Help")
@@ -203,11 +211,13 @@ class AutoGGUF(QMainWindow):
 
         # System info
         self.ram_bar = QProgressBar()
-        self.cpu_label = QLabel(CPU_USAGE)
+        self.cpu_bar = QProgressBar()
+        self.cpu_label = QLabel()
         self.gpu_monitor = GPUMonitor()
         left_layout.addWidget(QLabel(RAM_USAGE))
         left_layout.addWidget(self.ram_bar)
-        left_layout.addWidget(self.cpu_label)
+        left_layout.addWidget(QLabel(CPU_USAGE))
+        left_layout.addWidget(self.cpu_bar)
         left_layout.addWidget(QLabel(GPU_USAGE))
         left_layout.addWidget(self.gpu_monitor)
 
@@ -763,6 +773,25 @@ class AutoGGUF(QMainWindow):
         if os.environ.get("AUTOGGUF_CHECK_BACKEND", "").lower() == "enabled":
             self.refresh_releases()
         self.refresh_backends()
+
+        # Load theme based on environment variable
+        theme_path = os.environ.get("AUTOGGUF_THEME")
+        if theme_path:
+            try:
+                with open(theme_path, "r") as f:
+                    theme = f.read()
+                self.setStyleSheet(theme)
+            except (FileNotFoundError, OSError):
+                # If the specified theme file is not found or inaccessible,
+                # fall back to the default theme
+                with open(resource_path("assets/default.css"), "r") as f:
+                    default_theme = f.read()
+                self.setStyleSheet(default_theme)
+        else:
+            # If the environment variable is not set, use the default theme
+            with open(resource_path("assets/default.css"), "r") as f:
+                default_theme = f.read()
+            self.setStyleSheet(default_theme)
 
         # Load models
         self.load_models()
