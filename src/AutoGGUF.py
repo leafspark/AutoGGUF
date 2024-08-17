@@ -4,6 +4,7 @@ import shutil
 
 from functools import partial
 from datetime import datetime
+from dotenv import load_dotenv
 from PySide6.QtCore import *
 from PySide6.QtGui import *
 from PySide6.QtWidgets import *
@@ -41,6 +42,8 @@ class AutoGGUF(QMainWindow):
         self.setWindowIcon(QIcon(resource_path("assets/favicon.ico")))
         self.setGeometry(100, 100, width, height)
         self.setWindowFlag(Qt.FramelessWindowHint)
+
+        load_dotenv()  # Loads the .env file
 
         self.resize_factor = 1.1  # 10% increase/decrease
         self.default_width, self.default_height = self.parse_resolution()
