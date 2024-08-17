@@ -34,6 +34,7 @@ AutoGGUF provides a graphical user interface for quantizing GGUF models using th
 - Monitor system resources during quantization
 - Parallel quantization + imatrix generation
 - LoRA conversion and merging
+- Preset saving and loading
 
 ## Usage
 
@@ -49,9 +50,17 @@ AutoGGUF provides a graphical user interface for quantizing GGUF models using th
    or use the `run.bat` script.
 
 ### Windows
+Standard builds:
 1. Download the latest release
 2. Extract all files to a folder
-3. Run `AutoGGUF.exe`
+3. Run `AutoGGUF-x64.exe`
+
+Setup builds:
+1. Download setup varient of latest release
+2. Extract all files to a folder
+3. Run the setup program
+4. The .GGUF extension will be registered with the program automatically
+5. Run the program from the Start Menu or desktop shortcuts
 
 ### Verifying Releases
 
@@ -132,7 +141,7 @@ Fork the repo, make your changes, and ensure you have the latest commits when me
 
 ## User Interface
 
-![AutoGGUF-v1 7 1-showcase-blue](https://github.com/user-attachments/assets/04cb6cd3-7852-4638-b23b-b11507ca32cd)
+![AutoGGUF-v1 7 1-showcase-blue](https://github.com/user-attachments/assets/4240437f-77d4-459b-924f-c80e5f672c4f)
 
 ## Stargazers
 
