@@ -1,6 +1,7 @@
 import json
 import re
 import shutil
+import os
 
 from functools import partial
 from PySide6.QtCore import *
@@ -89,10 +90,12 @@ class AutoGGUF(QMainWindow):
         super().__init__()
         self.logger = Logger("AutoGGUF", "logs")
 
+        width, height = self.parse_resolution()
+
         self.logger.info(INITIALIZING_AUTOGGUF)
         self.setWindowTitle(WINDOW_TITLE)
         self.setWindowIcon(QIcon(resource_path("assets/favicon.ico")))
-        self.setGeometry(100, 100, 1700, 1200)
+        self.setGeometry(100, 100, width, height)
         self.setWindowFlag(Qt.FramelessWindowHint)
 
         ensure_directory(os.path.abspath("quantized_models"))
@@ -754,6 +757,16 @@ class AutoGGUF(QMainWindow):
         # Load models
         self.load_models()
         self.logger.info(AUTOGGUF_INITIALIZATION_COMPLETE)
+
+    def parse_resolution(self):
+        res = os.environ.get('AUTOGGUF_RESOLUTION', '1650x1100')
+        try:
+            width, height = map(int, res.split('x'))
+            if width <= 0 or height <= 0:
+                raise ValueError
+            return width, height
+        except (ValueError, AttributeError):
+            return 1650, 1100
 
     def resizeEvent(self, event):
         super().resizeEvent(event)
