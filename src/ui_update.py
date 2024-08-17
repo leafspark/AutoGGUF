@@ -1,5 +1,6 @@
 from Localizations import *
 import psutil
+from error_handling import show_error
 
 
 def update_model_info(logger, self, model_info):

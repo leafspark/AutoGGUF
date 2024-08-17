@@ -50,7 +50,7 @@ class Metadata:
         model_name: Optional[str] = None,
         total_params: int = 0,
     ) -> Metadata:
-        # This grabs as many contextual authorship metadata as possible from the model repository
+        # This grabs as much contextual authorship metadata as possible from the model repository
         # making any conversion as required to match the gguf kv store metadata format
         # as well as giving users the ability to override any authorship metadata that may be incorrect
 
@@ -508,7 +508,7 @@ class Metadata:
 
             hf_name_or_path = hf_params.get("_name_or_path")
             if hf_name_or_path is not None and hf_name_or_path.count("/") <= 1:
-                # Use _name_or_path only if its actually a model name and not some computer path
+                # Use _name_or_path only if it's actually a model name and not some computer path
                 # e.g. 'meta-llama/Llama-2-7b-hf'
                 model_id = hf_name_or_path
                 (

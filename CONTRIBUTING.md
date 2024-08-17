@@ -33,7 +33,7 @@ You can find issues labeled with "good first issue" in the Issues tab as a start
 
 - Use the present tense ("Add feature" not "Added feature")
 - Use the imperative mood ("Move cursor to..." not "Moves cursor to...")
-- Limit the first line to 72 characters or less
+- Limit the first line to 72 characters or fewer
 
 ### Commit Types:
 

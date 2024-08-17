@@ -1,145 +1,314 @@
+import json
+import re
+import shutil
+import os
+
+from functools import partial
+from PySide6.QtCore import *
+from PySide6.QtGui import *
+from PySide6.QtWidgets import *
+
+from GPUMonitor import GPUMonitor
+from KVOverrideEntry import KVOverrideEntry
+from Logger import Logger
+from ModelInfoDialog import ModelInfoDialog
+from error_handling import show_error, handle_error
+from imports_and_globals import (
+    open_file_safe,
+    resource_path,
+    show_about,
+    ensure_directory,
+)
+from Localizations import *
+import presets
+import ui_update
+import lora_conversion
+import utils
+
+
+class CustomTitleBar(QWidget):
+    """
+    Custom title bar for the main window, providing drag-and-drop functionality
+    and minimize/close buttons.
+    """
+
+    def __init__(self, parent=None):
+        """
+        Initializes the custom title bar.
+
+        Args:
+            parent (QWidget, optional): The parent widget. Defaults to None.
+        """
+
+
 class AutoGGUF(QMainWindow):
     """
-    AutoGGUF is a PySide6-based graphical user interface for managing and quantizing large language models.
-
-    This class provides functionality for:
-    - Loading and displaying models (including sharded models)
-    - Quantizing models with various options
-    - Downloading llama.cpp releases
-    - Generating importance matrices
-    - Converting and exporting LoRA models
-    - Managing quantization tasks
-    - Converting Hugging Face models to GGUF format
-
-    The GUI allows users to interact with these features in an intuitive way, providing
-    options for model selection, quantization parameters, and task management.
-
-    Attributes:
-        logger (Logger): Instance of the Logger class for logging operations.
-        ram_bar (QProgressBar): Progress bar for displaying RAM usage.
-        cpu_label (QLabel): Label for displaying CPU usage.
-        gpu_monitor (GPUMonitor): Widget for monitoring GPU usage.
-        backend_combo (QComboBox): Dropdown for selecting the backend.
-        model_tree (QTreeWidget): Tree widget for displaying available models.
-        task_list (QListWidget): List widget for displaying ongoing tasks.
-        quant_threads (list): List to store active quantization threads.
-
-    The class also contains numerous UI elements for user input and interaction,
-    including text inputs, checkboxes, and buttons for various operations.
+    Main application window for AutoGGUF, providing a user interface for
+    quantizing and converting large language models.
     """
 
     def __init__(self):
         """
-        Initialize the AutoGGUF application window.
+        Initializes the main window, setting up the UI, logger, and other
+        necessary components.
+        """
 
-        This method sets up the main window, initializes the UI components,
-        sets up layouts, and connects various signals to their respective slots.
-        It also initializes the logger, sets up the system info update timer,
-        and prepares the application for model management and quantization tasks.
+    def keyPressEvent(self, event):
+        """
+        Handles key press events for window resizing.
 
-        The initialization process includes:
-        - Setting up the main window properties (title, icon, size)
-        - Creating and arranging UI components for different functionalities
-        - Initializing backend and release information
-        - Setting up file browsers for various inputs
-        - Preparing quantization options and task management interface
-        - Initializing iMatrix generation interface
-        - Setting up LoRA conversion and export interfaces
-        - Preparing Hugging Face to GGUF conversion interface
+        Args:
+            event (QKeyEvent): The key press event.
+        """
+
+    def resize_window(self, larger):
+        """
+        Resizes the window by a specified factor.
+
+        Args:
+            larger (bool): Whether to make the window larger or smaller.
+        """
+
+    def reset_size(self):
+        """Resets the window to its default size."""
+
+    def parse_resolution(self):
+        """
+        Parses the resolution from the AUTOGGUF_RESOLUTION environment variable.
+
+        Returns:
+            tuple: The width and height of the window.
+        """
+
+    def resizeEvent(self, event):
+        """
+        Handles resize events to maintain rounded corners.
+
+        Args:
+            event (QResizeEvent): The resize event.
         """
 
     def refresh_backends(self):
+        """Refreshes the list of available backends."""
+
+    def save_task_preset(self, task_item):
         """
-        Refresh the list of available backends.
+        Saves the preset for a specific task.
 
-        This method scans the 'llama_bin' directory for valid backends,
-        updates the backend selection combo box, and enables/disables
-        it based on the availability of backends.
-
-        The method logs the refresh operation and the number of valid
-        backends found.
-        """
-
-    def update_assets(self):
-        """
-        Update the list of assets for the selected llama.cpp release.
-
-        This method clears the current asset list and populates it with
-        the assets of the selected release. It also updates the CUDA
-        option visibility based on the selected asset.
+        Args:
+            task_item (TaskListItem): The task item to save the preset for.
         """
 
-    def download_llama_cpp(self):
-        """
-        Initiate the download of the selected llama.cpp release asset.
+    def browse_export_lora_model(self):
+        """Opens a file dialog to browse for the export LORA model file."""
 
-        This method starts a download thread for the selected asset,
-        updates the UI to show download progress, and sets up signal
-        connections for download completion and error handling.
+    def browse_export_lora_output(self):
+        """Opens a file dialog to browse for the export LORA output file."""
+
+    def add_lora_adapter(self):
+        """Adds a LORA adapter to the export LORA list."""
+
+    def browse_base_model(self):
+        """Opens a file dialog to browse for the base model folder."""
+
+    def delete_lora_adapter_item(self, adapter_widget):
+        """
+        Deletes a LORA adapter item from the export LORA list.
+
+        Args:
+            adapter_widget (QWidget): The widget containing the adapter information.
+        """
+
+    def browse_hf_model_input(self):
+        """Opens a file dialog to browse for the HuggingFace model directory."""
+
+    def browse_hf_outfile(self):
+        """Opens a file dialog to browse for the HuggingFace to GGUF output file."""
+
+    def convert_hf_to_gguf(self):
+        """Converts a HuggingFace model to GGUF format."""
+
+    def export_lora(self):
+        """Exports a LORA from a GGML model."""
+
+    def restart_task(self, task_item):
+        """
+        Restarts a specific task.
+
+        Args:
+            task_item (TaskListItem): The task item to restart.
+        """
+
+    def lora_conversion_finished(self, thread, input_path, output_path):
+        """
+        Handles the completion of a LORA conversion task.
+
+        Args:
+            thread (QuantizationThread): The thread that handled the conversion.
+            input_path (str): The path to the input LORA file.
+            output_path (str): The path to the output GGML file.
+        """
+
+    def download_finished(self, extract_dir):
+        """
+        Handles the completion of a download, extracting files and updating the UI.
+
+        Args:
+            extract_dir (str): The directory where the downloaded files were extracted.
+        """
+
+    def extract_cuda_files(self, extract_dir, destination):
+        """
+        Extracts CUDA files from a downloaded archive.
+
+        Args:
+            extract_dir (str): The directory where the downloaded files were extracted.
+            destination (str): The destination directory for the CUDA files.
+        """
+
+    def download_error(self, error_message):
+        """
+        Handles download errors, displaying an error message and cleaning up.
+
+        Args:
+            error_message (str): The error message.
+        """
+
+    def show_task_context_menu(self, position):
+        """
+        Shows the context menu for a task item in the task list.
+
+        Args:
+            position (QPoint): The position of the context menu.
+        """
+
+    def show_task_properties(self, item):
+        """
+        Shows the properties dialog for a specific task.
+
+        Args:
+            item (QListWidgetItem): The task item.
+        """
+
+    def toggle_gpu_offload_auto(self, state):
+        """
+        Toggles the automatic GPU offload option.
+
+        Args:
+            state (Qt.CheckState): The state of the checkbox.
+        """
+
+    def cancel_task_by_item(self, item):
+        """
+        Cancels a task by its item in the task list.
+
+        Args:
+            item (QListWidgetItem): The task item.
+        """
+
+    def cancel_task(self, item):
+        """
+        Cancels a specific task.
+
+        Args:
+            item (QListWidgetItem): The task item.
+        """
+
+    def delete_task(self, item):
+        """
+        Deletes a specific task.
+
+        Args:
+            item (QListWidgetItem): The task item.
+        """
+
+    def create_label(self, text, tooltip):
+        """
+        Creates a QLabel with a tooltip.
+
+        Args:
+            text (str): The text for the label.
+            tooltip (str): The tooltip for the label.
+
+        Returns:
+            QLabel: The created label.
         """
 
     def load_models(self):
-        """
-        Load and display the list of available models.
+        """Loads the available models and displays them in the model tree."""
 
-        This method scans the specified models directory for .gguf files,
-        organizes them into sharded and single models, and populates
-        the model tree widget with this information.
-        """
+    def browse_models(self):
+        """Opens a file dialog to browse for the models directory."""
+
+    def browse_output(self):
+        """Opens a file dialog to browse for the output directory."""
+
+    def browse_logs(self):
+        """Opens a file dialog to browse for the logs directory."""
+
+    def browse_imatrix(self):
+        """Opens a file dialog to browse for the imatrix file."""
+
+    def validate_quantization_inputs(self):
+        """Validates the inputs for quantization."""
+
+    def add_kv_override(self, override_string=None):
+        """Adds a KV override entry to the list."""
+
+    def remove_kv_override(self, entry):
+        """Removes a KV override entry from the list."""
 
     def quantize_model(self):
-        """
-        Start the quantization process for the selected model.
+        """Quantizes the selected model."""
 
-        This method prepares the quantization command based on user-selected
-        options, creates a new quantization thread, and sets up a task item
-        in the task list to track the quantization progress.
+    def parse_progress(self, line, task_item):
         """
+        Parses the progress from the output line and updates the task item.
+
+        Args:
+            line (str): The output line.
+            task_item (TaskListItem): The task item.
+        """
+
+    def task_finished(self, thread, task_item):
+        """
+        Handles the completion of a task.
+
+        Args:
+            thread (QuantizationThread): The thread that handled the task.
+            task_item (TaskListItem): The task item.
+        """
+
+    def show_task_details(self, item):
+        """
+        Shows the details of a specific task.
+
+        Args:
+            item (QListWidgetItem): The task item.
+        """
+
+    def browse_imatrix_datafile(self):
+        """Opens a file dialog to browse for the imatrix data file."""
+
+    def browse_imatrix_model(self):
+        """Opens a file dialog to browse for the imatrix model file."""
+
+    def browse_imatrix_output(self):
+        """Opens a file dialog to browse for the imatrix output file."""
+
+    def get_models_data(self):
+        """Retrieves data for all loaded models."""
+
+    def get_tasks_data(self):
+        """Retrieves data for all tasks in the task list."""
 
     def generate_imatrix(self):
-        """
-        Start the importance matrix generation process.
-
-        This method prepares the iMatrix generation command based on user inputs,
-        creates a new thread for the operation, and sets up a task item
-        in the task list to track the generation progress.
-        """
-
-    def convert_lora(self):
-        """
-        Start the LoRA conversion process.
-
-        This method prepares the LoRA conversion command based on user inputs,
-        creates a new thread for the conversion, and sets up a task item
-        in the task list to track the conversion progress.
-        """
-
-    def export_lora(self):
-        """
-        Start the LoRA export process.
-
-        This method prepares the LoRA export command based on user inputs,
-        creates a new thread for the export operation, and sets up a task item
-        in the task list to track the export progress.
-        """
-
-    def convert_hf_to_gguf(self):
-        """
-        Start the process of converting a Hugging Face model to GGUF format.
-
-        This method prepares the conversion command based on user inputs,
-        creates a new thread for the conversion, and sets up a task item
-        in the task list to track the conversion progress.
-        """
+        """Generates an imatrix file."""
 
     def closeEvent(self, event: QCloseEvent):
         """
-        Handle the window close event.
-
-        This method is called when the user attempts to close the application.
-        It checks for any running tasks and prompts the user for confirmation
-        before closing if tasks are still in progress.
+        Handles close events, prompting the user if there are running tasks.
 
         Args:
-            event (QCloseEvent): The close event object.
+            event (QCloseEvent): The close event.
         """

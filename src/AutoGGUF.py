@@ -1,7 +1,6 @@
 import json
 import re
 import shutil
-import os
 
 from functools import partial
 from PySide6.QtCore import *
@@ -841,27 +840,6 @@ class AutoGGUF(QMainWindow):
         mask = QRegion(path.toFillPolygon().toPolygon())
         self.setMask(mask)
 
-    def closeEvent(self, event: QCloseEvent):
-        self.logger.info(APPLICATION_CLOSING)
-        if self.quant_threads:
-            reply = QMessageBox.question(
-                self,
-                WARNING,
-                TASK_RUNNING_WARNING,
-                QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
-                QMessageBox.StandardButton.No,
-            )
-
-            if reply == QMessageBox.StandardButton.Yes:
-                for thread in self.quant_threads:
-                    thread.terminate()
-                event.accept()
-            else:
-                event.ignore()
-        else:
-            event.accept()
-        self.logger.info(APPLICATION_CLOSED)
-
     def refresh_backends(self):
         self.logger.info(REFRESHING_BACKENDS)
         llama_bin = os.path.abspath("llama_bin")
@@ -1205,35 +1183,6 @@ class AutoGGUF(QMainWindow):
         index = self.backend_combo.findText(new_backend_name)
         if index >= 0:
             self.backend_combo.setCurrentIndex(index)
-
-    def download_finished(self, extract_dir):
-        self.download_button.setEnabled(True)
-        self.download_progress.setValue(100)
-
-        if (
-            self.cuda_extract_checkbox.isChecked()
-            and self.cuda_extract_checkbox.isVisible()
-        ):
-            cuda_backend = self.backend_combo_cuda.currentData()
-            if cuda_backend:
-                self.extract_cuda_files(extract_dir, cuda_backend)
-                QMessageBox.information(
-                    self,
-                    DOWNLOAD_COMPLETE,
-                    LLAMACPP_DOWNLOADED_AND_EXTRACTED.format(extract_dir, cuda_backend),
-                )
-            else:
-                QMessageBox.warning(
-                    self, CUDA_EXTRACTION_FAILED, NO_CUDA_BACKEND_SELECTED
-                )
-        else:
-            QMessageBox.information(
-                self,
-                DOWNLOAD_COMPLETE,
-                LLAMACPP_BINARY_DOWNLOADED_AND_EXTRACTED.format(extract_dir),
-            )
-
-        self.refresh_backends()
 
     def extract_cuda_files(self, extract_dir, destination):
         self.logger.info(EXTRACTING_CUDA_FILES.format(extract_dir, destination))

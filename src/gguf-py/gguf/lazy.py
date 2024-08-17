@@ -34,7 +34,7 @@ class LazyMeta(ABCMeta):
 
         # need to make a builder for the wrapped wrapper to copy the name,
         # or else it fails with very cryptic error messages,
-        # because somehow the same string would end up in every closures
+        # because somehow the same string would end up in every closure
         def mk_wrap(op_name: str, *, meta_noop: bool = False):
             # need to wrap the wrapper to get self
             def wrapped_special_op(self, *args, **kwargs):

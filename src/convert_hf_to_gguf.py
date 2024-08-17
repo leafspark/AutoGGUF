@@ -2952,7 +2952,7 @@ class BertModel(Model):
     ) -> Iterable[tuple[str, Tensor]]:
         del bid  # unused
 
-        # we are only using BERT for embeddings so we don't need the pooling layer
+        # we are only using BERT for embeddings, so we don't need the pooling layer
         if name in (
             "embeddings.position_ids",
             "pooler.dense.weight",
