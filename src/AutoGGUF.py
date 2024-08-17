@@ -20,6 +20,7 @@ from imports_and_globals import (
     ensure_directory,
 )
 from Localizations import *
+import presets
 import ui_update
 import lora_conversion
 import utils
@@ -114,6 +115,8 @@ class AutoGGUF(QMainWindow):
         self.browse_lora_output = utils.browse_lora_output.__get__(self)
         self.convert_lora = lora_conversion.convert_lora.__get__(self)
         self.show_about = show_about.__get__(self)
+        self.save_preset = presets.save_preset.__get__(self)
+        self.load_preset = presets.load_preset.__get__(self)
         self.update_threads_spinbox = partial(ui_update.update_threads_spinbox, self)
         self.update_threads_slider = partial(ui_update.update_threads_slider, self)
         self.update_gpu_offload_spinbox = partial(
@@ -145,7 +148,7 @@ class AutoGGUF(QMainWindow):
         # File menu
         file_menu = self.menubar.addMenu("&File")
         close_action = QAction("&Close", self)
-        close_action.setShortcut(QKeySequence.Quit)
+        close_action.setShortcut(QKeySequence("Alt+F4"))
         close_action.triggered.connect(self.close)
         file_menu.addAction(close_action)
 
@@ -159,7 +162,14 @@ class AutoGGUF(QMainWindow):
         # Content widget
         content_widget = QWidget()
         content_layout = QHBoxLayout(content_widget)
-        main_layout.addWidget(content_widget)
+
+        # Wrap content in a scroll area
+        scroll_area = QScrollArea()
+        scroll_area.setWidgetResizable(True)  # Allow content to resize
+        scroll_area.setWidget(content_widget)
+
+        # Add scroll area to main layout
+        main_layout.addWidget(scroll_area)
 
         self.setCentralWidget(main_widget)
 
@@ -819,80 +829,6 @@ class AutoGGUF(QMainWindow):
             self.backend_combo.addItem(NO_BACKENDS_AVAILABLE)
             self.backend_combo.setEnabled(False)
         self.logger.info(FOUND_VALID_BACKENDS.format(self.backend_combo.count()))
-
-    def save_preset(self):
-        self.logger.info(SAVING_PRESET)
-        preset = {
-            "quant_types": [item.text() for item in self.quant_type.selectedItems()],
-            "allow_requantize": self.allow_requantize.isChecked(),
-            "leave_output_tensor": self.leave_output_tensor.isChecked(),
-            "pure": self.pure.isChecked(),
-            "imatrix": self.imatrix.text(),
-            "include_weights": self.include_weights.text(),
-            "exclude_weights": self.exclude_weights.text(),
-            "use_output_tensor_type": self.use_output_tensor_type.isChecked(),
-            "output_tensor_type": self.output_tensor_type.currentText(),
-            "use_token_embedding_type": self.use_token_embedding_type.isChecked(),
-            "token_embedding_type": self.token_embedding_type.currentText(),
-            "keep_split": self.keep_split.isChecked(),
-            "kv_overrides": [
-                entry.get_raw_override_string() for entry in self.kv_override_entries
-            ],
-            "extra_arguments": self.extra_arguments.text(),
-        }
-
-        file_name, _ = QFileDialog.getSaveFileName(self, SAVE_PRESET, "", JSON_FILES)
-        if file_name:
-            with open(file_name, "w") as f:
-                json.dump(preset, f, indent=4)
-            QMessageBox.information(
-                self, PRESET_SAVED, PRESET_SAVED_TO.format(file_name)
-            )
-        self.logger.info(PRESET_SAVED_TO.format(file_name))
-
-    def load_preset(self):
-        self.logger.info(LOADING_PRESET)
-        file_name, _ = QFileDialog.getOpenFileName(self, LOAD_PRESET, "", JSON_FILES)
-        if file_name:
-            with open(file_name, "r") as f:
-                preset = json.load(f)
-
-            self.quant_type.clearSelection()
-            for quant_type in preset.get("quant_types", []):
-                items = self.quant_type.findItems(quant_type, Qt.MatchExactly)
-                if items:
-                    items[0].setSelected(True)
-            self.allow_requantize.setChecked(preset.get("allow_requantize", False))
-            self.leave_output_tensor.setChecked(
-                preset.get("leave_output_tensor", False)
-            )
-            self.pure.setChecked(preset.get("pure", False))
-            self.imatrix.setText(preset.get("imatrix", ""))
-            self.include_weights.setText(preset.get("include_weights", ""))
-            self.exclude_weights.setText(preset.get("exclude_weights", ""))
-            self.use_output_tensor_type.setChecked(
-                preset.get("use_output_tensor_type", False)
-            )
-            self.output_tensor_type.setCurrentText(preset.get("output_tensor_type", ""))
-            self.use_token_embedding_type.setChecked(
-                preset.get("use_token_embedding_type", False)
-            )
-            self.token_embedding_type.setCurrentText(
-                preset.get("token_embedding_type", "")
-            )
-            self.keep_split.setChecked(preset.get("keep_split", False))
-            self.extra_arguments.setText(preset.get("extra_arguments", ""))
-
-            # Clear existing KV overrides and add new ones
-            for entry in self.kv_override_entries:
-                self.remove_kv_override(entry)
-            for override in preset.get("kv_overrides", []):
-                self.add_kv_override(override)
-
-            QMessageBox.information(
-                self, PRESET_LOADED, PRESET_LOADED_FROM.format(file_name)
-            )
-        self.logger.info(PRESET_LOADED_FROM.format(file_name))
 
     def save_task_preset(self, task_item):
         self.logger.info(SAVING_TASK_PRESET.format(task_item.task_name))
