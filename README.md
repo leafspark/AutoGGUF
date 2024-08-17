@@ -111,7 +111,7 @@ To use a specific language, set the `AUTOGGUF_LANGUAGE` environment variable to 
 
 ## Known Issues
 
-- ~~Cannot delete task while processing (planned fix: disallow deletion before cancelling or cancel automatically)~~ (fixed in v1.6.2)
+- None!
 
 ## Planned Features
 
@@ -119,6 +119,8 @@ To use a specific language, set the `AUTOGGUF_LANGUAGE` environment variable to 
 - Actual progress bar tracking 
 - Perplexity testing
 - Web API and management (partially implemented in v1.6.2)
+- ~~Themes~~ (added in v1.7.1)
+- ~~Sleek UI menubar~~ (added in v1.7.1)
 
 ## Troubleshooting
 
@@ -130,7 +132,7 @@ Fork the repo, make your changes, and ensure you have the latest commits when me
 
 ## User Interface
 
-![rsz_1autogguf-v162-screenshot-blue](https://github.com/user-attachments/assets/0e69dd3d-95b0-4bc6-b29e-df308bf027c4)
+![AutoGGUF-v1 7 1-showcase-blue](https://github.com/user-attachments/assets/04cb6cd3-7852-4638-b23b-b11507ca32cd)
 
 ## Stargazers
 
