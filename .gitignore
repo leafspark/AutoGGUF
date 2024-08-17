@@ -41,3 +41,6 @@ assets/*
 
 # Don't ignore .gitignore
 !.gitignore
+
+# Allow PyPI setup script
+!setup.py
