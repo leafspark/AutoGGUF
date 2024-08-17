@@ -99,6 +99,10 @@ class AutoGGUF(QMainWindow):
         self.setGeometry(100, 100, width, height)
         self.setWindowFlag(Qt.FramelessWindowHint)
 
+        self.resize_factor = 1.1  # 10% increase/decrease
+        self.default_width, self.default_height = self.parse_resolution()
+        self.resize(self.default_width, self.default_height)
+
         ensure_directory(os.path.abspath("quantized_models"))
         ensure_directory(os.path.abspath("models"))
 
@@ -796,6 +800,29 @@ class AutoGGUF(QMainWindow):
         # Load models
         self.load_models()
         self.logger.info(AUTOGGUF_INITIALIZATION_COMPLETE)
+
+    def keyPressEvent(self, event):
+        if event.modifiers() == Qt.ControlModifier:
+            if (
+                event.key() == Qt.Key_Equal
+            ):  # Qt.Key_Plus doesn't work on some keyboards
+                self.resize_window(larger=True)
+            elif event.key() == Qt.Key_Minus:
+                self.resize_window(larger=False)
+            elif event.key() == Qt.Key_0:
+                self.reset_size()
+        super().keyPressEvent(event)
+
+    def resize_window(self, larger):
+        factor = 1.1 if larger else 1 / 1.1
+        current_width = self.width()
+        current_height = self.height()
+        new_width = int(current_width * factor)
+        new_height = int(current_height * factor)
+        self.resize(new_width, new_height)
+
+    def reset_size(self):
+        self.resize(self.default_width, self.default_height)
 
     def parse_resolution(self):
         res = os.environ.get("AUTOGGUF_RESOLUTION", "1650x1100")
