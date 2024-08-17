@@ -4403,83 +4403,81 @@ class LazyTorchTensor(gguf.LazyBase):
 
 
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(
-        description="Convert a huggingface model to a GGML compatible file"
-    )
+    parser = argparse.ArgumentParser(description="")
     parser.add_argument(
         "--vocab-only",
         action="store_true",
-        help="extract only the vocab",
+        help="",
     )
     parser.add_argument(
         "--outfile",
         type=Path,
-        help="path to write to; default: based on input. {ftype} will be replaced by the outtype.",
+        help="",
     )
     parser.add_argument(
         "--outtype",
         type=str,
         choices=["f32", "f16", "bf16", "q8_0", "auto"],
         default="f16",
-        help="output format - use f32 for float32, f16 for float16, bf16 for bfloat16, q8_0 for Q8_0, auto for the highest-fidelity 16-bit float type depending on the first loaded tensor type",
+        help="",
     )
     parser.add_argument(
         "--bigendian",
         action="store_true",
-        help="model is executed on big endian machine",
+        help="",
     )
     parser.add_argument(
         "model",
         type=Path,
-        help="directory containing model file",
+        help="",
     )
     parser.add_argument(
         "--use-temp-file",
         action="store_true",
-        help="use the tempfile library while processing (helpful when running out of memory, process killed)",
+        help="",
     )
     parser.add_argument(
         "--no-lazy",
         action="store_true",
-        help="use more RAM by computing all outputs before writing (use in case lazy evaluation is broken)",
+        help="",
     )
     parser.add_argument(
         "--model-name",
         type=str,
         default=None,
-        help="name of the model",
+        help="",
     )
     parser.add_argument(
         "--verbose",
         action="store_true",
-        help="increase output verbosity",
+        help="",
     )
     parser.add_argument(
         "--split-max-tensors",
         type=int,
         default=0,
-        help="max tensors in each split",
+        help="",
     )
     parser.add_argument(
         "--split-max-size",
         type=str,
         default="0",
-        help="max size per split N(M|G)",
+        help="",
     )
     parser.add_argument(
         "--dry-run",
         action="store_true",
-        help="only print out a split plan and exit, without writing any new files",
+        help="",
     )
     parser.add_argument(
         "--no-tensor-first-split",
         action="store_true",
-        help="do not add tensors to the first split (disabled by default)",
+        help="",
     )
     parser.add_argument(
         "--metadata",
         type=Path,
-        help="Specify the path for an authorship metadata override file",
+        help="",
     )
 
     return parser.parse_args()
