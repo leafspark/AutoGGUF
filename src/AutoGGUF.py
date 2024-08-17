@@ -759,9 +759,9 @@ class AutoGGUF(QMainWindow):
         self.logger.info(AUTOGGUF_INITIALIZATION_COMPLETE)
 
     def parse_resolution(self):
-        res = os.environ.get('AUTOGGUF_RESOLUTION', '1650x1100')
+        res = os.environ.get("AUTOGGUF_RESOLUTION", "1650x1100")
         try:
-            width, height = map(int, res.split('x'))
+            width, height = map(int, res.split("x"))
             if width <= 0 or height <= 0:
                 raise ValueError
             return width, height
