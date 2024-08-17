@@ -11,6 +11,7 @@ from GPUMonitor import GPUMonitor
 from KVOverrideEntry import KVOverrideEntry
 from Logger import Logger
 from ModelInfoDialog import ModelInfoDialog
+from error_handling import show_error, handle_error
 from imports_and_globals import (
     open_file_safe,
     resource_path,
@@ -23,6 +24,66 @@ import lora_conversion
 import utils
 
 
+class CustomTitleBar(QWidget):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.parent = parent
+        layout = QHBoxLayout(self)
+        layout.setContentsMargins(10, 5, 10, 5)
+
+        # Add your logo or app name here
+        self.title = QLabel("AutoGGUF")
+        layout.addWidget(self.title)
+
+        layout.addStretch(1)  # This pushes the buttons to the right
+
+        # Add minimize and close buttons
+        self.minimize_button = QPushButton("—")
+        self.close_button = QPushButton("✕")
+
+        for button in (self.minimize_button, self.close_button):
+            button.setFixedSize(30, 30)
+            button.setStyleSheet(
+                """
+                QPushButton {
+                    border: none;
+                    background-color: transparent;
+                }
+                QPushButton:hover {
+                    background-color: rgba(255, 255, 255, 0.1);
+                }
+            """
+            )
+
+        layout.addWidget(self.minimize_button)
+        layout.addWidget(self.close_button)
+
+        self.minimize_button.clicked.connect(self.parent.showMinimized)
+        self.close_button.clicked.connect(self.parent.close)
+
+        self.start = QPoint(0, 0)
+        self.pressing = False
+
+    def mousePressEvent(self, event):
+        self.start = self.mapToGlobal(event.pos())
+        self.pressing = True
+
+    def mouseMoveEvent(self, event):
+        if self.pressing:
+            end = self.mapToGlobal(event.pos())
+            movement = end - self.start
+            self.parent.setGeometry(
+                self.parent.x() + movement.x(),
+                self.parent.y() + movement.y(),
+                self.parent.width(),
+                self.parent.height(),
+            )
+            self.start = end
+
+    def mouseReleaseEvent(self, event):
+        self.pressing = False
+
+
 class AutoGGUF(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -31,7 +92,8 @@ class AutoGGUF(QMainWindow):
         self.logger.info(INITIALIZING_AUTOGGUF)
         self.setWindowTitle(WINDOW_TITLE)
         self.setWindowIcon(QIcon(resource_path("assets/favicon.ico")))
-        self.setGeometry(100, 100, 1600, 1200)
+        self.setGeometry(100, 100, 1700, 1200)
+        self.setWindowFlag(Qt.FramelessWindowHint)
 
         ensure_directory(os.path.abspath("quantized_models"))
         ensure_directory(os.path.abspath("models"))
@@ -63,47 +125,68 @@ class AutoGGUF(QMainWindow):
             ui_update.update_download_progress, self
         )
 
-        # Create a central widget and main layout
-        central_widget = QWidget()
-        main_layout = QHBoxLayout(central_widget)
+        # Set up main widget and layout
+        main_widget = QWidget()
+        main_layout = QVBoxLayout(main_widget)
+        main_layout.setContentsMargins(0, 0, 0, 0)
+        main_layout.setSpacing(0)
 
-        # Create a scroll area and set it as the central widget
-        scroll = QScrollArea()
-        scroll.setWidgetResizable(True)
-        scroll.setWidget(central_widget)
-        self.setCentralWidget(scroll)
+        # Custom title bar
+        self.title_bar = CustomTitleBar(self)
+        main_layout.addWidget(self.title_bar)
 
-        # Create left and right widgets
-        left_widget = QWidget()
-        right_widget = QWidget()
-
-        # Set minimum widths to maintain proportions
-        left_widget.setMinimumWidth(800)
-        right_widget.setMinimumWidth(400)
-
-        menubar = QMenuBar(self)
-        self.layout().setMenuBar(menubar)
+        # Menu bar
+        self.menubar = QMenuBar()
+        self.title_bar.layout().insertWidget(1, self.menubar)
 
         # File menu
-        file_menu = menubar.addMenu("&File")
+        file_menu = self.menubar.addMenu("&File")
         close_action = QAction("&Close", self)
         close_action.setShortcut(QKeySequence.Quit)
         close_action.triggered.connect(self.close)
         file_menu.addAction(close_action)
 
         # Help menu
-        help_menu = menubar.addMenu("&Help")
+        help_menu = self.menubar.addMenu("&Help")
         about_action = QAction("&About", self)
         about_action.setShortcut(QKeySequence("Ctrl+Q"))
         about_action.triggered.connect(self.show_about)
         help_menu.addAction(about_action)
 
+        # Content widget
+        content_widget = QWidget()
+        content_layout = QHBoxLayout(content_widget)
+        main_layout.addWidget(content_widget)
+
+        self.setCentralWidget(main_widget)
+
+        # Styling
+        self.setStyleSheet(
+            """
+                AutoGGUF {
+                    background-color: #2b2b2b;
+                    border-radius: 10px;
+                }
+            """
+        )
+
+        # Initialize threads
+        self.quant_threads = []
+
+        # Timer for updating system info
+        self.timer = QTimer()
+        self.timer.timeout.connect(self.update_system_info)
+        self.timer.start(200)
+
+        # Add all widgets to content_layout
+        left_widget = QWidget()
+        right_widget = QWidget()
+        left_widget.setMinimumWidth(1100)
+        right_widget.setMinimumWidth(400)
         left_layout = QVBoxLayout(left_widget)
         right_layout = QVBoxLayout(right_widget)
-
-        # Add left and right widgets to the main layout
-        main_layout.addWidget(left_widget, 2)
-        main_layout.addWidget(right_widget, 1)
+        content_layout.addWidget(left_widget)
+        content_layout.addWidget(right_widget)
 
         # System info
         self.ram_bar = QProgressBar()
@@ -115,7 +198,7 @@ class AutoGGUF(QMainWindow):
         left_layout.addWidget(QLabel(GPU_USAGE))
         left_layout.addWidget(self.gpu_monitor)
 
-        # Modify the backend selection
+        # Backend selection
         backend_layout = QHBoxLayout()
         self.backend_combo = QComboBox()
         self.refresh_backends_button = QPushButton(REFRESH_BACKENDS)
@@ -125,10 +208,9 @@ class AutoGGUF(QMainWindow):
         backend_layout.addWidget(self.refresh_backends_button)
         left_layout.addLayout(backend_layout)
 
-        # Modify the Download llama.cpp section
+        # Download llama.cpp section
         download_group = QGroupBox(DOWNLOAD_LLAMACPP)
         download_layout = QFormLayout()
-
         self.release_combo = QComboBox()
         self.refresh_releases_button = QPushButton(REFRESH_RELEASES)
         self.refresh_releases_button.clicked.connect(self.refresh_releases)
@@ -136,34 +218,24 @@ class AutoGGUF(QMainWindow):
         release_layout.addWidget(self.release_combo)
         release_layout.addWidget(self.refresh_releases_button)
         download_layout.addRow(SELECT_RELEASE, release_layout)
-
         self.asset_combo = QComboBox()
         self.asset_combo.currentIndexChanged.connect(self.update_cuda_option)
         download_layout.addRow(SELECT_ASSET, self.asset_combo)
-
         self.cuda_extract_checkbox = QCheckBox(EXTRACT_CUDA_FILES)
         self.cuda_extract_checkbox.setVisible(False)
         download_layout.addRow(self.cuda_extract_checkbox)
-
         self.cuda_backend_label = QLabel(SELECT_CUDA_BACKEND)
         self.cuda_backend_label.setVisible(False)
         self.backend_combo_cuda = QComboBox()
         self.backend_combo_cuda.setVisible(False)
         download_layout.addRow(self.cuda_backend_label, self.backend_combo_cuda)
-
         self.download_progress = QProgressBar()
         self.download_button = QPushButton(DOWNLOAD)
         self.download_button.clicked.connect(self.download_llama_cpp)
         download_layout.addRow(self.download_progress)
         download_layout.addRow(self.download_button)
-
         download_group.setLayout(download_layout)
         right_layout.addWidget(download_group)
-
-        # Initialize releases and backends
-        if os.environ.get("AUTOGGUF_CHECK_BACKEND", "").lower() == "enabled":
-            self.refresh_releases()
-        self.refresh_backends()
 
         # Models path
         models_layout = QHBoxLayout()
@@ -374,17 +446,16 @@ class AutoGGUF(QMainWindow):
             kv_override_main_layout,
         )
 
-        quant_options_widget.setLayout(quant_options_layout)
-        quant_options_scroll.setWidget(quant_options_widget)
-        quant_options_scroll.setWidgetResizable(True)
-        left_layout.addWidget(quant_options_scroll)
-
-        # Add this after the KV override section
         self.extra_arguments = QLineEdit()
         quant_options_layout.addRow(
             self.create_label(EXTRA_ARGUMENTS, "Additional command-line arguments"),
             self.extra_arguments,
         )
+
+        quant_options_widget.setLayout(quant_options_layout)
+        quant_options_scroll.setWidget(quant_options_widget)
+        quant_options_scroll.setWidgetResizable(True)
+        left_layout.addWidget(quant_options_scroll)
 
         # Quantize button layout
         quantize_layout = QHBoxLayout()
@@ -443,23 +514,21 @@ class AutoGGUF(QMainWindow):
         )
 
         self.imatrix_frequency = QSpinBox()
-        self.imatrix_frequency.setRange(1, 100)  # Set the range from 1 to 100
-        self.imatrix_frequency.setValue(1)  # Set a default value
+        self.imatrix_frequency.setRange(1, 100)
+        self.imatrix_frequency.setValue(1)
         imatrix_layout.addRow(
             self.create_label(OUTPUT_FREQUENCY, HOW_OFTEN_TO_SAVE_IMATRIX),
             self.imatrix_frequency,
         )
 
-        # Context size input (now a spinbox)
         self.imatrix_ctx_size = QSpinBox()
-        self.imatrix_ctx_size.setRange(1, 1048576)  # Up to one million tokens
-        self.imatrix_ctx_size.setValue(512)  # Set a default value
+        self.imatrix_ctx_size.setRange(1, 1048576)
+        self.imatrix_ctx_size.setValue(512)
         imatrix_layout.addRow(
             self.create_label(CONTEXT_SIZE, CONTEXT_SIZE_FOR_IMATRIX),
             self.imatrix_ctx_size,
         )
 
-        # Threads input with slider and spinbox
         threads_layout = QHBoxLayout()
         self.threads_slider = QSlider(Qt.Orientation.Horizontal)
         self.threads_slider.setRange(1, 64)
@@ -476,7 +545,6 @@ class AutoGGUF(QMainWindow):
             self.create_label(THREADS, NUMBER_OF_THREADS_FOR_IMATRIX), threads_layout
         )
 
-        # GPU Offload for IMatrix (corrected version)
         gpu_offload_layout = QHBoxLayout()
         self.gpu_offload_slider = QSlider(Qt.Orientation.Horizontal)
         self.gpu_offload_slider.setRange(0, 200)
@@ -530,7 +598,6 @@ class AutoGGUF(QMainWindow):
             lora_output_layout,
         )
 
-        # Output Type Dropdown
         self.lora_output_type_combo = QComboBox()
         self.lora_output_type_combo.addItems(["GGML", "GGUF"])
         self.lora_output_type_combo.currentIndexChanged.connect(
@@ -541,30 +608,24 @@ class AutoGGUF(QMainWindow):
             self.lora_output_type_combo,
         )
 
-        # Base Model Path (initially hidden)
         self.base_model_label = self.create_label(BASE_MODEL, SELECT_BASE_MODEL_FILE)
         self.base_model_path = QLineEdit()
         base_model_button = QPushButton(BROWSE)
         base_model_button.clicked.connect(self.browse_base_model)
         base_model_layout = QHBoxLayout()
-        base_model_layout.addWidget(self.base_model_path, 1)  # Give it a stretch factor
+        base_model_layout.addWidget(self.base_model_path, 1)
         base_model_layout.addWidget(base_model_button)
         self.base_model_widget = QWidget()
         self.base_model_widget.setLayout(base_model_layout)
 
-        # Create a wrapper widget to hold both label and input
         self.base_model_wrapper = QWidget()
         wrapper_layout = QHBoxLayout(self.base_model_wrapper)
         wrapper_layout.addWidget(self.base_model_label)
-        wrapper_layout.addWidget(self.base_model_widget, 1)  # Give it a stretch factor
-        wrapper_layout.setContentsMargins(
-            0, 0, 0, 0
-        )  # Remove margins for better alignment
+        wrapper_layout.addWidget(self.base_model_widget, 1)
+        wrapper_layout.setContentsMargins(0, 0, 0, 0)
 
-        # Add the wrapper to the layout
         lora_layout.addRow(self.base_model_wrapper)
 
-        # Set initial visibility
         self.update_base_model_visibility(self.lora_output_type_combo.currentIndex())
 
         lora_convert_button = QPushButton(CONVERT_LORA)
@@ -598,7 +659,6 @@ class AutoGGUF(QMainWindow):
             self.create_label(OUTPUT, SELECT_OUTPUT_FILE), export_lora_output_layout
         )
 
-        # GGML LoRA Adapters
         self.export_lora_adapters = QListWidget()
         add_adapter_button = QPushButton(ADD_ADAPTER)
         add_adapter_button.clicked.connect(self.add_lora_adapter)
@@ -612,10 +672,9 @@ class AutoGGUF(QMainWindow):
             adapters_layout,
         )
 
-        # Threads
         self.export_lora_threads = QSpinBox()
         self.export_lora_threads.setRange(1, 64)
-        self.export_lora_threads.setValue(8)  # Default value
+        self.export_lora_threads.setValue(8)
         export_lora_layout.addRow(
             self.create_label(THREADS, NUMBER_OF_THREADS_FOR_LORA_EXPORT),
             self.export_lora_threads,
@@ -626,9 +685,7 @@ class AutoGGUF(QMainWindow):
         export_lora_layout.addRow(export_lora_button)
 
         export_lora_group.setLayout(export_lora_layout)
-        right_layout.addWidget(
-            export_lora_group
-        )  # Add the Export LoRA group to the right layout
+        right_layout.addWidget(export_lora_group)
 
         # HuggingFace to GGUF Conversion
         hf_to_gguf_group = QGroupBox(HF_TO_GGUF_CONVERSION)
@@ -686,20 +743,45 @@ class AutoGGUF(QMainWindow):
         self.task_list.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
         self.task_list.customContextMenuRequested.connect(self.show_task_context_menu)
 
-        # Set inital state
+        # Set initial state
         self.update_base_model_visibility(self.lora_output_type_combo.currentIndex())
 
-        # Timer for updating system info
-        self.timer = QTimer()
-        self.timer.timeout.connect(self.update_system_info)
-        self.timer.start(200)
-
-        # Initialize threads
-        self.quant_threads = []
+        # Initialize releases and backends
+        if os.environ.get("AUTOGGUF_CHECK_BACKEND", "").lower() == "enabled":
+            self.refresh_releases()
+        self.refresh_backends()
 
         # Load models
         self.load_models()
         self.logger.info(AUTOGGUF_INITIALIZATION_COMPLETE)
+
+    def resizeEvent(self, event):
+        super().resizeEvent(event)
+        path = QPainterPath()
+        path.addRoundedRect(self.rect(), 10, 10)
+        mask = QRegion(path.toFillPolygon().toPolygon())
+        self.setMask(mask)
+
+    def closeEvent(self, event: QCloseEvent):
+        self.logger.info(APPLICATION_CLOSING)
+        if self.quant_threads:
+            reply = QMessageBox.question(
+                self,
+                WARNING,
+                TASK_RUNNING_WARNING,
+                QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
+                QMessageBox.StandardButton.No,
+            )
+
+            if reply == QMessageBox.StandardButton.Yes:
+                for thread in self.quant_threads:
+                    thread.terminate()
+                event.accept()
+            else:
+                event.ignore()
+        else:
+            event.accept()
+        self.logger.info(APPLICATION_CLOSED)
 
     def refresh_backends(self):
         self.logger.info(REFRESHING_BACKENDS)
