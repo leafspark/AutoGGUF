@@ -1,5 +1,26 @@
 # Changelog
 
+## [v1.7.1] - 2024-08-16
+
+### Added
+- Modern UI with seamless title bar
+- Window resizing shortcuts (Ctrl+, Ctrl-, Ctrl+0)
+- Theming support
+- CPU usage bar
+- Save Preset and Load Preset options in File menu
+- Support for EXAONE model type
+- Window size configuration through environment variables
+
+### Changed
+- Refactored window to be scrollable
+- Moved save/load preset logic to presets.py
+- Updated docstrings for AutoGGUF.py, lora_conversion.py, and Logger.py
+- Adapted gguf library to project standards
+
+### Fixed
+- Updated version to v1.7.0
+- Fixed IDE-detected code typos and errors
+
 ## [v1.7.0] - 2024-08-16
 
 ### Added
