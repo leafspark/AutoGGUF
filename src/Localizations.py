@@ -6071,34 +6071,34 @@ class _TraditionalChinese(_Localization):
 
 # Dictionary to map language codes to classes
 _languages = {
-    "en-US": _English,  # American English
-    "fr-FR": _French,  # Metropolitan French
-    "zh-CN": _SimplifiedChinese,  # Simplified Chinese
-    "es-ES": _Spanish,  # Spanish (Spain)
-    "hi-IN": _Hindi,  # Hindi (India)
-    "ru-RU": _Russian,  # Russian (Russia)
-    "uk-UA": _Ukrainian,  # Ukrainian (Ukraine)
-    "ja-JP": _Japanese,  # Japanese (Japan)
-    "de-DE": _German,  # German (Germany)
-    "pt-BR": _Portuguese,  # Portuguese (Brazil)
-    "ar-SA": _Arabic,  # Arabic (Saudi Arabia)
-    "ko-KR": _Korean,  # Korean (Korea)
-    "it-IT": _Italian,  # Italian (Italy)
-    "tr-TR": _Turkish,  # Turkish (Turkey)
-    "nl-NL": _Dutch,  # Dutch (Netherlands)
-    "fi-FI": _Finnish,  # Finnish (Finland)
-    "bn-BD": _Bengali,  # Bengali (Bangladesh)
-    "cs-CZ": _Czech,  # Czech (Czech Republic)
-    "pl-PL": _Polish,  # Polish (Poland)
-    "ro-RO": _Romanian,  # Romanian (Romania)
-    "el-GR": _Greek,  # Greek (Greece)
-    "pt-PT": _Portuguese_PT,  # Portuguese (Portugal)
-    "hu-HU": _Hungarian,  # Hungarian (Hungary)
-    "en-GB": _BritishEnglish,  # British English
-    "fr-CA": _CanadianFrench,  # Canadian French
-    "en-IN": _IndianEnglish,  # Indian English
-    "en-CA": _CanadianEnglish,  # Canadian English
-    "zh-TW": _TraditionalChinese,  # Traditional Chinese (Taiwan)
+    "en-US": _English,               # American English
+    "fr-FR": _French,                # Metropolitan French
+    "zh-CN": _SimplifiedChinese,     # Simplified Chinese
+    "es-ES": _Spanish,               # Spanish (Spain)
+    "hi-IN": _Hindi,                 # Hindi (India)
+    "ru-RU": _Russian,               # Russian (Russia)
+    "uk-UA": _Ukrainian,             # Ukrainian (Ukraine)
+    "ja-JP": _Japanese,              # Japanese (Japan)
+    "de-DE": _German,                # German (Germany)
+    "pt-BR": _Portuguese,            # Portuguese (Brazil)
+    "ar-SA": _Arabic,                # Arabic (Saudi Arabia)
+    "ko-KR": _Korean,                # Korean (Korea)
+    "it-IT": _Italian,               # Italian (Italy)
+    "tr-TR": _Turkish,               # Turkish (Turkey)
+    "nl-NL": _Dutch,                 # Dutch (Netherlands)
+    "fi-FI": _Finnish,               # Finnish (Finland)
+    "bn-BD": _Bengali,               # Bengali (Bangladesh)
+    "cs-CZ": _Czech,                 # Czech (Czech Republic)
+    "pl-PL": _Polish,                # Polish (Poland)
+    "ro-RO": _Romanian,              # Romanian (Romania)
+    "el-GR": _Greek,                 # Greek (Greece)
+    "pt-PT": _Portuguese_PT,         # Portuguese (Portugal)
+    "hu-HU": _Hungarian,             # Hungarian (Hungary)
+    "en-GB": _BritishEnglish,        # British English
+    "fr-CA": _CanadianFrench,        # Canadian French
+    "en-IN": _IndianEnglish,         # Indian English
+    "en-CA": _CanadianEnglish,       # Canadian English
+    "zh-TW": _TraditionalChinese,    # Traditional Chinese (Taiwan)
 }
 
 
