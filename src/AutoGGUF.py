@@ -12,6 +12,7 @@ from GPUMonitor import GPUMonitor
 from KVOverrideEntry import KVOverrideEntry
 from Logger import Logger
 from ModelInfoDialog import ModelInfoDialog
+from CustomTitleBar import CustomTitleBar
 from error_handling import show_error, handle_error
 from TaskListItem import TaskListItem
 from QuantizationThread import QuantizationThread
@@ -26,66 +27,6 @@ import presets
 import ui_update
 import lora_conversion
 import utils
-
-
-class CustomTitleBar(QWidget):
-    def __init__(self, parent=None):
-        super().__init__(parent)
-        self.parent = parent
-        layout = QHBoxLayout(self)
-        layout.setContentsMargins(10, 5, 10, 5)
-
-        # Add your logo or app name here
-        self.title = QLabel("AutoGGUF")
-        layout.addWidget(self.title)
-
-        layout.addStretch(1)  # This pushes the buttons to the right
-
-        # Add minimize and close buttons
-        self.minimize_button = QPushButton("—")
-        self.close_button = QPushButton("✕")
-
-        for button in (self.minimize_button, self.close_button):
-            button.setFixedSize(30, 30)
-            button.setStyleSheet(
-                """
-                QPushButton {
-                    border: none;
-                    background-color: transparent;
-                }
-                QPushButton:hover {
-                    background-color: rgba(255, 255, 255, 0.1);
-                }
-            """
-            )
-
-        layout.addWidget(self.minimize_button)
-        layout.addWidget(self.close_button)
-
-        self.minimize_button.clicked.connect(self.parent.showMinimized)
-        self.close_button.clicked.connect(self.parent.close)
-
-        self.start = QPoint(0, 0)
-        self.pressing = False
-
-    def mousePressEvent(self, event):
-        self.start = self.mapToGlobal(event.pos())
-        self.pressing = True
-
-    def mouseMoveEvent(self, event):
-        if self.pressing:
-            end = self.mapToGlobal(event.pos())
-            movement = end - self.start
-            self.parent.setGeometry(
-                self.parent.x() + movement.x(),
-                self.parent.y() + movement.y(),
-                self.parent.width(),
-                self.parent.height(),
-            )
-            self.start = end
-
-    def mouseReleaseEvent(self, event):
-        self.pressing = False
 
 
 class AutoGGUF(QMainWindow):

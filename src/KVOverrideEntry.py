@@ -31,7 +31,7 @@ class KVOverrideEntry(QWidget):
         self.value_input.setPlaceholderText("Value")
         layout.addWidget(self.value_input)
 
-        delete_button = QPushButton("X")
+        delete_button = QPushButton("✕")
         delete_button.setFixedSize(30, 30)
         delete_button.clicked.connect(self.delete_clicked)
         layout.addWidget(delete_button)

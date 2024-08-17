@@ -27,6 +27,7 @@ def update_system_info(self):
     )
     self.cpu_label.setText(CPU_USAGE_FORMAT.format(cpu))
 
+
 def animate_bar(self, bar, target_value):
     current_value = bar.value()
     difference = target_value - current_value
@@ -40,11 +41,14 @@ def animate_bar(self, bar, target_value):
     timer.timeout.connect(lambda: _animate_step(bar, target_value, step, timer))
     timer.start(10)  # Adjust the interval for animation speed
 
+
 def _animate_step(bar, target_value, step, timer):
     current_value = bar.value()
     new_value = current_value + step
 
-    if (step > 0 and new_value > target_value) or (step < 0 and new_value < target_value):
+    if (step > 0 and new_value > target_value) or (
+        step < 0 and new_value < target_value
+    ):
         bar.setValue(target_value)
         timer.stop()
     else:
