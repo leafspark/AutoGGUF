@@ -8,6 +8,40 @@ from DownloadThread import DownloadThread
 from imports_and_globals import ensure_directory
 
 
+def browse_models(self):
+    self.logger.info(BROWSING_FOR_MODELS_DIRECTORY)
+    models_path = QFileDialog.getExistingDirectory(self, SELECT_MODELS_DIRECTORY)
+    if models_path:
+        self.models_input.setText(os.path.abspath(models_path))
+        ensure_directory(models_path)
+        self.load_models()
+
+
+def browse_output(self):
+    self.logger.info(BROWSING_FOR_OUTPUT_DIRECTORY)
+    output_path = QFileDialog.getExistingDirectory(self, SELECT_OUTPUT_DIRECTORY)
+    if output_path:
+        self.output_input.setText(os.path.abspath(output_path))
+        ensure_directory(output_path)
+
+
+def browse_logs(self):
+    self.logger.info(BROWSING_FOR_LOGS_DIRECTORY)
+    logs_path = QFileDialog.getExistingDirectory(self, SELECT_LOGS_DIRECTORY)
+    if logs_path:
+        self.logs_input.setText(os.path.abspath(logs_path))
+        ensure_directory(logs_path)
+
+
+def browse_imatrix(self):
+    self.logger.info(BROWSING_FOR_IMATRIX_FILE)
+    imatrix_file, _ = QFileDialog.getOpenFileName(
+        self, SELECT_IMATRIX_FILE, "", DAT_FILES
+    )
+    if imatrix_file:
+        self.imatrix.setText(os.path.abspath(imatrix_file))
+
+
 def browse_lora_input(self):
     self.logger.info(BROWSING_FOR_LORA_INPUT_DIRECTORY)
     lora_input_path = QFileDialog.getExistingDirectory(

@@ -123,6 +123,18 @@ class AutoGGUF(QMainWindow):
         self.show_about = show_about.__get__(self)
         self.save_preset = presets.save_preset.__get__(self)
         self.load_preset = presets.load_preset.__get__(self)
+        self.browse_export_lora_model = (
+            lora_conversion.browse_export_lora_model.__get__(self)
+        )
+        self.browse_export_lora_output = (
+            lora_conversion.browse_export_lora_output.__get__(self)
+        )
+        self.add_lora_adapter = lora_conversion.add_lora_adapter.__get__(self)
+        self.export_lora = lora_conversion.export_lora.__get__(self)
+        self.browse_models = utils.browse_models.__get__(self)
+        self.browse_output = utils.browse_output.__get__(self)
+        self.browse_logs = utils.browse_logs.__get__(self)
+        self.browse_imatrix = utils.browse_imatrix.__get__(self)
         self.update_threads_spinbox = partial(ui_update.update_threads_spinbox, self)
         self.update_threads_slider = partial(ui_update.update_threads_slider, self)
         self.update_gpu_offload_spinbox = partial(
@@ -135,6 +147,9 @@ class AutoGGUF(QMainWindow):
         self.update_system_info = partial(ui_update.update_system_info, self)
         self.update_download_progress = partial(
             ui_update.update_download_progress, self
+        )
+        self.delete_lora_adapter_item = partial(
+            lora_conversion.delete_lora_adapter_item, self
         )
 
         # Set up main widget and layout
@@ -887,51 +902,6 @@ class AutoGGUF(QMainWindow):
                     )
                 break
 
-    def browse_export_lora_model(self):
-        self.logger.info(BROWSING_FOR_EXPORT_LORA_MODEL_FILE)
-        model_file, _ = QFileDialog.getOpenFileName(
-            self, SELECT_MODEL_FILE, "", GGUF_FILES
-        )
-        if model_file:
-            self.export_lora_model.setText(os.path.abspath(model_file))
-
-    def browse_export_lora_output(self):
-        self.logger.info(BROWSING_FOR_EXPORT_LORA_OUTPUT_FILE)
-        output_file, _ = QFileDialog.getSaveFileName(
-            self, SELECT_OUTPUT_FILE, "", GGUF_FILES
-        )
-        if output_file:
-            self.export_lora_output.setText(os.path.abspath(output_file))
-
-    def add_lora_adapter(self):
-        self.logger.info(ADDING_LORA_ADAPTER)
-        adapter_path, _ = QFileDialog.getOpenFileName(
-            self, SELECT_LORA_ADAPTER_FILE, "", LORA_FILES
-        )
-        if adapter_path:
-            # Create a widget to hold the path and scale input
-            adapter_widget = QWidget()
-            adapter_layout = QHBoxLayout(adapter_widget)
-
-            path_input = QLineEdit(adapter_path)
-            path_input.setReadOnly(True)
-            adapter_layout.addWidget(path_input)
-
-            scale_input = QLineEdit("1.0")  # Default scale value
-            adapter_layout.addWidget(scale_input)
-
-            delete_button = QPushButton(DELETE_ADAPTER)
-            delete_button.clicked.connect(
-                lambda: self.delete_lora_adapter_item(adapter_widget)
-            )
-            adapter_layout.addWidget(delete_button)
-
-            # Add the widget to the list
-            list_item = QListWidgetItem(self.export_lora_adapters)
-            list_item.setSizeHint(adapter_widget.sizeHint())
-            self.export_lora_adapters.addItem(list_item)
-            self.export_lora_adapters.setItemWidget(list_item, adapter_widget)
-
     def browse_base_model(self):
         self.logger.info(BROWSING_FOR_BASE_MODEL_FOLDER)  # Updated log message
         base_model_folder = QFileDialog.getExistingDirectory(
@@ -939,15 +909,6 @@ class AutoGGUF(QMainWindow):
         )
         if base_model_folder:
             self.base_model_path.setText(os.path.abspath(base_model_folder))
-
-    def delete_lora_adapter_item(self, adapter_widget):
-        self.logger.info(DELETING_LORA_ADAPTER)
-        # Find the QListWidgetItem containing the adapter_widget
-        for i in range(self.export_lora_adapters.count()):
-            item = self.export_lora_adapters.item(i)
-            if self.export_lora_adapters.itemWidget(item) == adapter_widget:
-                self.export_lora_adapters.takeItem(i)  # Remove the item
-                break
 
     def browse_hf_model_input(self):
         self.logger.info(BROWSE_FOR_HF_MODEL_DIRECTORY)
@@ -1032,87 +993,6 @@ class AutoGGUF(QMainWindow):
         except Exception as e:
             show_error(self.logger, ERROR_STARTING_HF_TO_GGUF_CONVERSION.format(str(e)))
         self.logger.info(HF_TO_GGUF_CONVERSION_TASK_STARTED)
-
-    def export_lora(self):
-        self.logger.info(STARTING_LORA_EXPORT)
-        try:
-            model_path = self.export_lora_model.text()
-            output_path = self.export_lora_output.text()
-            lora_adapters = []
-
-            for i in range(self.export_lora_adapters.count()):
-                item = self.export_lora_adapters.item(i)
-                adapter_widget = self.export_lora_adapters.itemWidget(item)
-                path_input = adapter_widget.layout().itemAt(0).widget()
-                scale_input = adapter_widget.layout().itemAt(1).widget()
-                adapter_path = path_input.text()
-                adapter_scale = scale_input.text()
-                lora_adapters.append((adapter_path, adapter_scale))
-
-            if not model_path:
-                raise ValueError(MODEL_PATH_REQUIRED)
-            if not output_path:
-                raise ValueError(OUTPUT_PATH_REQUIRED)
-            if not lora_adapters:
-                raise ValueError(AT_LEAST_ONE_LORA_ADAPTER_REQUIRED)
-
-            backend_path = self.backend_combo.currentData()
-            if not backend_path:
-                raise ValueError(NO_BACKEND_SELECTED)
-
-            command = [
-                os.path.join(backend_path, "llama-export-lora"),
-                "--model",
-                model_path,
-                "--output",
-                output_path,
-            ]
-
-            for adapter_path, adapter_scale in lora_adapters:
-                if adapter_path:
-                    if adapter_scale:
-                        try:
-                            scale_value = float(adapter_scale)
-                            command.extend(
-                                ["--lora-scaled", adapter_path, str(scale_value)]
-                            )
-                        except ValueError:
-                            raise ValueError(INVALID_LORA_SCALE_VALUE)
-                    else:
-                        command.extend(["--lora", adapter_path])
-
-            threads = self.export_lora_threads.value()
-            command.extend(["--threads", str(threads)])
-
-            logs_path = self.logs_input.text()
-            ensure_directory(logs_path)
-
-            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-            log_file = os.path.join(logs_path, f"lora_export_{timestamp}.log")
-
-            command_str = " ".join(command)
-            self.logger.info(f"{LORA_EXPORT_COMMAND}: {command_str}")
-
-            thread = QuantizationThread(command, backend_path, log_file)
-            self.quant_threads.append(thread)
-
-            task_item = TaskListItem(EXPORTING_LORA, log_file, show_progress_bar=False)
-            list_item = QListWidgetItem(self.task_list)
-            list_item.setSizeHint(task_item.sizeHint())
-            self.task_list.addItem(list_item)
-            self.task_list.setItemWidget(list_item, task_item)
-
-            thread.status_signal.connect(task_item.update_status)
-            thread.finished_signal.connect(lambda: self.task_finished(thread))
-            thread.error_signal.connect(
-                lambda err: handle_error(self.logger, err, task_item)
-            )
-            thread.start()
-            self.logger.info(LORA_EXPORT_TASK_STARTED)
-        except ValueError as e:
-            show_error(self.logger, str(e))
-        except Exception as e:
-            show_error(self.logger, ERROR_STARTING_LORA_EXPORT.format(str(e)))
 
     def restart_task(self, task_item):
         self.logger.info(RESTARTING_TASK.format(task_item.task_name))
@@ -1333,36 +1213,6 @@ class AutoGGUF(QMainWindow):
 
         self.model_tree.expandAll()
         self.logger.info(LOADED_MODELS.format(len(single_models) + len(sharded_models)))
-
-    def browse_models(self):
-        self.logger.info(BROWSING_FOR_MODELS_DIRECTORY)
-        models_path = QFileDialog.getExistingDirectory(self, SELECT_MODELS_DIRECTORY)
-        if models_path:
-            self.models_input.setText(os.path.abspath(models_path))
-            ensure_directory(models_path)
-            self.load_models()
-
-    def browse_output(self):
-        self.logger.info(BROWSING_FOR_OUTPUT_DIRECTORY)
-        output_path = QFileDialog.getExistingDirectory(self, SELECT_OUTPUT_DIRECTORY)
-        if output_path:
-            self.output_input.setText(os.path.abspath(output_path))
-            ensure_directory(output_path)
-
-    def browse_logs(self):
-        self.logger.info(BROWSING_FOR_LOGS_DIRECTORY)
-        logs_path = QFileDialog.getExistingDirectory(self, SELECT_LOGS_DIRECTORY)
-        if logs_path:
-            self.logs_input.setText(os.path.abspath(logs_path))
-            ensure_directory(logs_path)
-
-    def browse_imatrix(self):
-        self.logger.info(BROWSING_FOR_IMATRIX_FILE)
-        imatrix_file, _ = QFileDialog.getOpenFileName(
-            self, SELECT_IMATRIX_FILE, "", DAT_FILES
-        )
-        if imatrix_file:
-            self.imatrix.setText(os.path.abspath(imatrix_file))
 
     def validate_quantization_inputs(self):
         self.logger.debug(VALIDATING_QUANTIZATION_INPUTS)

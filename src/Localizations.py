@@ -6069,6 +6069,8 @@ class _TraditionalChinese(_Localization):
         self.REFRESH_MODELS = "重新整理模型"
 
 
+# fmt: off
+
 # Dictionary to map language codes to classes
 _languages = {
     "en-US": _English,               # American English
@@ -6100,6 +6102,8 @@ _languages = {
     "en-CA": _CanadianEnglish,       # Canadian English
     "zh-TW": _TraditionalChinese,    # Traditional Chinese (Taiwan)
 }
+
+# fmt: on
 
 
 def set_language(lang_code):

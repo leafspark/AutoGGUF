@@ -192,8 +192,13 @@ class GPUMonitor(QWidget):
         gpu_graph = SimpleGraph(GPU_USAGE_OVER_TIME)
         vram_graph = SimpleGraph(VRAM_USAGE_OVER_TIME)
 
-        gpu_graph.update_data(self.gpu_data)
-        vram_graph.update_data(self.vram_data)
+        def update_graph_data():
+            gpu_graph.update_data(self.gpu_data)
+            vram_graph.update_data(self.vram_data)
+
+        timer = QTimer(dialog)
+        timer.timeout.connect(update_graph_data)
+        timer.start(200)  # Update every 0.2 seconds
 
         tab_widget.addTab(gpu_graph, GPU_USAGE_OVER_TIME)
         tab_widget.addTab(vram_graph, VRAM_USAGE_OVER_TIME)
