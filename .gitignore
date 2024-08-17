@@ -24,7 +24,7 @@ src/*
 docs/*
 !docs/*.py
 
-# Allow assets folder, but only .svg, .png, .rc and .ico files
+# Allow assets folder, but only .svg, .png, .rc, .css and .ico files
 !assets/
 assets/*
 !assets/*.svg
@@ -32,6 +32,7 @@ assets/*
 !assets/*.ico
 !assets/*.rc
 !assets/*.res
+!assets/*.css
 
 # Allow .github folder and its contents
 !.github/
