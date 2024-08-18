@@ -1,6 +1,6 @@
 import os
 
-AUTOGGUF_VERSION = "v1.7.1"
+AUTOGGUF_VERSION = "v1.7.2"
 
 
 class _Localization:
@@ -124,6 +124,13 @@ class _English(_Localization):
         self.BROWSE_FOR_HF_TO_GGUF_OUTPUT = (
             "Browsing for HuggingFace to GGUF output file"
         )
+
+        # Update Checking
+        self.UPDATE_AVAILABLE = "Update Avaliable"
+        self.NEW_VERSION_AVAILABLE = "A new version is avaliable: {}"
+        self.DOWNLOAD_NEW_VERSION = "Download?"
+        self.ERROR_CHECKING_FOR_UPDATES = "Error checking for updates:"
+        self.CHECKING_FOR_UPDATES = "Checking for updates"
 
         # General Messages
         self.ERROR = "Error"

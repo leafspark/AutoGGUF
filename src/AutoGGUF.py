@@ -28,6 +28,7 @@ import presets
 import ui_update
 import lora_conversion
 import utils
+import requests
 
 
 class AutoGGUF(QMainWindow):
@@ -202,21 +203,26 @@ class AutoGGUF(QMainWindow):
         self.release_combo = QComboBox()
         self.refresh_releases_button = QPushButton(REFRESH_RELEASES)
         self.refresh_releases_button.clicked.connect(self.refresh_releases)
+
         release_layout = QHBoxLayout()
         release_layout.addWidget(self.release_combo)
         release_layout.addWidget(self.refresh_releases_button)
         download_layout.addRow(SELECT_RELEASE, release_layout)
+
         self.asset_combo = QComboBox()
         self.asset_combo.currentIndexChanged.connect(self.update_cuda_option)
         download_layout.addRow(SELECT_ASSET, self.asset_combo)
+
         self.cuda_extract_checkbox = QCheckBox(EXTRACT_CUDA_FILES)
         self.cuda_extract_checkbox.setVisible(False)
         download_layout.addRow(self.cuda_extract_checkbox)
+
         self.cuda_backend_label = QLabel(SELECT_CUDA_BACKEND)
         self.cuda_backend_label.setVisible(False)
         self.backend_combo_cuda = QComboBox()
         self.backend_combo_cuda.setVisible(False)
         download_layout.addRow(self.cuda_backend_label, self.backend_combo_cuda)
+
         self.download_progress = QProgressBar()
         self.download_button = QPushButton(DOWNLOAD)
         self.download_button.clicked.connect(self.download_llama_cpp)
@@ -739,6 +745,10 @@ class AutoGGUF(QMainWindow):
             self.refresh_releases()
         self.refresh_backends()
 
+        if os.environ.get("AUTOGGUF_CHECK_UPDATE", "").lower() == "enabled":
+            self.logger.info(CHECKING_FOR_UPDATES)
+            self.check_for_updates()
+
         # Load theme based on environment variable
         theme_path = os.environ.get("AUTOGGUF_THEME")
         if theme_path:
@@ -761,6 +771,34 @@ class AutoGGUF(QMainWindow):
         # Load models
         self.load_models()
         self.logger.info(AUTOGGUF_INITIALIZATION_COMPLETE)
+
+    def check_for_updates(self):
+        try:
+            response = requests.get(
+                "https://api.github.com/repos/leafspark/AutoGGUF/releases/latest"
+            )
+            response.raise_for_status()  # Raise an exception for bad status codes
+
+            latest_release = response.json()
+            latest_version = latest_release["tag_name"].replace("v", "")
+
+            if latest_version > AUTOGGUF_VERSION.replace("v", ""):
+                self.prompt_for_update(latest_release)
+        except requests.exceptions.RequestException as e:
+            self.logger.warning(f"{ERROR_CHECKING_FOR_UPDATES} {e}")
+
+    def prompt_for_update(self, release):
+        update_message = QMessageBox()
+        update_message.setIcon(QMessageBox.Information)
+        update_message.setWindowTitle(UPDATE_AVAILABLE)
+        update_message.setText(NEW_VERSION_AVAILABLE.format(release["tag_name"]))
+        update_message.setInformativeText(DOWNLOAD_NEW_VERSION)
+        update_message.addButton(QMessageBox.StandardButton.Yes)
+        update_message.addButton(QMessageBox.StandardButton.No)
+        update_message.setDefaultButton(QMessageBox.StandardButton.Yes)
+
+        if update_message.exec() == QMessageBox.StandardButton.Yes:
+            QDesktopServices.openUrl(QUrl(release["html_url"]))
 
     def keyPressEvent(self, event):
         if event.modifiers() == Qt.ControlModifier:
