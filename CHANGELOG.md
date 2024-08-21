@@ -1,5 +1,26 @@
 # Changelog
 
+## [v1.7.2] - 2024-08-19
+
+### Added
+- Update checking support (controlled by AUTOGGUF_CHECK_UPDATE environment variable)
+- Live update support for GPU monitor graphs
+- Smoother usage bar changes in monitor
+- Unicode X button in KV Overrides box
+- PyPI setup script
+- Inno Setup build file
+- Missing requirements and dotenv file loading
+
+### Changed
+- Moved functions out of AutoGGUF.py
+- Relocated CustomTitleBar to separate file
+- Updated torch requirement from ~=2.2.0 to ~=2.4.0
+- Updated showcase image
+- Version bumped to v1.7.2 in Localizations.py
+
+### Fixed
+- setup.py issues
+
 ## [v1.7.1] - 2024-08-16
 
 ### Added
