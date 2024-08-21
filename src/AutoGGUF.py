@@ -1400,7 +1400,7 @@ class AutoGGUF(QMainWindow):
 
     def parse_progress(self, line, task_item):
         # Parses the output line for progress information and updates the task item.
-        match = re.search(r"\[(\d+)/(\d+)\]", line)
+        match = re.search(r"\[\s*(\d+)\s*/\s*(\d+)\s*\].*", line)
         if match:
             current = int(match.group(1))
             total = int(match.group(2))

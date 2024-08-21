@@ -13,6 +13,8 @@ __pycache__/
 
 # Allow these files
 !.pre-commit-config.yaml
+!.env.example
+!setup.py
 
 # Allow src folder and its .py files
 !src/
@@ -41,6 +43,3 @@ assets/*
 
 # Don't ignore .gitignore
 !.gitignore
-
-# Allow PyPI setup script
-!setup.py
