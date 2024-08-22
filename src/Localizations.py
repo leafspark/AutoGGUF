@@ -25,6 +25,15 @@ class _English(_Localization):
         self.AVAILABLE_MODELS = "Available Models:"
         self.REFRESH_MODELS = "Refresh Models"
 
+        # Model Import
+        self.IMPORT_MODEL = "Import Model"
+        self.SELECT_MODEL_TO_IMPORT = "Select Model to Import"
+        self.CONFIRM_IMPORT = "Confirm Import"
+        self.IMPORT_MODEL_CONFIRMATION = "Do you want to import the model {}?"
+        self.MODEL_IMPORTED_SUCCESSFULLY = "Model {} imported successfully"
+        self.IMPORTING_MODEL = "Importing model"
+        self.IMPORTED_MODEL_TOOLTIP = "Imported model: {}"
+
         # GPU Monitoring
         self.GPU_USAGE = "GPU Usage:"
         self.GPU_USAGE_FORMAT = "GPU: {:.1f}% | VRAM: {:.1f}% ({} MB / {} MB)"

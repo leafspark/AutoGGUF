@@ -49,7 +49,7 @@ def main():
             )
 
     app = QApplication(sys.argv)
-    window = AutoGGUF()
+    window = AutoGGUF(sys.argv)
     window.show()
     # Start Flask in a separate thread after a short delay
     timer = QTimer()
