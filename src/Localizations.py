@@ -34,6 +34,15 @@ class _English(_Localization):
         self.IMPORTING_MODEL = "Importing model"
         self.IMPORTED_MODEL_TOOLTIP = "Imported model: {}"
 
+        # GGUF Verification
+        self.INVALID_GGUF_FILE = "Invalid GGUF file: {}"
+        self.SHARDED_MODEL_NAME = "{} (Sharded)"
+        self.IMPORTED_MODEL_TOOLTIP = "Imported model: {}"
+        self.CONCATENATED_FILE_WARNING = "This is a concatenated file part. It will not work with llama-quantize; please concat the file first."
+        self.CONCATENATED_FILES_FOUND = (
+            "Found {} concatenated file parts. Please concat the files first."
+        )
+
         # GPU Monitoring
         self.GPU_USAGE = "GPU Usage:"
         self.GPU_USAGE_FORMAT = "GPU: {:.1f}% | VRAM: {:.1f}% ({} MB / {} MB)"
