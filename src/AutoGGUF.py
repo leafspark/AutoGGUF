@@ -5,7 +5,7 @@ import importlib
 
 from functools import partial
 from datetime import datetime
-from typing import Tuple, Dict
+from typing import Tuple, Dict, List, Any
 from dotenv import load_dotenv
 from PySide6.QtCore import *
 from PySide6.QtGui import *

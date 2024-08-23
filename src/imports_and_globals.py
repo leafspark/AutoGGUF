@@ -1,6 +1,6 @@
 import os
 import sys
-from typing import LiteralString, TextIO, Union
+from typing import TextIO, Union
 
 import psutil
 import subprocess
@@ -69,7 +69,7 @@ def open_file_safe(file_path, mode="r") -> TextIO:
     )
 
 
-def resource_path(relative_path) -> Union[LiteralString, str, bytes]:
+def resource_path(relative_path) -> Union[str, str, bytes]:
     if hasattr(sys, "_MEIPASS"):
         # PyInstaller path
         base_path = sys._MEIPASS
