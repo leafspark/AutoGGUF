@@ -82,8 +82,9 @@ jobs:
         $archSuffix = if ("${{ matrix.arch }}" -eq "x86") { "-x86" } else { "-x64" }
         $exeName = "AutoGGUF$archSuffix.exe"
         $versionHash = "${{ github.sha }}".Substring(0, 7)
-        $hashFile = "AutoGGUF-$versionHash.sha256"
-        Get-FileHash "$distPath\$exeName" -Algorithm SHA256 | Select-Object -ExpandProperty Hash | Out-File -FilePath "$distPath\$hashFile"
+        $hashFile = "AutoGGUF-${{ matrix.os }}-${{ matrix.arch }}-$versionHash.sha256"
+        $hash = (Get-FileHash "$distPath\$exeName" -Algorithm SHA256).Hash.ToLower()
+        "$hash *$exeName" | Out-File -FilePath "$distPath\$hashFile" -Encoding utf8
 
     - name: Generate SHA256 (Linux/macOS)
       if: matrix.os != 'windows-latest'
@@ -91,8 +92,8 @@ jobs:
         distPath=$(if [ "${{ github.event.inputs.build_type }}" = "RELEASE" ]; then echo "build/release/dist"; else echo "build/dev/dist"; fi)
         exeName="AutoGGUF-x64"
         versionHash=$(echo ${{ github.sha }} | cut -c1-7)
-        hashFile="AutoGGUF-$versionHash.sha256"
-        sha256sum "$distPath/$exeName" | awk '{print $1}' > "$distPath/$hashFile"
+        hashFile="AutoGGUF-${{ matrix.os }}-x64-$versionHash.sha256"
+        cd $distPath && sha256sum $exeName > $hashFile
 
     - name: Upload Artifact
       uses: actions/upload-artifact@v2
