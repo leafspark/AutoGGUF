@@ -869,7 +869,7 @@ class AutoGGUF(QMainWindow):
         else:
             self.backend_combo.addItem(NO_BACKENDS_AVAILABLE)
             self.backend_combo.setEnabled(False)
-        self.logger.info(FOUND_VALID_BACKENDS.format(self.backend_combo.count()))
+        self.logger.info(FOUND_VALID_BACKENDS.format(len(valid_backends)))
 
     def save_task_preset(self, task_item):
         self.logger.info(SAVING_TASK_PRESET.format(task_item.task_name))
