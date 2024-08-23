@@ -3,7 +3,9 @@ from PySide6.QtWidgets import *
 
 
 class TaskListItem(QWidget):
-    def __init__(self, task_name, log_file, show_progress_bar=True, parent=None) -> None:
+    def __init__(
+        self, task_name, log_file, show_progress_bar=True, parent=None
+    ) -> None:
         super().__init__(parent)
         self.task_name = task_name
         self.log_file = log_file
