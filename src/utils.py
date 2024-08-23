@@ -1,3 +1,4 @@
+from PySide6.QtCore import Qt
 from PySide6.QtWidgets import QFileDialog
 
 from error_handling import show_error
@@ -6,6 +7,40 @@ import requests
 
 from DownloadThread import DownloadThread
 from imports_and_globals import ensure_directory
+
+
+def get_models_data(self):
+    models = []
+    root = self.model_tree.invisibleRootItem()
+    child_count = root.childCount()
+    for i in range(child_count):
+        item = root.child(i)
+        model_name = item.text(0)
+        model_type = "sharded" if "sharded" in model_name.lower() else "single"
+        model_path = item.data(0, Qt.ItemDataRole.UserRole)
+        models.append({"name": model_name, "type": model_type, "path": model_path})
+    return models
+
+
+def get_tasks_data(self):
+    tasks = []
+    for i in range(self.task_list.count()):
+        item = self.task_list.item(i)
+        task_widget = self.task_list.itemWidget(item)
+        if task_widget:
+            tasks.append(
+                {
+                    "name": task_widget.task_name,
+                    "status": task_widget.status,
+                    "progress": (
+                        task_widget.progress_bar.value()
+                        if hasattr(task_widget, "progress_bar")
+                        else 0
+                    ),
+                    "log_file": task_widget.log_file,
+                }
+            )
+    return tasks
 
 
 def browse_models(self):

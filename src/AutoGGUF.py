@@ -80,6 +80,8 @@ class AutoGGUF(QMainWindow):
         self.browse_output = utils.browse_output.__get__(self)
         self.browse_logs = utils.browse_logs.__get__(self)
         self.browse_imatrix = utils.browse_imatrix.__get__(self)
+        self.get_models_data = utils.get_models_data.__get__(self)
+        self.get_tasks_data = utils.get_tasks_data.__get__(self)
         self.update_threads_spinbox = partial(ui_update.update_threads_spinbox, self)
         self.update_threads_slider = partial(ui_update.update_threads_slider, self)
         self.update_gpu_offload_spinbox = partial(
@@ -1548,38 +1550,6 @@ class AutoGGUF(QMainWindow):
         )
         if output_file:
             self.imatrix_output.setText(os.path.abspath(output_file))
-
-    def get_models_data(self):
-        models = []
-        root = self.model_tree.invisibleRootItem()
-        child_count = root.childCount()
-        for i in range(child_count):
-            item = root.child(i)
-            model_name = item.text(0)
-            model_type = "sharded" if "sharded" in model_name.lower() else "single"
-            model_path = item.data(0, Qt.ItemDataRole.UserRole)
-            models.append({"name": model_name, "type": model_type, "path": model_path})
-        return models
-
-    def get_tasks_data(self):
-        tasks = []
-        for i in range(self.task_list.count()):
-            item = self.task_list.item(i)
-            task_widget = self.task_list.itemWidget(item)
-            if task_widget:
-                tasks.append(
-                    {
-                        "name": task_widget.task_name,
-                        "status": task_widget.status,
-                        "progress": (
-                            task_widget.progress_bar.value()
-                            if hasattr(task_widget, "progress_bar")
-                            else 0
-                        ),
-                        "log_file": task_widget.log_file,
-                    }
-                )
-        return tasks
 
     def generate_imatrix(self):
         self.logger.info(STARTING_IMATRIX_GENERATION)
