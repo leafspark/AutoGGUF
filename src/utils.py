@@ -1,3 +1,5 @@
+from typing import Any, Dict, List, Union
+
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import QFileDialog
 
@@ -9,7 +11,7 @@ from DownloadThread import DownloadThread
 from imports_and_globals import ensure_directory
 
 
-def get_models_data(self):
+def get_models_data(self) -> list[dict[str, Union[str, Any]]]:
     models = []
     root = self.model_tree.invisibleRootItem()
     child_count = root.childCount()
@@ -22,7 +24,7 @@ def get_models_data(self):
     return models
 
 
-def get_tasks_data(self):
+def get_tasks_data(self) -> list[dict[str, Union[int, Any]]]:
     tasks = []
     for i in range(self.task_list.count()):
         item = self.task_list.item(i)
@@ -43,7 +45,7 @@ def get_tasks_data(self):
     return tasks
 
 
-def browse_models(self):
+def browse_models(self) -> None:
     self.logger.info(BROWSING_FOR_MODELS_DIRECTORY)
     models_path = QFileDialog.getExistingDirectory(self, SELECT_MODELS_DIRECTORY)
     if models_path:
@@ -52,7 +54,7 @@ def browse_models(self):
         self.load_models()
 
 
-def browse_output(self):
+def browse_output(self) -> None:
     self.logger.info(BROWSING_FOR_OUTPUT_DIRECTORY)
     output_path = QFileDialog.getExistingDirectory(self, SELECT_OUTPUT_DIRECTORY)
     if output_path:
@@ -60,7 +62,7 @@ def browse_output(self):
         ensure_directory(output_path)
 
 
-def browse_logs(self):
+def browse_logs(self) -> None:
     self.logger.info(BROWSING_FOR_LOGS_DIRECTORY)
     logs_path = QFileDialog.getExistingDirectory(self, SELECT_LOGS_DIRECTORY)
     if logs_path:
@@ -68,7 +70,7 @@ def browse_logs(self):
         ensure_directory(logs_path)
 
 
-def browse_imatrix(self):
+def browse_imatrix(self) -> None:
     self.logger.info(BROWSING_FOR_IMATRIX_FILE)
     imatrix_file, _ = QFileDialog.getOpenFileName(
         self, SELECT_IMATRIX_FILE, "", DAT_FILES
@@ -77,7 +79,7 @@ def browse_imatrix(self):
         self.imatrix.setText(os.path.abspath(imatrix_file))
 
 
-def browse_lora_input(self):
+def browse_lora_input(self) -> None:
     self.logger.info(BROWSING_FOR_LORA_INPUT_DIRECTORY)
     lora_input_path = QFileDialog.getExistingDirectory(
         self, SELECT_LORA_INPUT_DIRECTORY
@@ -87,7 +89,7 @@ def browse_lora_input(self):
         ensure_directory(lora_input_path)
 
 
-def browse_lora_output(self):
+def browse_lora_output(self) -> None:
     self.logger.info(BROWSING_FOR_LORA_OUTPUT_FILE)
     lora_output_file, _ = QFileDialog.getSaveFileName(
         self, SELECT_LORA_OUTPUT_FILE, "", GGUF_AND_BIN_FILES
@@ -96,7 +98,7 @@ def browse_lora_output(self):
         self.lora_output.setText(os.path.abspath(lora_output_file))
 
 
-def download_llama_cpp(self):
+def download_llama_cpp(self) -> None:
     self.logger.info(STARTING_LLAMACPP_DOWNLOAD)
     asset = self.asset_combo.currentData()
     if not asset:
@@ -118,7 +120,7 @@ def download_llama_cpp(self):
     self.download_progress.setValue(0)
 
 
-def refresh_releases(self):
+def refresh_releases(self) -> None:
     self.logger.info(REFRESHING_LLAMACPP_RELEASES)
     try:
         response = requests.get(

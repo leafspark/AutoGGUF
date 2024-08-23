@@ -1,12 +1,9 @@
 from PySide6.QtCore import QPoint
-from PySide6.QtGui import QPixmap
 from PySide6.QtWidgets import QHBoxLayout, QLabel, QMenuBar, QPushButton, QWidget
-
-from imports_and_globals import resource_path
 
 
 class CustomTitleBar(QWidget):
-    def __init__(self, parent=None):
+    def __init__(self, parent=None) -> None:
         super().__init__(parent)
         self.parent = parent
         layout = QHBoxLayout(self)
@@ -55,11 +52,11 @@ class CustomTitleBar(QWidget):
         self.start = QPoint(0, 0)
         self.pressing = False
 
-    def mousePressEvent(self, event):
+    def mousePressEvent(self, event) -> None:
         self.start = self.mapToGlobal(event.pos())
         self.pressing = True
 
-    def mouseMoveEvent(self, event):
+    def mouseMoveEvent(self, event) -> None:
         if self.pressing:
             end = self.mapToGlobal(event.pos())
             movement = end - self.start
@@ -71,5 +68,5 @@ class CustomTitleBar(QWidget):
             )
             self.start = end
 
-    def mouseReleaseEvent(self, event):
+    def mouseReleaseEvent(self, event) -> None:
         self.pressing = False

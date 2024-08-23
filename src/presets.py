@@ -4,7 +4,7 @@ from PySide6.QtWidgets import QFileDialog, QMessageBox
 from Localizations import *
 
 
-def save_preset(self):
+def save_preset(self) -> None:
     self.logger.info(SAVING_PRESET)
     preset = {
         "quant_types": [item.text() for item in self.quant_type.selectedItems()],
@@ -33,7 +33,7 @@ def save_preset(self):
     self.logger.info(PRESET_SAVED_TO.format(file_name))
 
 
-def load_preset(self):
+def load_preset(self) -> None:
     self.logger.info(LOADING_PRESET)
     file_name, _ = QFileDialog.getOpenFileName(self, LOAD_PRESET, "", JSON_FILES)
     if file_name:

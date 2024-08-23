@@ -5,12 +5,12 @@ import psutil
 from error_handling import show_error
 
 
-def update_model_info(logger, self, model_info):
+def update_model_info(logger, self, model_info) -> None:
     logger.debug(UPDATING_MODEL_INFO.format(model_info))
     pass
 
 
-def update_system_info(self):
+def update_system_info(self) -> None:
     ram = psutil.virtual_memory()
     cpu = psutil.cpu_percent()
 
@@ -28,7 +28,7 @@ def update_system_info(self):
     self.cpu_label.setText(CPU_USAGE_FORMAT.format(cpu))
 
 
-def animate_bar(self, bar, target_value):
+def animate_bar(self, bar, target_value) -> None:
     current_value = bar.value()
     difference = target_value - current_value
 
@@ -42,7 +42,7 @@ def animate_bar(self, bar, target_value):
     timer.start(10)  # Adjust the interval for animation speed
 
 
-def _animate_step(bar, target_value, step, timer):
+def _animate_step(bar, target_value, step, timer) -> None:
     current_value = bar.value()
     new_value = current_value + step
 
@@ -55,11 +55,11 @@ def _animate_step(bar, target_value, step, timer):
         bar.setValue(new_value)
 
 
-def update_download_progress(self, progress):
+def update_download_progress(self, progress) -> None:
     self.download_progress.setValue(progress)
 
 
-def update_cuda_backends(self):
+def update_cuda_backends(self) -> None:
     self.logger.debug(UPDATING_CUDA_BACKENDS)
     self.backend_combo_cuda.clear()
     llama_bin = os.path.abspath("llama_bin")
@@ -77,23 +77,23 @@ def update_cuda_backends(self):
         self.backend_combo_cuda.setEnabled(True)
 
 
-def update_threads_spinbox(self, value):
+def update_threads_spinbox(self, value) -> None:
     self.threads_spinbox.setValue(value)
 
 
-def update_threads_slider(self, value):
+def update_threads_slider(self, value) -> None:
     self.threads_slider.setValue(value)
 
 
-def update_gpu_offload_spinbox(self, value):
+def update_gpu_offload_spinbox(self, value) -> None:
     self.gpu_offload_spinbox.setValue(value)
 
 
-def update_gpu_offload_slider(self, value):
+def update_gpu_offload_slider(self, value) -> None:
     self.gpu_offload_slider.setValue(value)
 
 
-def update_cuda_option(self):
+def update_cuda_option(self) -> None:
     self.logger.debug(UPDATING_CUDA_OPTIONS)
     asset = self.asset_combo.currentData()
 
@@ -113,7 +113,7 @@ def update_cuda_option(self):
         self.update_cuda_backends()
 
 
-def update_assets(self):
+def update_assets(self) -> None:
     self.logger.debug(UPDATING_ASSET_LIST)
     self.asset_combo.clear()
     release = self.release_combo.currentData()
@@ -128,6 +128,6 @@ def update_assets(self):
     self.update_cuda_option()
 
 
-def update_base_model_visibility(self, index):
+def update_base_model_visibility(self, index) -> None:
     is_gguf = self.lora_output_type_combo.itemText(index) == "GGUF"
     self.base_model_wrapper.setVisible(is_gguf)

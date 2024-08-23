@@ -16,7 +16,7 @@ from imports_and_globals import ensure_directory
 from Localizations import *
 
 
-def export_lora(self):
+def export_lora(self) -> None:
     self.logger.info(STARTING_LORA_EXPORT)
     try:
         model_path = self.export_lora_model.text()
@@ -98,7 +98,7 @@ def export_lora(self):
         show_error(self.logger, ERROR_STARTING_LORA_EXPORT.format(str(e)))
 
 
-def delete_lora_adapter_item(self, adapter_widget):
+def delete_lora_adapter_item(self, adapter_widget) -> None:
     self.logger.info(DELETING_LORA_ADAPTER)
     # Find the QListWidgetItem containing the adapter_widget
     for i in range(self.export_lora_adapters.count()):
@@ -108,14 +108,14 @@ def delete_lora_adapter_item(self, adapter_widget):
             break
 
 
-def browse_export_lora_model(self):
+def browse_export_lora_model(self) -> None:
     self.logger.info(BROWSING_FOR_EXPORT_LORA_MODEL_FILE)
     model_file, _ = QFileDialog.getOpenFileName(self, SELECT_MODEL_FILE, "", GGUF_FILES)
     if model_file:
         self.export_lora_model.setText(os.path.abspath(model_file))
 
 
-def browse_export_lora_output(self):
+def browse_export_lora_output(self) -> None:
     self.logger.info(BROWSING_FOR_EXPORT_LORA_OUTPUT_FILE)
     output_file, _ = QFileDialog.getSaveFileName(
         self, SELECT_OUTPUT_FILE, "", GGUF_FILES
@@ -124,7 +124,7 @@ def browse_export_lora_output(self):
         self.export_lora_output.setText(os.path.abspath(output_file))
 
 
-def add_lora_adapter(self):
+def add_lora_adapter(self) -> None:
     self.logger.info(ADDING_LORA_ADAPTER)
     adapter_path, _ = QFileDialog.getOpenFileName(
         self, SELECT_LORA_ADAPTER_FILE, "", LORA_FILES
@@ -154,7 +154,7 @@ def add_lora_adapter(self):
         self.export_lora_adapters.setItemWidget(list_item, adapter_widget)
 
 
-def convert_lora(self):
+def convert_lora(self) -> None:
     self.logger.info(STARTING_LORA_CONVERSION)
     try:
         lora_input_path = self.lora_input.text()

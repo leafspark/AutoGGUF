@@ -5,6 +5,7 @@ import importlib
 
 from functools import partial
 from datetime import datetime
+from typing import Tuple, Dict
 from dotenv import load_dotenv
 from PySide6.QtCore import *
 from PySide6.QtGui import *
@@ -33,7 +34,8 @@ import requests
 
 
 class AutoGGUF(QMainWindow):
-    def __init__(self, args):
+
+    def __init__(self, args: List[str]) -> None:
         super().__init__()
         self.logger = Logger("AutoGGUF", "logs")
 
@@ -785,7 +787,7 @@ class AutoGGUF(QMainWindow):
 
         self.logger.info(AUTOGGUF_INITIALIZATION_COMPLETE)
 
-    def load_plugins(self):
+    def load_plugins(self) -> Dict[str, Dict[str, Any]]:
         plugins = {}
         plugin_dir = "plugins"
 
@@ -844,7 +846,7 @@ class AutoGGUF(QMainWindow):
 
         return plugins
 
-    def apply_plugins(self):
+    def apply_plugins(self) -> None:
         if not self.plugins:
             self.logger.info(NO_PLUGINS_LOADED)
             return
@@ -859,7 +861,7 @@ class AutoGGUF(QMainWindow):
             if hasattr(plugin_instance, "init") and callable(plugin_instance.init):
                 plugin_instance.init(self)
 
-    def check_for_updates(self):
+    def check_for_updates(self) -> None:
         try:
             response = requests.get(
                 "https://api.github.com/repos/leafspark/AutoGGUF/releases/latest"
@@ -874,7 +876,7 @@ class AutoGGUF(QMainWindow):
         except requests.exceptions.RequestException as e:
             self.logger.warning(f"{ERROR_CHECKING_FOR_UPDATES} {e}")
 
-    def prompt_for_update(self, release):
+    def prompt_for_update(self, release) -> None:
         update_message = QMessageBox()
         update_message.setIcon(QMessageBox.Information)
         update_message.setWindowTitle(UPDATE_AVAILABLE)
@@ -887,7 +889,7 @@ class AutoGGUF(QMainWindow):
         if update_message.exec() == QMessageBox.StandardButton.Yes:
             QDesktopServices.openUrl(QUrl(release["html_url"]))
 
-    def keyPressEvent(self, event):
+    def keyPressEvent(self, event) -> None:
         if event.modifiers() == Qt.ControlModifier:
             if (
                 event.key() == Qt.Key_Equal
@@ -899,7 +901,7 @@ class AutoGGUF(QMainWindow):
                 self.reset_size()
         super().keyPressEvent(event)
 
-    def resize_window(self, larger):
+    def resize_window(self, larger) -> None:
         factor = 1.1 if larger else 1 / 1.1
         current_width = self.width()
         current_height = self.height()
@@ -907,10 +909,10 @@ class AutoGGUF(QMainWindow):
         new_height = int(current_height * factor)
         self.resize(new_width, new_height)
 
-    def reset_size(self):
+    def reset_size(self) -> None:
         self.resize(self.default_width, self.default_height)
 
-    def parse_resolution(self):
+    def parse_resolution(self) -> Tuple[int, int]:
         res = os.environ.get("AUTOGGUF_RESOLUTION", "1650x1100")
         try:
             width, height = map(int, res.split("x"))
@@ -920,14 +922,14 @@ class AutoGGUF(QMainWindow):
         except (ValueError, AttributeError):
             return 1650, 1100
 
-    def resizeEvent(self, event):
+    def resizeEvent(self, event) -> None:
         super().resizeEvent(event)
         path = QPainterPath()
         path.addRoundedRect(self.rect(), 10, 10)
         mask = QRegion(path.toFillPolygon().toPolygon())
         self.setMask(mask)
 
-    def refresh_backends(self):
+    def refresh_backends(self) -> None:
         self.logger.info(REFRESHING_BACKENDS)
         llama_bin = os.path.abspath("llama_bin")
         os.makedirs(llama_bin, exist_ok=True)
@@ -951,7 +953,7 @@ class AutoGGUF(QMainWindow):
             self.backend_combo.setEnabled(False)
         self.logger.info(FOUND_VALID_BACKENDS.format(len(valid_backends)))
 
-    def save_task_preset(self, task_item):
+    def save_task_preset(self, task_item) -> None:
         self.logger.info(SAVING_TASK_PRESET.format(task_item.task_name))
         for thread in self.quant_threads:
             if thread.log_file == task_item.log_file:
@@ -971,7 +973,7 @@ class AutoGGUF(QMainWindow):
                     )
                 break
 
-    def browse_base_model(self):
+    def browse_base_model(self) -> None:
         self.logger.info(BROWSING_FOR_BASE_MODEL_FOLDER)  # Updated log message
         base_model_folder = QFileDialog.getExistingDirectory(
             self, SELECT_BASE_MODEL_FOLDER
@@ -979,13 +981,13 @@ class AutoGGUF(QMainWindow):
         if base_model_folder:
             self.base_model_path.setText(os.path.abspath(base_model_folder))
 
-    def browse_hf_model_input(self):
+    def browse_hf_model_input(self) -> None:
         self.logger.info(BROWSE_FOR_HF_MODEL_DIRECTORY)
         model_dir = QFileDialog.getExistingDirectory(self, SELECT_HF_MODEL_DIRECTORY)
         if model_dir:
             self.hf_model_input.setText(os.path.abspath(model_dir))
 
-    def browse_hf_outfile(self):
+    def browse_hf_outfile(self) -> None:
         self.logger.info(BROWSE_FOR_HF_TO_GGUF_OUTPUT)
         outfile, _ = QFileDialog.getSaveFileName(
             self, SELECT_OUTPUT_FILE, "", GGUF_FILES
@@ -993,7 +995,7 @@ class AutoGGUF(QMainWindow):
         if outfile:
             self.hf_outfile.setText(os.path.abspath(outfile))
 
-    def convert_hf_to_gguf(self):
+    def convert_hf_to_gguf(self) -> None:
         self.logger.info(STARTING_HF_TO_GGUF_CONVERSION)
         try:
             model_dir = self.hf_model_input.text()
@@ -1063,7 +1065,7 @@ class AutoGGUF(QMainWindow):
             show_error(self.logger, ERROR_STARTING_HF_TO_GGUF_CONVERSION.format(str(e)))
         self.logger.info(HF_TO_GGUF_CONVERSION_TASK_STARTED)
 
-    def restart_task(self, task_item):
+    def restart_task(self, task_item) -> None:
         self.logger.info(RESTARTING_TASK.format(task_item.task_name))
         for thread in self.quant_threads:
             if thread.log_file == task_item.log_file:
@@ -1083,7 +1085,7 @@ class AutoGGUF(QMainWindow):
                 task_item.update_status(IN_PROGRESS)
                 break
 
-    def lora_conversion_finished(self, thread, input_path, output_path):
+    def lora_conversion_finished(self, thread, input_path, output_path) -> None:
         self.logger.info(LORA_CONVERSION_FINISHED)
         if thread in self.quant_threads:
             self.quant_threads.remove(thread)
@@ -1099,7 +1101,7 @@ class AutoGGUF(QMainWindow):
         except Exception as e:
             self.logger.error(ERROR_MOVING_LORA_FILE.format(str(e)))
 
-    def download_finished(self, extract_dir):
+    def download_finished(self, extract_dir) -> None:
         self.logger.info(DOWNLOAD_FINISHED_EXTRACTED_TO.format(extract_dir))
         self.download_button.setEnabled(True)
         self.download_progress.setValue(100)
@@ -1136,7 +1138,7 @@ class AutoGGUF(QMainWindow):
         if index >= 0:
             self.backend_combo.setCurrentIndex(index)
 
-    def extract_cuda_files(self, extract_dir, destination):
+    def extract_cuda_files(self, extract_dir, destination) -> None:
         self.logger.info(EXTRACTING_CUDA_FILES.format(extract_dir, destination))
         for root, dirs, files in os.walk(extract_dir):
             for file in files:
@@ -1145,7 +1147,7 @@ class AutoGGUF(QMainWindow):
                     dest_path = os.path.join(destination, file)
                     shutil.copy2(source_path, dest_path)
 
-    def download_error(self, error_message):
+    def download_error(self, error_message) -> None:
         self.logger.error(DOWNLOAD_ERROR.format(error_message))
         self.download_button.setEnabled(True)
         self.download_progress.setValue(0)
@@ -1158,7 +1160,7 @@ class AutoGGUF(QMainWindow):
             if os.path.exists(partial_file):
                 os.remove(partial_file)
 
-    def show_task_context_menu(self, position):
+    def show_task_context_menu(self, position) -> None:
         self.logger.debug(SHOWING_TASK_CONTEXT_MENU)
         item = self.task_list.itemAt(position)
         if item is not None:
@@ -1185,7 +1187,7 @@ class AutoGGUF(QMainWindow):
 
             context_menu.exec(self.task_list.viewport().mapToGlobal(position))
 
-    def show_task_properties(self, item):
+    def show_task_properties(self, item) -> None:
         self.logger.debug(SHOWING_PROPERTIES_FOR_TASK.format(item.text()))
         task_item = self.task_list.itemWidget(item)
         for thread in self.quant_threads:
@@ -1194,12 +1196,12 @@ class AutoGGUF(QMainWindow):
                 model_info_dialog.exec()
                 break
 
-    def toggle_gpu_offload_auto(self, state):
+    def toggle_gpu_offload_auto(self, state) -> None:
         is_auto = state == Qt.CheckState.Checked
         self.gpu_offload_slider.setEnabled(not is_auto)
         self.gpu_offload_spinbox.setEnabled(not is_auto)
 
-    def cancel_task_by_item(self, item):
+    def cancel_task_by_item(self, item) -> None:
         task_item = self.task_list.itemWidget(item)
         for thread in self.quant_threads:
             if thread.log_file == task_item.log_file:
@@ -1208,11 +1210,11 @@ class AutoGGUF(QMainWindow):
                 self.quant_threads.remove(thread)
                 break
 
-    def cancel_task(self, item):
+    def cancel_task(self, item) -> None:
         self.logger.info(CANCELLING_TASK.format(item.text()))
         self.cancel_task_by_item(item)
 
-    def delete_task(self, item):
+    def delete_task(self, item) -> None:
         self.logger.info(DELETING_TASK.format(item.text()))
 
         # Cancel the task first
@@ -1233,12 +1235,12 @@ class AutoGGUF(QMainWindow):
             if task_item:
                 task_item.deleteLater()
 
-    def create_label(self, text, tooltip):
+    def create_label(self, text, tooltip) -> QLabel:
         label = QLabel(text)
         label.setToolTip(tooltip)
         return label
 
-    def verify_gguf(self, file_path):
+    def verify_gguf(self, file_path) -> bool:
         try:
             with open(file_path, "rb") as f:
                 magic = f.read(4)
@@ -1246,7 +1248,7 @@ class AutoGGUF(QMainWindow):
         except Exception:
             return False
 
-    def load_models(self):
+    def load_models(self) -> None:
         self.logger.info(LOADING_MODELS)
         models_dir = self.models_input.text()
         ensure_directory(models_dir)
@@ -1322,7 +1324,7 @@ class AutoGGUF(QMainWindow):
                 CONCATENATED_FILES_FOUND.format(len(concatenated_models))
             )
 
-    def add_model_to_tree(self, model):
+    def add_model_to_tree(self, model) -> QTreeWidgetItem:
         item = QTreeWidgetItem(self.model_tree)
         item.setText(0, model)
         if hasattr(self, "imported_models") and model in [
@@ -1337,7 +1339,7 @@ class AutoGGUF(QMainWindow):
             item.setData(0, Qt.ItemDataRole.UserRole, model)
         return item
 
-    def validate_quantization_inputs(self):
+    def validate_quantization_inputs(self) -> None:
         self.logger.debug(VALIDATING_QUANTIZATION_INPUTS)
         errors = []
         if not self.backend_combo.currentData():
@@ -1354,7 +1356,7 @@ class AutoGGUF(QMainWindow):
         if errors:
             raise ValueError("\n".join(errors))
 
-    def add_kv_override(self, override_string=None):
+    def add_kv_override(self, override_string=None) -> None:
         entry = KVOverrideEntry()
         entry.deleted.connect(self.remove_kv_override)
         if override_string:
@@ -1366,12 +1368,12 @@ class AutoGGUF(QMainWindow):
         self.kv_override_layout.addWidget(entry)
         self.kv_override_entries.append(entry)
 
-    def remove_kv_override(self, entry):
+    def remove_kv_override(self, entry) -> None:
         self.kv_override_layout.removeWidget(entry)
         self.kv_override_entries.remove(entry)
         entry.deleteLater()
 
-    def quantize_model(self):
+    def quantize_model(self) -> None:
         self.logger.info(STARTING_MODEL_QUANTIZATION)
         try:
             self.validate_quantization_inputs()
@@ -1539,7 +1541,7 @@ class AutoGGUF(QMainWindow):
         except Exception as e:
             show_error(self.logger, ERROR_STARTING_QUANTIZATION.format(str(e)))
 
-    def parse_progress(self, line, task_item):
+    def parse_progress(self, line, task_item) -> None:
         # Parses the output line for progress information and updates the task item.
         match = re.search(r"\[\s*(\d+)\s*/\s*(\d+)\s*\].*", line)
         if match:
@@ -1548,13 +1550,13 @@ class AutoGGUF(QMainWindow):
             progress = int((current / total) * 100)
             task_item.update_progress(progress)
 
-    def task_finished(self, thread, task_item):
+    def task_finished(self, thread, task_item) -> None:
         self.logger.info(TASK_FINISHED.format(thread.log_file))
         if thread in self.quant_threads:
             self.quant_threads.remove(thread)
         task_item.update_status(COMPLETED)
 
-    def show_task_details(self, item):
+    def show_task_details(self, item) -> None:
         self.logger.debug(SHOWING_TASK_DETAILS_FOR.format(item.text()))
         task_item = self.task_list.itemWidget(item)
         if task_item:
@@ -1582,7 +1584,7 @@ class AutoGGUF(QMainWindow):
 
             log_dialog.exec()
 
-    def import_model(self):
+    def import_model(self) -> None:
         self.logger.info(IMPORTING_MODEL)
         file_path, _ = QFileDialog.getOpenFileName(
             self, SELECT_MODEL_TO_IMPORT, "", GGUF_FILES
@@ -1609,13 +1611,13 @@ class AutoGGUF(QMainWindow):
                 self.load_models()
                 self.logger.info(MODEL_IMPORTED_SUCCESSFULLY.format(file_name))
 
-    def browse_imatrix_datafile(self):
+    def browse_imatrix_datafile(self) -> None:
         self.logger.info(BROWSING_FOR_IMATRIX_DATA_FILE)
         datafile, _ = QFileDialog.getOpenFileName(self, SELECT_DATA_FILE, "", ALL_FILES)
         if datafile:
             self.imatrix_datafile.setText(os.path.abspath(datafile))
 
-    def browse_imatrix_model(self):
+    def browse_imatrix_model(self) -> None:
         self.logger.info(BROWSING_FOR_IMATRIX_MODEL_FILE)
         model_file, _ = QFileDialog.getOpenFileName(
             self, SELECT_MODEL_FILE, "", GGUF_FILES
@@ -1623,7 +1625,7 @@ class AutoGGUF(QMainWindow):
         if model_file:
             self.imatrix_model.setText(os.path.abspath(model_file))
 
-    def browse_imatrix_output(self):
+    def browse_imatrix_output(self) -> None:
         self.logger.info(BROWSING_FOR_IMATRIX_OUTPUT_FILE)
         output_file, _ = QFileDialog.getSaveFileName(
             self, SELECT_OUTPUT_FILE, "", DAT_FILES
@@ -1631,7 +1633,7 @@ class AutoGGUF(QMainWindow):
         if output_file:
             self.imatrix_output.setText(os.path.abspath(output_file))
 
-    def generate_imatrix(self):
+    def generate_imatrix(self) -> None:
         self.logger.info(STARTING_IMATRIX_GENERATION)
         try:
             backend_path = self.backend_combo.currentData()
@@ -1692,7 +1694,7 @@ class AutoGGUF(QMainWindow):
             show_error(self.logger, ERROR_STARTING_IMATRIX_GENERATION.format(str(e)))
         self.logger.info(IMATRIX_GENERATION_TASK_STARTED)
 
-    def closeEvent(self, event: QCloseEvent):
+    def closeEvent(self, event: QCloseEvent) -> None:
         self.logger.info(APPLICATION_CLOSING)
         if self.quant_threads:
             reply = QMessageBox.question(

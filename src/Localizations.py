@@ -6325,7 +6325,7 @@ _languages = {
 # fmt: on
 
 
-def set_language(lang_code):
+def set_language(lang_code) -> None:
     # Globals
     global WINDOW_TITLE, RAM_USAGE, CPU_USAGE, BACKEND, REFRESH_BACKENDS, MODELS_PATH, OUTPUT_PATH, LOGS_PATH
     global BROWSE, AVAILABLE_MODELS, QUANTIZATION_TYPE, ALLOW_REQUANTIZE, LEAVE_OUTPUT_TENSOR, PURE, IMATRIX

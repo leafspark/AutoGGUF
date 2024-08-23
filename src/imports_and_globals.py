@@ -1,5 +1,7 @@
 import os
 import sys
+from typing import LiteralString, TextIO, Union
+
 import psutil
 import subprocess
 import time
@@ -41,7 +43,7 @@ from PySide6.QtGui import QCloseEvent, QAction
 from Localizations import *
 
 
-def show_about(self):
+def show_about(self) -> None:
     about_text = (
         "AutoGGUF\n\n"
         f"Version: {AUTOGGUF_VERSION}\n\n"
@@ -50,12 +52,12 @@ def show_about(self):
     QMessageBox.about(self, "About AutoGGUF", about_text)
 
 
-def ensure_directory(path):
+def ensure_directory(path) -> None:
     if not os.path.exists(path):
         os.makedirs(path)
 
 
-def open_file_safe(file_path, mode="r"):
+def open_file_safe(file_path, mode="r") -> TextIO:
     encodings = ["utf-8", "latin-1", "ascii", "utf-16"]
     for encoding in encodings:
         try:
@@ -67,7 +69,7 @@ def open_file_safe(file_path, mode="r"):
     )
 
 
-def resource_path(relative_path):
+def resource_path(relative_path) -> Union[LiteralString, str, bytes]:
     if hasattr(sys, "_MEIPASS"):
         # PyInstaller path
         base_path = sys._MEIPASS

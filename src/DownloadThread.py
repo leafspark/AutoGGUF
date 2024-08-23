@@ -10,12 +10,12 @@ class DownloadThread(QThread):
     finished_signal = Signal(str)
     error_signal = Signal(str)
 
-    def __init__(self, url, save_path):
+    def __init__(self, url, save_path) -> None:
         super().__init__()
         self.url = url
         self.save_path = save_path
 
-    def run(self):
+    def run(self) -> None:
         try:
             response = requests.get(self.url, stream=True)
             response.raise_for_status()

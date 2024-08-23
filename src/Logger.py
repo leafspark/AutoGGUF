@@ -5,7 +5,7 @@ from datetime import datetime
 
 
 class Logger:
-    def __init__(self, name, log_dir):
+    def __init__(self, name, log_dir) -> None:
         self.logger = logging.getLogger(name)
         self.logger.setLevel(logging.DEBUG)
 
@@ -34,17 +34,17 @@ class Logger:
         self.logger.addHandler(console_handler)
         self.logger.addHandler(file_handler)
 
-    def debug(self, message):
+    def debug(self, message) -> None:
         self.logger.debug(message)
 
-    def info(self, message):
+    def info(self, message) -> None:
         self.logger.info(message)
 
-    def warning(self, message):
+    def warning(self, message) -> None:
         self.logger.warning(message)
 
-    def error(self, message):
+    def error(self, message) -> None:
         self.logger.error(message)
 
-    def critical(self, message):
+    def critical(self, message) -> None:
         self.logger.critical(message)

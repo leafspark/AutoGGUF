@@ -15,7 +15,7 @@ class QuantizationThread(QThread):
     error_signal = Signal(str)
     model_info_signal = Signal(dict)
 
-    def __init__(self, command, cwd, log_file):
+    def __init__(self, command, cwd, log_file) -> None:
         super().__init__()
         self.command = command
         self.cwd = cwd
@@ -23,7 +23,7 @@ class QuantizationThread(QThread):
         self.process = None
         self.model_info = {}
 
-    def run(self):
+    def run(self) -> None:
         try:
             # Start the subprocess
             self.process = subprocess.Popen(
@@ -56,7 +56,7 @@ class QuantizationThread(QThread):
         except Exception as e:
             self.error_signal.emit(str(e))
 
-    def parse_model_info(self, line):
+    def parse_model_info(self, line) -> None:
         # Parse output for model information
         if "llama_model_loader: loaded meta data with" in line:
             parts = line.split()
@@ -77,7 +77,7 @@ class QuantizationThread(QThread):
                     f"{quant_type}: {tensors} tensors"
                 )
 
-    def terminate(self):
+    def terminate(self) -> None:
         # Terminate the subprocess if it's still running
         if self.process:
             os.kill(self.process.pid, signal.SIGTERM)

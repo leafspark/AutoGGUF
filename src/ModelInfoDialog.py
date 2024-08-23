@@ -2,7 +2,7 @@ from PySide6.QtWidgets import *
 
 
 class ModelInfoDialog(QDialog):
-    def __init__(self, model_info, parent=None):
+    def __init__(self, model_info, parent=None) -> None:
         super().__init__(parent)
         self.setWindowTitle("Model Information")
         self.setGeometry(200, 200, 600, 400)
@@ -21,7 +21,7 @@ class ModelInfoDialog(QDialog):
 
         self.setLayout(layout)
 
-    def format_model_info(self, model_info):
+    def format_model_info(self, model_info) -> str:
         html = "<h2>Model Information</h2>"
         html += f"<p><b>Architecture:</b> {model_info.get('architecture', 'N/A')}</p>"
         html += f"<p><b>Quantization Type:</b> {model_info.get('quantization_type', 'N/A')}</p>"

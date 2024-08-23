@@ -5,30 +5,30 @@ import threading
 from PySide6.QtCore import QTimer
 from PySide6.QtWidgets import QApplication
 from AutoGGUF import AutoGGUF
-from flask import Flask, jsonify
+from flask import Flask, Response, jsonify
 
 server = Flask(__name__)
 
 
-def main():
+def main() -> None:
     @server.route("/v1/models", methods=["GET"])
-    def models():
+    def models() -> Response:
         if window:
             return jsonify({"models": window.get_models_data()})
         return jsonify({"models": []})
 
     @server.route("/v1/tasks", methods=["GET"])
-    def tasks():
+    def tasks() -> Response:
         if window:
             return jsonify({"tasks": window.get_tasks_data()})
         return jsonify({"tasks": []})
 
     @server.route("/v1/health", methods=["GET"])
-    def ping():
+    def ping() -> Response:
         return jsonify({"status": "alive"})
 
     @server.route("/v1/backends", methods=["GET"])
-    def get_backends():
+    def get_backends() -> Response:
         backends = []
         for i in range(window.backend_combo.count()):
             backends.append(
@@ -40,7 +40,7 @@ def main():
         return jsonify({"backends": backends})
 
     @server.route("/v1/plugins", methods=["GET"])
-    def get_plugins():
+    def get_plugins() -> Response:
         if window:
             return jsonify(
                 {
@@ -57,7 +57,7 @@ def main():
             )
         return jsonify({"plugins": []})
 
-    def run_flask():
+    def run_flask() -> None:
         if os.environ.get("AUTOGGUF_SERVER", "").lower() == "enabled":
             server.run(
                 host="0.0.0.0",

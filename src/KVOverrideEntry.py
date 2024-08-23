@@ -11,7 +11,7 @@ import platform
 class KVOverrideEntry(QWidget):
     deleted = Signal(QWidget)
 
-    def __init__(self, parent=None):
+    def __init__(self, parent=None) -> None:
         super().__init__(parent)
         layout = QHBoxLayout(self)
         layout.setContentsMargins(0, 0, 0, 0)
@@ -42,12 +42,12 @@ class KVOverrideEntry(QWidget):
         # Initialize validator
         self.update_validator(self.type_combo.currentText())
 
-    def delete_clicked(self):
+    def delete_clicked(self) -> None:
         self.deleted.emit(self)
 
     def get_override_string(
         self, model_name=None, quant_type=None, output_path=None
-    ):  # Add arguments
+    ) -> str:  # Add arguments
         key = self.key_input.text()
         type_ = self.type_combo.currentText()
         value = self.value_input.text()
@@ -79,11 +79,11 @@ class KVOverrideEntry(QWidget):
 
         return f"{key}={type_}:{value}"
 
-    def get_raw_override_string(self):
+    def get_raw_override_string(self) -> str:
         # Return the raw override string with placeholders intact
         return f"{self.key_input.text()}={self.type_combo.currentText()}:{self.value_input.text()}"
 
-    def update_validator(self, type_):
+    def update_validator(self, type_) -> None:
         if type_ == "int":
             self.value_input.setValidator(QIntValidator())
         elif type_ == "float":

@@ -28,7 +28,7 @@ from ui_update import animate_bar
 
 
 class SimpleGraph(QGraphicsView):
-    def __init__(self, title, parent=None):
+    def __init__(self, title, parent=None) -> None:
         super().__init__(parent)
         self.setScene(QGraphicsScene(self))
         self.setRenderHint(QPainter.RenderHint.Antialiasing)
@@ -37,7 +37,7 @@ class SimpleGraph(QGraphicsView):
         self.title = title
         self.data = []
 
-    def update_data(self, data):
+    def update_data(self, data) -> None:
         self.data = data
         self.scene().clear()
         if not self.data:
@@ -65,13 +65,13 @@ class SimpleGraph(QGraphicsView):
             line.setPen(path)
             self.scene().addItem(line)
 
-    def resizeEvent(self, event):
+    def resizeEvent(self, event) -> None:
         super().resizeEvent(event)
         self.update_data(self.data)
 
 
 class GPUMonitor(QWidget):
-    def __init__(self, parent=None):
+    def __init__(self, parent=None) -> None:
         super().__init__(parent)
         self.setMinimumHeight(30)
         self.setMaximumHeight(30)
@@ -125,17 +125,17 @@ class GPUMonitor(QWidget):
         if not self.handles:
             self.gpu_label.setText(NO_GPU_DETECTED)
 
-    def check_for_amd_gpu(self):
+    def check_for_amd_gpu(self) -> None:
         # This is a placeholder. Implementing AMD GPU detection would require
         # platform-specific methods or additional libraries.
         self.gpu_label.setText(AMD_GPU_NOT_SUPPORTED)
 
-    def change_gpu(self, index):
+    def change_gpu(self, index) -> None:
         self.current_gpu = index
         self.gpu_data.clear()
         self.vram_data.clear()
 
-    def update_gpu_info(self):
+    def update_gpu_info(self) -> None:
         if self.handles:
             try:
                 handle = self.handles[self.current_gpu]
@@ -165,11 +165,11 @@ class GPUMonitor(QWidget):
                 self.gpu_bar.setValue(0)
                 self.gpu_label.setText(GPU_USAGE_FORMAT.format(0, 0, 0, 0))
 
-    def mouseDoubleClickEvent(self, event):
+    def mouseDoubleClickEvent(self, event) -> None:
         if self.handles:
             self.show_detailed_stats()
 
-    def show_detailed_stats(self):
+    def show_detailed_stats(self) -> None:
         dialog = QDialog(self)
         dialog.setWindowTitle(GPU_DETAILS)
         dialog.setMinimumSize(800, 600)
@@ -194,7 +194,7 @@ class GPUMonitor(QWidget):
         gpu_graph = SimpleGraph(GPU_USAGE_OVER_TIME)
         vram_graph = SimpleGraph(VRAM_USAGE_OVER_TIME)
 
-        def update_graph_data():
+        def update_graph_data() -> None:
             gpu_graph.update_data(self.gpu_data)
             vram_graph.update_data(self.vram_data)
 
@@ -207,7 +207,7 @@ class GPUMonitor(QWidget):
 
         dialog.exec()
 
-    def closeEvent(self, event):
+    def closeEvent(self, event) -> None:
         if self.handles:
             pynvml.nvmlShutdown()
         super().closeEvent(event)
