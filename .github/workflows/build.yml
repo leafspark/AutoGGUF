@@ -86,8 +86,8 @@ jobs:
         $hash = (Get-FileHash "$distPath\$exeName" -Algorithm SHA256).Hash.ToLower()
         "$hash *$exeName" | Out-File -FilePath "$distPath\$hashFile" -Encoding utf8
 
-    - name: Generate SHA256 (Linux/macOS)
-      if: matrix.os != 'windows-latest'
+    - name: Generate SHA256 (Linux)
+      if: matrix.os == 'ubuntu-latest'
       run: |
         distPath=$(if [ "${{ github.event.inputs.build_type }}" = "RELEASE" ]; then echo "build/release/dist"; else echo "build/dev/dist"; fi)
         exeName="AutoGGUF-x64"
@@ -95,6 +95,15 @@ jobs:
         hashFile="AutoGGUF-${{ matrix.os }}-x64-$versionHash.sha256"
         cd $distPath && sha256sum $exeName > $hashFile
 
+    - name: Generate SHA256 (macOS)
+      if: matrix.os == 'macos-latest'
+      run: |
+        distPath=$(if [ "${{ github.event.inputs.build_type }}" = "RELEASE" ]; then echo "build/release/dist"; else echo "build/dev/dist"; fi)
+        exeName="AutoGGUF-x64"
+        versionHash=$(echo ${{ github.sha }} | cut -c1-7)
+        hashFile="AutoGGUF-${{ matrix.os }}-x64-$versionHash.sha256"
+        cd $distPath && shasum -a 256 $exeName > $hashFile
+        
     - name: Upload Artifact
       uses: actions/upload-artifact@v2
       with:
