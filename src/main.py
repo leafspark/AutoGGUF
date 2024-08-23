@@ -39,8 +39,26 @@ def main():
             )
         return jsonify({"backends": backends})
 
+    @server.route("/v1/plugins", methods=["GET"])
+    def get_plugins():
+        if window:
+            return jsonify(
+                {
+                    "plugins": [
+                        {
+                            "name": plugin_data["data"]["name"],
+                            "version": plugin_data["data"]["version"],
+                            "description": plugin_data["data"]["description"],
+                            "author": plugin_data["data"]["author"],
+                        }
+                        for plugin_data in window.plugins.values()
+                    ]
+                }
+            )
+        return jsonify({"plugins": []})
+
     def run_flask():
-        if os.environ.get("AUTOGGUF_SERVER", "").lower() == "true":
+        if os.environ.get("AUTOGGUF_SERVER", "").lower() == "enabled":
             server.run(
                 host="0.0.0.0",
                 port=int(os.environ.get("AUTOGGUF_SERVER_PORT", 5000)),

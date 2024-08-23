@@ -43,6 +43,18 @@ class _English(_Localization):
             "Found {} concatenated file parts. Please concat the files first."
         )
 
+        # Plugins
+        self.PLUGINS_DIR_NOT_EXIST = (
+            "Plugins directory '{}' does not exist. No plugins will be loaded."
+        )
+        self.PLUGINS_DIR_NOT_DIRECTORY = (
+            "'{}' exists but is not a directory. No plugins will be loaded."
+        )
+        self.PLUGIN_LOADED = "Loaded plugin: {} {}"
+        self.PLUGIN_INCOMPATIBLE = "Plugin {} {} is not compatible with AutoGGUF version {}. Supported versions: {}"
+        self.PLUGIN_LOAD_FAILED = "Failed to load plugin {}: {}"
+        self.NO_PLUGINS_LOADED = "No plugins loaded."
+
         # GPU Monitoring
         self.GPU_USAGE = "GPU Usage:"
         self.GPU_USAGE_FORMAT = "GPU: {:.1f}% | VRAM: {:.1f}% ({} MB / {} MB)"

@@ -26,6 +26,11 @@ src/*
 docs/*
 !docs/*.py
 
+# Allow plugins folder and its .py files
+!plugins/
+plugins/*
+!plugins/*.py
+
 # Allow assets folder, but only .svg, .png, .rc, .css, .iss and .ico files
 !assets/
 assets/*
