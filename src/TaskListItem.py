@@ -1,6 +1,13 @@
 from PySide6.QtCore import *
 from PySide6.QtWidgets import *
 
+from Localizations import (
+    DELETING_TASK,
+    CANCELLING_TASK,
+    CONFIRM_DELETION_TITLE,
+    CONFIRM_DELETION,
+)
+
 
 class TaskListItem(QWidget):
     def __init__(
@@ -29,6 +36,31 @@ class TaskListItem(QWidget):
         self.progress_timer = QTimer(self)
         self.progress_timer.timeout.connect(self.update_progress)
         self.progress_value = 0
+
+    def cancel_task(self, item) -> None:
+        self.logger.info(CANCELLING_TASK.format(item.text()))
+        self.cancel_task_by_item(item)
+
+    def delete_task(self, item) -> None:
+        self.logger.info(DELETING_TASK.format(item.text()))
+
+        # Cancel the task first
+        self.cancel_task_by_item(item)
+
+        reply = QMessageBox.question(
+            self,
+            CONFIRM_DELETION_TITLE,
+            CONFIRM_DELETION,
+            QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
+            QMessageBox.StandardButton.No,
+        )
+        if reply == QMessageBox.StandardButton.Yes:
+            task_item = self.task_list.itemWidget(item)
+            row = self.task_list.row(item)
+            self.task_list.takeItem(row)
+
+            if task_item:
+                task_item.deleteLater()
 
     def update_status(self, status) -> None:
         self.status = status

@@ -1,10 +1,11 @@
+import os
 import signal
 import subprocess
 
-from PySide6.QtCore import *
+from PySide6.QtCore import Signal, QThread
 
 from imports_and_globals import open_file_safe
-from Localizations import *
+from Localizations import IN_PROGRESS, COMPLETED
 
 
 class QuantizationThread(QThread):

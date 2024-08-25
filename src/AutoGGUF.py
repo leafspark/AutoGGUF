@@ -49,12 +49,20 @@ class AutoGGUF(QMainWindow):
 
         load_dotenv()  # Loads the .env file
 
-        self.resize_factor = 1.1  # 10% increase/decrease
+        # Configuration
+        self.model_dir_name = os.environ.get("AUTOGGUF_MODEL_DIR_NAME", "models")
+        self.output_dir_name = os.environ.get(
+            "AUTOGGUF_OUTPUT_DIR_NAME", "quantized_models"
+        )
+
+        self.resize_factor = float(
+            os.environ.get("AUTOGGUF_RESIZE_FACTOR", 1.1)
+        )  # 10% increase/decrease
         self.default_width, self.default_height = self.parse_resolution()
         self.resize(self.default_width, self.default_height)
 
-        ensure_directory(os.path.abspath("quantized_models"))
-        ensure_directory(os.path.abspath("models"))
+        ensure_directory(os.path.abspath(self.output_dir_name))
+        ensure_directory(os.path.abspath(self.model_dir_name))
 
         # References
         self.update_base_model_visibility = partial(
@@ -85,6 +93,9 @@ class AutoGGUF(QMainWindow):
         self.browse_imatrix = utils.browse_imatrix.__get__(self)
         self.get_models_data = utils.get_models_data.__get__(self)
         self.get_tasks_data = utils.get_tasks_data.__get__(self)
+        self.cancel_task = partial(TaskListItem.cancel_task, self)
+        self.delete_task = partial(TaskListItem.delete_task, self)
+        self.toggle_gpu_offload_auto = partial(ui_update.toggle_gpu_offload_auto, self)
         self.update_threads_spinbox = partial(ui_update.update_threads_spinbox, self)
         self.update_threads_slider = partial(ui_update.update_threads_slider, self)
         self.update_gpu_offload_spinbox = partial(
@@ -238,7 +249,7 @@ class AutoGGUF(QMainWindow):
 
         # Models path
         models_layout = QHBoxLayout()
-        self.models_input = QLineEdit(os.path.abspath("models"))
+        self.models_input = QLineEdit(os.path.abspath(self.model_dir_name))
         models_button = QPushButton(BROWSE)
         models_button.clicked.connect(self.browse_models)
         models_layout.addWidget(QLabel(MODELS_PATH))
@@ -248,7 +259,7 @@ class AutoGGUF(QMainWindow):
 
         # Output path
         output_layout = QHBoxLayout()
-        self.output_input = QLineEdit(os.path.abspath("quantized_models"))
+        self.output_input = QLineEdit(os.path.abspath(self.output_dir_name))
         output_button = QPushButton(BROWSE)
         output_button.clicked.connect(self.browse_output)
         output_layout.addWidget(QLabel(OUTPUT_PATH))
@@ -1196,11 +1207,6 @@ class AutoGGUF(QMainWindow):
                 model_info_dialog.exec()
                 break
 
-    def toggle_gpu_offload_auto(self, state) -> None:
-        is_auto = state == Qt.CheckState.Checked
-        self.gpu_offload_slider.setEnabled(not is_auto)
-        self.gpu_offload_spinbox.setEnabled(not is_auto)
-
     def cancel_task_by_item(self, item) -> None:
         task_item = self.task_list.itemWidget(item)
         for thread in self.quant_threads:
@@ -1209,31 +1215,6 @@ class AutoGGUF(QMainWindow):
                 task_item.update_status(CANCELED)
                 self.quant_threads.remove(thread)
                 break
-
-    def cancel_task(self, item) -> None:
-        self.logger.info(CANCELLING_TASK.format(item.text()))
-        self.cancel_task_by_item(item)
-
-    def delete_task(self, item) -> None:
-        self.logger.info(DELETING_TASK.format(item.text()))
-
-        # Cancel the task first
-        self.cancel_task_by_item(item)
-
-        reply = QMessageBox.question(
-            self,
-            CONFIRM_DELETION_TITLE,
-            CONFIRM_DELETION,
-            QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
-            QMessageBox.StandardButton.No,
-        )
-        if reply == QMessageBox.StandardButton.Yes:
-            task_item = self.task_list.itemWidget(item)
-            row = self.task_list.row(item)
-            self.task_list.takeItem(row)
-
-            if task_item:
-                task_item.deleteLater()
 
     def create_label(self, text, tooltip) -> QLabel:
         label = QLabel(text)

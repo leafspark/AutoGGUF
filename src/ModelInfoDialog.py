@@ -1,4 +1,4 @@
-from PySide6.QtWidgets import *
+from PySide6.QtWidgets import QVBoxLayout, QTextEdit, QDialog, QPushButton
 
 
 class ModelInfoDialog(QDialog):

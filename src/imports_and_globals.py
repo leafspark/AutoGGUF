@@ -1,44 +1,9 @@
-import os
 import sys
 from typing import TextIO, Union
 
-import psutil
-import subprocess
-import time
-import signal
-import json
-import platform
-import requests
-import zipfile
-from datetime import datetime
 from PySide6.QtWidgets import (
-    QApplication,
-    QMainWindow,
-    QVBoxLayout,
-    QHBoxLayout,
-    QWidget,
-    QPushButton,
-    QListWidget,
-    QLineEdit,
-    QLabel,
-    QFileDialog,
-    QProgressBar,
-    QComboBox,
-    QTextEdit,
-    QCheckBox,
-    QGroupBox,
-    QFormLayout,
-    QScrollArea,
-    QSlider,
-    QSpinBox,
-    QListWidgetItem,
     QMessageBox,
-    QDialog,
-    QPlainTextEdit,
-    QMenu,
 )
-from PySide6.QtCore import QTimer, Signal, QThread, Qt, QSize
-from PySide6.QtGui import QCloseEvent, QAction
 
 from Localizations import *
 

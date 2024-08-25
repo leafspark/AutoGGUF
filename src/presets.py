@@ -1,7 +1,18 @@
 import json
 
+from PySide6.QtCore import Qt
 from PySide6.QtWidgets import QFileDialog, QMessageBox
-from Localizations import *
+from Localizations import (
+    SAVING_PRESET,
+    SAVE_PRESET,
+    JSON_FILES,
+    PRESET_SAVED,
+    PRESET_SAVED_TO,
+    LOADING_PRESET,
+    LOAD_PRESET,
+    PRESET_LOADED,
+    PRESET_LOADED_FROM,
+)
 
 
 def save_preset(self) -> None:

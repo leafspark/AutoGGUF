@@ -1,8 +1,15 @@
 from PySide6.QtCore import QTimer
+from PySide6.QtGui import Qt
 
 from Localizations import *
 import psutil
 from error_handling import show_error
+
+
+def toggle_gpu_offload_auto(self, state) -> None:
+    is_auto = state == Qt.CheckState.Checked
+    self.gpu_offload_slider.setEnabled(not is_auto)
+    self.gpu_offload_spinbox.setEnabled(not is_auto)
 
 
 def update_model_info(logger, self, model_info) -> None:

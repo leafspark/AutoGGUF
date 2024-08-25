@@ -1,13 +1,12 @@
-from typing import Any, Dict, List, Union
+from typing import Any, Union
 
+import requests
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import QFileDialog
 
-from error_handling import show_error
-from Localizations import *
-import requests
-
 from DownloadThread import DownloadThread
+from Localizations import *
+from error_handling import show_error
 from imports_and_globals import ensure_directory
 
 

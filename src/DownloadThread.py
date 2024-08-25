@@ -2,7 +2,7 @@ import os
 import zipfile
 
 import requests
-from PySide6.QtCore import *
+from PySide6.QtCore import QThread, Signal
 
 
 class DownloadThread(QThread):
