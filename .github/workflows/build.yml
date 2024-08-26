@@ -73,7 +73,7 @@ jobs:
         distPath=$(if [ "${{ github.event.inputs.build_type }}" = "RELEASE" ]; then echo "build/release/dist"; else echo "build/dev/dist"; fi)
         mkdir -p $distPath/src/gguf-py
         cp -R src/gguf-py/* $distPath/src/gguf-py/
-        cp src\convert_hf_to_gguf.py $distPath/src/
+        cp src/convert_hf_to_gguf.py $distPath/src/
         cp src/convert_lora_to_gguf.py $distPath/src/
         cp src/convert_lora_to_ggml.py $distPath/src/
 
