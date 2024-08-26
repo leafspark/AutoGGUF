@@ -1,5 +1,31 @@
 # Changelog
 
+## [v1.8.0] - 2024-08-26
+
+### Added
+- .env.example file added
+- Sha256 generation support added to build.yml
+- Allow importing models from any directory on the system
+- Added manual model import functionality
+- Verification for manual imports and support for concatenated files
+- Implemented plugins feature using importlib
+- Configuration options for AUTOGGUF_MODEL_DIR_NAME, AUTOGGUF_OUTPUT_DIR_NAME, and AUTOGGUF_RESIZE_FACTOR added
+
+### Changed
+- Moved get helper functions to utils.py
+- Added type hints
+- Reformat TaskListItem.py for better readability
+- Separate macOS and Linux runs in CI/CD
+- Updated .gitignore for better file management
+- Updated numpy requirement from <2.0.0 to <3.0.0
+
+### Fixed
+- Fixed sha256 file format and avoided overwriting
+- Updated regex for progress tracking
+- Arabic and French localizations fixed
+- Only count valid backends instead of total backend combos
+- Import missing modules
+
 ## [v1.7.2] - 2024-08-19
 
 ### Added

@@ -1,6 +1,6 @@
 import os
 
-AUTOGGUF_VERSION = "v1.7.3"
+AUTOGGUF_VERSION = "v1.8.0"
 
 
 class _Localization:
