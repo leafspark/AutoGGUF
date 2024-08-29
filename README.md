@@ -128,8 +128,8 @@ To use a specific language, set the `AUTOGGUF_LANGUAGE` environment variable to 
 - Actual progress bar tracking 
 - Perplexity testing
 - Web API and management (partially implemented in v1.6.2)
-- ~~Themes~~ (added in v1.7.1)
-- ~~Sleek UI menubar~~ (added in v1.7.1)
+- HuggingFace upload/download (coming in the next release)
+- AutoFP8 quantization and bitsandbytes (coming in the next release)
 
 ## Troubleshooting
 
