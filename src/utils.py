@@ -8,6 +8,26 @@ from DownloadThread import DownloadThread
 from Localizations import *
 from error_handling import show_error
 from imports_and_globals import ensure_directory
+from KVOverrideEntry import KVOverrideEntry
+
+
+def add_kv_override(self, override_string=None) -> None:
+    entry = KVOverrideEntry()
+    entry.deleted.connect(self.remove_kv_override)
+    if override_string:
+        key, value = override_string.split("=")
+        type_, val = value.split(":")
+        entry.key_input.setText(key)
+        entry.type_combo.setCurrentText(type_)
+        entry.value_input.setText(val)
+    self.kv_override_layout.addWidget(entry)
+    self.kv_override_entries.append(entry)
+
+
+def remove_kv_override(self, entry) -> None:
+    self.kv_override_layout.removeWidget(entry)
+    self.kv_override_entries.remove(entry)
+    entry.deleteLater()
 
 
 def get_models_data(self) -> list[dict[str, Union[str, Any]]]:

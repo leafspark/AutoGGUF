@@ -1,4 +1,5 @@
 from PySide6.QtCore import *
+from PySide6.QtGui import QAction
 from PySide6.QtWidgets import *
 
 from Localizations import (
@@ -6,7 +7,16 @@ from Localizations import (
     CANCELLING_TASK,
     CONFIRM_DELETION_TITLE,
     CONFIRM_DELETION,
+    SHOWING_TASK_CONTEXT_MENU,
+    CANCELED,
+    CANCEL,
+    PROPERTIES,
+    COMPLETED,
+    SHOWING_PROPERTIES_FOR_TASK,
+    DELETE,
+    RESTART,
 )
+from ModelInfoDialog import ModelInfoDialog
 
 
 class TaskListItem(QWidget):
@@ -36,6 +46,52 @@ class TaskListItem(QWidget):
         self.progress_timer = QTimer(self)
         self.progress_timer.timeout.connect(self.update_progress)
         self.progress_value = 0
+
+    def show_task_context_menu(self, position) -> None:
+        self.logger.debug(SHOWING_TASK_CONTEXT_MENU)
+        item = self.task_list.itemAt(position)
+        if item is not None:
+            context_menu = QMenu(self)
+
+            properties_action = QAction(PROPERTIES, self)
+            properties_action.triggered.connect(lambda: self.show_task_properties(item))
+            context_menu.addAction(properties_action)
+
+            task_item = self.task_list.itemWidget(item)
+            if task_item.status != COMPLETED:
+                cancel_action = QAction(CANCEL, self)
+                cancel_action.triggered.connect(lambda: self.cancel_task(item))
+                context_menu.addAction(cancel_action)
+
+            if task_item.status == CANCELED:
+                restart_action = QAction(RESTART, self)
+                restart_action.triggered.connect(lambda: self.restart_task(task_item))
+                context_menu.addAction(restart_action)
+
+            delete_action = QAction(DELETE, self)
+            delete_action.triggered.connect(lambda: self.delete_task(item))
+            context_menu.addAction(delete_action)
+
+            context_menu.exec(self.task_list.viewport().mapToGlobal(position))
+
+    def show_task_properties(self, item) -> None:
+        self.logger.debug(SHOWING_PROPERTIES_FOR_TASK.format(item.text()))
+        task_item = self.task_list.itemWidget(item)
+        for thread in self.quant_threads:
+            if thread.log_file == task_item.log_file:
+                model_info_dialog = ModelInfoDialog(thread.model_info, self)
+
+                model_info_dialog.exec()
+                break
+
+    def cancel_task_by_item(self, item) -> None:
+        task_item = self.task_list.itemWidget(item)
+        for thread in self.quant_threads:
+            if thread.log_file == task_item.log_file:
+                thread.terminate()
+                task_item.update_status(CANCELED)
+                self.quant_threads.remove(thread)
+                break
 
     def cancel_task(self, item) -> None:
         self.logger.info(CANCELLING_TASK.format(item.text()))

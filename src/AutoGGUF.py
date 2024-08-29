@@ -1,36 +1,34 @@
+import importlib
 import json
 import re
 import shutil
-import importlib
-
-from functools import partial
 from datetime import datetime
-from typing import Tuple, Dict, List, Any
-from dotenv import load_dotenv
+from functools import partial
+from typing import Any, Dict, List, Tuple
+
+import requests
 from PySide6.QtCore import *
 from PySide6.QtGui import *
 from PySide6.QtWidgets import *
+from dotenv import load_dotenv
 
-from GPUMonitor import GPUMonitor
-from KVOverrideEntry import KVOverrideEntry
-from Logger import Logger
-from ModelInfoDialog import ModelInfoDialog
+import lora_conversion
+import presets
+import ui_update
+import utils
 from CustomTitleBar import CustomTitleBar
-from error_handling import show_error, handle_error
-from TaskListItem import TaskListItem
+from GPUMonitor import GPUMonitor
+from Localizations import *
+from Logger import Logger
 from QuantizationThread import QuantizationThread
+from TaskListItem import TaskListItem
+from error_handling import handle_error, show_error
 from imports_and_globals import (
+    ensure_directory,
     open_file_safe,
     resource_path,
     show_about,
-    ensure_directory,
 )
-from Localizations import *
-import presets
-import ui_update
-import lora_conversion
-import utils
-import requests
 
 
 class AutoGGUF(QMainWindow):
@@ -93,8 +91,13 @@ class AutoGGUF(QMainWindow):
         self.browse_imatrix = utils.browse_imatrix.__get__(self)
         self.get_models_data = utils.get_models_data.__get__(self)
         self.get_tasks_data = utils.get_tasks_data.__get__(self)
+        self.add_kv_override = partial(utils.add_kv_override, self)
+        self.remove_kv_override = partial(utils.remove_kv_override, self)
         self.cancel_task = partial(TaskListItem.cancel_task, self)
         self.delete_task = partial(TaskListItem.delete_task, self)
+        self.show_task_context_menu = partial(TaskListItem.show_task_context_menu, self)
+        self.show_task_properties = partial(TaskListItem.show_task_properties, self)
+        self.cancel_task_by_item = partial(TaskListItem.cancel_task_by_item, self)
         self.toggle_gpu_offload_auto = partial(ui_update.toggle_gpu_offload_auto, self)
         self.update_threads_spinbox = partial(ui_update.update_threads_spinbox, self)
         self.update_threads_slider = partial(ui_update.update_threads_slider, self)
@@ -1171,51 +1174,6 @@ class AutoGGUF(QMainWindow):
             if os.path.exists(partial_file):
                 os.remove(partial_file)
 
-    def show_task_context_menu(self, position) -> None:
-        self.logger.debug(SHOWING_TASK_CONTEXT_MENU)
-        item = self.task_list.itemAt(position)
-        if item is not None:
-            context_menu = QMenu(self)
-
-            properties_action = QAction(PROPERTIES, self)
-            properties_action.triggered.connect(lambda: self.show_task_properties(item))
-            context_menu.addAction(properties_action)
-
-            task_item = self.task_list.itemWidget(item)
-            if task_item.status != COMPLETED:
-                cancel_action = QAction(CANCEL, self)
-                cancel_action.triggered.connect(lambda: self.cancel_task(item))
-                context_menu.addAction(cancel_action)
-
-            if task_item.status == CANCELED:
-                restart_action = QAction(RESTART, self)
-                restart_action.triggered.connect(lambda: self.restart_task(task_item))
-                context_menu.addAction(restart_action)
-
-            delete_action = QAction(DELETE, self)
-            delete_action.triggered.connect(lambda: self.delete_task(item))
-            context_menu.addAction(delete_action)
-
-            context_menu.exec(self.task_list.viewport().mapToGlobal(position))
-
-    def show_task_properties(self, item) -> None:
-        self.logger.debug(SHOWING_PROPERTIES_FOR_TASK.format(item.text()))
-        task_item = self.task_list.itemWidget(item)
-        for thread in self.quant_threads:
-            if thread.log_file == task_item.log_file:
-                model_info_dialog = ModelInfoDialog(thread.model_info, self)
-                model_info_dialog.exec()
-                break
-
-    def cancel_task_by_item(self, item) -> None:
-        task_item = self.task_list.itemWidget(item)
-        for thread in self.quant_threads:
-            if thread.log_file == task_item.log_file:
-                thread.terminate()
-                task_item.update_status(CANCELED)
-                self.quant_threads.remove(thread)
-                break
-
     def create_label(self, text, tooltip) -> QLabel:
         label = QLabel(text)
         label.setToolTip(tooltip)
@@ -1336,23 +1294,6 @@ class AutoGGUF(QMainWindow):
 
         if errors:
             raise ValueError("\n".join(errors))
-
-    def add_kv_override(self, override_string=None) -> None:
-        entry = KVOverrideEntry()
-        entry.deleted.connect(self.remove_kv_override)
-        if override_string:
-            key, value = override_string.split("=")
-            type_, val = value.split(":")
-            entry.key_input.setText(key)
-            entry.type_combo.setCurrentText(type_)
-            entry.value_input.setText(val)
-        self.kv_override_layout.addWidget(entry)
-        self.kv_override_entries.append(entry)
-
-    def remove_kv_override(self, entry) -> None:
-        self.kv_override_layout.removeWidget(entry)
-        self.kv_override_entries.remove(entry)
-        entry.deleteLater()
 
     def quantize_model(self) -> None:
         self.logger.info(STARTING_MODEL_QUANTIZATION)
