@@ -179,7 +179,12 @@ def convert_lora(self) -> None:
                 raise ValueError(BASE_MODEL_PATH_REQUIRED)
             command.extend(["--base", base_model_path])
         else:  # Use old GGML parameters for GGML
-            command = ["python", "src/convert_lora_to_ggml.py", lora_input_path]
+            command = [
+                "python",
+                "src/convert_lora_to_ggml.py",
+                lora_input_path,
+                lora_output_path,
+            ]
 
         logs_path = self.logs_input.text()
         ensure_directory(logs_path)
@@ -203,11 +208,7 @@ def convert_lora(self) -> None:
         self.task_list.setItemWidget(list_item, task_item)
 
         thread.status_signal.connect(task_item.update_status)
-        thread.finished_signal.connect(
-            lambda: self.lora_conversion_finished(
-                thread, lora_input_path, lora_output_path
-            )
-        )
+        thread.finished_signal.connect(lambda: self.lora_conversion_finished(thread))
         thread.error_signal.connect(
             lambda err: handle_error(self.logger, err, task_item)
         )

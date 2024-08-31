@@ -1099,21 +1099,10 @@ class AutoGGUF(QMainWindow):
                 task_item.update_status(IN_PROGRESS)
                 break
 
-    def lora_conversion_finished(self, thread, input_path, output_path) -> None:
+    def lora_conversion_finished(self, thread) -> None:
         self.logger.info(LORA_CONVERSION_FINISHED)
         if thread in self.quant_threads:
             self.quant_threads.remove(thread)
-        try:
-            # Only move the file if the output type is GGML
-            if self.lora_output_type_combo.currentText() == "GGML":
-                source_file = os.path.join(input_path, "ggml-adapter-model.bin")
-                if os.path.exists(source_file):
-                    shutil.move(source_file, output_path)
-                    self.logger.info(LORA_FILE_MOVED.format(source_file, output_path))
-                else:
-                    self.logger.warning(LORA_FILE_NOT_FOUND.format(source_file))
-        except Exception as e:
-            self.logger.error(ERROR_MOVING_LORA_FILE.format(str(e)))
 
     def download_finished(self, extract_dir) -> None:
         self.logger.info(DOWNLOAD_FINISHED_EXTRACTED_TO.format(extract_dir))

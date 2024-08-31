@@ -58,7 +58,7 @@ def pyinstaller_include():
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
-        logger.info(f"Usage: python {sys.argv[0]} <path> [arch]")
+        logger.info(f"Usage: python {sys.argv[0]} <path> <output_path> [arch]")
         logger.info(
             "Path must contain HuggingFace PEFT LoRA files 'adapter_config.json' and 'adapter_model.bin'"
         )
@@ -69,7 +69,7 @@ if __name__ == "__main__":
 
     input_json = os.path.join(sys.argv[1], "adapter_config.json")
     input_model = os.path.join(sys.argv[1], "adapter_model.bin")
-    output_path = os.path.join(sys.argv[1], "ggml-adapter-model.bin")
+    output_path = sys.argv[2]
 
     if os.path.exists(input_model):
         model = torch.load(input_model, map_location="cpu")
@@ -80,7 +80,7 @@ if __name__ == "__main__":
 
         model = load_file(input_model, device="cpu")
 
-    arch_name = sys.argv[2] if len(sys.argv) == 3 else "llama"
+    arch_name = sys.argv[3] if len(sys.argv) == 4 else "llama"
 
     if arch_name not in gguf.MODEL_ARCH_NAMES.values():
         logger.error(f"Error: unsupported architecture {arch_name}")
@@ -89,7 +89,7 @@ if __name__ == "__main__":
     arch = list(gguf.MODEL_ARCH_NAMES.keys())[
         list(gguf.MODEL_ARCH_NAMES.values()).index(arch_name)
     ]
-    name_map = gguf.TensorNameMap(arch, 200)  # 200 layers ought to be enough for anyone
+    name_map = gguf.TensorNameMap(arch, 500)
 
     with open(input_json, "r") as f:
         params = json.load(f)
