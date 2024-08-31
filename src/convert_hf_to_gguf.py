@@ -69,6 +69,7 @@ class Model:
     model_name: str | None
     metadata_override: Path | None
     dir_model_card: Path
+    is_lora: bool
 
     model_arch: gguf.MODEL_ARCH
 
@@ -86,6 +87,7 @@ class Model:
         split_max_size: int = 0,
         dry_run: bool = False,
         small_first_shard: bool = False,
+        is_lora: bool = False,
     ):
         if type(self) is Model:
             raise TypeError(
@@ -118,6 +120,7 @@ class Model:
         self.metadata_override = metadata_override
         self.model_name = model_name
         self.dir_model_card = dir_model
+        self.is_lora = is_lora
 
         if self.ftype == gguf.LlamaFileType.GUESSED:
 
@@ -381,6 +384,7 @@ class Model:
                             gguf.MODEL_TENSOR.FFN_GATE_INP,
                             gguf.MODEL_TENSOR.POS_EMBD,
                             gguf.MODEL_TENSOR.TOKEN_TYPES,
+                            gguf.MODEL_TENSOR.SSM_CONV1D,
                         )
                     )
                     or not name.endswith(".weight")
@@ -1831,7 +1835,10 @@ class LlamaModel(Model):
         if rope_scaling := self.find_hparam(["rope_scaling"], optional=True):
             if rope_scaling.get("rope_type", "").lower() == "llama3":
                 base = self.hparams.get("rope_theta", 10000.0)
-                dim = self.hparams["hidden_size"] // self.hparams["num_attention_heads"]
+                dim = self.hparams.get(
+                    "head_dim",
+                    self.hparams["hidden_size"] // self.hparams["num_attention_heads"],
+                )
                 freqs = 1.0 / (
                     base ** (torch.arange(0, dim, 2, dtype=torch.float32) / dim)
                 )
@@ -1860,10 +1867,11 @@ class LlamaModel(Model):
                         )
                         rope_factors.append(1 / ((1 - smooth) / factor + smooth))
 
-                self.gguf_writer.add_tensor(
-                    self.format_tensor_name(gguf.MODEL_TENSOR.ROPE_FREQS),
-                    np.array(rope_factors, dtype=np.float32),
-                )
+                if not self.is_lora:
+                    self.gguf_writer.add_tensor(
+                        self.format_tensor_name(gguf.MODEL_TENSOR.ROPE_FREQS),
+                        np.array(rope_factors, dtype=np.float32),
+                    )
 
         super().prepare_tensors()
 
@@ -2472,14 +2480,15 @@ class Phi3MiniModel(Model):
                 f"The length of rope long and short factors must be {rope_dims / 2}"
             )
 
-        self.gguf_writer.add_tensor(
-            gguf.TENSOR_NAMES[gguf.MODEL_TENSOR.ROPE_FACTORS_LONG] + ".weight",
-            np.array(long_factors, dtype=np.float32),
-        )
-        self.gguf_writer.add_tensor(
-            gguf.TENSOR_NAMES[gguf.MODEL_TENSOR.ROPE_FACTORS_SHORT] + ".weight",
-            np.array(short_factors, dtype=np.float32),
-        )
+        if not self.is_lora:
+            self.gguf_writer.add_tensor(
+                gguf.TENSOR_NAMES[gguf.MODEL_TENSOR.ROPE_FACTORS_LONG] + ".weight",
+                np.array(long_factors, dtype=np.float32),
+            )
+            self.gguf_writer.add_tensor(
+                gguf.TENSOR_NAMES[gguf.MODEL_TENSOR.ROPE_FACTORS_SHORT] + ".weight",
+                np.array(short_factors, dtype=np.float32),
+            )
 
 
 @Model.register("PlamoForCausalLM")
@@ -3081,7 +3090,7 @@ class StarCoder2Model(Model):
     model_arch = gguf.MODEL_ARCH.STARCODER2
 
 
-@Model.register("MambaForCausalLM", "MambaLMHeadModel")
+@Model.register("MambaForCausalLM", "MambaLMHeadModel", "FalconMambaForCausalLM")
 class MambaModel(Model):
     model_arch = gguf.MODEL_ARCH.MAMBA
 
@@ -3117,6 +3126,10 @@ class MambaModel(Model):
             self.find_hparam(["layer_norm_epsilon", "rms_norm_eps"], optional=True)
             or 1e-5
         )
+        use_dt_b_c_norm = False
+
+        if self.find_hparam(["model_type"], optional=True) in ("falcon_mamba",):
+            use_dt_b_c_norm = True
 
         assert d_inner == 2 * d_model
 
@@ -3124,12 +3137,13 @@ class MambaModel(Model):
         self.gguf_writer.add_embedding_length(d_model)
         self.gguf_writer.add_feed_forward_length(0)
         self.gguf_writer.add_head_count(0)
-        self.gguf_writer.add_block_count(self.hparams["n_layer"])
+        self.gguf_writer.add_block_count(self.block_count)
         self.gguf_writer.add_ssm_conv_kernel(d_conv)
         self.gguf_writer.add_ssm_inner_size(d_inner)
         self.gguf_writer.add_ssm_state_size(d_state)
         self.gguf_writer.add_ssm_time_step_rank(dt_rank)
         self.gguf_writer.add_layer_norm_rms_eps(rms_norm_eps)
+        self.gguf_writer.add_ssm_dt_b_c_rms(use_dt_b_c_norm)
         self.gguf_writer.add_file_type(self.ftype)
 
     _tok_embd = None
@@ -3158,25 +3172,6 @@ class MambaModel(Model):
             self._tok_embd = data_torch
 
         return [(new_name, data_torch)]
-
-    def tensor_force_quant(
-        self, name: str, new_name: str, bid: int | None, n_dims: int
-    ) -> gguf.GGMLQuantizationType | bool:
-        if bid is not None and new_name in (
-            self.format_tensor_name(
-                n, bid, ".weight" if name.endswith(".weight") else ""
-            )
-            for n in [
-                gguf.MODEL_TENSOR.SSM_CONV1D,
-                gguf.MODEL_TENSOR.SSM_X,
-                gguf.MODEL_TENSOR.SSM_DT,
-                gguf.MODEL_TENSOR.SSM_A,
-                gguf.MODEL_TENSOR.SSM_D,
-            ]
-        ):
-            return gguf.GGMLQuantizationType.F32
-
-        return super().tensor_force_quant(name, new_name, bid, n_dims)
 
 
 @Model.register("CohereForCausalLM")
@@ -4301,7 +4296,10 @@ class ExaoneModel(Model):
         if rope_scaling := self.find_hparam(["rope_scaling"], optional=True):
             if rope_scaling.get("rope_type", "").lower() == "llama3":
                 base = self.hparams.get("rope_theta", 10000.0)
-                dim = self.hparams["hidden_size"] // self.hparams["num_attention_heads"]
+                dim = self.hparams.get(
+                    "head_dim",
+                    self.hparams["hidden_size"] // self.hparams["num_attention_heads"],
+                )
                 freqs = 1.0 / (
                     base ** (torch.arange(0, dim, 2, dtype=torch.float32) / dim)
                 )
@@ -4330,10 +4328,11 @@ class ExaoneModel(Model):
                         )
                         rope_factors.append(1 / ((1 - smooth) / factor + smooth))
 
-                self.gguf_writer.add_tensor(
-                    self.format_tensor_name(gguf.MODEL_TENSOR.ROPE_FREQS),
-                    np.array(rope_factors, dtype=np.float32),
-                )
+                if not self.is_lora:
+                    self.gguf_writer.add_tensor(
+                        self.format_tensor_name(gguf.MODEL_TENSOR.ROPE_FREQS),
+                        np.array(rope_factors, dtype=np.float32),
+                    )
 
         super().prepare_tensors()
 
@@ -4403,82 +4402,26 @@ class LazyTorchTensor(gguf.LazyBase):
 
 
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="")
-    parser.add_argument(
-        "--vocab-only",
-        action="store_true",
-        help="",
-    )
-    parser.add_argument(
-        "--outfile",
-        type=Path,
-        help="",
-    )
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--vocab-only", action="store_true")
+    parser.add_argument("--outfile", type=Path)
     parser.add_argument(
         "--outtype",
         type=str,
         choices=["f32", "f16", "bf16", "q8_0", "auto"],
         default="f16",
-        help="",
     )
-    parser.add_argument(
-        "--bigendian",
-        action="store_true",
-        help="",
-    )
-    parser.add_argument(
-        "model",
-        type=Path,
-        help="",
-    )
-    parser.add_argument(
-        "--use-temp-file",
-        action="store_true",
-        help="",
-    )
-    parser.add_argument(
-        "--no-lazy",
-        action="store_true",
-        help="",
-    )
-    parser.add_argument(
-        "--model-name",
-        type=str,
-        default=None,
-        help="",
-    )
-    parser.add_argument(
-        "--verbose",
-        action="store_true",
-        help="",
-    )
-    parser.add_argument(
-        "--split-max-tensors",
-        type=int,
-        default=0,
-        help="",
-    )
-    parser.add_argument(
-        "--split-max-size",
-        type=str,
-        default="0",
-        help="",
-    )
-    parser.add_argument(
-        "--dry-run",
-        action="store_true",
-        help="",
-    )
-    parser.add_argument(
-        "--no-tensor-first-split",
-        action="store_true",
-        help="",
-    )
-    parser.add_argument(
-        "--metadata",
-        type=Path,
-        help="",
-    )
+    parser.add_argument("--bigendian", action="store_true")
+    parser.add_argument("model", type=Path)
+    parser.add_argument("--use-temp-file", action="store_true")
+    parser.add_argument("--no-lazy", action="store_true")
+    parser.add_argument("--model-name", type=str, default=None)
+    parser.add_argument("--verbose", action="store_true")
+    parser.add_argument("--split-max-tensors", type=int, default=0)
+    parser.add_argument("--split-max-size", type=str, default="0")
+    parser.add_argument("--dry-run", action="store_true")
+    parser.add_argument("--no-tensor-first-split", action="store_true")
+    parser.add_argument("--metadata", type=Path)
 
     return parser.parse_args()
 

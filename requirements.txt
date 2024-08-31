@@ -11,3 +11,4 @@ python-dotenv~=1.0.1
 safetensors~=0.4.4
 setuptools~=68.2.0
 huggingface-hub~=0.24.6
+transformers~=4.44.2

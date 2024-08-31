@@ -28,7 +28,6 @@ if "NO_LOCAL_GGUF" not in os.environ:
     sys.path.insert(1, str(Path(__file__).parent / "gguf-py"))
 import gguf
 
-# reuse model definitions from convert_hf_to_gguf.py
 from convert_hf_to_gguf import LazyTorchTensor, Model
 
 logger = logging.getLogger("lora-to-gguf")
@@ -40,10 +39,9 @@ class PartialLoraTensor:
     B: Tensor | None = None
 
 
-# magic to support tensor shape modifications and splitting
 class LoraTorchTensor:
-    _lora_A: Tensor  # (n_rank, row_size)
-    _lora_B: Tensor  # (col_size, n_rank)
+    _lora_A: Tensor
+    _lora_B: Tensor
     _rank: int
 
     def __init__(self, A: Tensor, B: Tensor):
@@ -61,20 +59,14 @@ class LoraTorchTensor:
 
     def __getitem__(
         self,
-        indices: (
-            SupportsIndex
-            | slice
-            | tuple[
-                SupportsIndex | slice | Tensor, ...
-            ]  # TODO: add ellipsis in the type signature
-        ),
+        indices: SupportsIndex | slice | tuple[SupportsIndex | slice | Tensor, ...],
     ) -> LoraTorchTensor:
         shape = self.shape
         if isinstance(indices, SupportsIndex):
             if len(shape) > 2:
                 return LoraTorchTensor(self._lora_A[indices], self._lora_B[indices])
             else:
-                raise NotImplementedError  # can't return a vector
+                raise NotImplementedError
         elif isinstance(indices, slice):
             if len(shape) > 2:
                 return LoraTorchTensor(self._lora_A[indices], self._lora_B[indices])
@@ -84,7 +76,7 @@ class LoraTorchTensor:
             assert len(indices) > 0
             if indices[-1] is Ellipsis:
                 return self[indices[:-1]]
-            # expand ellipsis
+
             indices = tuple(
                 u
                 for v in (
@@ -104,7 +96,6 @@ class LoraTorchTensor:
                     *(slice(None, None) for _ in range(len(indices), len(shape))),
                 )
 
-            # TODO: make sure this is correct
             indices_A = (
                 *(
                     (
@@ -120,7 +111,7 @@ class LoraTorchTensor:
             indices_B = indices[:-1]
             return LoraTorchTensor(self._lora_A[indices_A], self._lora_B[indices_B])
         else:
-            raise NotImplementedError  # unknown indice type
+            raise NotImplementedError
 
     @property
     def dtype(self) -> torch.dtype:
@@ -143,9 +134,8 @@ class LoraTorchTensor:
             new_shape = cast(tuple[int, ...], shape)
         orig_shape = self.shape
         if len(new_shape) < 2:
-            raise NotImplementedError  # can't become a vector
+            raise NotImplementedError
 
-        # expand -1 in the shape
         if any(dim == -1 for dim in new_shape):
             n_elems = prod(orig_shape)
             n_new_elems = prod(dim if dim != -1 else 1 for dim in new_shape)
@@ -155,7 +145,7 @@ class LoraTorchTensor:
             )
 
         if new_shape[-1] != orig_shape[-1]:
-            raise NotImplementedError  # can't reshape the row size trivially
+            raise NotImplementedError
 
         shape_A = (*(1 for _ in new_shape[:-2]), self._rank, orig_shape[-1])
         shape_B = (*new_shape[:-1], self._rank)
@@ -174,7 +164,7 @@ class LoraTorchTensor:
         shape = self.shape
         dims = tuple(dim - len(shape) if dim >= 0 else dim for dim in dims)
         if dims[-1] == -1:
-            # TODO: support higher dimensional A shapes bigger than 1
+
             assert all(dim == 1 for dim in self._lora_A.shape[:-2])
             return LoraTorchTensor(self._lora_A, self._lora_B.permute(*dims))
         if len(shape) == 2 and dims[-1] == -2 and dims[-2] == -1:
@@ -182,7 +172,7 @@ class LoraTorchTensor:
                 self._lora_B.permute(*dims), self._lora_A.permute(*dims)
             )
         else:
-            # TODO: compose the above two
+
             raise NotImplementedError
 
     def transpose(self, dim0: int, dim1: int) -> LoraTorchTensor:
@@ -201,7 +191,7 @@ class LoraTorchTensor:
 
     @classmethod
     def __torch_function__(cls, func: Callable, types, args=(), kwargs=None):
-        del types  # unused
+        del types
 
         if kwargs is None:
             kwargs = {}
@@ -245,58 +235,21 @@ def get_base_tensor_name(lora_tensor_name: str) -> str:
     return base_name
 
 
-def pyinstaller_include():
-    # PyInstaller import
-    pass
-
-
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(
-        description="Convert a huggingface PEFT LoRA adapter to a GGML compatible file"
-    )
-    parser.add_argument(
-        "--outfile",
-        type=Path,
-        help="path to write to; default: based on input. {ftype} will be replaced by the outtype.",
-    )
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--outfile", type=Path)
     parser.add_argument(
         "--outtype",
         type=str,
         choices=["f32", "f16", "bf16", "q8_0", "auto"],
         default="f16",
-        help="output format - use f32 for float32, f16 for float16, bf16 for bfloat16, q8_0 for Q8_0, auto for the highest-fidelity 16-bit float type depending on the first loaded tensor type",
     )
-    parser.add_argument(
-        "--bigendian",
-        action="store_true",
-        help="model is executed on big endian machine",
-    )
-    parser.add_argument(
-        "--no-lazy",
-        action="store_true",
-        help="use more RAM by computing all outputs before writing (use in case lazy evaluation is broken)",
-    )
-    parser.add_argument(
-        "--verbose",
-        action="store_true",
-        help="increase output verbosity",
-    )
-    parser.add_argument(
-        "--dry-run",
-        action="store_true",
-        help="only print out what will be done, without writing any new files",
-    )
-    parser.add_argument(
-        "--base",
-        type=Path,
-        required=True,
-        help="directory containing base model file",
-    )
-    parser.add_argument(
-        "lora_path",
-        type=Path,
-        help="directory containing LoRA adapter file",
-    )
+    parser.add_argument("--bigendian", action="store_true")
+    parser.add_argument("--no-lazy", action="store_true")
+    parser.add_argument("--verbose", action="store_true")
+    parser.add_argument("--dry-run", action="store_true")
+    parser.add_argument("--base", type=Path, required=True)
+    parser.add_argument("lora_path", type=Path)
 
     return parser.parse_args()
 
@@ -323,11 +276,11 @@ if __name__ == "__main__":
     if args.outfile is not None:
         fname_out = args.outfile
     else:
-        # output in the same directory as the model by default
+
         fname_out = dir_lora
 
     if os.path.exists(input_model):
-        # lazy import load_file only if lora is in safetensors format.
+
         from safetensors.torch import load_file
 
         lora_model = load_file(input_model, device="cpu")
@@ -335,7 +288,6 @@ if __name__ == "__main__":
         input_model = os.path.join(dir_lora, "adapter_model.bin")
         lora_model = torch.load(input_model, map_location="cpu", weights_only=True)
 
-    # load base model
     logger.info(f"Loading base model: {dir_base_model.name}")
     hparams = Model.load_hparams(dir_base_model)
     with torch.inference_mode():
@@ -431,6 +383,7 @@ if __name__ == "__main__":
             dry_run=args.dry_run,
             dir_lora_model=dir_lora,
             lora_alpha=alpha,
+            is_lora=True,
         )
 
         logger.info("Exporting model...")
