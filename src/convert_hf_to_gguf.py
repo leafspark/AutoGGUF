@@ -419,7 +419,7 @@ class Model:
                 shape_str = f"{{{', '.join(str(n) for n in reversed(shape))}}}"
 
                 logger.info(
-                    f"{f'%-{max_name_len}s' % f'{new_name},'} {old_dtype} --> {data_qtype.name}, shape = {shape_str}"
+                    f"{f'%s-{max_name_len}s' % f'{new_name},'} {old_dtype} --> {data_qtype.name}, shape = {shape_str}"
                 )
 
                 self.gguf_writer.add_tensor(new_name, data, raw_dtype=data_qtype)
@@ -1132,7 +1132,6 @@ class MPTModel(Model):
         try:
             self._set_vocab_gpt2()
         except Exception:
-
             self._set_vocab_sentencepiece()
             self.gguf_writer.add_add_bos_token(False)
             self.gguf_writer.add_pad_token_id(3)
@@ -4125,7 +4124,7 @@ class ChatGLMModel(Model):
             if len(token) == 1:
                 continue
             merged = ChatGLMModel.bpe(mergeable_ranks, token, max_rank=rank)
-            assert len(merged) >= 2 and len(merged) <= 7
+            assert 2 <= len(merged) <= 7
             merges.append(" ".join(map(ChatGLMModel.token_bytes_to_string, merged)))
 
         added_vocab = tokenizer.get_added_vocab()

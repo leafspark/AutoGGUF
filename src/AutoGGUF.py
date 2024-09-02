@@ -35,9 +35,8 @@ class AutoGGUF(QMainWindow):
 
     def __init__(self, args: List[str]) -> None:
         super().__init__()
-        self.logger = Logger("AutoGGUF", "logs")
-
         width, height = self.parse_resolution()
+        self.logger = Logger("AutoGGUF", "logs")
 
         self.logger.info(INITIALIZING_AUTOGGUF)
         self.setWindowTitle(WINDOW_TITLE)
@@ -107,7 +106,7 @@ class AutoGGUF(QMainWindow):
         self.update_gpu_offload_slider = partial(
             ui_update.update_gpu_offload_slider, self
         )
-        self.update_model_info = partial(ui_update.update_model_info, self.logger, self)
+        self.update_model_info = partial(ui_update.update_model_info, self.logger)
         self.update_system_info = partial(ui_update.update_system_info, self)
         self.update_download_progress = partial(
             ui_update.update_download_progress, self
@@ -792,6 +791,8 @@ class AutoGGUF(QMainWindow):
                 default_theme = f.read()
             self.setStyleSheet(default_theme)
 
+        self.imported_models = []
+
         # Load models
         self.load_models()
 
@@ -1089,7 +1090,7 @@ class AutoGGUF(QMainWindow):
                 self.quant_threads.append(new_thread)
                 new_thread.status_signal.connect(task_item.update_status)
                 new_thread.finished_signal.connect(
-                    lambda: self.task_finished(new_thread)
+                    lambda: self.task_finished(new_thread, task_item)
                 )
                 new_thread.error_signal.connect(
                     lambda err: handle_error(self.logger, err, task_item)
@@ -1173,7 +1174,7 @@ class AutoGGUF(QMainWindow):
             with open(file_path, "rb") as f:
                 magic = f.read(4)
                 return magic == b"GGUF"
-        except Exception:
+        except (FileNotFoundError, IOError, OSError):
             return False
 
     def load_models(self) -> None:
@@ -1454,7 +1455,7 @@ class AutoGGUF(QMainWindow):
 
     def parse_progress(self, line, task_item) -> None:
         # Parses the output line for progress information and updates the task item.
-        match = re.search(r"\[\s*(\d+)\s*/\s*(\d+)\s*\].*", line)
+        match = re.search(r"\[\s*(\d+)\s*/\s*(\d+)\s*].*", line)
         if match:
             current = int(match.group(1))
             total = int(match.group(2))
@@ -1516,8 +1517,6 @@ class AutoGGUF(QMainWindow):
                 QMessageBox.StandardButton.No,
             )
             if reply == QMessageBox.StandardButton.Yes:
-                if not hasattr(self, "imported_models"):
-                    self.imported_models = []
                 self.imported_models.append(file_path)
                 self.load_models()
                 self.logger.info(MODEL_IMPORTED_SUCCESSFULLY.format(file_name))
@@ -1596,7 +1595,9 @@ class AutoGGUF(QMainWindow):
             self.task_list.setItemWidget(list_item, task_item)
 
             thread.status_signal.connect(task_item.update_status)
-            thread.finished_signal.connect(lambda: self.task_finished(thread))
+            thread.finished_signal.connect(
+                lambda: self.task_finished(thread, task_item)
+            )
             thread.error_signal.connect(
                 lambda err: handle_error(self.logger, err, task_item)
             )

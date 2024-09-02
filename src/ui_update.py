@@ -12,7 +12,7 @@ def toggle_gpu_offload_auto(self, state) -> None:
     self.gpu_offload_spinbox.setEnabled(not is_auto)
 
 
-def update_model_info(logger, self, model_info) -> None:
+def update_model_info(logger, model_info) -> None:
     logger.debug(UPDATING_MODEL_INFO.format(model_info))
     pass
 

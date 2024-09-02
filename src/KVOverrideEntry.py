@@ -61,7 +61,6 @@ class KVOverrideEntry(QWidget):
             "{system.hostname}": lambda: socket.gethostname(),
             "{system.platform}": lambda: platform.system(),
             "{system.python.version}": lambda: platform.python_version(),
-            "{system.time.milliseconds}": lambda: str(int(time.time() * 1000)),
             "{system.date}": lambda: datetime.now().strftime("%Y-%m-%d"),
             "{model.name}": lambda: (
                 model_name if model_name is not None else "Unknown Model"
