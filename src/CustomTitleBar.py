@@ -1,4 +1,4 @@
-from PySide6.QtCore import QPoint
+from PySide6.QtCore import QPoint, Qt
 from PySide6.QtWidgets import QHBoxLayout, QLabel, QMenuBar, QPushButton, QWidget
 
 
@@ -43,7 +43,29 @@ class CustomTitleBar(QWidget):
             """
             )
 
+        # Enable mouse tracking for smoother movement
+        self.setMouseTracking(True)
+
+        # Add maximize button
+        self.maximize_button = QPushButton("□")
+        self.maximize_button.setFixedSize(30, 30)
+        self.maximize_button.setStyleSheet(
+            """
+            QPushButton {
+                border: none;
+                background-color: transparent;
+                padding: 2px;
+                font-size: 15px;
+            }
+            QPushButton:hover {
+                background-color: rgba(255, 255, 255, 0.1);
+            }
+        """
+        )
+        self.maximize_button.clicked.connect(self.toggle_maximize)
+
         layout.addWidget(self.minimize_button)
+        layout.addWidget(self.maximize_button)
         layout.addWidget(self.close_button)
 
         self.minimize_button.clicked.connect(self.parent.showMinimized)
@@ -51,22 +73,40 @@ class CustomTitleBar(QWidget):
 
         self.start = QPoint(0, 0)
         self.pressing = False
+        self.isMaximized = False  # Flag to track maximization state
+        self.normal_size = None  # Store the normal window size
 
     def mousePressEvent(self, event) -> None:
-        self.start = self.mapToGlobal(event.pos())
-        self.pressing = True
+        if event.button() == Qt.LeftButton:
+            self.start = event.globalPos() - self.parent.frameGeometry().topLeft()
+            self.pressing = True
 
     def mouseMoveEvent(self, event) -> None:
         if self.pressing:
-            end = self.mapToGlobal(event.pos())
-            movement = end - self.start
-            self.parent.setGeometry(
-                self.parent.x() + movement.x(),
-                self.parent.y() + movement.y(),
-                self.parent.width(),
-                self.parent.height(),
-            )
-            self.start = end
+            new_pos = event.globalPos() - self.start
+            screen = self.parent.screen()
+            screen_geo = screen.availableGeometry()
+
+            # Check if the new position would put the titlebar below the taskbar
+            if (
+                new_pos.y() + self.parent.height() > screen_geo.bottom()
+            ):  # Use screen_geo.bottom()
+                new_pos.setY(screen_geo.bottom() - self.parent.height())
+
+            self.parent.move(new_pos)
 
     def mouseReleaseEvent(self, event) -> None:
         self.pressing = False
+
+    def toggle_maximize(self):
+        if self.isMaximized:
+            self.parent.showNormal()
+            if self.normal_size:
+                self.parent.resize(self.normal_size)
+            self.maximize_button.setText("□")  # Change back to maximize symbol
+            self.isMaximized = False
+        else:
+            self.normal_size = self.parent.size()  # Store the current size
+            self.parent.showMaximized()
+            self.maximize_button.setText("❐")  # Change to restore symbol
+            self.isMaximized = True
