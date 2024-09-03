@@ -151,6 +151,12 @@ class AutoGGUF(QMainWindow):
         about_action.triggered.connect(self.show_about)
         help_menu.addAction(about_action)
 
+        # Tools menu
+        tools_menu = self.menubar.addMenu("&Tools")
+        autofp8_action = QAction("&AutoFP8", self)
+        autofp8_action.triggered.connect(self.show_autofp8_window)
+        tools_menu.addAction(autofp8_action)
+
         # Content widget
         content_widget = QWidget()
         content_layout = QHBoxLayout(content_widget)
@@ -1010,6 +1016,91 @@ class AutoGGUF(QMainWindow):
         if outfile:
             self.hf_outfile.setText(os.path.abspath(outfile))
 
+    def quantize_to_fp8_dynamic(self, model_dir: str, output_dir: str) -> None:
+        self.logger.info(f"Quantizing {os.path.basename(model_dir)} to {output_dir}")
+        try:
+            command = [
+                "python",
+                "src/quantize_to_fp8_dynamic.py",
+                model_dir,
+                output_dir,
+            ]
+
+            logs_path = self.logs_input.text()
+            ensure_directory(logs_path)
+
+            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+            log_file = os.path.join(logs_path, f"autofp8_{timestamp}.log")
+
+            thread = QuantizationThread(command, os.getcwd(), log_file)
+            self.quant_threads.append(thread)
+
+            task_name = f"Quantizing {os.path.basename(model_dir)} with AutoFP8"
+            task_item = TaskListItem(task_name, log_file, show_progress_bar=False)
+            list_item = QListWidgetItem(self.task_list)
+            list_item.setSizeHint(task_item.sizeHint())
+            self.task_list.addItem(list_item)
+            self.task_list.setItemWidget(list_item, task_item)
+
+            thread.status_signal.connect(task_item.update_status)
+            thread.finished_signal.connect(
+                lambda: self.task_finished(thread, task_item)
+            )
+            thread.error_signal.connect(
+                lambda err: handle_error(self.logger, err, task_item)
+            )
+            thread.start()
+
+        except Exception as e:
+            show_error(self.logger, f"Error starting AutoFP8 quantization: {e}")
+        self.logger.info("AutoFP8 quantization task started")
+
+    def show_autofp8_window(self):
+        dialog = QDialog(self)
+        dialog.setWindowTitle("Quantize to FP8 Dynamic")
+        dialog.setFixedWidth(500)
+        layout = QVBoxLayout()
+
+        # Input path
+        input_layout = QHBoxLayout()
+        self.fp8_input = QLineEdit()
+        input_button = QPushButton(BROWSE)
+        input_button.clicked.connect(
+            lambda: self.fp8_input.setText(
+                QFileDialog.getExistingDirectory(self, "Open Model Folder")
+            )
+        )
+        input_layout.addWidget(QLabel("Input Model:"))
+        input_layout.addWidget(self.fp8_input)
+        input_layout.addWidget(input_button)
+        layout.addLayout(input_layout)
+
+        # Output path
+        output_layout = QHBoxLayout()
+        self.fp8_output = QLineEdit()
+        output_button = QPushButton(BROWSE)
+        output_button.clicked.connect(
+            lambda: self.fp8_output.setText(
+                QFileDialog.getExistingDirectory(self, "Open Model Folder")
+            )
+        )
+        output_layout.addWidget(QLabel("Output Path:"))
+        output_layout.addWidget(self.fp8_output)
+        output_layout.addWidget(output_button)
+        layout.addLayout(output_layout)
+
+        # Quantize button
+        quantize_button = QPushButton("Quantize")
+        quantize_button.clicked.connect(
+            lambda: self.quantize_to_fp8_dynamic(
+                self.fp8_input.text(), self.fp8_output.text()
+            )
+        )
+        layout.addWidget(quantize_button)
+
+        dialog.setLayout(layout)
+        dialog.exec()
+
     def convert_hf_to_gguf(self) -> None:
         self.logger.info(STARTING_HF_TO_GGUF_CONVERSION)
         try:
@@ -1346,10 +1437,12 @@ class AutoGGUF(QMainWindow):
                     output_name_parts.append("rq")
 
                 # Check for KV override
+                kv_used = bool
                 if any(
                     entry.get_override_string() for entry in self.kv_override_entries
                 ):
                     output_name_parts.append("kv")
+                    kv_used = True
 
                 # Join all parts with underscores and add .gguf extension
                 output_name = "_".join(output_name_parts) + ".gguf"
@@ -1391,6 +1484,12 @@ class AutoGGUF(QMainWindow):
                             model_name=model_name,
                             quant_type=quant_type,
                             output_path=output_path,
+                            quantization_parameters=[
+                                kv_used,  # If KV overrides are used
+                                self.allow_requantize.isChecked(),  # If requantize is used
+                                self.pure.isChecked(),  # If pure tensors option is used
+                                self.leave_output_tensor.isChecked(),  # If leave output tensor option is used
+                            ],
                         )
                         if override_string:
                             command.extend(["--override-kv", override_string])

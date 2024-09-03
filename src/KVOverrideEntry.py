@@ -1,7 +1,12 @@
+import locale
+import shutil
+
+import psutil
 from PySide6.QtWidgets import QWidget, QHBoxLayout, QLineEdit, QComboBox, QPushButton
 from PySide6.QtCore import Signal, QRegularExpression
 from PySide6.QtGui import QDoubleValidator, QIntValidator, QRegularExpressionValidator
 from datetime import datetime
+import pytz
 import time
 import os
 import socket
@@ -24,7 +29,7 @@ class KVOverrideEntry(QWidget):
         layout.addWidget(self.key_input)
 
         self.type_combo = QComboBox()
-        self.type_combo.addItems(["int", "str", "float"])
+        self.type_combo.addItems(["int", "str", "float", "u32", "i32"])
         layout.addWidget(self.type_combo)
 
         self.value_input = QLineEdit()
@@ -46,7 +51,11 @@ class KVOverrideEntry(QWidget):
         self.deleted.emit(self)
 
     def get_override_string(
-        self, model_name=None, quant_type=None, output_path=None
+        self,
+        model_name=None,
+        quant_type=None,
+        output_path=None,
+        quantization_parameters=None,
     ) -> str:  # Add arguments
         key = self.key_input.text()
         type_ = self.type_combo.currentText()
@@ -61,7 +70,14 @@ class KVOverrideEntry(QWidget):
             "{system.hostname}": lambda: socket.gethostname(),
             "{system.platform}": lambda: platform.system(),
             "{system.python.version}": lambda: platform.python_version(),
-            "{system.date}": lambda: datetime.now().strftime("%Y-%m-%d"),
+            "{system.timezone}": lambda: time.tzname[time.daylight],
+            "{system.cpus}": lambda: str(os.cpu_count()),
+            "{system.memory.total}": lambda: str(psutil.virtual_memory().total),
+            "{system.memory.free}": lambda: str(psutil.virtual_memory().free),
+            "{system.filesystem.used}": lambda: str(shutil.disk_usage("/").used),
+            "{system.kernel.version}": lambda: platform.release(),
+            "{system.locale}": lambda: locale.getdefaultlocale()[0],
+            "{process.nice}": lambda: str(os.nice(0)),
             "{model.name}": lambda: (
                 model_name if model_name is not None else "Unknown Model"
             ),
@@ -70,6 +86,21 @@ class KVOverrideEntry(QWidget):
             ),
             "{output.path}": lambda: (
                 output_path if output_path is not None else "Unknown Output Path"
+            ),
+            "{quant.kv}": lambda: (
+                quantization_parameters[0]
+                if quantization_parameters is not None
+                else False
+            ),
+            "{quant.requantized}": lambda: (
+                quantization_parameters[1]
+                if quantization_parameters is not None
+                else False
+            ),
+            "{quant.leave_output_tensor}": lambda: (
+                quantization_parameters[2]
+                if quantization_parameters is not None
+                else False
             ),
         }
 

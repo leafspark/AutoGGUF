@@ -66,6 +66,7 @@ jobs:
         Copy-Item -Path "src\convert_hf_to_gguf.py" -Destination "$distPath\src"
         Copy-Item -Path "src\convert_lora_to_gguf.py" -Destination "$distPath\src"
         Copy-Item -Path "src\convert_lora_to_ggml.py" -Destination "$distPath\src"
+        Copy-Item -Path "src\quantize_to_fp8_dynamic.py" -Destination "$distPath\src"
 
     - name: Copy additional files (Linux/macOS)
       if: matrix.os != 'windows-latest'
@@ -76,6 +77,7 @@ jobs:
         cp src/convert_hf_to_gguf.py $distPath/src/
         cp src/convert_lora_to_gguf.py $distPath/src/
         cp src/convert_lora_to_ggml.py $distPath/src/
+        cp src/quantize_to_fp8_dynamic.py $distPath/src/
 
     - name: Generate SHA256 (Windows)
       if: matrix.os == 'windows-latest'

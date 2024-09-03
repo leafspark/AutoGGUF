@@ -1,6 +1,7 @@
 import copy
 import gc
 import re
+import sys
 from typing import List
 from typing import Optional, Tuple
 
@@ -280,12 +281,11 @@ class AutoFP8ForCausalLM:
                 _prepare_calibration_data(calibration_tokens),
             )
 
-    def save_quantized(self, save_dir, logger):
+    def save_quantized(self, save_dir):
         save_quantized_model(
             self.model,
             quant_config=self.quantize_config,
             save_dir=save_dir,
-            logger=logger,
         )
 
 
@@ -489,10 +489,9 @@ def save_quantized_model(
     model: AutoModelForCausalLM,
     quant_config: BaseQuantizeConfig,
     save_dir: str,
-    logger: Logger,
 ):
-    logger.info(model)
-    logger.info(f"Saving the model to {save_dir}")
+    print(model)
+    print(f"Saving the model to {save_dir}")
     static_q_dict = {
         "quantization_config": {
             "quant_method": "fp8",
@@ -544,10 +543,8 @@ def get_kv_cache_quant_layers(model, kv_cache_quant_targets: Tuple[str]) -> List
     return kv_cache_quant_layers
 
 
-def quantize_to_fp8_dynamic(
-    input_model_dir: str, output_model_dir: str, logger: Logger
-) -> None:
-    logger.info("Starting fp8 dynamic quantization")
+def quantize_to_fp8_dynamic(input_model_dir: str, output_model_dir: str) -> None:
+    print("Starting fp8 dynamic quantization")
     # Define quantization config with static activation scales
     quantize_config = BaseQuantizeConfig(
         quant_method="fp8", activation_scheme="dynamic"
@@ -557,4 +554,8 @@ def quantize_to_fp8_dynamic(
     model = AutoFP8ForCausalLM.from_pretrained(input_model_dir, quantize_config)
     # No examples for dynamic quantization
     model.quantize([])
-    model.save_quantized(output_model_dir, logger)
+    model.save_quantized(output_model_dir)
+
+
+if __name__ == "__main__":
+    quantize_to_fp8_dynamic(sys.argv[0], sys.argv[1])
