@@ -96,7 +96,6 @@ class AutoGGUF(QMainWindow):
         self.delete_task = partial(TaskListItem.delete_task, self)
         self.show_task_context_menu = partial(TaskListItem.show_task_context_menu, self)
         self.show_task_properties = partial(TaskListItem.show_task_properties, self)
-        self.cancel_task_by_item = partial(TaskListItem.cancel_task_by_item, self)
         self.toggle_gpu_offload_auto = partial(ui_update.toggle_gpu_offload_auto, self)
         self.update_threads_spinbox = partial(ui_update.update_threads_spinbox, self)
         self.update_threads_slider = partial(ui_update.update_threads_slider, self)
@@ -1036,7 +1035,13 @@ class AutoGGUF(QMainWindow):
             self.quant_threads.append(thread)
 
             task_name = f"Quantizing {os.path.basename(model_dir)} with AutoFP8"
-            task_item = TaskListItem(task_name, log_file, show_progress_bar=False)
+            task_item = TaskListItem(
+                task_name,
+                log_file,
+                show_progress_bar=False,
+                logger=self.logger,
+                quant_threads=self.quant_threads,
+            )
             list_item = QListWidgetItem(self.task_list)
             list_item.setSizeHint(task_item.sizeHint())
             self.task_list.addItem(list_item)
@@ -1152,7 +1157,13 @@ class AutoGGUF(QMainWindow):
             self.quant_threads.append(thread)
 
             task_name = CONVERTING_TO_GGUF.format(os.path.basename(model_dir))
-            task_item = TaskListItem(task_name, log_file, show_progress_bar=False)
+            task_item = TaskListItem(
+                task_name,
+                log_file,
+                show_progress_bar=False,
+                logger=self.logger,
+                quant_threads=self.quant_threads,
+            )
             list_item = QListWidgetItem(self.task_list)
             list_item.setSizeHint(task_item.sizeHint())
             self.task_list.addItem(list_item)
@@ -1516,7 +1527,10 @@ class AutoGGUF(QMainWindow):
                 self.quant_threads.append(thread)
 
                 task_item = TaskListItem(
-                    QUANTIZING_MODEL_TO.format(model_name, quant_type), log_file
+                    QUANTIZING_MODEL_TO.format(model_name, quant_type),
+                    log_file,
+                    show_properties=True,
+                    logger=self.logger,
                 )
                 list_item = QListWidgetItem(self.task_list)
                 list_item.setSizeHint(task_item.sizeHint())
@@ -1687,7 +1701,13 @@ class AutoGGUF(QMainWindow):
             task_name = GENERATING_IMATRIX_FOR.format(
                 os.path.basename(self.imatrix_model.text())
             )
-            task_item = TaskListItem(task_name, log_file, show_progress_bar=False)
+            task_item = TaskListItem(
+                task_name,
+                log_file,
+                show_progress_bar=False,
+                logger=self.logger,
+                quant_threads=self.quant_threads,
+            )
             list_item = QListWidgetItem(self.task_list)
             list_item.setSizeHint(task_item.sizeHint())
             self.task_list.addItem(list_item)

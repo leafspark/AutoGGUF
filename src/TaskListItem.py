@@ -1,3 +1,5 @@
+from typing import List
+
 from PySide6.QtCore import *
 from PySide6.QtGui import QAction
 from PySide6.QtWidgets import *
@@ -15,19 +17,34 @@ from Localizations import (
     SHOWING_PROPERTIES_FOR_TASK,
     DELETE,
     RESTART,
+    IN_PROGRESS,
+    ERROR,
 )
 from ModelInfoDialog import ModelInfoDialog
+from QuantizationThread import QuantizationThread
+from Logger import Logger
 
 
 class TaskListItem(QWidget):
     def __init__(
-        self, task_name, log_file, show_progress_bar=True, parent=None
+        self,
+        task_name,
+        log_file,
+        show_progress_bar=True,
+        parent=None,
+        show_properties=False,
+        logger=Logger,
+        quant_threads=List[QuantizationThread],
     ) -> None:
         super().__init__(parent)
+        self.quant_threads = quant_threads
         self.task_name = task_name
         self.log_file = log_file
+        self.logger = logger
+        self.show_properties = show_properties
         self.status = "Pending"
         layout = QHBoxLayout(self)
+
         self.task_label = QLabel(task_name)
         self.progress_bar = QProgressBar()
         self.progress_bar.setRange(0, 100)
@@ -84,7 +101,8 @@ class TaskListItem(QWidget):
                 model_info_dialog.exec()
                 break
 
-    def cancel_task_by_item(self, item) -> None:
+    def cancel_task(self, item) -> None:
+        self.logger.info(CANCELLING_TASK.format(item.text()))
         task_item = self.task_list.itemWidget(item)
         for thread in self.quant_threads:
             if thread.log_file == task_item.log_file:
@@ -93,15 +111,11 @@ class TaskListItem(QWidget):
                 self.quant_threads.remove(thread)
                 break
 
-    def cancel_task(self, item) -> None:
-        self.logger.info(CANCELLING_TASK.format(item.text()))
-        self.cancel_task_by_item(item)
-
     def delete_task(self, item) -> None:
         self.logger.info(DELETING_TASK.format(item.text()))
 
         # Cancel the task first
-        self.cancel_task_by_item(item)
+        self.cancel_task(item)
 
         reply = QMessageBox.question(
             self,
@@ -121,21 +135,21 @@ class TaskListItem(QWidget):
     def update_status(self, status) -> None:
         self.status = status
         self.status_label.setText(status)
-        if status == "In Progress":
+        if status == IN_PROGRESS:
             # Only start timer if showing percentage progress
             if self.progress_bar.isVisible():
                 self.progress_bar.setRange(0, 100)
                 self.progress_timer.start(100)
-        elif status == "Completed":
+        elif status == COMPLETED:
             self.progress_timer.stop()
             self.progress_bar.setValue(100)
-        elif status == "Canceled":
+        elif status == CANCELED:
             self.progress_timer.stop()
             self.progress_bar.setValue(0)
 
     def set_error(self) -> None:
-        self.status = "Error"
-        self.status_label.setText("Error")
+        self.status = ERROR
+        self.status_label.setText(ERROR)
         self.status_label.setStyleSheet("color: red;")
         self.progress_bar.setRange(0, 100)
         self.progress_timer.stop()

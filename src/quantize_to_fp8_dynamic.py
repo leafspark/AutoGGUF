@@ -9,7 +9,6 @@ import torch
 import tqdm
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
-from Logger import Logger
 
 # https://github.com/neuralmagic/AutoFP8
 
@@ -544,7 +543,6 @@ def get_kv_cache_quant_layers(model, kv_cache_quant_targets: Tuple[str]) -> List
 
 
 def quantize_to_fp8_dynamic(input_model_dir: str, output_model_dir: str) -> None:
-    print("Starting fp8 dynamic quantization")
     # Define quantization config with static activation scales
     quantize_config = BaseQuantizeConfig(
         quant_method="fp8", activation_scheme="dynamic"
