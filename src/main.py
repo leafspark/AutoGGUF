@@ -6,7 +6,8 @@ from typing import List, Optional
 
 from PySide6.QtCore import QTimer
 from PySide6.QtWidgets import QApplication
-from fastapi import FastAPI, Query
+from fastapi import FastAPI, Query, Depends, HTTPException, Security
+from fastapi.security.api_key import APIKeyHeader, APIKey
 from pydantic import BaseModel, Field
 from uvicorn import Config, Server
 
@@ -72,56 +73,72 @@ class Plugin(BaseModel):
     author: str = Field(..., description="Author of the plugin")
 
 
-@app.get("/v1/models", response_model=List[Model], tags=["Models"])
+# API Key configuration
+API_KEY_NAME = "Authorization"
+api_key_header = APIKeyHeader(name=API_KEY_NAME, auto_error=False)
+
+
+def get_api_key(
+    api_key_header: str = Security(api_key_header),
+) -> Optional[str]:
+    api_key_env = os.getenv("AUTOGGUF_SERVER_API_KEY")
+    if not api_key_env:
+        return None  # No API key restriction if not set
+
+    api_keys = [
+        key.strip() for key in api_key_env.split(",") if key.strip()
+    ]  # Split by comma and strip whitespace
+
+    if api_key_header and api_key_header.startswith("Bearer "):
+        api_key = api_key_header[len("Bearer ") :]
+        if api_key in api_keys:
+            return api_key
+
+    raise HTTPException(status_code=403, detail="Could not validate API key")
+
+
+@app.get(
+    "/v1/models",
+    response_model=List[Model],
+    tags=["Models"],
+    dependencies=[Depends(get_api_key)],
+)
 async def get_models(
     type: Optional[ModelType] = Query(None, description="Filter models by type")
 ) -> List[Model]:
-    """
-    Get a list of all available models.
-
-    - **type**: Optional filter for model type
-
-    Returns a list of Model objects containing name, type, path, and optional size.
-    """
     if window:
         models = window.get_models_data()
         if type:
             models = [m for m in models if m["type"] == type]
 
-        # Convert to Pydantic models, handling missing 'size' field
         return [Model(**m) for m in models]
     return []
 
 
-@app.get("/v1/tasks", response_model=List[Task], tags=["Tasks"])
+@app.get(
+    "/v1/tasks",
+    response_model=List[Task],
+    tags=["Tasks"],
+    dependencies=[Depends(get_api_key)],
+)
 async def get_tasks() -> List[Task]:
-    """
-    Get a list of all current tasks.
-
-    Returns a list of Task objects containing id, status, and progress.
-    """
     if window:
         return window.get_tasks_data()
     return []
 
 
-@app.get("/v1/health", tags=["System"])
+@app.get("/v1/health", tags=["System"], dependencies=[Depends(get_api_key)])
 async def health_check() -> dict:
-    """
-    Check the health status of the API.
-
-    Returns a simple status message indicating the API is alive.
-    """
     return {"status": "alive"}
 
 
-@app.get("/v1/backends", response_model=List[Backend], tags=["System"])
+@app.get(
+    "/v1/backends",
+    response_model=List[Backend],
+    tags=["System"],
+    dependencies=[Depends(get_api_key)],
+)
 async def get_backends() -> List[Backend]:
-    """
-    Get a list of all available llama.cpp backends.
-
-    Returns a list of Backend objects containing name and path.
-    """
     backends = []
     if window:
         for i in range(window.backend_combo.count()):
@@ -134,13 +151,13 @@ async def get_backends() -> List[Backend]:
     return backends
 
 
-@app.get("/v1/plugins", response_model=List[Plugin], tags=["System"])
+@app.get(
+    "/v1/plugins",
+    response_model=List[Plugin],
+    tags=["System"],
+    dependencies=[Depends(get_api_key)],
+)
 async def get_plugins() -> List[Plugin]:
-    """
-    Get a list of all installed plugins.
-
-    Returns a list of Plugin objects containing name, version, description, and author.
-    """
     if window:
         return [
             Plugin(**plugin_data["data"]) for plugin_data in window.plugins.values()
