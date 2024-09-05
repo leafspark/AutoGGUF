@@ -8,6 +8,7 @@
 - API key authentication support for the local server
 - HuggingFace upload/download class
 - OpenAPI docs for endpoints
+- Added new showcase image
 
 ### Changed
 - Replaced Flask with FastAPI and Uvicorn for improved performance
@@ -21,6 +22,7 @@
 - Now binding to localhost (127.0.0.1) instead of 0.0.0.0
 - Upadted Spanish localizations
 - Updated setuptools requirement from ~=68.2.0 to ~=74.0.0
+- Updated .env.example with new configuration parameters
 
 ### Fixed
 - Web page not found error
@@ -29,6 +31,7 @@
 - Improved window moving smoothness
 - Prevention of moving window below taskbar
 - Optimized imports in various files
+- Remove aliased quant types
 
 ## [v1.8.0] - 2024-08-26
 
