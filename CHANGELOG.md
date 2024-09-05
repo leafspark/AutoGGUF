@@ -1,5 +1,35 @@
 # Changelog
 
+## [v1.8.1] - 2024-09-04
+
+### Added
+- AutoFP8 quantization classes and window (currently WIP)
+- Minimize/maximize buttons to title bar
+- API key authentication support for the local server
+- HuggingFace upload/download class
+- OpenAPI docs for endpoints
+
+### Changed
+- Replaced Flask with FastAPI and Uvicorn for improved performance
+- Moved functions out of AutoGGUF.py into utils.py and TaskListItem.py
+- Updated llama.cpp convert scripts
+- Improved LoRA conversion process:
+  - Allow specifying output path in arguments
+  - Removed shutil.move operation
+  - Increased max number of LoRA layers
+- Changed default port to 7001
+- Now binding to localhost (127.0.0.1) instead of 0.0.0.0
+- Upadted Spanish localizations
+- Updated setuptools requirement from ~=68.2.0 to ~=74.0.0
+
+### Fixed
+- Web page not found error
+- Use of proper status in TaskListItem
+- Passing of quant_threads and Logger to TaskListItem
+- Improved window moving smoothness
+- Prevention of moving window below taskbar
+- Optimized imports in various files
+
 ## [v1.8.0] - 2024-08-26
 
 ### Added

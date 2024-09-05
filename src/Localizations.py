@@ -1,6 +1,6 @@
 import os
 
-AUTOGGUF_VERSION = "v1.8.0"
+AUTOGGUF_VERSION = "v1.8.1"
 
 
 class _Localization:
@@ -33,6 +33,17 @@ class _English(_Localization):
         self.MODEL_IMPORTED_SUCCESSFULLY = "Model {} imported successfully"
         self.IMPORTING_MODEL = "Importing model"
         self.IMPORTED_MODEL_TOOLTIP = "Imported model: {}"
+
+        # AutoFP8 Quantization
+        self.AUTOFP8_QUANTIZATION_TASK_STARTED = "AutoFP8 quantization task started"
+        self.ERROR_STARTING_AUTOFP8_QUANTIZATION = "Error starting AutoFP8 quantization"
+        self.QUANTIZING_WITH_AUTOFP8 = "Quantizing {0} with AutoFP8"
+        self.QUANTIZING_TO_WITH_AUTOFP8 = "Quantizing {0} to {1}"
+        self.QUANTIZE_TO_FP8_DYNAMIC = "Quantize to FP8 Dynamic"
+        self.OPEN_MODEL_FOLDER = "Open Model Folder"
+        self.QUANTIZE = "Quantize"
+        self.OPEN_MODEL_FOLDER = "Open Model Folder"
+        self.INPUT_MODEL = "Input Model:"
 
         # GGUF Verification
         self.INVALID_GGUF_FILE = "Invalid GGUF file: {}"

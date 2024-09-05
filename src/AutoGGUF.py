@@ -1016,7 +1016,9 @@ class AutoGGUF(QMainWindow):
             self.hf_outfile.setText(os.path.abspath(outfile))
 
     def quantize_to_fp8_dynamic(self, model_dir: str, output_dir: str) -> None:
-        self.logger.info(f"Quantizing {os.path.basename(model_dir)} to {output_dir}")
+        self.logger.info(
+            QUANTIZING_TO_WITH_AUTOFP8.format(os.path.basename(model_dir), output_dir)
+        )
         try:
             command = [
                 "python",
@@ -1034,7 +1036,7 @@ class AutoGGUF(QMainWindow):
             thread = QuantizationThread(command, os.getcwd(), log_file)
             self.quant_threads.append(thread)
 
-            task_name = f"Quantizing {os.path.basename(model_dir)} with AutoFP8"
+            task_name = QUANTIZING_WITH_AUTOFP8.format(os.path.basename(model_dir))
             task_item = TaskListItem(
                 task_name,
                 log_file,
@@ -1057,12 +1059,12 @@ class AutoGGUF(QMainWindow):
             thread.start()
 
         except Exception as e:
-            show_error(self.logger, f"Error starting AutoFP8 quantization: {e}")
-        self.logger.info("AutoFP8 quantization task started")
+            show_error(self.logger, f"{ERROR_STARTING_AUTOFP8_QUANTIZATION}: {e}")
+        self.logger.info(AUTOFP8_QUANTIZATION_TASK_STARTED)
 
     def show_autofp8_window(self):
         dialog = QDialog(self)
-        dialog.setWindowTitle("Quantize to FP8 Dynamic")
+        dialog.setWindowTitle(QUANTIZE_TO_FP8_DYNAMIC)
         dialog.setFixedWidth(500)
         layout = QVBoxLayout()
 
@@ -1072,10 +1074,10 @@ class AutoGGUF(QMainWindow):
         input_button = QPushButton(BROWSE)
         input_button.clicked.connect(
             lambda: self.fp8_input.setText(
-                QFileDialog.getExistingDirectory(self, "Open Model Folder")
+                QFileDialog.getExistingDirectory(self, OPEN_MODEL_FOLDER)
             )
         )
-        input_layout.addWidget(QLabel("Input Model:"))
+        input_layout.addWidget(QLabel(INPUT_MODEL))
         input_layout.addWidget(self.fp8_input)
         input_layout.addWidget(input_button)
         layout.addLayout(input_layout)
@@ -1086,16 +1088,16 @@ class AutoGGUF(QMainWindow):
         output_button = QPushButton(BROWSE)
         output_button.clicked.connect(
             lambda: self.fp8_output.setText(
-                QFileDialog.getExistingDirectory(self, "Open Model Folder")
+                QFileDialog.getExistingDirectory(self, OPEN_MODEL_FOLDER)
             )
         )
-        output_layout.addWidget(QLabel("Output Path:"))
+        output_layout.addWidget(QLabel(OUTPUT))
         output_layout.addWidget(self.fp8_output)
         output_layout.addWidget(output_button)
         layout.addLayout(output_layout)
 
         # Quantize button
-        quantize_button = QPushButton("Quantize")
+        quantize_button = QPushButton(QUANTIZE)
         quantize_button.clicked.connect(
             lambda: self.quantize_to_fp8_dynamic(
                 self.fp8_input.text(), self.fp8_output.text()
