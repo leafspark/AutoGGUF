@@ -2,15 +2,15 @@ import importlib
 import json
 import re
 import shutil
+import urllib.request
+import urllib.error
 from datetime import datetime
 from functools import partial
 from typing import Any, Dict, List, Tuple
 
-import requests
 from PySide6.QtCore import *
 from PySide6.QtGui import *
 from PySide6.QtWidgets import *
-from dotenv import load_dotenv
 
 import lora_conversion
 import presets
@@ -44,7 +44,7 @@ class AutoGGUF(QMainWindow):
         self.setGeometry(100, 100, width, height)
         self.setWindowFlag(Qt.FramelessWindowHint)
 
-        load_dotenv()  # Loads the .env file
+        self.load_dotenv()  # Loads the .env file
 
         # Configuration
         self.model_dir_name = os.environ.get("AUTOGGUF_MODEL_DIR_NAME", "models")
@@ -805,6 +805,41 @@ class AutoGGUF(QMainWindow):
 
         self.logger.info(AUTOGGUF_INITIALIZATION_COMPLETE)
 
+    def load_dotenv(self):
+        if not os.path.isfile(".env"):
+            self.logger.warning(".env file not found.")
+            return
+
+        try:
+            with open(".env") as f:
+                for line in f:
+                    # Strip leading/trailing whitespace
+                    line = line.strip()
+
+                    # Ignore comments and empty lines
+                    if not line or line.startswith("#"):
+                        continue
+
+                    # Match key-value pairs (unquoted and quoted values)
+                    match = re.match(r"^([^=]+)=(.*)$", line)
+                    if not match:
+                        self.logger.warning(f"Could not parse line: {line}")
+                        continue
+
+                    key, value = match.groups()
+
+                    # Remove any surrounding quotes from the value
+                    if value.startswith(("'", '"')) and value.endswith(("'", '"')):
+                        value = value[1:-1]
+
+                    # Decode escape sequences
+                    value = bytes(value, "utf-8").decode("unicode_escape")
+
+                    # Set the environment variable
+                    os.environ[key.strip()] = value.strip()
+        except Exception as e:
+            self.logger.error(f"Error loading .env: {e}")
+
     def load_plugins(self) -> Dict[str, Dict[str, Any]]:
         plugins = {}
         plugin_dir = "plugins"
@@ -881,17 +916,22 @@ class AutoGGUF(QMainWindow):
 
     def check_for_updates(self) -> None:
         try:
-            response = requests.get(
-                "https://api.github.com/repos/leafspark/AutoGGUF/releases/latest"
-            )
-            response.raise_for_status()  # Raise an exception for bad status codes
+            url = "https://api.github.com/repos/leafspark/AutoGGUF/releases/latest"
+            req = urllib.request.Request(url)
 
-            latest_release = response.json()
-            latest_version = latest_release["tag_name"].replace("v", "")
+            with urllib.request.urlopen(req) as response:
+                if response.status != 200:
+                    raise urllib.error.HTTPError(
+                        url, response.status, "HTTP Error", response.headers, None
+                    )
 
-            if latest_version > AUTOGGUF_VERSION.replace("v", ""):
-                self.prompt_for_update(latest_release)
-        except requests.exceptions.RequestException as e:
+                latest_release = json.loads(response.read().decode("utf-8"))
+                latest_version = latest_release["tag_name"].replace("v", "")
+
+                if latest_version > AUTOGGUF_VERSION.replace("v", ""):
+                    self.prompt_for_update(latest_release)
+
+        except urllib.error.URLError as e:
             self.logger.warning(f"{ERROR_CHECKING_FOR_UPDATES} {e}")
 
     def prompt_for_update(self, release) -> None:

@@ -1,7 +1,7 @@
 import os
+import urllib.request
+import urllib.error
 import zipfile
-
-import requests
 from PySide6.QtCore import QThread, Signal
 
 
@@ -17,19 +17,28 @@ class DownloadThread(QThread):
 
     def run(self) -> None:
         try:
-            response = requests.get(self.url, stream=True)
-            response.raise_for_status()
-            total_size = int(response.headers.get("content-length", 0))
-            block_size = 8192
-            downloaded = 0
+            req = urllib.request.Request(self.url)
 
-            with open(self.save_path, "wb") as file:
-                for data in response.iter_content(block_size):
-                    size = file.write(data)
-                    downloaded += size
-                    if total_size:
-                        progress = int((downloaded / total_size) * 100)
-                        self.progress_signal.emit(progress)
+            with urllib.request.urlopen(req) as response:
+                if response.status != 200:
+                    raise urllib.error.HTTPError(
+                        self.url, response.status, "HTTP Error", response.headers, None
+                    )
+
+                total_size = int(response.headers.get("Content-Length", 0))
+                block_size = 8192
+                downloaded = 0
+
+                with open(self.save_path, "wb") as file:
+                    while True:
+                        data = response.read(block_size)
+                        if not data:
+                            break
+                        size = file.write(data)
+                        downloaded += size
+                        if total_size:
+                            progress = int((downloaded / total_size) * 100)
+                            self.progress_signal.emit(progress)
 
             # Extract the downloaded zip file
             extract_dir = os.path.splitext(self.save_path)[0]
