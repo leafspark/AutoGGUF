@@ -1,16 +1,15 @@
 import locale
+import os
+import platform
 import shutil
+import socket
+import time
+from datetime import datetime
 
 import psutil
-from PySide6.QtWidgets import QWidget, QHBoxLayout, QLineEdit, QComboBox, QPushButton
-from PySide6.QtCore import Signal, QRegularExpression
+from PySide6.QtCore import QRegularExpression, Signal
 from PySide6.QtGui import QDoubleValidator, QIntValidator, QRegularExpressionValidator
-from datetime import datetime
-import pytz
-import time
-import os
-import socket
-import platform
+from PySide6.QtWidgets import QComboBox, QHBoxLayout, QLineEdit, QPushButton, QWidget
 
 
 class KVOverrideEntry(QWidget):
