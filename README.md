@@ -108,7 +108,7 @@ build RELEASE | DEV
 ```
 Find the executable in `build/<type>/dist/AutoGGUF.exe`.
 
-You can also use the slower build but faster executable script (Nuitka):
+You can also use the slower build but faster executable method (Nuitka):
 ```bash
 build_optimized RELEASE | DEV
 ```
@@ -145,7 +145,7 @@ Fork the repo, make your changes, and ensure you have the latest commits when me
 
 ## User Interface
 
-![AutoGGUF-v1 7 1-showcase-blue](https://github.com/user-attachments/assets/4240437f-77d4-459b-924f-c80e5f672c4f)
+![AutoGGUF-v1 8 1-showcase-blue](https://github.com/user-attachments/assets/b136ccc3-5983-4266-9e66-00cebf3ca590)
 
 ## Stargazers
 
