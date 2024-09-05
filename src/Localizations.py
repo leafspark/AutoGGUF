@@ -24,6 +24,12 @@ class _English(_Localization):
         self.BROWSE = "Browse"
         self.AVAILABLE_MODELS = "Available Models:"
         self.REFRESH_MODELS = "Refresh Models"
+        self.STARTUP_ELASPED_TIME = "Initialization took {0} ms"
+
+        # Environment variables
+        self.DOTENV_FILE_NOT_FOUND = ".env file not found."
+        self.COULD_NOT_PARSE_LINE = "Could not parse line: {0}"
+        self.ERROR_LOADING_DOTENV = "Error loading .env: {0}"
 
         # Model Import
         self.IMPORT_MODEL = "Import Model"

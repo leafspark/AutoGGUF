@@ -35,6 +35,10 @@ class AutoGGUF(QMainWindow):
 
     def __init__(self, args: List[str]) -> None:
         super().__init__()
+
+        init_timer = QElapsedTimer()
+        init_timer.start()
+
         width, height = self.parse_resolution()
         self.logger = Logger("AutoGGUF", "logs")
 
@@ -794,6 +798,7 @@ class AutoGGUF(QMainWindow):
                 default_theme = f.read()
             self.setStyleSheet(default_theme)
 
+        # Imported models from external paths
         self.imported_models = []
 
         # Load models
@@ -803,11 +808,13 @@ class AutoGGUF(QMainWindow):
         self.plugins = self.load_plugins()
         self.apply_plugins()
 
+        # Finish initialization
         self.logger.info(AUTOGGUF_INITIALIZATION_COMPLETE)
+        self.logger.info(STARTUP_ELASPED_TIME.format(init_timer.elapsed()))
 
     def load_dotenv(self):
         if not os.path.isfile(".env"):
-            self.logger.warning(".env file not found.")
+            self.logger.warning(DOTENV_FILE_NOT_FOUND)
             return
 
         try:
@@ -823,7 +830,7 @@ class AutoGGUF(QMainWindow):
                     # Match key-value pairs (unquoted and quoted values)
                     match = re.match(r"^([^=]+)=(.*)$", line)
                     if not match:
-                        self.logger.warning(f"Could not parse line: {line}")
+                        self.logger.warning(COULD_NOT_PARSE_LINE.format(line))
                         continue
 
                     key, value = match.groups()
@@ -838,7 +845,7 @@ class AutoGGUF(QMainWindow):
                     # Set the environment variable
                     os.environ[key.strip()] = value.strip()
         except Exception as e:
-            self.logger.error(f"Error loading .env: {e}")
+            self.logger.error(ERROR_LOADING_DOTENV.format(e))
 
     def load_plugins(self) -> Dict[str, Dict[str, Any]]:
         plugins = {}
