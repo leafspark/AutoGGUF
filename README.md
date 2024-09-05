@@ -35,6 +35,7 @@ AutoGGUF provides a graphical user interface for quantizing GGUF models using th
 - Parallel quantization + imatrix generation
 - LoRA conversion and merging
 - Preset saving and loading
+- AutoFP8 quantization
 
 ## Usage
 
@@ -49,6 +50,8 @@ AutoGGUF provides a graphical user interface for quantizing GGUF models using th
    ```
    or use the `run.bat` script.
 
+macOS and Ubuntu builds are provided with GitHub Actions, you may download the binaries in the releases section.
+
 ### Windows
 Standard builds:
 1. Download the latest release
@@ -61,6 +64,8 @@ Setup builds:
 3. Run the setup program
 4. The .GGUF extension will be registered with the program automatically
 5. Run the program from the Start Menu or desktop shortcuts
+
+After launching the program, you may access its local server at port 7001 (set `AUTOGGUF_SERVER` to "enabled" first)
 
 ### Verifying Releases
 
@@ -77,11 +82,11 @@ sha256sum -c AutoGGUF-v1.5.0-prerel.sha256
 gpg --import AutoGGUF-v1.5.0-prerel.asc
 
 # Verify the signature
-gpg --verify AutoGGUF-v1.5.0-Windows-avx2-prerel.zip.sig AutoGGUF-v1.5.0-Windows-avx2-prerel.zip
+gpg --verify AutoGGUF-v1.8.1-Windows-avx2.zip.sig AutoGGUF-v1.8.1-Windows-avx2.zip
 
 # Check SHA256
-$fileHash = (Get-FileHash -Algorithm SHA256 AutoGGUF-v1.5.0-Windows-avx2-prerel.zip).Hash.ToLower()
-$storedHash = (Get-Content AutoGGUF-v1.5.0-prerel.sha256 | Select-String AutoGGUF-v1.5.0-Windows-avx2-prerel.zip).Line.Split()[0]
+$fileHash = (Get-FileHash -Algorithm SHA256 AutoGGUF-v1.8.1-Windows-avx2.zip).Hash.ToLower()
+$storedHash = (Get-Content AutoGGUF-v1.8.1.sha256 | Select-String AutoGGUF-v1.8.1-Windows-avx2.zip).Line.Split()[0]
 if ($fileHash -eq $storedHash) { "SHA256 Match" } else { "SHA256 Mismatch" }
 ```
 
@@ -118,7 +123,7 @@ View the list of supported languages at [AutoGGUF/wiki/Installation#configuratio
 
 To use a specific language, set the `AUTOGGUF_LANGUAGE` environment variable to one of the listed language codes (note: some languages may not be fully supported yet, those will fall back to English).
 
-## Known Issues
+## Issues
 
 - None!
 
@@ -127,9 +132,8 @@ To use a specific language, set the `AUTOGGUF_LANGUAGE` environment variable to 
 - Time estimation for quantization
 - Actual progress bar tracking 
 - Perplexity testing
-- Web API and management (partially implemented in v1.6.2)
 - HuggingFace upload/download (coming in the next release)
-- AutoFP8 quantization and bitsandbytes (coming in the next release)
+- AutoFP8 quantization (partially done) and bitsandbytes (coming soon)
 
 ## Troubleshooting
 

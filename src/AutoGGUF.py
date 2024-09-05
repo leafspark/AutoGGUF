@@ -153,6 +153,7 @@ class AutoGGUF(QMainWindow):
         # Tools menu
         tools_menu = self.menubar.addMenu("&Tools")
         autofp8_action = QAction("&AutoFP8", self)
+        autofp8_action.setShortcut(QKeySequence("Shift+Q"))
         autofp8_action.triggered.connect(self.show_autofp8_window)
         tools_menu.addAction(autofp8_action)
 
@@ -321,17 +322,14 @@ class AutoGGUF(QMainWindow):
             "IQ3_XXS",
             "IQ3_S",
             "IQ3_M",
-            "Q3_K",
             "IQ3_XS",
             "Q3_K_S",
             "Q3_K_M",
             "Q3_K_L",
             "IQ4_NL",
             "IQ4_XS",
-            "Q4_K",
             "Q4_K_S",
             "Q4_K_M",
-            "Q5_K",
             "Q5_K_S",
             "Q5_K_M",
             "Q6_K",
