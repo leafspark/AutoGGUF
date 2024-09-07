@@ -160,6 +160,5 @@ class TaskListItem(QWidget):
             self.progress_value = value
             self.progress_bar.setValue(self.progress_value)
         else:
-            # Increment progress bar for indeterminate progress
-            self.progress_value = (self.progress_value + 1) % 101
-            self.progress_bar.setValue(self.progress_value)
+            # Set progress bar to zero for indeterminate progress
+            self.progress_bar.setValue(0)
