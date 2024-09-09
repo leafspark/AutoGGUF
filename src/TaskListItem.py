@@ -162,3 +162,23 @@ class TaskListItem(QWidget):
         else:
             # Set progress bar to zero for indeterminate progress
             self.progress_bar.setValue(0)
+
+    def restart_task(self, task_item) -> None:
+        self.logger.info(RESTARTING_TASK.format(task_item.task_name))
+        for thread in self.quant_threads:
+            if thread.log_file == task_item.log_file:
+                new_thread = QuantizationThread(
+                    thread.command, thread.cwd, thread.log_file
+                )
+                self.quant_threads.append(new_thread)
+                new_thread.status_signal.connect(task_item.update_status)
+                new_thread.finished_signal.connect(
+                    lambda: self.task_finished(new_thread, task_item)
+                )
+                new_thread.error_signal.connect(
+                    lambda err: handle_error(self.logger, err, task_item)
+                )
+                new_thread.model_info_signal.connect(self.update_model_info)
+                new_thread.start()
+                task_item.update_status(IN_PROGRESS)
+                break

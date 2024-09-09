@@ -98,6 +98,12 @@ def export_lora(self) -> None:
         show_error(self.logger, ERROR_STARTING_LORA_EXPORT.format(str(e)))
 
 
+def lora_conversion_finished(self, thread) -> None:
+    self.logger.info(LORA_CONVERSION_FINISHED)
+    if thread in self.quant_threads:
+        self.quant_threads.remove(thread)
+
+
 def delete_lora_adapter_item(self, adapter_widget) -> None:
     self.logger.info(DELETING_LORA_ADAPTER)
     # Find the QListWidgetItem containing the adapter_widget

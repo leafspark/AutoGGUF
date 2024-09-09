@@ -1,9 +1,60 @@
 from PySide6.QtCore import QTimer
 from PySide6.QtGui import Qt
+from PySide6.QtWidgets import QFileDialog, QLabel
 
 from Localizations import *
 import psutil
 from error_handling import show_error
+
+
+def browse_base_model(self) -> None:
+    self.logger.info(BROWSING_FOR_BASE_MODEL_FOLDER)  # Updated log message
+    base_model_folder = QFileDialog.getExistingDirectory(self, SELECT_BASE_MODEL_FOLDER)
+    if base_model_folder:
+        self.base_model_path.setText(os.path.abspath(base_model_folder))
+
+
+def browse_hf_model_input(self) -> None:
+    self.logger.info(BROWSE_FOR_HF_MODEL_DIRECTORY)
+    model_dir = QFileDialog.getExistingDirectory(self, SELECT_HF_MODEL_DIRECTORY)
+    if model_dir:
+        self.hf_model_input.setText(os.path.abspath(model_dir))
+
+
+def browse_hf_outfile(self) -> None:
+    self.logger.info(BROWSE_FOR_HF_TO_GGUF_OUTPUT)
+    outfile, _ = QFileDialog.getSaveFileName(self, SELECT_OUTPUT_FILE, "", GGUF_FILES)
+    if outfile:
+        self.hf_outfile.setText(os.path.abspath(outfile))
+
+
+def browse_imatrix_datafile(self) -> None:
+    self.logger.info(BROWSING_FOR_IMATRIX_DATA_FILE)
+    datafile, _ = QFileDialog.getOpenFileName(self, SELECT_DATA_FILE, "", ALL_FILES)
+    if datafile:
+        self.imatrix_datafile.setText(os.path.abspath(datafile))
+
+
+def browse_imatrix_model(self) -> None:
+    self.logger.info(BROWSING_FOR_IMATRIX_MODEL_FILE)
+    model_file, _ = QFileDialog.getOpenFileName(self, SELECT_MODEL_FILE, "", GGUF_FILES)
+    if model_file:
+        self.imatrix_model.setText(os.path.abspath(model_file))
+
+
+def browse_imatrix_output(self) -> None:
+    self.logger.info(BROWSING_FOR_IMATRIX_OUTPUT_FILE)
+    output_file, _ = QFileDialog.getSaveFileName(
+        self, SELECT_OUTPUT_FILE, "", DAT_FILES
+    )
+    if output_file:
+        self.imatrix_output.setText(os.path.abspath(output_file))
+
+
+def create_label(self, text, tooltip) -> QLabel:
+    label = QLabel(text)
+    label.setToolTip(tooltip)
+    return label
 
 
 def toggle_gpu_offload_auto(self, state) -> None:

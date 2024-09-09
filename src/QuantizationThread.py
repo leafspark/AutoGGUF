@@ -1,4 +1,5 @@
 import os
+import re
 import signal
 import subprocess
 
@@ -77,6 +78,15 @@ class QuantizationThread(QThread):
                 self.model_info.setdefault("quantization_type", []).append(
                     f"{quant_type}: {tensors} tensors"
                 )
+
+    def parse_progress(self, line, task_item) -> None:
+        # Parses the output line for progress information and updates the task item.
+        match = re.search(r"\[\s*(\d+)\s*/\s*(\d+)\s*].*", line)
+        if match:
+            current = int(match.group(1))
+            total = int(match.group(2))
+            progress = int((current / total) * 100)
+            task_item.update_progress(progress)
 
     def terminate(self) -> None:
         # Terminate the subprocess if it's still running

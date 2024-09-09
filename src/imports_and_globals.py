@@ -1,3 +1,5 @@
+import os
+import re
 import sys
 from typing import TextIO, Union
 
@@ -5,7 +7,48 @@ from PySide6.QtWidgets import (
     QMessageBox,
 )
 
-from Localizations import *
+from Localizations import (
+    DOTENV_FILE_NOT_FOUND,
+    COULD_NOT_PARSE_LINE,
+    ERROR_LOADING_DOTENV,
+    AUTOGGUF_VERSION,
+)
+
+
+def load_dotenv(self) -> None:
+    if not os.path.isfile(".env"):
+        self.logger.warning(DOTENV_FILE_NOT_FOUND)
+        return
+
+    try:
+        with open(".env") as f:
+            for line in f:
+                # Strip leading/trailing whitespace
+                line = line.strip()
+
+                # Ignore comments and empty lines
+                if not line or line.startswith("#"):
+                    continue
+
+                # Match key-value pairs (unquoted and quoted values)
+                match = re.match(r"^([^=]+)=(.*)$", line)
+                if not match:
+                    self.logger.warning(COULD_NOT_PARSE_LINE.format(line))
+                    continue
+
+                key, value = match.groups()
+
+                # Remove any surrounding quotes from the value
+                if value.startswith(("'", '"')) and value.endswith(("'", '"')):
+                    value = value[1:-1]
+
+                # Decode escape sequences
+                value = bytes(value, "utf-8").decode("unicode_escape")
+
+                # Set the environment variable
+                os.environ[key.strip()] = value.strip()
+    except Exception as e:
+        self.logger.error(ERROR_LOADING_DOTENV.format(e))
 
 
 def show_about(self) -> None:
