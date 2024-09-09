@@ -1060,6 +1060,12 @@ class AutoGGUF(QMainWindow):
                 break
 
     def quantize_to_fp8_dynamic(self, model_dir: str, output_dir: str) -> None:
+        if model_dir or output_dir == "":
+            show_error(
+                self.logger,
+                f"{ERROR_STARTING_AUTOFP8_QUANTIZATION}: {NO_MODEL_SELECTED}",
+            )
+            return
         self.logger.info(
             QUANTIZING_TO_WITH_AUTOFP8.format(os.path.basename(model_dir), output_dir)
         )

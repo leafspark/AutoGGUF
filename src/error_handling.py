@@ -3,7 +3,7 @@ from Localizations import ERROR_MESSAGE, ERROR, TASK_ERROR
 
 
 def show_error(logger, message) -> None:
-    logger.error(ERROR_MESSAGE.format(message))
+    logger.error(message)
     QMessageBox.critical(None, ERROR, message)
 
 

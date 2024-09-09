@@ -19,10 +19,12 @@ from Localizations import (
     RESTART,
     IN_PROGRESS,
     ERROR,
+    RESTARTING_TASK,
 )
 from ModelInfoDialog import ModelInfoDialog
 from QuantizationThread import QuantizationThread
 from Logger import Logger
+from error_handling import handle_error
 
 
 class TaskListItem(QWidget):

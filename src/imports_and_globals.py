@@ -1,7 +1,7 @@
 import os
 import re
 import sys
-from typing import TextIO, Union
+from typing import Any, TextIO, Union
 
 from PySide6.QtWidgets import (
     QMessageBox,
@@ -15,7 +15,7 @@ from Localizations import (
 )
 
 
-def load_dotenv(self) -> None:
+def load_dotenv(self=Any) -> None:
     if not os.path.isfile(".env"):
         self.logger.warning(DOTENV_FILE_NOT_FOUND)
         return
