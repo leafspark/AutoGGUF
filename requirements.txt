@@ -2,7 +2,7 @@ PyYAML~=6.0.2
 psutil~=6.0.0
 pynvml~=11.5.3
 PySide6~=6.7.2
-safetensors~=0.4.4
+safetensors~=0.4.5
 numpy<3.0.0
 torch~=2.4.0
 sentencepiece~=0.2.0
