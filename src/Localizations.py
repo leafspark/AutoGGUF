@@ -396,6 +396,15 @@ class _English(_Localization):
             "HuggingFace to GGUF conversion task started"
         )
 
+        # Split GGUF
+        self.SPLIT_GGUF = "Split GGUF"
+        self.SPLIT_MAX_SIZE = "Split Max Size"
+        self.SPLIT_MAX_TENSORS = "Split Max Tensors"
+        self.SPLIT_GGUF_TASK_STARTED = "GGUF Split task started"
+        self.SPLIT_GGUF_TASK_FINISHED = "GGUF Split task finished"
+        self.SPLIT_GGUF_COMMAND = "GGUF Split Command"
+        self.SPLIT_GGUF_ERROR = "Error starting GGUF split"
+
 
 class _French(_Localization):
     def __init__(self):
