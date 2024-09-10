@@ -162,8 +162,7 @@ class TaskListItem(QWidget):
             self.progress_value = value
             self.progress_bar.setValue(self.progress_value)
         else:
-            # Set progress bar to zero for indeterminate progress
-            self.progress_bar.setValue(0)
+            return
 
     def restart_task(self, task_item) -> None:
         self.logger.info(RESTARTING_TASK.format(task_item.task_name))

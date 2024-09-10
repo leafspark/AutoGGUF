@@ -1,6 +1,5 @@
 import importlib
 import json
-import re
 import shutil
 import urllib.request
 import urllib.error
@@ -1547,6 +1546,7 @@ class AutoGGUF(QMainWindow):
         if thread in self.quant_threads:
             self.quant_threads.remove(thread)
         task_item.update_status(COMPLETED)
+        self.setAttribute(Qt.WA_WindowModified, True)  # Set modified flag
 
     def show_task_details(self, item) -> None:
         self.logger.debug(SHOWING_TASK_DETAILS_FOR.format(item.text()))
@@ -1649,7 +1649,7 @@ class AutoGGUF(QMainWindow):
             task_item = TaskListItem(
                 task_name,
                 log_file,
-                show_progress_bar=False,
+                show_progress_bar=True,
                 logger=self.logger,
                 quant_threads=self.quant_threads,
             )
@@ -1658,7 +1658,12 @@ class AutoGGUF(QMainWindow):
             self.task_list.addItem(list_item)
             self.task_list.setItemWidget(list_item, task_item)
 
+            imatrix_chunks = None
+
             thread.status_signal.connect(task_item.update_status)
+            thread.output_signal.connect(
+                lambda line, ti=task_item: self.parse_progress(line, ti, imatrix_chunks)
+            )
             thread.finished_signal.connect(
                 lambda: self.task_finished(thread, task_item)
             )

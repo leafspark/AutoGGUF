@@ -79,14 +79,31 @@ class QuantizationThread(QThread):
                     f"{quant_type}: {tensors} tensors"
                 )
 
-    def parse_progress(self, line, task_item) -> None:
+    def parse_progress(self, line, task_item, imatrix_chunks=None) -> None:
         # Parses the output line for progress information and updates the task item.
         match = re.search(r"\[\s*(\d+)\s*/\s*(\d+)\s*].*", line)
+
         if match:
             current = int(match.group(1))
             total = int(match.group(2))
             progress = int((current / total) * 100)
             task_item.update_progress(progress)
+        else:
+            imatrix_match = re.search(
+                r"compute_imatrix: computing over (\d+) chunks with batch_size \d+",
+                line,
+            )
+            if imatrix_match:
+                imatrix_chunks = int(imatrix_match.group(1))
+            elif imatrix_chunks is not None:
+                save_match = re.search(
+                    r"save_imatrix: stored collected data after (\d+) chunks in .*",
+                    line,
+                )
+                if save_match:
+                    saved_chunks = int(save_match.group(1))
+                    progress = int((saved_chunks / self.imatrix_chunks) * 100)
+                    task_item.update_progress(progress)
 
     def terminate(self) -> None:
         # Terminate the subprocess if it's still running

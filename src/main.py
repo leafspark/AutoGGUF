@@ -51,7 +51,7 @@ class Model(BaseModel):
 
 
 class Task(BaseModel):
-    id: str = Field(..., description="Unique identifier for the task")
+    # id: str = Field(..., description="Unique identifier for the task")
     status: str = Field(..., description="Current status of the task")
     progress: float = Field(..., description="Progress of the task as a percentage")
 
