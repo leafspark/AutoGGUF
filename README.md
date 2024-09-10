@@ -18,6 +18,7 @@
 ![GitHub forks](https://img.shields.io/github/forks/leafspark/AutoGGUF.svg)
 ![GitHub release (latest by date)](https://img.shields.io/github/downloads/leafspark/AutoGGUF/latest/total?color=green)
 ![GitHub repo size](https://img.shields.io/github/repo-size/leafspark/AutoGGUF.svg)
+![Lines of Code](https://tokei.rs/b1/github/leafspark/AutoGGUF?category=code)
 
 <!-- Contribution -->
 [![Code Style: Black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
@@ -36,6 +37,7 @@ AutoGGUF provides a graphical user interface for quantizing GGUF models using th
 - LoRA conversion and merging
 - Preset saving and loading
 - AutoFP8 quantization
+- GGUF splitting
 
 ## Usage
 
@@ -125,15 +127,15 @@ To use a specific language, set the `AUTOGGUF_LANGUAGE` environment variable to 
 
 ## Issues
 
-- None!
+- Some inconsistent logging
 
 ## Planned Features
 
 - Time estimation for quantization
-- Actual progress bar tracking 
+- Quantization file size estimate
 - Perplexity testing
 - HuggingFace upload/download (coming in the next release)
-- AutoFP8 quantization (partially done) and bitsandbytes (coming soon)
+- bitsandbytes (coming soon)
 
 ## Troubleshooting
 
