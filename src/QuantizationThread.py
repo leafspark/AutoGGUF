@@ -96,14 +96,12 @@ class QuantizationThread(QThread):
             if imatrix_match:
                 imatrix_chunks = int(imatrix_match.group(1))
             elif imatrix_chunks is not None:
-                save_match = re.search(
-                    r"save_imatrix: stored collected data after (\d+) chunks in .*",
-                    line,
-                )
-                if save_match:
-                    saved_chunks = int(save_match.group(1))
-                    progress = int((saved_chunks / self.imatrix_chunks) * 100)
-                    task_item.update_progress(progress)
+                if "save_imatrix: stored collected data" in line:
+                    save_match = re.search(r"collected data after (\d+) chunks", line)
+                    if save_match:
+                        saved_chunks = int(save_match.group(1))
+                        progress = int((saved_chunks / self.imatrix_chunks) * 100)
+                        task_item.update_progress(progress)
 
     def terminate(self) -> None:
         # Terminate the subprocess if it's still running

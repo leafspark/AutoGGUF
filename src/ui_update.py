@@ -85,6 +85,14 @@ def update_system_info(self) -> None:
     )
     self.cpu_label.setText(CPU_USAGE_FORMAT.format(cpu))
 
+    # Collect CPU and RAM usage data
+    self.cpu_data.append(cpu)
+    self.ram_data.append(ram.percent)
+
+    if len(self.cpu_data) > 60:
+        self.cpu_data.pop(0)
+        self.ram_data.pop(0)
+
 
 def animate_bar(self, bar, target_value) -> None:
     current_value = bar.value()

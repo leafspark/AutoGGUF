@@ -27,6 +27,10 @@ class _English(_Localization):
         self.REFRESH_MODELS = "Refresh Models"
         self.STARTUP_ELASPED_TIME = "Initialization took {0} ms"
 
+        # Usage Graphs
+        self.CPU_USAGE_OVER_TIME = "CPU Usage Over Time"
+        self.RAM_USAGE_OVER_TIME = "RAM Usage Over Time"
+
         # Environment variables
         self.DOTENV_FILE_NOT_FOUND = ".env file not found."
         self.COULD_NOT_PARSE_LINE = "Could not parse line: {0}"
@@ -187,6 +191,7 @@ class _English(_Localization):
         self.CANCEL = "Cancel"
         self.RESTART = "Restart"
         self.DELETE = "Delete"
+        self.RENAME = "Rename"
         self.CONFIRM_DELETION = "Are you sure you want to delete this task?"
         self.TASK_RUNNING_WARNING = (
             "Some tasks are still running. Are you sure you want to quit?"
@@ -404,6 +409,12 @@ class _English(_Localization):
         self.SPLIT_GGUF_TASK_FINISHED = "GGUF Split task finished"
         self.SPLIT_GGUF_COMMAND = "GGUF Split Command"
         self.SPLIT_GGUF_ERROR = "Error starting GGUF split"
+
+        # Model actions
+        self.CONFIRM_DELETE = "Confirm Delete"
+        self.DELETE_MODEL_WARNING = "Are you sure you want to delete the model: {}?"
+        self.MODEL_RENAMED_SUCCESSFULLY = "Model renamed successfully."
+        self.MODEL_DELETED_SUCCESSFULLY = "Model deleted successfully."
 
 
 class _French(_Localization):

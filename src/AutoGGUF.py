@@ -4,7 +4,7 @@ import shutil
 import urllib.request
 import urllib.error
 from datetime import datetime
-from functools import partial
+from functools import partial, wraps
 from typing import Any, Dict, List, Tuple
 
 from PySide6.QtCore import *
@@ -16,7 +16,7 @@ import presets
 import ui_update
 import utils
 from CustomTitleBar import CustomTitleBar
-from GPUMonitor import GPUMonitor
+from GPUMonitor import GPUMonitor, SimpleGraph
 from Localizations import *
 from Logger import Logger
 from QuantizationThread import QuantizationThread
@@ -32,6 +32,36 @@ from imports_and_globals import (
 
 
 class AutoGGUF(QMainWindow):
+    def validate_input(*fields):
+        def decorator(func):
+            @wraps(func)
+            def wrapper(self, *args, **kwargs):
+                for field in fields:
+                    value = getattr(self, field).text().strip()
+
+                    # Length check
+                    if len(value) > 1024:
+                        show_error(f"{field} exceeds maximum length")
+
+                    # Normalize path
+                    normalized_path = os.path.normpath(value)
+
+                    # Check for path traversal attempts
+                    if ".." in normalized_path:
+                        show_error(f"Invalid path in {field}")
+
+                    # Disallow control characters and null bytes
+                    if re.search(r"[\x00-\x1f\x7f]", value):
+                        show_error(f"Invalid characters in {field}")
+
+                    # Update the field with normalized path
+                    getattr(self, field).setText(normalized_path)
+
+                return func(self, *args, **kwargs)
+
+            return wrapper
+
+        return decorator
 
     def __init__(self, args: List[str]) -> None:
         super().__init__()
@@ -49,6 +79,7 @@ class AutoGGUF(QMainWindow):
         self.setWindowFlag(Qt.FramelessWindowHint)
 
         load_dotenv(self)  # Loads the .env file
+        self.process_args(args)  # Load any command line parameters
 
         # Configuration
         self.model_dir_name = os.environ.get("AUTOGGUF_MODEL_DIR_NAME", "models")
@@ -308,11 +339,6 @@ class AutoGGUF(QMainWindow):
         # Initialize threads
         self.quant_threads = []
 
-        # Timer for updating system info
-        self.timer = QTimer()
-        self.timer.timeout.connect(self.update_system_info)
-        self.timer.start(200)
-
         # Add all widgets to content_layout
         left_widget = QWidget()
         right_widget = QWidget()
@@ -334,6 +360,19 @@ class AutoGGUF(QMainWindow):
         left_layout.addWidget(self.cpu_bar)
         left_layout.addWidget(QLabel(GPU_USAGE))
         left_layout.addWidget(self.gpu_monitor)
+
+        # Add mouse click event handlers for RAM and CPU bars
+        self.ram_bar.mouseDoubleClickEvent = self.show_ram_graph
+        self.cpu_bar.mouseDoubleClickEvent = self.show_cpu_graph
+
+        # Initialize data lists for CPU and RAM usage
+        self.cpu_data = []
+        self.ram_data = []
+
+        # Timer for updating system info
+        self.timer = QTimer()
+        self.timer.timeout.connect(self.update_system_info)
+        self.timer.start(200)
 
         # Backend selection
         backend_layout = QHBoxLayout()
@@ -414,6 +453,10 @@ class AutoGGUF(QMainWindow):
         self.model_tree.setHeaderHidden(True)
         left_layout.addWidget(QLabel(AVAILABLE_MODELS))
         left_layout.addWidget(self.model_tree)
+
+        # Ssupport right-click menu
+        self.model_tree.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
+        self.model_tree.customContextMenuRequested.connect(self.show_model_context_menu)
 
         # Refresh models button
         refresh_models_button = QPushButton(REFRESH_MODELS)
@@ -930,6 +973,97 @@ class AutoGGUF(QMainWindow):
         self.logger.info(AUTOGGUF_INITIALIZATION_COMPLETE)
         self.logger.info(STARTUP_ELASPED_TIME.format(init_timer.elapsed()))
 
+    def show_ram_graph(self, event) -> None:
+        self.show_detailed_stats(RAM_USAGE_OVER_TIME, self.ram_data)
+
+    def show_cpu_graph(self, event) -> None:
+        self.show_detailed_stats(CPU_USAGE_OVER_TIME, self.cpu_data)
+
+    def show_detailed_stats(self, title, data) -> None:
+        dialog = QDialog(self)
+        dialog.setWindowTitle(title)
+        dialog.setMinimumSize(800, 600)
+
+        layout = QVBoxLayout(dialog)
+
+        graph = SimpleGraph(title)
+        layout.addWidget(graph)
+
+        def update_graph_data() -> None:
+            graph.update_data(data)
+
+        timer = QTimer(dialog)
+        timer.timeout.connect(update_graph_data)
+        timer.start(200)  # Update every 0.2 seconds
+
+        dialog.exec()
+
+    def show_model_context_menu(self, position):
+        item = self.model_tree.itemAt(position)
+        if item:
+            # Child of a sharded model or top-level item without children
+            if item.parent() is not None or item.childCount() == 0:
+                menu = QMenu()
+                rename_action = menu.addAction(RENAME)
+                delete_action = menu.addAction(DELETE)
+
+                action = menu.exec(self.model_tree.viewport().mapToGlobal(position))
+                if action == rename_action:
+                    self.rename_model(item)
+                elif action == delete_action:
+                    self.delete_model(item)
+
+    def rename_model(self, item):
+        old_name = item.text(0)
+        new_name, ok = QInputDialog.getText(self, RENAME, f"New name for {old_name}:")
+        if ok and new_name:
+            old_path = os.path.join(self.models_input.text(), old_name)
+            new_path = os.path.join(self.models_input.text(), new_name)
+            try:
+                os.rename(old_path, new_path)
+                item.setText(0, new_name)
+                self.logger.info(MODEL_RENAMED_SUCCESSFULLY.format(old_name, new_name))
+            except Exception as e:
+                show_error(self.logger, f"Error renaming model: {e}")
+
+    def delete_model(self, item):
+        model_name = item.text(0)
+        reply = QMessageBox.question(
+            self,
+            CONFIRM_DELETE,
+            DELETE_WARNING.format(model_name),
+            QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
+            QMessageBox.StandardButton.No,
+        )
+        if reply == QMessageBox.StandardButton.Yes:
+            model_path = os.path.join(self.models_input.text(), model_name)
+            try:
+                os.remove(model_path)
+                self.model_tree.takeTopLevelItem(
+                    self.model_tree.indexOfTopLevelItem(item)
+                )
+                self.logger.info(MODEL_DELETED_SUCCESSFULLY.format(model_name))
+            except Exception as e:
+                show_error(self.logger, f"Error deleting model: {e}")
+
+    def process_args(self, args: List[str]) -> bool:
+        try:
+            i = 1
+            while i < len(args):
+                key = (
+                    args[i][2:].replace("-", "_").upper()
+                )  # Strip the first two '--' and replace '-' with '_'
+                if i + 1 < len(args) and not args[i + 1].startswith("--"):
+                    value = args[i + 1]
+                    i += 2
+                else:
+                    value = "enabled"
+                    i += 1
+                os.environ[key] = value
+            return True
+        except Exception:
+            return False
+
     def load_plugins(self) -> Dict[str, Dict[str, Any]]:
         plugins = {}
         plugin_dir = "plugins"
@@ -1174,6 +1308,13 @@ class AutoGGUF(QMainWindow):
             show_error(self.logger, f"{ERROR_STARTING_AUTOFP8_QUANTIZATION}: {e}")
         self.logger.info(AUTOFP8_QUANTIZATION_TASK_STARTED)
 
+    @validate_input(
+        "hf_model_input",
+        "hf_outfile",
+        "hf_split_max_size",
+        "hf_model_name",
+        "logs_input",
+    )
     def convert_hf_to_gguf(self) -> None:
         self.logger.info(STARTING_HF_TO_GGUF_CONVERSION)
         try:
@@ -1718,6 +1859,9 @@ class AutoGGUF(QMainWindow):
                 self.load_models()
                 self.logger.info(MODEL_IMPORTED_SUCCESSFULLY.format(file_name))
 
+    @validate_input(
+        "imatrix_model", "imatrix_datafile", "imatrix_model", "imatrix_output"
+    )
     def generate_imatrix(self) -> None:
         self.logger.info(STARTING_IMATRIX_GENERATION)
         try:
