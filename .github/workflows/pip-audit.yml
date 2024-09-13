@@ -14,10 +14,10 @@ jobs:
   audit:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
 
     - name: Set up Python
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v5
       with:
         python-version: '3.x'
 
@@ -52,7 +52,7 @@ jobs:
         cat requirements.txt >> detailed_report.txt
 
     - name: Upload audit results
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: pip-audit-report
         path: detailed_report.txt
