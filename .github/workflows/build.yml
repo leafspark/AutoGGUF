@@ -24,10 +24,10 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
 
     - name: Set up Python
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v5
       with:
         python-version: '3.x'
         architecture: ${{ matrix.arch }}
@@ -109,7 +109,7 @@ jobs:
         cd $distPath && shasum -a 256 $exeName > $hashFile
         
     - name: Upload Artifact
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: AutoGGUF-${{ matrix.os }}-${{ matrix.arch }}-${{ github.event.inputs.build_type }}-${{ github.sha }}
         path: |
@@ -117,7 +117,7 @@ jobs:
           !build/${{ github.event.inputs.build_type == 'RELEASE' && 'release' || 'dev' }}/dist/AutoGGUF-*.sha256
 
     - name: Upload SHA256
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: AutoGGUF-${{ github.sha }}-SHA256
         path: build/${{ github.event.inputs.build_type == 'RELEASE' && 'release' || 'dev' }}/dist/AutoGGUF-*.sha256
