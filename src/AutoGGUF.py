@@ -1,8 +1,8 @@
 import importlib
 import json
 import shutil
-import urllib.request
 import urllib.error
+import urllib.request
 from datetime import datetime
 from functools import partial, wraps
 from typing import Any, Dict, List, Tuple
@@ -24,10 +24,10 @@ from TaskListItem import TaskListItem
 from error_handling import handle_error, show_error
 from imports_and_globals import (
     ensure_directory,
+    load_dotenv,
     open_file_safe,
     resource_path,
     show_about,
-    load_dotenv,
 )
 
 
@@ -41,21 +41,18 @@ class AutoGGUF(QMainWindow):
 
                     # Length check
                     if len(value) > 1024:
-                        show_error(f"{field} exceeds maximum length")
+                        show_error(self.logger, f"{field} exceeds maximum length")
 
                     # Normalize path
                     normalized_path = os.path.normpath(value)
 
                     # Check for path traversal attempts
                     if ".." in normalized_path:
-                        show_error(f"Invalid path in {field}")
+                        show_error(self.logger, f"Invalid path in {field}")
 
                     # Disallow control characters and null bytes
                     if re.search(r"[\x00-\x1f\x7f]", value):
-                        show_error(f"Invalid characters in {field}")
-
-                    # Update the field with normalized path
-                    getattr(self, field).setText(normalized_path)
+                        show_error(self.logger, f"Invalid characters in {field}")
 
                 return func(self, *args, **kwargs)
 

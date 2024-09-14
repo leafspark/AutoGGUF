@@ -224,11 +224,9 @@ class Vocab(BaseVocab, Protocol):
     added_tokens_list: list[str]
     fname_tokenizer: Path
 
-    def __init__(self, base_path: Path):
-        ...
+    def __init__(self, base_path: Path): ...
 
-    def all_tokens(self) -> Iterable[tuple[bytes, float, gguf.TokenType]]:
-        ...
+    def all_tokens(self) -> Iterable[tuple[bytes, float, gguf.TokenType]]: ...
 
 
 class NoVocab(BaseVocab):

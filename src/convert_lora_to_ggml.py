@@ -1,19 +1,17 @@
 from __future__ import annotations
 
-import logging
 import json
+import logging
 import os
 import struct
 import sys
-from pathlib import Path
-from typing import Any, BinaryIO, Sequence
+from typing import BinaryIO
 
 import numpy as np
 import torch
 
-if "NO_LOCAL_GGUF" not in os.environ:
-    sys.path.insert(1, str(Path(__file__).parent / "gguf-py" / "gguf"))
-import gguf
+from gguf.constants import *
+from gguf.tensor_mapping import *
 
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger("lora-to-gguf")
@@ -51,11 +49,6 @@ def write_tensor_header(
     fout.seek((fout.tell() + 31) & -32)
 
 
-def pyinstaller_include():
-    # PyInstaller import
-    pass
-
-
 if __name__ == "__main__":
     if len(sys.argv) < 2:
         logger.info(f"Usage: python {sys.argv[0]} <path> <output_path> [arch]")
@@ -63,7 +56,7 @@ if __name__ == "__main__":
             "Path must contain HuggingFace PEFT LoRA files 'adapter_config.json' and 'adapter_model.bin'"
         )
         logger.info(
-            f"Arch must be one of {list(gguf.MODEL_ARCH_NAMES.values())} (default: llama)"
+            f"Arch must be one of {list(MODEL_ARCH_NAMES.values())} (default: llama)"
         )
         sys.exit(1)
 
@@ -82,14 +75,14 @@ if __name__ == "__main__":
 
     arch_name = sys.argv[3] if len(sys.argv) == 4 else "llama"
 
-    if arch_name not in gguf.MODEL_ARCH_NAMES.values():
+    if arch_name not in MODEL_ARCH_NAMES.values():
         logger.error(f"Error: unsupported architecture {arch_name}")
         sys.exit(1)
 
-    arch = list(gguf.MODEL_ARCH_NAMES.keys())[
-        list(gguf.MODEL_ARCH_NAMES.values()).index(arch_name)
+    arch = list(MODEL_ARCH_NAMES.keys())[
+        list(MODEL_ARCH_NAMES.values()).index(arch_name)
     ]
-    name_map = gguf.TensorNameMap(arch, 500)
+    name_map = TensorNameMap(arch, 500)
 
     with open(input_json, "r") as f:
         params = json.load(f)
