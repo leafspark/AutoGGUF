@@ -1237,6 +1237,181 @@ class AutoGGUF(QMainWindow):
                     )
                 break
 
+    def download_finished(self, extract_dir) -> None:
+        self.logger.info(DOWNLOAD_FINISHED_EXTRACTED_TO.format(extract_dir))
+        self.download_button.setEnabled(True)
+        self.download_progress.setValue(100)
+
+        if (
+            self.cuda_extract_checkbox.isChecked()
+            and self.cuda_extract_checkbox.isVisible()
+        ):
+            cuda_backend = self.backend_combo_cuda.currentData()
+            if cuda_backend and cuda_backend != NO_SUITABLE_CUDA_BACKENDS:
+                self.extract_cuda_files(extract_dir, cuda_backend)
+                QMessageBox.information(
+                    self,
+                    DOWNLOAD_COMPLETE,
+                    LLAMACPP_DOWNLOADED_AND_EXTRACTED.format(extract_dir, cuda_backend),
+                )
+            else:
+                QMessageBox.warning(
+                    self, CUDA_EXTRACTION_FAILED, NO_SUITABLE_CUDA_BACKEND_FOUND
+                )
+        else:
+            QMessageBox.information(
+                self,
+                DOWNLOAD_COMPLETE,
+                LLAMACPP_BINARY_DOWNLOADED_AND_EXTRACTED.format(extract_dir),
+            )
+
+        self.refresh_backends()  # Refresh the backends after successful download
+        self.update_cuda_option()  # Update CUDA options in case a CUDA-capable backend was downloaded
+
+        # Select the newly downloaded backend
+        new_backend_name = os.path.basename(extract_dir)
+        index = self.backend_combo.findText(new_backend_name)
+        if index >= 0:
+            self.backend_combo.setCurrentIndex(index)
+
+    def verify_gguf(self, file_path) -> bool:
+        try:
+            with open(file_path, "rb") as f:
+                magic = f.read(4)
+                return magic == b"GGUF"
+        except (FileNotFoundError, IOError, OSError):
+            return False
+
+    def validate_quantization_inputs(self) -> None:
+        self.logger.debug(VALIDATING_QUANTIZATION_INPUTS)
+        errors = []
+        if not self.backend_combo.currentData():
+            errors.append(NO_BACKEND_SELECTED)
+        if not self.models_input.text():
+            errors.append(MODELS_PATH_REQUIRED)
+        if not self.output_input.text():
+            errors.append(OUTPUT_PATH_REQUIRED)
+        if not self.logs_input.text():
+            errors.append(LOGS_PATH_REQUIRED)
+        if not self.model_tree.currentItem():
+            errors.append(NO_MODEL_SELECTED)
+
+        if errors:
+            raise ValueError("\n".join(errors))
+
+    def load_models(self) -> None:
+        self.logger.info(LOADING_MODELS)
+        models_dir = self.models_input.text()
+        ensure_directory(models_dir)
+        self.model_tree.clear()
+
+        sharded_models = {}
+        single_models = []
+        concatenated_models = []
+
+        shard_pattern = re.compile(r"(.*)-(\d+)-of-(\d+)\.gguf$")
+        concat_pattern = re.compile(r"(.*)\.gguf\.part(\d+)of(\d+)$")
+
+        for file in os.listdir(models_dir):
+            full_path = os.path.join(models_dir, file)
+            if file.endswith(".gguf"):
+                if not self.verify_gguf(full_path):
+                    show_error(self.logger, INVALID_GGUF_FILE.format(file))
+                    continue
+
+                match = shard_pattern.match(file)
+                if match:
+                    base_name, shard_num, total_shards = match.groups()
+                    if base_name not in sharded_models:
+                        sharded_models[base_name] = []
+                    sharded_models[base_name].append((int(shard_num), file))
+                else:
+                    single_models.append(file)
+            else:
+                match = concat_pattern.match(file)
+                if match:
+                    concatenated_models.append(file)
+
+        if hasattr(self, "imported_models"):
+            for imported_model in self.imported_models:
+                file_name = os.path.basename(imported_model)
+                if (
+                    file_name not in single_models
+                    and file_name not in concatenated_models
+                ):
+                    if self.verify_gguf(imported_model):
+                        single_models.append(file_name)
+                    else:
+                        show_error(
+                            self.logger, INVALID_GGUF_FILE.format(imported_model)
+                        )
+
+        for base_name, shards in sharded_models.items():
+            parent_item = QTreeWidgetItem(self.model_tree)
+            parent_item.setText(0, SHARDED_MODEL_NAME.format(base_name))
+            first_shard = sorted(shards, key=lambda x: x[0])[0][1]
+            parent_item.setData(0, Qt.ItemDataRole.UserRole, first_shard)
+            for _, shard_file in sorted(shards):
+                child_item = QTreeWidgetItem(parent_item)
+                child_item.setText(0, shard_file)
+                child_item.setData(0, Qt.ItemDataRole.UserRole, shard_file)
+
+        for model in sorted(single_models):
+            self.add_model_to_tree(model)
+
+        for model in sorted(concatenated_models):
+            item = self.add_model_to_tree(model)
+            item.setForeground(0, Qt.gray)
+            item.setToolTip(0, CONCATENATED_FILE_WARNING)
+
+        self.model_tree.expandAll()
+        self.logger.info(
+            LOADED_MODELS.format(
+                len(single_models) + len(sharded_models) + len(concatenated_models)
+            )
+        )
+        if concatenated_models:
+            self.logger.warning(
+                CONCATENATED_FILES_FOUND.format(len(concatenated_models))
+            )
+
+    def add_model_to_tree(self, model) -> QTreeWidgetItem:
+        item = QTreeWidgetItem(self.model_tree)
+        item.setText(0, model)
+        if hasattr(self, "imported_models") and model in [
+            os.path.basename(m) for m in self.imported_models
+        ]:
+            full_path = next(
+                m for m in self.imported_models if os.path.basename(m) == model
+            )
+            item.setData(0, Qt.ItemDataRole.UserRole, full_path)
+            item.setToolTip(0, IMPORTED_MODEL_TOOLTIP.format(full_path))
+        else:
+            item.setData(0, Qt.ItemDataRole.UserRole, model)
+        return item
+
+    def extract_cuda_files(self, extract_dir, destination) -> None:
+        self.logger.info(EXTRACTING_CUDA_FILES.format(extract_dir, destination))
+        for root, dirs, files in os.walk(extract_dir):
+            for file in files:
+                if file.lower().endswith(".dll"):
+                    source_path = os.path.join(root, file)
+                    dest_path = os.path.join(destination, file)
+                    shutil.copy2(source_path, dest_path)
+
+    def download_error(self, error_message) -> None:
+        self.logger.error(DOWNLOAD_ERROR.format(error_message))
+        self.download_button.setEnabled(True)
+        self.download_progress.setValue(0)
+        show_error(self.logger, DOWNLOAD_FAILED.format(error_message))
+
+        # Clean up any partially downloaded files
+        asset = self.asset_combo.currentData()
+        if asset:
+            partial_file = os.path.join(os.path.abspath("llama_bin"), asset["name"])
+            if os.path.exists(partial_file):
+                os.remove(partial_file)
+
     def browse_local_path(self) -> None:
         if self.upload_type_file.isChecked():
             file_path, _ = QFileDialog.getOpenFileName(self, SELECT_FILE)
@@ -1444,65 +1619,6 @@ class AutoGGUF(QMainWindow):
             show_error(self.logger, ERROR_STARTING_HF_TO_GGUF_CONVERSION.format(str(e)))
         self.logger.info(HF_TO_GGUF_CONVERSION_TASK_STARTED)
 
-    def download_finished(self, extract_dir) -> None:
-        self.logger.info(DOWNLOAD_FINISHED_EXTRACTED_TO.format(extract_dir))
-        self.download_button.setEnabled(True)
-        self.download_progress.setValue(100)
-
-        if (
-            self.cuda_extract_checkbox.isChecked()
-            and self.cuda_extract_checkbox.isVisible()
-        ):
-            cuda_backend = self.backend_combo_cuda.currentData()
-            if cuda_backend and cuda_backend != NO_SUITABLE_CUDA_BACKENDS:
-                self.extract_cuda_files(extract_dir, cuda_backend)
-                QMessageBox.information(
-                    self,
-                    DOWNLOAD_COMPLETE,
-                    LLAMACPP_DOWNLOADED_AND_EXTRACTED.format(extract_dir, cuda_backend),
-                )
-            else:
-                QMessageBox.warning(
-                    self, CUDA_EXTRACTION_FAILED, NO_SUITABLE_CUDA_BACKEND_FOUND
-                )
-        else:
-            QMessageBox.information(
-                self,
-                DOWNLOAD_COMPLETE,
-                LLAMACPP_BINARY_DOWNLOADED_AND_EXTRACTED.format(extract_dir),
-            )
-
-        self.refresh_backends()  # Refresh the backends after successful download
-        self.update_cuda_option()  # Update CUDA options in case a CUDA-capable backend was downloaded
-
-        # Select the newly downloaded backend
-        new_backend_name = os.path.basename(extract_dir)
-        index = self.backend_combo.findText(new_backend_name)
-        if index >= 0:
-            self.backend_combo.setCurrentIndex(index)
-
-    def extract_cuda_files(self, extract_dir, destination) -> None:
-        self.logger.info(EXTRACTING_CUDA_FILES.format(extract_dir, destination))
-        for root, dirs, files in os.walk(extract_dir):
-            for file in files:
-                if file.lower().endswith(".dll"):
-                    source_path = os.path.join(root, file)
-                    dest_path = os.path.join(destination, file)
-                    shutil.copy2(source_path, dest_path)
-
-    def download_error(self, error_message) -> None:
-        self.logger.error(DOWNLOAD_ERROR.format(error_message))
-        self.download_button.setEnabled(True)
-        self.download_progress.setValue(0)
-        show_error(self.logger, DOWNLOAD_FAILED.format(error_message))
-
-        # Clean up any partially downloaded files
-        asset = self.asset_combo.currentData()
-        if asset:
-            partial_file = os.path.join(os.path.abspath("llama_bin"), asset["name"])
-            if os.path.exists(partial_file):
-                os.remove(partial_file)
-
     def split_gguf(
         self, model_dir: str, output_dir: str, max_size: str, max_tensors: str
     ) -> None:
@@ -1556,122 +1672,6 @@ class AutoGGUF(QMainWindow):
         except Exception as e:
             show_error(self.logger, SPLIT_GGUF_ERROR.format(e))
         self.logger.info(SPLIT_GGUF_TASK_FINISHED)
-
-    def verify_gguf(self, file_path) -> bool:
-        try:
-            with open(file_path, "rb") as f:
-                magic = f.read(4)
-                return magic == b"GGUF"
-        except (FileNotFoundError, IOError, OSError):
-            return False
-
-    def load_models(self) -> None:
-        self.logger.info(LOADING_MODELS)
-        models_dir = self.models_input.text()
-        ensure_directory(models_dir)
-        self.model_tree.clear()
-
-        sharded_models = {}
-        single_models = []
-        concatenated_models = []
-
-        shard_pattern = re.compile(r"(.*)-(\d+)-of-(\d+)\.gguf$")
-        concat_pattern = re.compile(r"(.*)\.gguf\.part(\d+)of(\d+)$")
-
-        for file in os.listdir(models_dir):
-            full_path = os.path.join(models_dir, file)
-            if file.endswith(".gguf"):
-                if not self.verify_gguf(full_path):
-                    show_error(self.logger, INVALID_GGUF_FILE.format(file))
-                    continue
-
-                match = shard_pattern.match(file)
-                if match:
-                    base_name, shard_num, total_shards = match.groups()
-                    if base_name not in sharded_models:
-                        sharded_models[base_name] = []
-                    sharded_models[base_name].append((int(shard_num), file))
-                else:
-                    single_models.append(file)
-            else:
-                match = concat_pattern.match(file)
-                if match:
-                    concatenated_models.append(file)
-
-        if hasattr(self, "imported_models"):
-            for imported_model in self.imported_models:
-                file_name = os.path.basename(imported_model)
-                if (
-                    file_name not in single_models
-                    and file_name not in concatenated_models
-                ):
-                    if self.verify_gguf(imported_model):
-                        single_models.append(file_name)
-                    else:
-                        show_error(
-                            self.logger, INVALID_GGUF_FILE.format(imported_model)
-                        )
-
-        for base_name, shards in sharded_models.items():
-            parent_item = QTreeWidgetItem(self.model_tree)
-            parent_item.setText(0, SHARDED_MODEL_NAME.format(base_name))
-            first_shard = sorted(shards, key=lambda x: x[0])[0][1]
-            parent_item.setData(0, Qt.ItemDataRole.UserRole, first_shard)
-            for _, shard_file in sorted(shards):
-                child_item = QTreeWidgetItem(parent_item)
-                child_item.setText(0, shard_file)
-                child_item.setData(0, Qt.ItemDataRole.UserRole, shard_file)
-
-        for model in sorted(single_models):
-            self.add_model_to_tree(model)
-
-        for model in sorted(concatenated_models):
-            item = self.add_model_to_tree(model)
-            item.setForeground(0, Qt.gray)
-            item.setToolTip(0, CONCATENATED_FILE_WARNING)
-
-        self.model_tree.expandAll()
-        self.logger.info(
-            LOADED_MODELS.format(
-                len(single_models) + len(sharded_models) + len(concatenated_models)
-            )
-        )
-        if concatenated_models:
-            self.logger.warning(
-                CONCATENATED_FILES_FOUND.format(len(concatenated_models))
-            )
-
-    def add_model_to_tree(self, model) -> QTreeWidgetItem:
-        item = QTreeWidgetItem(self.model_tree)
-        item.setText(0, model)
-        if hasattr(self, "imported_models") and model in [
-            os.path.basename(m) for m in self.imported_models
-        ]:
-            full_path = next(
-                m for m in self.imported_models if os.path.basename(m) == model
-            )
-            item.setData(0, Qt.ItemDataRole.UserRole, full_path)
-            item.setToolTip(0, IMPORTED_MODEL_TOOLTIP.format(full_path))
-        else:
-            item.setData(0, Qt.ItemDataRole.UserRole, model)
-        return item
-
-    def validate_quantization_inputs(self) -> None:
-        self.logger.debug(VALIDATING_QUANTIZATION_INPUTS)
-        errors = []
-        if not self.backend_combo.currentData():
-            errors.append(NO_BACKEND_SELECTED)
-        if not self.models_input.text():
-            errors.append(MODELS_PATH_REQUIRED)
-        if not self.output_input.text():
-            errors.append(OUTPUT_PATH_REQUIRED)
-        if not self.logs_input.text():
-            errors.append(LOGS_PATH_REQUIRED)
-        if not self.model_tree.currentItem():
-            errors.append(NO_MODEL_SELECTED)
-
-        if errors:
-            raise ValueError("\n".join(errors))
 
     def quantize_model(self) -> None:
         self.logger.info(STARTING_MODEL_QUANTIZATION)

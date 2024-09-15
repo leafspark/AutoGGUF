@@ -7,7 +7,7 @@ from typing import List, Optional
 from PySide6.QtCore import QTimer
 from PySide6.QtWidgets import QApplication
 from fastapi import FastAPI, Query, Depends, HTTPException, Security
-from fastapi.security.api_key import APIKeyHeader, APIKey
+from fastapi.security.api_key import APIKeyHeader
 from pydantic import BaseModel, Field
 from uvicorn import Config, Server
 
