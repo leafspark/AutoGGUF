@@ -5,7 +5,7 @@ import urllib.error
 import urllib.request
 from datetime import datetime
 from functools import partial, wraps
-from typing import Any, Dict, List, Tuple
+from typing import Any, Dict, List
 
 from PySide6.QtCore import *
 from PySide6.QtGui import *
@@ -66,6 +66,8 @@ class AutoGGUF(QMainWindow):
         init_timer = QElapsedTimer()
         init_timer.start()
 
+        self.parse_resolution = ui_update.parse_resolution.__get__(self)
+
         width, height = self.parse_resolution()
         self.logger = Logger("AutoGGUF", "logs")
 
@@ -87,7 +89,7 @@ class AutoGGUF(QMainWindow):
         self.resize_factor = float(
             os.environ.get("AUTOGGUF_RESIZE_FACTOR", 1.1)
         )  # 10% increase/decrease
-        self.default_width, self.default_height = self.parse_resolution()
+        self.default_width, self.default_height = width, height
         self.resize(self.default_width, self.default_height)
 
         ensure_directory(os.path.abspath(self.output_dir_name))
@@ -157,6 +159,13 @@ class AutoGGUF(QMainWindow):
         self.browse_hf_outfile = ui_update.browse_hf_outfile.__get__(self)
         self.browse_hf_model_input = ui_update.browse_hf_model_input.__get__(self)
         self.browse_base_model = ui_update.browse_base_model.__get__(self)
+        self.reset_size = ui_update.reset_size.__get__(self)
+        self.resize_window = partial(ui_update.resize_window, self)
+        self.show_detailed_stats_std = partial(GPUMonitor.show_detailed_stats_std, self)
+        self.show_cpu_graph = partial(GPUMonitor.show_cpu_graph, self)
+        self.show_ram_graph = partial(GPUMonitor.show_ram_graph, self)
+        self.rename_model = partial(utils.rename_model, self)
+        self.show_model_context_menu = partial(utils.show_model_context_menu, self)
 
         # Set up main widget and layout
         main_widget = QWidget()
@@ -276,9 +285,9 @@ class AutoGGUF(QMainWindow):
         # Split options
         split_options_layout = QHBoxLayout()
         self.split_max_size = QLineEdit()
-        self.split_max_size.setPlaceholderText("Size in G/M")
+        self.split_max_size.setPlaceholderText(SIZE_IN_UNITS)
         self.split_max_tensors = QLineEdit()
-        self.split_max_tensors.setPlaceholderText("Number of tensors")
+        self.split_max_tensors.setPlaceholderText(NUMBER_OF_TENSORS)
         split_options_layout.addWidget(QLabel(SPLIT_MAX_SIZE))
         split_options_layout.addWidget(self.split_max_size)
         split_options_layout.addWidget(QLabel(SPLIT_MAX_TENSORS))
@@ -1020,58 +1029,12 @@ class AutoGGUF(QMainWindow):
         self.logger.info(AUTOGGUF_INITIALIZATION_COMPLETE)
         self.logger.info(STARTUP_ELASPED_TIME.format(init_timer.elapsed()))
 
-    def show_ram_graph(self, event) -> None:
-        self.show_detailed_stats(RAM_USAGE_OVER_TIME, self.ram_data)
-
-    def show_cpu_graph(self, event) -> None:
-        self.show_detailed_stats(CPU_USAGE_OVER_TIME, self.cpu_data)
-
-    def show_detailed_stats(self, title, data) -> None:
-        dialog = QDialog(self)
-        dialog.setWindowTitle(title)
-        dialog.setMinimumSize(800, 600)
-
-        layout = QVBoxLayout(dialog)
-
-        graph = SimpleGraph(title)
-        layout.addWidget(graph)
-
-        def update_graph_data() -> None:
-            graph.update_data(data)
-
-        timer = QTimer(dialog)
-        timer.timeout.connect(update_graph_data)
-        timer.start(200)  # Update every 0.2 seconds
-
-        dialog.exec()
-
-    def show_model_context_menu(self, position):
-        item = self.model_tree.itemAt(position)
-        if item:
-            # Child of a sharded model or top-level item without children
-            if item.parent() is not None or item.childCount() == 0:
-                menu = QMenu()
-                rename_action = menu.addAction(RENAME)
-                delete_action = menu.addAction(DELETE)
-
-                action = menu.exec(self.model_tree.viewport().mapToGlobal(position))
-                if action == rename_action:
-                    self.rename_model(item)
-                elif action == delete_action:
-                    self.delete_model(item)
-
-    def rename_model(self, item):
-        old_name = item.text(0)
-        new_name, ok = QInputDialog.getText(self, RENAME, f"New name for {old_name}:")
-        if ok and new_name:
-            old_path = os.path.join(self.models_input.text(), old_name)
-            new_path = os.path.join(self.models_input.text(), new_name)
-            try:
-                os.rename(old_path, new_path)
-                item.setText(0, new_name)
-                self.logger.info(MODEL_RENAMED_SUCCESSFULLY.format(old_name, new_name))
-            except Exception as e:
-                show_error(self.logger, f"Error renaming model: {e}")
+    def resizeEvent(self, event) -> None:
+        super().resizeEvent(event)
+        path = QPainterPath()
+        path.addRoundedRect(self.rect(), 10, 10)
+        mask = QRegion(path.toFillPolygon().toPolygon())
+        self.setMask(mask)
 
     def delete_model(self, item):
         model_name = item.text(0)
@@ -1229,34 +1192,6 @@ class AutoGGUF(QMainWindow):
             elif event.key() == Qt.Key_0:
                 self.reset_size()
         super().keyPressEvent(event)
-
-    def resize_window(self, larger) -> None:
-        factor = 1.1 if larger else 1 / 1.1
-        current_width = self.width()
-        current_height = self.height()
-        new_width = int(current_width * factor)
-        new_height = int(current_height * factor)
-        self.resize(new_width, new_height)
-
-    def reset_size(self) -> None:
-        self.resize(self.default_width, self.default_height)
-
-    def parse_resolution(self) -> Tuple[int, int]:
-        res = os.environ.get("AUTOGGUF_RESOLUTION", "1650x1100")
-        try:
-            width, height = map(int, res.split("x"))
-            if width <= 0 or height <= 0:
-                raise ValueError
-            return width, height
-        except (ValueError, AttributeError):
-            return 1650, 1100
-
-    def resizeEvent(self, event) -> None:
-        super().resizeEvent(event)
-        path = QPainterPath()
-        path.addRoundedRect(self.rect(), 10, 10)
-        mask = QRegion(path.toFillPolygon().toPolygon())
-        self.setMask(mask)
 
     def refresh_backends(self) -> None:
         self.logger.info(REFRESHING_BACKENDS)

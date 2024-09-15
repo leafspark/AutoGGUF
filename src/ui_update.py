@@ -1,10 +1,36 @@
+from typing import Tuple
+
+import psutil
 from PySide6.QtCore import QTimer
 from PySide6.QtGui import Qt
 from PySide6.QtWidgets import QFileDialog, QLabel
 
 from Localizations import *
-import psutil
 from error_handling import show_error
+
+
+def resize_window(self, larger) -> None:
+    factor = 1.1 if larger else 1 / 1.1
+    current_width = self.width()
+    current_height = self.height()
+    new_width = int(current_width * factor)
+    new_height = int(current_height * factor)
+    self.resize(new_width, new_height)
+
+
+def reset_size(self) -> None:
+    self.resize(self.default_width, self.default_height)
+
+
+def parse_resolution(self) -> Tuple[int, int]:
+    res = os.environ.get("AUTOGGUF_RESOLUTION", "1650x1100")
+    try:
+        width, height = map(int, res.split("x"))
+        if width <= 0 or height <= 0:
+            raise ValueError
+        return width, height
+    except (ValueError, AttributeError):
+        return 1650, 1100
 
 
 def browse_base_model(self) -> None:

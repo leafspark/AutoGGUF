@@ -2,13 +2,43 @@ from typing import Any, Union
 
 import requests
 from PySide6.QtCore import Qt
-from PySide6.QtWidgets import QFileDialog
+from PySide6.QtWidgets import QFileDialog, QInputDialog, QMenu
 
 from DownloadThread import DownloadThread
 from Localizations import *
 from error_handling import show_error
 from imports_and_globals import ensure_directory
 from KVOverrideEntry import KVOverrideEntry
+
+
+def show_model_context_menu(self, position):
+    item = self.model_tree.itemAt(position)
+    if item:
+        # Child of a sharded model or top-level item without children
+        if item.parent() is not None or item.childCount() == 0:
+            menu = QMenu()
+            rename_action = menu.addAction(RENAME)
+            delete_action = menu.addAction(DELETE)
+
+            action = menu.exec(self.model_tree.viewport().mapToGlobal(position))
+            if action == rename_action:
+                self.rename_model(item)
+            elif action == delete_action:
+                self.delete_model(item)
+
+
+def rename_model(self, item):
+    old_name = item.text(0)
+    new_name, ok = QInputDialog.getText(self, RENAME, f"New name for {old_name}:")
+    if ok and new_name:
+        old_path = os.path.join(self.models_input.text(), old_name)
+        new_path = os.path.join(self.models_input.text(), new_name)
+        try:
+            os.rename(old_path, new_path)
+            item.setText(0, new_name)
+            self.logger.info(MODEL_RENAMED_SUCCESSFULLY.format(old_name, new_name))
+        except Exception as e:
+            show_error(self.logger, f"Error renaming model: {e}")
 
 
 def add_kv_override(self, override_string=None) -> None:

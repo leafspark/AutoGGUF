@@ -409,6 +409,8 @@ class _English(_Localization):
         self.SPLIT_GGUF_TASK_FINISHED = "GGUF Split task finished"
         self.SPLIT_GGUF_COMMAND = "GGUF Split Command"
         self.SPLIT_GGUF_ERROR = "Error starting GGUF split"
+        self.NUMBER_OF_TENSORS = "Number of tensors"
+        self.SIZE_IN_UNITS = "Size in G/M"
 
         # Model actions
         self.CONFIRM_DELETE = "Confirm Delete"

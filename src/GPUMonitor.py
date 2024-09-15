@@ -22,6 +22,8 @@ from Localizations import (
     VRAM_USAGE_OVER_TIME,
     NO_GPU_DETECTED,
     AMD_GPU_NOT_SUPPORTED,
+    CPU_USAGE_OVER_TIME,
+    RAM_USAGE_OVER_TIME,
 )
 
 from ui_update import animate_bar
@@ -168,6 +170,31 @@ class GPUMonitor(QWidget):
     def mouseDoubleClickEvent(self, event) -> None:
         if self.handles:
             self.show_detailed_stats()
+
+    def show_ram_graph(self, event) -> None:
+        self.show_detailed_stats_std(RAM_USAGE_OVER_TIME, self.ram_data)
+
+    def show_cpu_graph(self, event) -> None:
+        self.show_detailed_stats_std(CPU_USAGE_OVER_TIME, self.cpu_data)
+
+    def show_detailed_stats_std(self, title, data) -> None:
+        dialog = QDialog(self)
+        dialog.setWindowTitle(title)
+        dialog.setMinimumSize(800, 600)
+
+        layout = QVBoxLayout(dialog)
+
+        graph = SimpleGraph(title)
+        layout.addWidget(graph)
+
+        def update_graph_data() -> None:
+            graph.update_data(data)
+
+        timer = QTimer(dialog)
+        timer.timeout.connect(update_graph_data)
+        timer.start(200)  # Update every 0.2 seconds
+
+        dialog.exec()
 
     def show_detailed_stats(self) -> None:
         dialog = QDialog(self)
