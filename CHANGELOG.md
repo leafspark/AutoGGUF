@@ -1,5 +1,34 @@
 # Changelog
 
+## [v1.9.0] - 2024-09-15
+
+### Added
+- Implemented Hugging Face (HF) upload functionality with GUI definitions
+- Added RAM and CPU usage graphs to UI
+- Input validation using wraps added to UI
+- Right-click context menu added to the models list in UI
+- Support for iMatrix generation tracking
+- GGUF splitting feature added
+- Japanese and German localizations updated
+
+### Changed
+- Refactored to move functions out of `AutoGGUF` to reduce bloat
+- Localized GGUF split strings
+- Optimized GGUF imports and renamed related modules
+- Removed old `HFTransfer` class
+- Adjusted logging strings and updated French and Dutch localizations
+- Improved startup time by optimizing default configuration, disabling network fetches for backends/updates
+- Removed `requests` and `python-dotenv` to reduce size
+- Updated `fastapi` requirement from `~=0.112.2` to `~=0.114.2`
+- Updated `torch` requirement from `~=2.4.0` to `~=2.4.1`
+- Updated `setuptools` requirement from `~=74.0.0` to `~=74.1.2`
+- Updated `safetensors` requirement from `~=0.4.4` to `~=0.4.5`
+- Updated `huggingface-hub` requirement from `~=0.24.6` to `~=0.24.7`
+
+### Fixed
+- Adjusted indeterminate progress bar behavior
+- Removed comments in `requirements.txt` and updated its formatting
+
 ## [v1.8.1] - 2024-09-04
 
 ### Added

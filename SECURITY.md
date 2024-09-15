@@ -4,7 +4,7 @@
 
 | Version         | Supported          |
 |-----------------|--------------------|
-| stable (v1.8.1) | :white_check_mark: |
+| stable (v1.9.0) | :white_check_mark: |
 
 Beta versions are not supported, and may have unknown security issues.
 

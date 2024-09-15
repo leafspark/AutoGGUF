@@ -5,7 +5,7 @@ with open("requirements.txt") as f:
 
 setup(
     name="AutoGGUF",
-    version="v1.8.1",
+    version="v1.9.0",
     packages=[""],
     url="https://github.com/leafspark/AutoGGUF",
     license="apache-2.0",
