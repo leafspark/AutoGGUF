@@ -416,6 +416,17 @@ class _English(_Localization):
         self.MODEL_RENAMED_SUCCESSFULLY = "Model renamed successfully."
         self.MODEL_DELETED_SUCCESSFULLY = "Model deleted successfully."
 
+        # HuggingFace Transfer
+        self.ALL_FIELDS_REQUIRED = "All fields are required."
+        self.HUGGINGFACE_UPLOAD_COMMAND = "HuggingFace Upload Command: "
+        self.UPLOADING = "Uploading"
+        self.UPLOADING_FOLDER = "Uploading folder"
+        self.HF_TRANSFER_TASK_NAME = "{} {} to {} from {}"
+        self.ERROR_STARTING_HF_TRANSFER = "Error starting HF transfer: {}"
+        self.STARTED_HUGGINGFACE_TRANSFER = "Started HuggingFace {} operation."
+        self.SELECT_FOLDER = "Select Folder"
+        self.SELECT_FILE = "Select File"
+
 
 class _French(_Localization):
     def __init__(self):

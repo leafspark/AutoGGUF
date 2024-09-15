@@ -298,6 +298,52 @@ class AutoGGUF(QMainWindow):
         self.split_gguf_layout.addWidget(split_button)
         self.split_gguf_dialog.setLayout(self.split_gguf_layout)
 
+        # HF Upload Window
+        self.hf_upload_dialog = QDialog(self)
+        self.hf_upload_dialog.setWindowTitle("HF Upload")
+        self.hf_upload_dialog.setFixedWidth(500)
+        self.hf_upload_layout = QVBoxLayout()
+
+        # Repo input
+        repo_layout = QHBoxLayout()
+        self.hf_repo_input = QLineEdit()
+        repo_layout.addWidget(QLabel("Repository:"))
+        repo_layout.addWidget(self.hf_repo_input)
+        self.hf_upload_layout.addLayout(repo_layout)
+
+        # Remote path input
+        remote_path_layout = QHBoxLayout()
+        self.hf_remote_path_input = QLineEdit()
+        remote_path_layout.addWidget(QLabel("Remote Path:"))
+        remote_path_layout.addWidget(self.hf_remote_path_input)
+        self.hf_upload_layout.addLayout(remote_path_layout)
+
+        # Local file/folder input
+        local_path_layout = QHBoxLayout()
+        self.hf_local_path_input = QLineEdit()
+        local_path_button = QPushButton("Browse")
+        local_path_button.clicked.connect(self.browse_local_path)
+        local_path_layout.addWidget(QLabel("Local Path:"))
+        local_path_layout.addWidget(self.hf_local_path_input)
+        local_path_layout.addWidget(local_path_button)
+        self.hf_upload_layout.addLayout(local_path_layout)
+
+        # Upload type (file or folder)
+        self.upload_type_group = QButtonGroup()
+        self.upload_type_file = QRadioButton("File")
+        self.upload_type_folder = QRadioButton("Folder")
+        self.upload_type_group.addButton(self.upload_type_file)
+        self.upload_type_group.addButton(self.upload_type_folder)
+        self.hf_upload_layout.addWidget(self.upload_type_file)
+        self.hf_upload_layout.addWidget(self.upload_type_folder)
+
+        # Upload button
+        upload_button = QPushButton("Upload")
+        upload_button.clicked.connect(self.transfer_to_hf)
+        self.hf_upload_layout.addWidget(upload_button)
+
+        self.hf_upload_dialog.setLayout(self.hf_upload_layout)
+
         # Tools menu
         tools_menu = self.menubar.addMenu("&Tools")
         autofp8_action = QAction("&AutoFP8", self)
@@ -306,6 +352,10 @@ class AutoGGUF(QMainWindow):
         split_gguf_action = QAction("&Split GGUF", self)
         split_gguf_action.setShortcut(QKeySequence("Shift+G"))
         split_gguf_action.triggered.connect(self.split_gguf_dialog.exec)
+        hf_transfer_action = QAction("&HF Transfer", self)
+        hf_transfer_action.setShortcut(QKeySequence("Shift+H"))
+        hf_transfer_action.triggered.connect(self.hf_upload_dialog.exec)
+        tools_menu.addAction(hf_transfer_action)
         tools_menu.addAction(autofp8_action)
         tools_menu.addAction(split_gguf_action)
 
@@ -1251,6 +1301,77 @@ class AutoGGUF(QMainWindow):
                         self, TASK_PRESET_SAVED, TASK_PRESET_SAVED_TO.format(file_name)
                     )
                 break
+
+    def browse_local_path(self) -> None:
+        if self.upload_type_file.isChecked():
+            file_path, _ = QFileDialog.getOpenFileName(self, SELECT_FILE)
+            if file_path:
+                self.hf_local_path_input.setText(file_path)
+        elif self.upload_type_folder.isChecked():
+            folder_path = QFileDialog.getExistingDirectory(self, SELECT_FOLDER)
+            if folder_path:
+                self.hf_local_path_input.setText(folder_path)
+
+    @validate_input("hf_repo_input", "hf_local_path_input", "hf_remote_path_input")
+    def transfer_to_hf(self) -> None:
+        hf_repo = self.hf_repo_input.text()
+        local_path = self.hf_local_path_input.text()
+        remote_path = self.hf_remote_path_input.text()
+        type = "upload"
+
+        if not hf_repo or not local_path or not type:
+            QMessageBox.warning(self, ERROR, ALL_FIELDS_REQUIRED)
+            return
+
+        try:
+            command = ["huggingface-cli", type, hf_repo, local_path]
+            if remote_path:
+                command.append(remote_path)
+
+            logs_path = self.logs_input.text()
+            ensure_directory(logs_path)
+
+            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+            log_file = os.path.join(logs_path, f"hf_transfer_{timestamp}.log")
+
+            # Log command
+            command_str = " ".join(command)
+            self.logger.info(HUGGINGFACE_UPLOAD_COMMAND + command_str)
+
+            thread = QuantizationThread(command, os.getcwd(), log_file)
+            self.quant_threads.append(thread)
+
+            task_name_temp = (
+                UPLOADING if self.upload_type_file.isChecked() else UPLOADING_FOLDER
+            )
+
+            task_name = HF_TRANSFER_TASK_NAME.format(
+                task_name_temp, local_path, hf_repo, local_path
+            )
+            task_item = TaskListItem(
+                task_name,
+                log_file,
+                show_progress_bar=False,
+                logger=self.logger,
+                quant_threads=self.quant_threads,
+            )
+            list_item = QListWidgetItem(self.task_list)
+            list_item.setSizeHint(task_item.sizeHint())
+            self.task_list.addItem(list_item)
+            self.task_list.setItemWidget(list_item, task_item)
+
+            thread.status_signal.connect(task_item.update_status)
+            thread.finished_signal.connect(
+                lambda: self.task_finished(thread, task_item)
+            )
+            thread.error_signal.connect(
+                lambda err: handle_error(self.logger, err, task_item)
+            )
+            thread.start()
+
+        except Exception as e:
+            show_error(self.logger, ERROR_STARTING_HF_TRANSFER.format(str(e)))
+        self.logger.info(STARTED_HUGGINGFACE_TRANSFER.format(type))
 
     def quantize_to_fp8_dynamic(self, model_dir: str, output_dir: str) -> None:
         if model_dir or output_dir == "":
