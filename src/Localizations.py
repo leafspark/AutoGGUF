@@ -1776,18 +1776,86 @@ class _Hindi(_Localization):
 class _Russian(_Localization):
     def __init__(self):
         super().__init__()
-        self.WINDOW_TITLE = "AutoGGUF (автоматический квантователь моделей GGUF)"
+
+        # General UI
+        self.WINDOW_TITLE = "AutoGGUF (автоматический квантователь модели GGUF)"
         self.RAM_USAGE = "Использование ОЗУ:"
         self.CPU_USAGE = "Использование ЦП:"
-        self.BACKEND = "Бэкенд Llama.cpp:"
-        self.REFRESH_BACKENDS = "Обновить бэкенды"
+        self.BACKEND = "Бэкэнд Llama.cpp:"
+        self.REFRESH_BACKENDS = "Обновить бэкэнды"
         self.MODELS_PATH = "Путь к моделям:"
         self.OUTPUT_PATH = "Путь вывода:"
         self.LOGS_PATH = "Путь к логам:"
         self.BROWSE = "Обзор"
         self.AVAILABLE_MODELS = "Доступные модели:"
+        self.REFRESH_MODELS = "Обновить модели"
+        self.STARTUP_ELASPED_TIME = "Инициализация заняла {0} мс"
+
+        # Usage Graphs
+        self.CPU_USAGE_OVER_TIME = "Использование ЦП во времени"
+        self.RAM_USAGE_OVER_TIME = "Использование ОЗУ во времени"
+
+        # Environment variables
+        self.DOTENV_FILE_NOT_FOUND = "Файл .env не найден."
+        self.COULD_NOT_PARSE_LINE = "Не удалось проанализировать строку: {0}"
+        self.ERROR_LOADING_DOTENV = "Ошибка загрузки .env: {0}"
+
+        # Model Import
+        self.IMPORT_MODEL = "Импортировать модель"
+        self.SELECT_MODEL_TO_IMPORT = "Выберите модель для импорта"
+        self.CONFIRM_IMPORT = "Подтвердить импорт"
+        self.IMPORT_MODEL_CONFIRMATION = "Вы хотите импортировать модель {}?"
+        self.MODEL_IMPORTED_SUCCESSFULLY = "Модель {} успешно импортирована"
+        self.IMPORTING_MODEL = "Импорт модели"
+        self.IMPORTED_MODEL_TOOLTIP = "Импортированная модель: {}"
+
+        # AutoFP8 Quantization
+        self.AUTOFP8_QUANTIZATION_TASK_STARTED = "Задача квантования AutoFP8 запущена"
+        self.ERROR_STARTING_AUTOFP8_QUANTIZATION = "Ошибка запуска квантования AutoFP8"
+        self.QUANTIZING_WITH_AUTOFP8 = "Квантование {0} с помощью AutoFP8"
+        self.QUANTIZING_TO_WITH_AUTOFP8 = "Квантование {0} в {1}"
+        self.QUANTIZE_TO_FP8_DYNAMIC = "Квантовать в FP8 Dynamic"
+        self.OPEN_MODEL_FOLDER = "Открыть папку модели"
+        self.QUANTIZE = "Квантовать"
+        self.OPEN_MODEL_FOLDER = "Открыть папку модели"
+        self.INPUT_MODEL = "Входная модель:"
+
+        # GGUF Verification
+        self.INVALID_GGUF_FILE = "Неверный файл GGUF: {}"
+        self.SHARDED_MODEL_NAME = "{} (Шардированная)"
+        self.IMPORTED_MODEL_TOOLTIP = "Импортированная модель: {}"
+        self.CONCATENATED_FILE_WARNING = "Это часть объединенного файла. Он не будет работать с llama-quantize; пожалуйста, сначала объедините файл."
+        self.CONCATENATED_FILES_FOUND = "Найдено {} частей объединенного файла. Пожалуйста, сначала объедините файлы."
+
+        # Plugins
+        self.PLUGINS_DIR_NOT_EXIST = (
+            "Каталог плагинов '{}' не существует. Плагины не будут загружены."
+        )
+        self.PLUGINS_DIR_NOT_DIRECTORY = (
+            "'{}' существует, но не является каталогом. Плагины не будут загружены."
+        )
+        self.PLUGIN_LOADED = "Загружен плагин: {} {}"
+        self.PLUGIN_INCOMPATIBLE = (
+            "Плагин {} {} не совместим с версией AutoGGUF {}. Поддерживаемые версии: {}"
+        )
+        self.PLUGIN_LOAD_FAILED = "Не удалось загрузить плагин {}: {}"
+        self.NO_PLUGINS_LOADED = "Плагины не загружены."
+
+        # GPU Monitoring
+        self.GPU_USAGE = "Использование GPU:"
+        self.GPU_USAGE_FORMAT = "GPU: {:.1f}% | VRAM: {:.1f}% ({} MB / {} MB)"
+        self.GPU_DETAILS = "Детали GPU"
+        self.GPU_USAGE_OVER_TIME = "Использование GPU во времени"
+        self.VRAM_USAGE_OVER_TIME = "Использование VRAM во времени"
+        self.PERCENTAGE = "Процент"
+        self.TIME = "Время (с)"
+        self.NO_GPU_DETECTED = "GPU не обнаружен"
+        self.SELECT_GPU = "Выбрать GPU"
+        self.AMD_GPU_NOT_SUPPORTED = "Обнаружен GPU AMD, но он не поддерживается"
+
+        # Quantization
         self.QUANTIZATION_TYPE = "Тип квантования:"
-        self.ALLOW_REQUANTIZE = "Разрешить переквантование"
+        self.ALLOW_REQUANTIZE = "Разрешить повторное квантование"
         self.LEAVE_OUTPUT_TENSOR = "Оставить выходной тензор"
         self.PURE = "Чистый"
         self.IMATRIX = "IMatrix:"
@@ -1796,143 +1864,220 @@ class _Russian(_Localization):
         self.USE_OUTPUT_TENSOR_TYPE = "Использовать тип выходного тензора"
         self.USE_TOKEN_EMBEDDING_TYPE = "Использовать тип встраивания токенов"
         self.KEEP_SPLIT = "Сохранить разделение"
-        self.KV_OVERRIDES = "KV переопределения:"
+        self.KV_OVERRIDES = "Переопределения KV:"
         self.ADD_NEW_OVERRIDE = "Добавить новое переопределение"
         self.QUANTIZE_MODEL = "Квантовать модель"
+        self.EXTRA_ARGUMENTS = "Дополнительные аргументы:"
+        self.EXTRA_ARGUMENTS_LABEL = "Дополнительные аргументы командной строки"
+        self.QUANTIZATION_COMMAND = "Команда квантования"
+
+        # Presets
         self.SAVE_PRESET = "Сохранить пресет"
         self.LOAD_PRESET = "Загрузить пресет"
+
+        # Tasks
         self.TASKS = "Задачи:"
+
+        # llama.cpp Download
         self.DOWNLOAD_LLAMACPP = "Скачать llama.cpp"
         self.SELECT_RELEASE = "Выбрать релиз:"
-        self.SELECT_ASSET = "Выбрать актив:"
+        self.SELECT_ASSET = "Выбрать ресурс:"
         self.EXTRACT_CUDA_FILES = "Извлечь файлы CUDA"
-        self.SELECT_CUDA_BACKEND = "Выбрать бэкенд CUDA:"
+        self.SELECT_CUDA_BACKEND = "Выбрать бэкэнд CUDA:"
         self.DOWNLOAD = "Скачать"
+        self.REFRESH_RELEASES = "Обновить релизы"
+
+        # IMatrix Generation
         self.IMATRIX_GENERATION = "Генерация IMatrix"
         self.DATA_FILE = "Файл данных:"
         self.MODEL = "Модель:"
         self.OUTPUT = "Вывод:"
         self.OUTPUT_FREQUENCY = "Частота вывода:"
-        self.GPU_OFFLOAD = "Разгрузка GPU:"
+        self.GPU_OFFLOAD = "Выгрузка на GPU:"
         self.AUTO = "Авто"
         self.GENERATE_IMATRIX = "Сгенерировать IMatrix"
+        self.CONTEXT_SIZE = "Размер контекста:"
+        self.CONTEXT_SIZE_FOR_IMATRIX = "Размер контекста для генерации IMatrix"
+        self.THREADS = "Потоки:"
+        self.NUMBER_OF_THREADS_FOR_IMATRIX = "Количество потоков для генерации IMatrix"
+        self.IMATRIX_GENERATION_COMMAND = "Команда генерации IMatrix"
+
+        # LoRA Conversion
+        self.LORA_CONVERSION = "Конвертация LoRA"
+        self.LORA_INPUT_PATH = "Путь ввода LoRA"
+        self.LORA_OUTPUT_PATH = "Путь вывода LoRA"
+        self.SELECT_LORA_INPUT_DIRECTORY = "Выбрать входной каталог LoRA"
+        self.SELECT_LORA_OUTPUT_FILE = "Выбрать выходной файл LoRA"
+        self.CONVERT_LORA = "Конвертировать LoRA"
+        self.LORA_CONVERSION_COMMAND = "Команда конвертации LoRA"
+
+        # LoRA Export
+        self.EXPORT_LORA = "Экспорт LoRA"
+        self.GGML_LORA_ADAPTERS = "Адаптеры GGML LoRA"
+        self.SELECT_LORA_ADAPTER_FILES = "Выбрать файлы адаптера LoRA"
+        self.ADD_ADAPTER = "Добавить адаптер"
+        self.DELETE_ADAPTER = "Удалить"
+        self.LORA_SCALE = "Масштаб LoRA"
+        self.ENTER_LORA_SCALE_VALUE = "Введите значение масштаба LoRA (необязательно)"
+        self.NUMBER_OF_THREADS_FOR_LORA_EXPORT = "Количество потоков для экспорта LoRA"
+        self.LORA_EXPORT_COMMAND = "Команда экспорта LoRA"
+
+        # HuggingFace to GGUF Conversion
+        self.HF_TO_GGUF_CONVERSION = "Конвертация HuggingFace в GGUF"
+        self.MODEL_DIRECTORY = "Каталог модели:"
+        self.OUTPUT_FILE = "Выходной файл:"
+        self.OUTPUT_TYPE = "Тип вывода:"
+        self.VOCAB_ONLY = "Только словарь"
+        self.USE_TEMP_FILE = "Использовать временный файл"
+        self.NO_LAZY_EVALUATION = "Без ленивого вычисления"
+        self.MODEL_NAME = "Название модели:"
+        self.VERBOSE = "Подробный вывод"
+        self.SPLIT_MAX_SIZE = "Максимальный размер разделения:"
+        self.DRY_RUN = "Пробный запуск"
+        self.CONVERT_HF_TO_GGUF = "Конвертировать HF в GGUF"
+        self.SELECT_HF_MODEL_DIRECTORY = "Выбрать каталог модели HuggingFace"
+        self.BROWSE_FOR_HF_MODEL_DIRECTORY = "Обзор каталога модели HuggingFace"
+        self.BROWSE_FOR_HF_TO_GGUF_OUTPUT = "Обзор выходного файла HuggingFace в GGUF"
+
+        # Update Checking
+        self.UPDATE_AVAILABLE = "Доступно обновление"
+        self.NEW_VERSION_AVAILABLE = "Доступна новая версия: {}"
+        self.DOWNLOAD_NEW_VERSION = "Скачать?"
+        self.ERROR_CHECKING_FOR_UPDATES = "Ошибка проверки обновлений:"
+        self.CHECKING_FOR_UPDATES = "Проверка обновлений"
+
+        # General Messages
         self.ERROR = "Ошибка"
         self.WARNING = "Предупреждение"
         self.PROPERTIES = "Свойства"
         self.CANCEL = "Отмена"
         self.RESTART = "Перезапуск"
         self.DELETE = "Удалить"
+        self.RENAME = "Переименовать"
         self.CONFIRM_DELETION = "Вы уверены, что хотите удалить эту задачу?"
         self.TASK_RUNNING_WARNING = (
             "Некоторые задачи все еще выполняются. Вы уверены, что хотите выйти?"
         )
         self.YES = "Да"
         self.NO = "Нет"
-        self.DOWNLOAD_COMPLETE = "Загрузка завершена"
-        self.CUDA_EXTRACTION_FAILED = "Извлечение CUDA не удалось"
-        self.PRESET_SAVED = "Пресет сохранен"
-        self.PRESET_LOADED = "Пресет загружен"
-        self.NO_ASSET_SELECTED = "Актив не выбран"
-        self.DOWNLOAD_FAILED = "Загрузка не удалась"
-        self.NO_BACKEND_SELECTED = "Бэкенд не выбран"
-        self.NO_MODEL_SELECTED = "Модель не выбрана"
-        self.REFRESH_RELEASES = "Обновить релизы"
-        self.NO_SUITABLE_CUDA_BACKENDS = "Подходящие бэкенды CUDA не найдены"
-        self.LLAMACPP_DOWNLOADED_EXTRACTED = "Бинарный файл llama.cpp загружен и извлечен в {0}\nФайлы CUDA извлечены в {1}"
-        self.CUDA_FILES_EXTRACTED = "Файлы CUDA извлечены в"
-        self.NO_SUITABLE_CUDA_BACKEND_EXTRACTION = (
-            "Подходящий бэкенд CUDA для извлечения не найден"
-        )
-        self.ERROR_FETCHING_RELEASES = "Ошибка получения релизов: {0}"
-        self.CONFIRM_DELETION_TITLE = "Подтвердить удаление"
-        self.LOG_FOR = "Лог для {0}"
+        self.COMPLETED = "Завершено"
+
+        # File Types
         self.ALL_FILES = "Все файлы (*)"
         self.GGUF_FILES = "Файлы GGUF (*.gguf)"
         self.DAT_FILES = "Файлы DAT (*.dat)"
         self.JSON_FILES = "Файлы JSON (*.json)"
-        self.FAILED_LOAD_PRESET = "Не удалось загрузить пресет: {0}"
+        self.BIN_FILES = "Двоичные файлы (*.bin)"
+        self.LORA_FILES = "Файлы LoRA (*.bin *.gguf)"
+        self.GGUF_AND_BIN_FILES = "Файлы GGUF и двоичные файлы (*.gguf *.bin)"
+        self.SHARDED = "разделенный"
+
+        # Status Messages
+        self.DOWNLOAD_COMPLETE = "Загрузка завершена"
+        self.CUDA_EXTRACTION_FAILED = "Извлечение CUDA не удалось"
+        self.PRESET_SAVED = "Пресет сохранен"
+        self.PRESET_LOADED = "Пресет загружен"
+        self.NO_ASSET_SELECTED = "Ресурс не выбран"
+        self.DOWNLOAD_FAILED = "Загрузка не удалась"
+        self.NO_BACKEND_SELECTED = "Бэкэнд не выбран"
+        self.NO_MODEL_SELECTED = "Модель не выбрана"
+        self.NO_SUITABLE_CUDA_BACKENDS = "Не найдено подходящих бэкэндов CUDA"
+        self.IN_PROGRESS = "В процессе"
+        self.LLAMACPP_DOWNLOADED_EXTRACTED = (
+            "Бинарный файл llama.cpp загружен и извлечен в {0}"
+        )
+        self.CUDA_FILES_EXTRACTED = "Файлы CUDA извлечены в"
+        self.NO_SUITABLE_CUDA_BACKEND_EXTRACTION = (
+            "Не найдено подходящего бэкэнда CUDA для извлечения"
+        )
+        self.ERROR_FETCHING_RELEASES = "Ошибка получения релизов: {0}"
+        self.CONFIRM_DELETION_TITLE = "Подтвердить удаление"
+        self.LOG_FOR = "Лог для {0}"
+        self.FAILED_TO_LOAD_PRESET = "Не удалось загрузить пресет: {0}"
         self.INITIALIZING_AUTOGGUF = "Инициализация приложения AutoGGUF"
         self.AUTOGGUF_INITIALIZATION_COMPLETE = "Инициализация AutoGGUF завершена"
-        self.REFRESHING_BACKENDS = "Обновление бэкендов"
-        self.NO_BACKENDS_AVAILABLE = "Бэкенды недоступны"
-        self.FOUND_VALID_BACKENDS = "Найдено {0} действительных бэкендов"
+        self.REFRESHING_BACKENDS = "Обновление бэкэндов"
+        self.NO_BACKENDS_AVAILABLE = "Нет доступных бэкэндов"
+        self.FOUND_VALID_BACKENDS = "Найдено {0} действительных бэкэндов"
         self.SAVING_PRESET = "Сохранение пресета"
         self.PRESET_SAVED_TO = "Пресет сохранен в {0}"
         self.LOADING_PRESET = "Загрузка пресета"
         self.PRESET_LOADED_FROM = "Пресет загружен из {0}"
-        self.ADDING_KV_OVERRIDE = "Добавление KV переопределения: {0}"
+        self.ADDING_KV_OVERRIDE = "Добавление переопределения KV: {0}"
         self.SAVING_TASK_PRESET = "Сохранение пресета задачи для {0}"
         self.TASK_PRESET_SAVED = "Пресет задачи сохранен"
         self.TASK_PRESET_SAVED_TO = "Пресет задачи сохранен в {0}"
         self.RESTARTING_TASK = "Перезапуск задачи: {0}"
-        self.IN_PROGRESS = "В процессе"
         self.DOWNLOAD_FINISHED_EXTRACTED_TO = "Загрузка завершена. Извлечено в: {0}"
-        self.LLAMACPP_DOWNLOADED_AND_EXTRACTED = "Бинарный файл llama.cpp загружен и извлечен в {0}\nФайлы CUDA извлечены в {1}"
+        self.LLAMACPP_DOWNLOADED_AND_EXTRACTED = (
+            "Бинарный файл llama.cpp загружен и извлечен в {0}"
+        )
         self.NO_SUITABLE_CUDA_BACKEND_FOUND = (
-            "Подходящий бэкенд CUDA для извлечения не найден"
+            "Не найдено подходящего бэкэнда CUDA для извлечения"
         )
         self.LLAMACPP_BINARY_DOWNLOADED_AND_EXTRACTED = (
             "Бинарный файл llama.cpp загружен и извлечен в {0}"
         )
         self.REFRESHING_LLAMACPP_RELEASES = "Обновление релизов llama.cpp"
-        self.UPDATING_ASSET_LIST = "Обновление списка активов"
-        self.UPDATING_CUDA_OPTIONS = "Обновление параметров CUDA"
+        self.UPDATING_ASSET_LIST = "Обновление списка ресурсов"
+        self.UPDATING_CUDA_OPTIONS = "Обновление опций CUDA"
         self.STARTING_LLAMACPP_DOWNLOAD = "Начало загрузки llama.cpp"
-        self.UPDATING_CUDA_BACKENDS = "Обновление бэкендов CUDA"
-        self.NO_CUDA_BACKEND_SELECTED = "Бэкенд CUDA для извлечения не выбран"
+        self.UPDATING_CUDA_BACKENDS = "Обновление бэкэндов CUDA"
+        self.NO_CUDA_BACKEND_SELECTED = "Не выбран бэкэнд CUDA для извлечения"
         self.EXTRACTING_CUDA_FILES = "Извлечение файлов CUDA из {0} в {1}"
         self.DOWNLOAD_ERROR = "Ошибка загрузки: {0}"
         self.SHOWING_TASK_CONTEXT_MENU = "Отображение контекстного меню задачи"
-        self.SHOWING_PROPERTIES_FOR_TASK = "Отображение свойств задачи: {0}"
+        self.SHOWING_PROPERTIES_FOR_TASK = "Отображение свойств для задачи: {0}"
         self.CANCELLING_TASK = "Отмена задачи: {0}"
         self.CANCELED = "Отменено"
         self.DELETING_TASK = "Удаление задачи: {0}"
         self.LOADING_MODELS = "Загрузка моделей"
+
         self.LOADED_MODELS = "Загружено {0} моделей"
-        self.BROWSING_FOR_MODELS_DIRECTORY = "Поиск каталога моделей"
-        self.SELECT_MODELS_DIRECTORY = "Выберите каталог моделей"
-        self.BROWSING_FOR_OUTPUT_DIRECTORY = "Поиск выходного каталога"
-        self.SELECT_OUTPUT_DIRECTORY = "Выберите выходной каталог"
-        self.BROWSING_FOR_LOGS_DIRECTORY = "Поиск каталога логов"
-        self.SELECT_LOGS_DIRECTORY = "Выберите каталог логов"
-        self.BROWSING_FOR_IMATRIX_FILE = "Поиск файла IMatrix"
+        self.BROWSING_FOR_MODELS_DIRECTORY = "Выбор директории моделей"
+        self.SELECT_MODELS_DIRECTORY = "Выберите директорию моделей"
+        self.BROWSING_FOR_OUTPUT_DIRECTORY = "Выбор выходной директории"
+        self.SELECT_OUTPUT_DIRECTORY = "Выберите выходную директорию"
+        self.BROWSING_FOR_LOGS_DIRECTORY = "Выбор директории логов"
+        self.SELECT_LOGS_DIRECTORY = "Выберите директорию логов"
+        self.BROWSING_FOR_IMATRIX_FILE = "Выбор файла IMatrix"
         self.SELECT_IMATRIX_FILE = "Выберите файл IMatrix"
-        self.RAM_USAGE_FORMAT = "{0:.1f}% ({1} МБ / {2} МБ)"
-        self.CPU_USAGE_FORMAT = "Использование ЦП: {0:.1f}%"
+        self.RAM_USAGE_FORMAT = "{0:.1f}% ({1} MB / {2} MB)"
+        self.CPU_USAGE_FORMAT = "Использование CPU: {0:.1f}%"
         self.VALIDATING_QUANTIZATION_INPUTS = "Проверка входных данных квантования"
         self.MODELS_PATH_REQUIRED = "Требуется путь к моделям"
-        self.OUTPUT_PATH_REQUIRED = "Требуется путь вывода"
+        self.OUTPUT_PATH_REQUIRED = "Требуется выходной путь"
         self.LOGS_PATH_REQUIRED = "Требуется путь к логам"
         self.STARTING_MODEL_QUANTIZATION = "Начало квантования модели"
         self.INPUT_FILE_NOT_EXIST = "Входной файл '{0}' не существует."
         self.QUANTIZING_MODEL_TO = "Квантование {0} в {1}"
         self.QUANTIZATION_TASK_STARTED = "Задача квантования запущена для {0}"
-        self.ERROR_STARTING_QUANTIZATION = "Ошибка запуска квантования: {0}"
+        self.ERROR_STARTING_QUANTIZATION = "Ошибка при запуске квантования: {0}"
         self.UPDATING_MODEL_INFO = "Обновление информации о модели: {0}"
         self.TASK_FINISHED = "Задача завершена: {0}"
-        self.SHOWING_TASK_DETAILS_FOR = "Отображение сведений о задаче для: {0}"
-        self.BROWSING_FOR_IMATRIX_DATA_FILE = "Поиск файла данных IMatrix"
+        self.SHOWING_TASK_DETAILS_FOR = "Отображение деталей задачи для: {0}"
+        self.BROWSING_FOR_IMATRIX_DATA_FILE = "Выбор файла данных IMatrix"
         self.SELECT_DATA_FILE = "Выберите файл данных"
-        self.BROWSING_FOR_IMATRIX_MODEL_FILE = "Поиск файла модели IMatrix"
+        self.BROWSING_FOR_IMATRIX_MODEL_FILE = "Выбор файла модели IMatrix"
         self.SELECT_MODEL_FILE = "Выберите файл модели"
-        self.BROWSING_FOR_IMATRIX_OUTPUT_FILE = "Поиск выходного файла IMatrix"
+        self.BROWSING_FOR_IMATRIX_OUTPUT_FILE = "Выбор выходного файла IMatrix"
         self.SELECT_OUTPUT_FILE = "Выберите выходной файл"
         self.STARTING_IMATRIX_GENERATION = "Начало генерации IMatrix"
-        self.BACKEND_PATH_NOT_EXIST = "Путь бэкенда не существует: {0}"
+        self.BACKEND_PATH_NOT_EXIST = "Путь к бэкенду не существует: {0}"
         self.GENERATING_IMATRIX = "Генерация IMatrix"
-        self.ERROR_STARTING_IMATRIX_GENERATION = "Ошибка запуска генерации IMatrix: {0}"
+        self.ERROR_STARTING_IMATRIX_GENERATION = (
+            "Ошибка при запуске генерации IMatrix: {0}"
+        )
         self.IMATRIX_GENERATION_TASK_STARTED = "Задача генерации IMatrix запущена"
         self.ERROR_MESSAGE = "Ошибка: {0}"
         self.TASK_ERROR = "Ошибка задачи: {0}"
         self.APPLICATION_CLOSING = "Закрытие приложения"
         self.APPLICATION_CLOSED = "Приложение закрыто"
         self.SELECT_QUANTIZATION_TYPE = "Выберите тип квантования"
-        self.ALLOWS_REQUANTIZING = (
-            "Позволяет переквантовать тензоры, которые уже были квантованы"
-        )
-        self.LEAVE_OUTPUT_WEIGHT = "Оставит output.weight не (пере)квантованным"
+        self.ALLOWS_REQUANTIZING = "Разрешает переквантование уже квантованных тензоров"
+        self.LEAVE_OUTPUT_WEIGHT = "Оставит output.weight неквантованным"
         self.DISABLE_K_QUANT_MIXTURES = (
-            "Отключить k-квантовые смеси и квантовать все тензоры к одному типу"
+            "Отключить k-quant смеси и квантовать все тензоры в один тип"
         )
         self.USE_DATA_AS_IMPORTANCE_MATRIX = "Использовать данные в файле как матрицу важности для оптимизации квантования"
         self.USE_IMPORTANCE_MATRIX_FOR_TENSORS = (
@@ -1945,21 +2090,105 @@ class _Russian(_Localization):
         self.USE_THIS_TYPE_FOR_OUTPUT_WEIGHT = (
             "Использовать этот тип для тензора output.weight"
         )
-        self.TOKEN_EMBEDDING_TYPE = "Тип встраивания токенов:"
+        self.TOKEN_EMBEDDING_TYPE = "Тип токенов эмбеддинга:"
         self.USE_THIS_TYPE_FOR_TOKEN_EMBEDDINGS = (
-            "Использовать этот тип для тензора встраивания токенов"
+            "Использовать этот тип для тензоров токенов эмбеддинга"
         )
-        self.WILL_GENERATE_QUANTIZED_MODEL_IN_SAME_SHARDS = "Будет генерировать квантованную модель в тех же шардах, что и входные данные"
+        self.WILL_GENERATE_QUANTIZED_MODEL_IN_SAME_SHARDS = (
+            "Сгенерирует квантованную модель в тех же шардах, что и входная"
+        )
         self.OVERRIDE_MODEL_METADATA = "Переопределить метаданные модели"
         self.INPUT_DATA_FILE_FOR_IMATRIX = "Входной файл данных для генерации IMatrix"
         self.MODEL_TO_BE_QUANTIZED = "Модель для квантования"
         self.OUTPUT_PATH_FOR_GENERATED_IMATRIX = (
-            "Выходной путь для сгенерированного IMatrix"
+            "Выходной путь для сгенерированной IMatrix"
         )
         self.HOW_OFTEN_TO_SAVE_IMATRIX = "Как часто сохранять IMatrix"
-        self.SET_GPU_OFFLOAD_VALUE = "Установить значение разгрузки GPU (-ngl)"
-        self.COMPLETED = "Завершено"
-        self.REFRESH_MODELS = "Обновить модели"
+        self.SET_GPU_OFFLOAD_VALUE = "Установить значение выгрузки на GPU (-ngl)"
+        self.STARTING_LORA_CONVERSION = "Начало конвертации LoRA"
+        self.LORA_INPUT_PATH_REQUIRED = "Требуется входной путь LoRA."
+        self.LORA_OUTPUT_PATH_REQUIRED = "Требуется выходной путь LoRA."
+        self.ERROR_STARTING_LORA_CONVERSION = "Ошибка при запуске конвертации LoRA: {}"
+        self.LORA_CONVERSION_TASK_STARTED = "Задача конвертации LoRA запущена."
+        self.BROWSING_FOR_LORA_INPUT_DIRECTORY = "Выбор входной директории LoRA..."
+        self.BROWSING_FOR_LORA_OUTPUT_FILE = "Выбор выходного файла LoRA..."
+        self.CONVERTING_LORA = "Конвертация LoRA"
+        self.LORA_CONVERSION_FINISHED = "Конвертация LoRA завершена."
+        self.LORA_FILE_MOVED = "Файл LoRA перемещен из {} в {}."
+        self.LORA_FILE_NOT_FOUND = "Файл LoRA не найден: {}."
+        self.ERROR_MOVING_LORA_FILE = "Ошибка при перемещении файла LoRA: {}"
+        self.MODEL_PATH_REQUIRED = "Требуется путь к модели."
+        self.AT_LEAST_ONE_LORA_ADAPTER_REQUIRED = "Требуется хотя бы один адаптер LoRA."
+        self.INVALID_LORA_SCALE_VALUE = "Неверное значение масштаба LoRA."
+        self.ERROR_STARTING_LORA_EXPORT = "Ошибка при запуске экспорта LoRA: {}"
+        self.LORA_EXPORT_TASK_STARTED = "Задача экспорта LoRA запущена."
+        self.EXPORTING_LORA = "Экспорт LoRA..."
+        self.BROWSING_FOR_EXPORT_LORA_MODEL_FILE = (
+            "Выбор файла модели для экспорта LoRA..."
+        )
+        self.BROWSING_FOR_EXPORT_LORA_OUTPUT_FILE = (
+            "Выбор выходного файла для экспорта LoRA..."
+        )
+        self.ADDING_LORA_ADAPTER = "Добавление адаптера LoRA..."
+        self.DELETING_LORA_ADAPTER = "Удаление адаптера LoRA..."
+        self.SELECT_LORA_ADAPTER_FILE = "Выберите файл адаптера LoRA"
+        self.STARTING_LORA_EXPORT = "Начало экспорта LoRA..."
+        self.SELECT_OUTPUT_TYPE = "Выберите тип вывода (GGUF или GGML)"
+        self.BASE_MODEL = "Базовая модель"
+        self.SELECT_BASE_MODEL_FILE = "Выберите файл базовой модели (GGUF)"
+        self.BASE_MODEL_PATH_REQUIRED = (
+            "Требуется путь к базовой модели для вывода GGUF."
+        )
+        self.BROWSING_FOR_BASE_MODEL_FILE = "Выбор файла базовой модели..."
+        self.SELECT_BASE_MODEL_FOLDER = (
+            "Выберите папку базовой модели (содержащую safetensors)"
+        )
+        self.BROWSING_FOR_BASE_MODEL_FOLDER = "Выбор папки базовой модели..."
+        self.LORA_CONVERSION_FROM_TO = "Конвертация LoRA из {} в {}"
+        self.GENERATING_IMATRIX_FOR = "Генерация IMatrix для {}"
+        self.MODEL_PATH_REQUIRED_FOR_IMATRIX = (
+            "Требуется путь к модели для генерации IMatrix."
+        )
+        self.NO_ASSET_SELECTED_FOR_CUDA_CHECK = "Не выбран ассет для проверки CUDA"
+        self.NO_QUANTIZATION_TYPE_SELECTED = "Не выбран тип квантования. Пожалуйста, выберите хотя бы один тип квантования."
+        self.STARTING_HF_TO_GGUF_CONVERSION = "Начало конвертации из HuggingFace в GGUF"
+        self.MODEL_DIRECTORY_REQUIRED = "Требуется директория модели"
+        self.HF_TO_GGUF_CONVERSION_COMMAND = "Команда конвертации из HF в GGUF: {}"
+        self.CONVERTING_TO_GGUF = "Конвертация {} в GGUF"
+        self.ERROR_STARTING_HF_TO_GGUF_CONVERSION = (
+            "Ошибка при запуске конвертации из HuggingFace в GGUF: {}"
+        )
+        self.HF_TO_GGUF_CONVERSION_TASK_STARTED = (
+            "Задача конвертации из HuggingFace в GGUF запущена"
+        )
+
+        # GGUF Split
+        self.SPLIT_GGUF = "Разделить GGUF"
+        self.SPLIT_MAX_SIZE = "Максимальный размер разделения"
+        self.SPLIT_MAX_TENSORS = "Максимальное количество тензоров при разделении"
+        self.SPLIT_GGUF_TASK_STARTED = "Задача разделения GGUF запущена"
+        self.SPLIT_GGUF_TASK_FINISHED = "Задача разделения GGUF завершена"
+        self.SPLIT_GGUF_COMMAND = "Команда разделения GGUF"
+        self.SPLIT_GGUF_ERROR = "Ошибка при запуске разделения GGUF"
+        self.NUMBER_OF_TENSORS = "Количество тензоров"
+        self.SIZE_IN_UNITS = "Размер в G/M"
+
+        # Model operations
+        self.CONFIRM_DELETE = "Подтвердить удаление"
+        self.DELETE_MODEL_WARNING = "Вы уверены, что хотите удалить модель: {}?"
+        self.MODEL_RENAMED_SUCCESSFULLY = "Модель успешно переименована."
+        self.MODEL_DELETED_SUCCESSFULLY = "Модель успешно удалена."
+
+        # HuggingFace Transfer
+        self.ALL_FIELDS_REQUIRED = "Все поля обязательны."
+        self.HUGGINGFACE_UPLOAD_COMMAND = "Команда загрузки в HuggingFace: "
+        self.UPLOADING = "Загрузка"
+        self.UPLOADING_FOLDER = "Загрузка папки"
+        self.HF_TRANSFER_TASK_NAME = "{} {} в {} из {}"
+        self.ERROR_STARTING_HF_TRANSFER = "Ошибка при запуске передачи в HF: {}"
+        self.STARTED_HUGGINGFACE_TRANSFER = "Начата операция {} в HuggingFace."
+        self.SELECT_FOLDER = "Выберите папку"
+        self.SELECT_FILE = "Выберите файл"
 
 
 class _Ukrainian(_Localization):
@@ -4525,198 +4754,428 @@ class _Dutch(_Localization):
 class _Finnish(_Localization):
     def __init__(self):
         super().__init__()
-        self.WINDOW_TITLE = "AutoGGUF (automaattinen GGUF-mallien kvantisoija)"
-        self.RAM_USAGE = "RAM-muistin käyttö:"
-        self.CPU_USAGE = "CPU:n käyttö:"
-        self.BACKEND = "Llama.cpp-taustaosa:"
-        self.REFRESH_BACKENDS = "Päivitä taustaosat"
+
+        # General UI
+        self.WINDOW_TITLE = "AutoGGUF (automaattinen GGUF-mallin kvantisoija)"
+        self.RAM_USAGE = "RAM-käyttö:"
+        self.CPU_USAGE = "CPU-käyttö:"
+        self.BACKEND = "Llama.cpp-taustajärjestelmä:"
+        self.REFRESH_BACKENDS = "Päivitä taustajärjestelmät"
         self.MODELS_PATH = "Mallien polku:"
-        self.OUTPUT_PATH = "Tulostepolku:"
+        self.OUTPUT_PATH = "Tulosteen polku:"
         self.LOGS_PATH = "Lokien polku:"
         self.BROWSE = "Selaa"
-        self.AVAILABLE_MODELS = "Käytettävissä olevat mallit:"
+        self.AVAILABLE_MODELS = "Saatavilla olevat mallit:"
+        self.REFRESH_MODELS = "Päivitä mallit"
+        self.STARTUP_ELASPED_TIME = "Alustus kesti {0} ms"
+
+        # Usage Graphs
+        self.CPU_USAGE_OVER_TIME = "CPU-käyttö ajan myötä"
+        self.RAM_USAGE_OVER_TIME = "RAM-käyttö ajan myötä"
+
+        # Environment variables
+        self.DOTENV_FILE_NOT_FOUND = ".env-tiedostoa ei löytynyt."
+        self.COULD_NOT_PARSE_LINE = "Riviä ei voitu jäsentää: {0}"
+        self.ERROR_LOADING_DOTENV = "Virhe ladattaessa .env: {0}"
+
+        # Model Import
+        self.IMPORT_MODEL = "Tuo malli"
+        self.SELECT_MODEL_TO_IMPORT = "Valitse tuotava malli"
+        self.CONFIRM_IMPORT = "Vahvista tuonti"
+        self.IMPORT_MODEL_CONFIRMATION = "Haluatko tuoda mallin {}?"
+        self.MODEL_IMPORTED_SUCCESSFULLY = "Malli {} tuotu onnistuneesti"
+        self.IMPORTING_MODEL = "Tuodaan mallia"
+        self.IMPORTED_MODEL_TOOLTIP = "Tuotu malli: {}"
+
+        # AutoFP8 Quantization
+        self.AUTOFP8_QUANTIZATION_TASK_STARTED = "AutoFP8-kvantisointitehtävä aloitettu"
+        self.ERROR_STARTING_AUTOFP8_QUANTIZATION = (
+            "Virhe aloitettaessa AutoFP8-kvantisointia"
+        )
+        self.QUANTIZING_WITH_AUTOFP8 = "Kvantisoidaan {0} AutoFP8:lla"
+        self.QUANTIZING_TO_WITH_AUTOFP8 = "Kvantisoidaan {0} muotoon {1}"
+        self.QUANTIZE_TO_FP8_DYNAMIC = "Kvantisoi FP8 Dynamic -muotoon"
+        self.OPEN_MODEL_FOLDER = "Avaa mallikansio"
+        self.QUANTIZE = "Kvantisoi"
+        self.OPEN_MODEL_FOLDER = "Avaa mallikansio"
+        self.INPUT_MODEL = "Syötemalli:"
+
+        # GGUF Verification
+        self.INVALID_GGUF_FILE = "Virheellinen GGUF-tiedosto: {}"
+        self.SHARDED_MODEL_NAME = "{} (Sharded)"
+        self.IMPORTED_MODEL_TOOLTIP = "Tuotu malli: {}"
+        self.CONCATENATED_FILE_WARNING = "Tämä on yhdistetty tiedoston osa. Se ei toimi llama-quantizen kanssa; yhdistä tiedosto ensin."
+        self.CONCATENATED_FILES_FOUND = (
+            "Löydettiin {} yhdistettyä tiedoston osaa. Yhdistä tiedostot ensin."
+        )
+
+        # Plugins
+        self.PLUGINS_DIR_NOT_EXIST = (
+            "Lisäosakansiota '{}' ei ole olemassa. Lisäosia ei ladata."
+        )
+        self.PLUGINS_DIR_NOT_DIRECTORY = (
+            "'{}' on olemassa, mutta se ei ole kansio. Lisäosia ei ladata."
+        )
+        self.PLUGIN_LOADED = "Ladattu lisäosa: {} {}"
+        self.PLUGIN_INCOMPATIBLE = "Lisäosa {} {} ei ole yhteensopiva AutoGGUF-version {} kanssa. Tuetut versiot: {}"
+        self.PLUGIN_LOAD_FAILED = "Lisäosan {} lataaminen epäonnistui: {}"
+        self.NO_PLUGINS_LOADED = "Lisäosia ei ladattu."
+
+        # GPU Monitoring
+        self.GPU_USAGE = "GPU-käyttö:"
+        self.GPU_USAGE_FORMAT = "GPU: {:.1f}% | VRAM: {:.1f}% ({} MB / {} MB)"
+        self.GPU_DETAILS = "GPU-tiedot"
+        self.GPU_USAGE_OVER_TIME = "GPU-käyttö ajan myötä"
+        self.VRAM_USAGE_OVER_TIME = "VRAM-käyttö ajan myötä"
+        self.PERCENTAGE = "Prosenttiosuus"
+        self.TIME = "Aika (s)"
+        self.NO_GPU_DETECTED = "GPU:ta ei havaittu"
+        self.SELECT_GPU = "Valitse GPU"
+        self.AMD_GPU_NOT_SUPPORTED = "AMD GPU havaittu, mutta ei tuettu"
+
+        # Quantization
         self.QUANTIZATION_TYPE = "Kvantisointityyppi:"
         self.ALLOW_REQUANTIZE = "Salli uudelleenkvantisointi"
-        self.LEAVE_OUTPUT_TENSOR = "Jätä tulostensori"
+        self.LEAVE_OUTPUT_TENSOR = "Jätä tulostetensori"
         self.PURE = "Puhdas"
         self.IMATRIX = "IMatrix:"
         self.INCLUDE_WEIGHTS = "Sisällytä painot:"
-        self.EXCLUDE_WEIGHTS = "Sulje pois painot:"
-        self.USE_OUTPUT_TENSOR_TYPE = "Käytä tulostensorin tyyppiä"
-        self.USE_TOKEN_EMBEDDING_TYPE = "Käytä token-upotustyyppiä"
-        self.KEEP_SPLIT = "Säilytä jako"
+        self.EXCLUDE_WEIGHTS = "Jätä pois painot:"
+        self.USE_OUTPUT_TENSOR_TYPE = "Käytä tulostetensorityyppiä"
+        self.USE_TOKEN_EMBEDDING_TYPE = "Käytä merkkiupotustyyppiä"
+        self.KEEP_SPLIT = "Pidä jaettuna"
         self.KV_OVERRIDES = "KV-ohitukset:"
         self.ADD_NEW_OVERRIDE = "Lisää uusi ohitus"
         self.QUANTIZE_MODEL = "Kvantisoi malli"
+        self.EXTRA_ARGUMENTS = "Lisäargumentit:"
+        self.EXTRA_ARGUMENTS_LABEL = "Lisäkomentoriviargumentit"
+        self.QUANTIZATION_COMMAND = "Kvantisointikomento"
+
+        # Presets
         self.SAVE_PRESET = "Tallenna esiasetus"
         self.LOAD_PRESET = "Lataa esiasetus"
+
+        # Tasks
         self.TASKS = "Tehtävät:"
+
+        # llama.cpp Download
         self.DOWNLOAD_LLAMACPP = "Lataa llama.cpp"
         self.SELECT_RELEASE = "Valitse julkaisu:"
         self.SELECT_ASSET = "Valitse resurssi:"
         self.EXTRACT_CUDA_FILES = "Pura CUDA-tiedostot"
-        self.SELECT_CUDA_BACKEND = "Valitse CUDA-taustaosa:"
+        self.SELECT_CUDA_BACKEND = "Valitse CUDA-taustajärjestelmä:"
         self.DOWNLOAD = "Lataa"
+        self.REFRESH_RELEASES = "Päivitä julkaisut"
+
+        # IMatrix Generation
         self.IMATRIX_GENERATION = "IMatrix-generointi"
         self.DATA_FILE = "Datatiedosto:"
-        self.MODEL = "Malli:"
+        self.MODEL_FILE = "Mallitiedosto:"
         self.OUTPUT = "Tuloste:"
-        self.OUTPUT_FREQUENCY = "Tulostetaajuus:"
-        self.GPU_OFFLOAD = "GPU-kuormansiirto:"
-        self.AUTO = "Automaattinen"
+        self.OUTPUT_FREQUENCY = "Tulosteen taajuus:"
+        self.GPU_OFFLOAD = "GPU-purku:"
+        self.AUTO = "Auto"
         self.GENERATE_IMATRIX = "Generoi IMatrix"
+        self.CONTEXT_SIZE = "Kontekstin koko:"
+        self.CONTEXT_SIZE_FOR_IMATRIX = "Kontekstin koko IMatrix-generoinnille"
+        self.THREADS = "Säikeet:"
+        self.NUMBER_OF_THREADS_FOR_IMATRIX = "Säikeiden määrä IMatrix-generoinnille"
+        self.IMATRIX_GENERATION_COMMAND = "IMatrix-generointikomento"
+
+        # LoRA Conversion
+        self.LORA_CONVERSION = "LoRA-muunnos"
+        self.LORA_INPUT_PATH = "LoRA-syötepolku"
+        self.LORA_OUTPUT_PATH = "LoRA-tulostepolku"
+        self.SELECT_LORA_INPUT_DIRECTORY = "Valitse LoRA-syötekansio"
+        self.SELECT_LORA_OUTPUT_FILE = "Valitse LoRA-tulostetiedosto"
+        self.CONVERT_LORA = "Muunna LoRA"
+        self.LORA_CONVERSION_COMMAND = "LoRA-muunnoskomento"
+
+        # LoRA Export
+        self.EXPORT_LORA = "Vie LoRA"
+        self.GGML_LORA_ADAPTERS = "GGML LoRA -adapterit"
+        self.SELECT_LORA_ADAPTER_FILES = "Valitse LoRA-adapteritiedostot"
+        self.ADD_ADAPTER = "Lisää adapteri"
+        self.DELETE_ADAPTER = "Poista"
+        self.LORA_SCALE = "LoRA-skaala"
+        self.ENTER_LORA_SCALE_VALUE = "Anna LoRA-skaala-arvo (valinnainen)"
+        self.NUMBER_OF_THREADS_FOR_LORA_EXPORT = "Säikeiden määrä LoRA-viennille"
+        self.LORA_EXPORT_COMMAND = "LoRA-vientikomento"
+
+        # HuggingFace to GGUF Conversion
+        self.HF_TO_GGUF_CONVERSION = "HuggingFace - GGUF -muunnos"
+        self.MODEL_DIRECTORY = "Mallikansio:"
+        self.OUTPUT_FILE = "Tulostetiedosto:"
+        self.OUTPUT_TYPE = "Tulostetyyppi:"
+        self.VOCAB_ONLY = "Vain sanasto"
+        self.USE_TEMP_FILE = "Käytä väliaikaistiedostoa"
+        self.NO_LAZY_EVALUATION = "Ei laiskaa arviointia"
+        self.MODEL_NAME = "Mallin nimi:"
+        self.VERBOSE = "Monisanainen"
+        self.SPLIT_MAX_SIZE = "Jaon enimmäiskoko:"
+        self.DRY_RUN = "Kuivaharjoittelu"
+        self.CONVERT_HF_TO_GGUF = "Muunna HF GGUF:ksi"
+        self.SELECT_HF_MODEL_DIRECTORY = "Valitse HuggingFace-mallikansio"
+        self.BROWSE_FOR_HF_MODEL_DIRECTORY = "Selaa HuggingFace-mallikansiota"
+        self.BROWSE_FOR_HF_TO_GGUF_OUTPUT = "Selaa HuggingFace - GGUF -tulostetiedostoa"
+
+        # Update Checking
+        self.UPDATE_AVAILABLE = "Päivitys saatavilla"
+        self.NEW_VERSION_AVAILABLE = "Uusi versio saatavilla: {}"
+        self.DOWNLOAD_NEW_VERSION = "Lataa?"
+        self.ERROR_CHECKING_FOR_UPDATES = "Virhe tarkistettaessa päivityksiä:"
+        self.CHECKING_FOR_UPDATES = "Tarkistetaan päivityksiä"
+
+        # General Messages
         self.ERROR = "Virhe"
         self.WARNING = "Varoitus"
         self.PROPERTIES = "Ominaisuudet"
         self.CANCEL = "Peruuta"
         self.RESTART = "Käynnistä uudelleen"
         self.DELETE = "Poista"
+        self.RENAME = "Nimeä uudelleen"
         self.CONFIRM_DELETION = "Haluatko varmasti poistaa tämän tehtävän?"
         self.TASK_RUNNING_WARNING = (
-            "Jotkin tehtävät ovat vielä käynnissä. Haluatko varmasti lopettaa?"
+            "Joitakin tehtäviä on vielä käynnissä. Haluatko varmasti lopettaa?"
         )
         self.YES = "Kyllä"
         self.NO = "Ei"
-        self.DOWNLOAD_COMPLETE = "Lataus valmis"
-        self.CUDA_EXTRACTION_FAILED = "CUDA-purku epäonnistui"
-        self.PRESET_SAVED = "Esiasetus tallennettu"
-        self.PRESET_LOADED = "Esiasetus ladattu"
-        self.NO_ASSET_SELECTED = "Ei resurssia valittuna"
-        self.DOWNLOAD_FAILED = "Lataus epäonnistui"
-        self.NO_BACKEND_SELECTED = "Ei taustaosaa valittuna"
-        self.NO_MODEL_SELECTED = "Ei mallia valittuna"
-        self.REFRESH_RELEASES = "Päivitä julkaisut"
-        self.NO_SUITABLE_CUDA_BACKENDS = "Sopivia CUDA-taustaosoja ei löytynyt"
-        self.LLAMACPP_DOWNLOADED_EXTRACTED = "llama.cpp-binaaritiedosto ladattu ja purettu kansioon {0}\nCUDA-tiedostot purettu kansioon {1}"
-        self.CUDA_FILES_EXTRACTED = "CUDA-tiedostot purettu kansioon"
-        self.NO_SUITABLE_CUDA_BACKEND_EXTRACTION = (
-            "Sopivaa CUDA-taustaosaa purkua varten ei löytynyt"
-        )
-        self.ERROR_FETCHING_RELEASES = "Virhe haettaessa julkaisuja: {0}"
-        self.CONFIRM_DELETION_TITLE = "Vahvista poisto"
-        self.LOG_FOR = "Loki kohteelle {0}"
+        self.COMPLETED = "Valmis"
+
+        # File Types
         self.ALL_FILES = "Kaikki tiedostot (*)"
         self.GGUF_FILES = "GGUF-tiedostot (*.gguf)"
         self.DAT_FILES = "DAT-tiedostot (*.dat)"
         self.JSON_FILES = "JSON-tiedostot (*.json)"
-        self.FAILED_LOAD_PRESET = "Esiasetuksen lataus epäonnistui: {0}"
+        self.BIN_FILES = "Binääritiedostot (*.bin)"
+        self.LORA_FILES = "LoRA-tiedostot (*.bin *.gguf)"
+        self.GGUF_AND_BIN_FILES = "GGUF- ja binääritiedostot (*.gguf *.bin)"
+        self.SHARDED = "jaettu"
+
+        # Status Messages
+        self.DOWNLOAD_COMPLETE = "Lataus valmis"
+        self.CUDA_EXTRACTION_FAILED = "CUDA-purkaminen epäonnistui"
+        self.PRESET_SAVED = "Esiasetus tallennettu"
+        self.PRESET_LOADED = "Esiasetus ladattu"
+        self.NO_ASSET_SELECTED = "Resurssia ei valittu"
+        self.DOWNLOAD_FAILED = "Lataus epäonnistui"
+        self.NO_BACKEND_SELECTED = "Taustajärjestelmää ei valittu"
+        self.NO_MODEL_SELECTED = "Mallia ei valittu"
+        self.NO_SUITABLE_CUDA_BACKENDS = "Sopivia CUDA-taustajärjestelmiä ei löytynyt"
+        self.IN_PROGRESS = "Käynnissä"
+        self.LLAMACPP_DOWNLOADED_EXTRACTED = (
+            "llama.cpp-binääri ladattu ja purettu kohteeseen {0}"
+        )
+        self.CUDA_FILES_EXTRACTED = "CUDA-tiedostot purettu kohteeseen"
+        self.NO_SUITABLE_CUDA_BACKEND_EXTRACTION = (
+            "Sopivaa CUDA-taustajärjestelmää ei löytynyt purkamista varten"
+        )
+        self.ERROR_FETCHING_RELEASES = "Virhe noudettaessa julkaisuja: {0}"
+        self.CONFIRM_DELETION_TITLE = "Vahvista poistaminen"
+        self.LOG_FOR = "Loki kohteelle {0}"
+        self.FAILED_TO_LOAD_PRESET = "Esiasetuksen lataaminen epäonnistui: {0}"
         self.INITIALIZING_AUTOGGUF = "Alustetaan AutoGGUF-sovellusta"
         self.AUTOGGUF_INITIALIZATION_COMPLETE = "AutoGGUF-alustus valmis"
-        self.REFRESHING_BACKENDS = "Päivitetään taustaosoja"
-        self.NO_BACKENDS_AVAILABLE = "Ei käytettävissä olevia taustaosoja"
-        self.FOUND_VALID_BACKENDS = "Löydettiin {0} kelvollista taustaosaa"
+        self.REFRESHING_BACKENDS = "Päivitetään taustajärjestelmiä"
+        self.NO_BACKENDS_AVAILABLE = "Taustajärjestelmiä ei saatavilla"
+        self.FOUND_VALID_BACKENDS = "Löydettiin {0} kelvollista taustajärjestelmää"
         self.SAVING_PRESET = "Tallennetaan esiasetusta"
-        self.PRESET_SAVED_TO = "Esiasetus tallennettu kansioon {0}"
+        self.PRESET_SAVED_TO = "Esiasetus tallennettu kohteeseen {0}"
         self.LOADING_PRESET = "Ladataan esiasetusta"
-        self.PRESET_LOADED_FROM = "Esiasetus ladattu kansiosta {0}"
+        self.PRESET_LOADED_FROM = "Esiasetus ladattu kohteesta {0}"
         self.ADDING_KV_OVERRIDE = "Lisätään KV-ohitus: {0}"
-        self.SAVING_TASK_PRESET = "Tallennetaan tehtäväesiasetusta kohteelle {0}"
-        self.TASK_PRESET_SAVED = "Tehtäväesiasetus tallennettu"
-        self.TASK_PRESET_SAVED_TO = "Tehtäväesiasetus tallennettu kansioon {0}"
+        self.SAVING_TASK_PRESET = "Tallennetaan tehtävän esiasetus kohteelle {0}"
+        self.TASK_PRESET_SAVED = "Tehtävän esiasetus tallennettu"
+        self.TASK_PRESET_SAVED_TO = "Tehtävän esiasetus tallennettu kohteeseen {0}"
         self.RESTARTING_TASK = "Käynnistetään tehtävä uudelleen: {0}"
-        self.IN_PROGRESS = "Käynnissä"
-        self.DOWNLOAD_FINISHED_EXTRACTED_TO = "Lataus valmis. Purettu kansioon: {0}"
-        self.LLAMACPP_DOWNLOADED_AND_EXTRACTED = "llama.cpp-binaaritiedosto ladattu ja purettu kansioon {0}\nCUDA-tiedostot purettu kansioon {1}"
+        self.DOWNLOAD_FINISHED_EXTRACTED_TO = "Lataus valmis. Purettu kohteeseen: {0}"
+        self.LLAMACPP_DOWNLOADED_AND_EXTRACTED = (
+            "llama.cpp-binääri ladattu ja purettu kohteeseen {0}"
+        )
         self.NO_SUITABLE_CUDA_BACKEND_FOUND = (
-            "Sopivaa CUDA-taustaosaa purkua varten ei löytynyt"
+            "Sopivaa CUDA-taustajärjestelmää ei löytynyt purkamista varten"
         )
         self.LLAMACPP_BINARY_DOWNLOADED_AND_EXTRACTED = (
-            "llama.cpp-binaaritiedosto ladattu ja purettu kansioon {0}"
+            "llama.cpp-binääri ladattu ja purettu kohteeseen {0}"
         )
         self.REFRESHING_LLAMACPP_RELEASES = "Päivitetään llama.cpp-julkaisuja"
-        self.UPDATING_ASSET_LIST = "Päivitetään resurssilistaa"
-        self.UPDATING_CUDA_OPTIONS = "Päivitetään CUDA-asetuksia"
-        self.STARTING_LLAMACPP_DOWNLOAD = "Aloitetaan llama.cpp:n lataus"
-        self.UPDATING_CUDA_BACKENDS = "Päivitetään CUDA-taustaosoja"
-        self.NO_CUDA_BACKEND_SELECTED = "Ei CUDA-taustaosaa valittuna purkua varten"
+        self.UPDATING_ASSET_LIST = "Päivitetään resurssiluetteloa"
+        self.UPDATING_CUDA_OPTIONS = "Päivitetään CUDA-vaihtoehtoja"
+        self.STARTING_LLAMACPP_DOWNLOAD = "Aloitetaan llama.cpp-lataus"
+        self.UPDATING_CUDA_BACKENDS = "Päivitetään CUDA-taustajärjestelmiä"
+        self.NO_CUDA_BACKEND_SELECTED = (
+            "CUDA-taustajärjestelmää ei valittu purkamista varten"
+        )
         self.EXTRACTING_CUDA_FILES = (
-            "Puretaan CUDA-tiedostoja kansiosta {0} kansioon {1}"
+            "Puretaan CUDA-tiedostoja kohteesta {0} kohteeseen {1}"
         )
         self.DOWNLOAD_ERROR = "Latausvirhe: {0}"
-        self.SHOWING_TASK_CONTEXT_MENU = "Näytetään tehtäväkontekstivalikko"
-        self.SHOWING_PROPERTIES_FOR_TASK = "Näytetään tehtävän ominaisuudet: {0}"
-        self.CANCELLING_TASK = "Peruutetaan tehtävää: {0}"
+        self.SHOWING_TASK_CONTEXT_MENU = "Näytetään tehtävän kontekstivalikko"
+        self.SHOWING_PROPERTIES_FOR_TASK = "Näytetään ominaisuudet tehtävälle: {0}"
+        self.CANCELLING_TASK = "Peruutetaan tehtävä: {0}"
         self.CANCELED = "Peruutettu"
-        self.DELETING_TASK = "Poistetaan tehtävää: {0}"
+        self.DELETING_TASK = "Poistetaan tehtävä: {0}"
         self.LOADING_MODELS = "Ladataan malleja"
-        self.LOADED_MODELS = "{0} mallia ladattu"
-        self.BROWSING_FOR_MODELS_DIRECTORY = "Selaillaan mallikansiota"
+        self.LOADED_MODELS = "Ladattu {0} mallia"
+        self.BROWSING_FOR_MODELS_DIRECTORY = "Selataan mallikansioita"
         self.SELECT_MODELS_DIRECTORY = "Valitse mallikansio"
-        self.BROWSING_FOR_OUTPUT_DIRECTORY = "Selaillaan tulostekansiota"
+        self.BROWSING_FOR_OUTPUT_DIRECTORY = "Selataan tulostekansioita"
         self.SELECT_OUTPUT_DIRECTORY = "Valitse tulostekansio"
-        self.BROWSING_FOR_LOGS_DIRECTORY = "Selaillaan lokikansiota"
+        self.BROWSING_FOR_LOGS_DIRECTORY = "Selataan lokikansioita"
         self.SELECT_LOGS_DIRECTORY = "Valitse lokikansio"
-        self.BROWSING_FOR_IMATRIX_FILE = "Selaillaan IMatrix-tiedostoa"
+        self.BROWSING_FOR_IMATRIX_FILE = "Selataan IMatrix-tiedostoa"
         self.SELECT_IMATRIX_FILE = "Valitse IMatrix-tiedosto"
-        self.RAM_USAGE_FORMAT = "{0:.1f}% ({1} Mt / {2} Mt)"
-        self.CPU_USAGE_FORMAT = "CPU:n käyttö: {0:.1f}%"
-        self.VALIDATING_QUANTIZATION_INPUTS = "Vahvistetaan kvantisointisyötteet"
-        self.MODELS_PATH_REQUIRED = "Mallien polku on pakollinen"
-        self.OUTPUT_PATH_REQUIRED = "Tulostepolku on pakollinen"
-        self.LOGS_PATH_REQUIRED = "Lokien polku on pakollinen"
+        self.RAM_USAGE_FORMAT = "{0:.1f}% ({1} MB / {2} MB)"
+        self.CPU_USAGE_FORMAT = "CPU-käyttö: {0:.1f}%"
+        self.VALIDATING_QUANTIZATION_INPUTS = "Validoidaan kvantisoinnin syötteitä"
+        self.MODELS_PATH_REQUIRED = "Mallien polku vaaditaan"
+        self.OUTPUT_PATH_REQUIRED = "Tulostepolku vaaditaan"
+        self.LOGS_PATH_REQUIRED = "Lokipolku vaaditaan"
         self.STARTING_MODEL_QUANTIZATION = "Aloitetaan mallin kvantisointi"
-        self.INPUT_FILE_NOT_EXIST = "Syötetiedostoa '{0}' ei ole."
-        self.QUANTIZING_MODEL_TO = "Kvantisoidaan mallia {0} muotoon {1}"
-        self.QUANTIZATION_TASK_STARTED = (
-            "Kvantisointitehtävä käynnistetty kohteelle {0}"
-        )
-        self.ERROR_STARTING_QUANTIZATION = "Virhe kvantisoinnin käynnistyksessä: {0}"
-        self.UPDATING_MODEL_INFO = "Päivitetään mallitietoja: {0}"
+        self.INPUT_FILE_NOT_EXIST = "Syötetiedostoa '{0}' ei ole olemassa."
+        self.QUANTIZING_MODEL_TO = "Kvantisoidaan {0} muotoon {1}"
+        self.QUANTIZATION_TASK_STARTED = "Kvantisointitehtävä aloitettu kohteelle {0}"
+        self.ERROR_STARTING_QUANTIZATION = "Virhe aloitettaessa kvantisointia: {0}"
+        self.UPDATING_MODEL_INFO = "Päivitetään mallin tietoja: {0}"
         self.TASK_FINISHED = "Tehtävä valmis: {0}"
         self.SHOWING_TASK_DETAILS_FOR = "Näytetään tehtävän tiedot kohteelle: {0}"
-        self.BROWSING_FOR_IMATRIX_DATA_FILE = "Selaillaan IMatrix-datatiedostoa"
+        self.BROWSING_FOR_IMATRIX_DATA_FILE = "Selataan IMatrix-datatiedostoa"
         self.SELECT_DATA_FILE = "Valitse datatiedosto"
-        self.BROWSING_FOR_IMATRIX_MODEL_FILE = "Selaillaan IMatrix-mallitiedostoa"
+        self.BROWSING_FOR_IMATRIX_MODEL_FILE = "Selataan IMatrix-mallitiedostoa"
         self.SELECT_MODEL_FILE = "Valitse mallitiedosto"
-        self.BROWSING_FOR_IMATRIX_OUTPUT_FILE = "Selaillaan IMatrix-tulostetiedostoa"
+        self.BROWSING_FOR_IMATRIX_OUTPUT_FILE = "Selataan IMatrix-tulostetiedostoa"
         self.SELECT_OUTPUT_FILE = "Valitse tulostetiedosto"
         self.STARTING_IMATRIX_GENERATION = "Aloitetaan IMatrix-generointi"
-        self.BACKEND_PATH_NOT_EXIST = "Taustaosan polkua ei ole: {0}"
-        self.GENERATING_IMATRIX = "Generoidaan IMatrixia"
+        self.BACKEND_PATH_NOT_EXIST = "Taustajärjestelmän polkua ei ole olemassa: {0}"
+        self.GENERATING_IMATRIX = "Generoidaan IMatrix"
         self.ERROR_STARTING_IMATRIX_GENERATION = (
-            "Virhe IMatrix-generoinnin käynnistyksessä: {0}"
+            "Virhe aloitettaessa IMatrix-generointia: {0}"
         )
-        self.IMATRIX_GENERATION_TASK_STARTED = "IMatrix-generointi käynnistetty"
+        self.IMATRIX_GENERATION_TASK_STARTED = "IMatrix-generointitehtävä aloitettu"
         self.ERROR_MESSAGE = "Virhe: {0}"
         self.TASK_ERROR = "Tehtävävirhe: {0}"
-        self.APPLICATION_CLOSING = "Sovellus suljetaan"
+        self.APPLICATION_CLOSING = "Sovellus sulkeutuu"
         self.APPLICATION_CLOSED = "Sovellus suljettu"
         self.SELECT_QUANTIZATION_TYPE = "Valitse kvantisointityyppi"
         self.ALLOWS_REQUANTIZING = (
-            "Sallii jo kvantisoitujen tensoreiden uudelleenkvantisoinnin"
+            "Sallii jo kvantisoitujen tensorien uudelleenkvantisoinnin"
         )
-        self.LEAVE_OUTPUT_WEIGHT = (
-            "Jättää output.weight-tensorin (uudelleen)kvantisoimatta"
-        )
-        self.DISABLE_K_QUANT_MIXTURES = "Poista käytöstä k-kvanttisekoitukset ja kvantisoi kaikki tensorit samaan tyyppiin"
+        self.LEAVE_OUTPUT_WEIGHT = "Jättää output.weight-tensorin kvantisoimatta"
+        self.DISABLE_K_QUANT_MIXTURES = "Poistaa käytöstä k-quant-sekoituksetja kvantisoi kaikki tensorit samaan tyyppiin"
         self.USE_DATA_AS_IMPORTANCE_MATRIX = (
-            "Käytä tiedoston tietoja kvantisoinnin optimoinnin tärkeysmatriisina"
+            "Käytä tiedoston dataa tärkeyden matriisina kvantisoinnin optimoinneille"
         )
         self.USE_IMPORTANCE_MATRIX_FOR_TENSORS = (
-            "Käytä tärkeysmatriisia näille tensoreille"
+            "Käytä tärkeyden matriisia näille tensoreille"
         )
         self.DONT_USE_IMPORTANCE_MATRIX_FOR_TENSORS = (
-            "Älä käytä tärkeysmatriisia näille tensoreille"
+            "Älä käytä tärkeyden matriisia näille tensoreille"
         )
-        self.OUTPUT_TENSOR_TYPE = "Tulostensorin tyyppi:"
+        self.OUTPUT_TENSOR_TYPE = "Tulostetensorin tyyppi:"
         self.USE_THIS_TYPE_FOR_OUTPUT_WEIGHT = (
             "Käytä tätä tyyppiä output.weight-tensorille"
         )
-        self.TOKEN_EMBEDDING_TYPE = "Token-upotustyyppi:"
+        self.TOKEN_EMBEDDING_TYPE = "Merkkiupotuksen tyyppi:"
         self.USE_THIS_TYPE_FOR_TOKEN_EMBEDDINGS = (
-            "Käytä tätä tyyppiä token-upotustensorille"
+            "Käytä tätä tyyppiä merkkiupotustensoreille"
         )
         self.WILL_GENERATE_QUANTIZED_MODEL_IN_SAME_SHARDS = (
-            "Generoi kvantisoidun mallin samoihin osiin kuin syöte"
+            "Generoi kvantisoidun mallin samoissa osioissa kuin syöte"
         )
-        self.OVERRIDE_MODEL_METADATA = "Ohita mallitiedot"
-        self.INPUT_DATA_FILE_FOR_IMATRIX = "IMatrix-generoinnin syötedatatiedosto"
+        self.OVERRIDE_MODEL_METADATA = "Ohita mallin metatiedot"
+        self.INPUT_DATA_FILE_FOR_IMATRIX = "Syötedatatiedosto IMatrix-generoinnille"
         self.MODEL_TO_BE_QUANTIZED = "Kvantisoitava malli"
-        self.OUTPUT_PATH_FOR_GENERATED_IMATRIX = "Generoidun IMatrixin tulostepolku"
+        self.OUTPUT_PATH_FOR_GENERATED_IMATRIX = "Tulostepolku generoidulle IMatrixille"
         self.HOW_OFTEN_TO_SAVE_IMATRIX = "Kuinka usein IMatrix tallennetaan"
-        self.SET_GPU_OFFLOAD_VALUE = "Aseta GPU-kuormansiirron arvo (-ngl)"
-        self.COMPLETED = "Valmis"
-        self.REFRESH_MODELS = "Päivitä mallit"
+        self.SET_GPU_OFFLOAD_VALUE = "Aseta GPU-purkuarvo (-ngl)"
+        self.STARTING_LORA_CONVERSION = "Aloitetaan LoRA-muunnos"
+        self.LORA_INPUT_PATH_REQUIRED = "LoRA-syötepolku vaaditaan."
+        self.LORA_OUTPUT_PATH_REQUIRED = "LoRA-tulostepolku vaaditaan."
+        self.ERROR_STARTING_LORA_CONVERSION = "Virhe aloitettaessa LoRA-muunnosta: {}"
+        self.LORA_CONVERSION_TASK_STARTED = "LoRA-muunnos tehtävä aloitettu."
+        self.BROWSING_FOR_LORA_INPUT_DIRECTORY = "Selataan LoRA-syötekansiota..."
+        self.BROWSING_FOR_LORA_OUTPUT_FILE = "Selataan LoRA-tulostetiedostoa..."
+        self.CONVERTING_LORA = "LoRA-muunnos"
+        self.LORA_CONVERSION_FINISHED = "LoRA-muunnos valmis."
+        self.LORA_FILE_MOVED = "LoRA-tiedosto siirretty kohteesta {} kohteeseen {}."
+        self.LORA_FILE_NOT_FOUND = "LoRA-tiedostoa ei löytynyt: {}."
+        self.ERROR_MOVING_LORA_FILE = "Virhe siirrettäessä LoRA-tiedostoa: {}"
+        self.MODEL_PATH_REQUIRED = "Mallin polku vaaditaan."
+        self.AT_LEAST_ONE_LORA_ADAPTER_REQUIRED = (
+            "Vähintään yksi LoRA-adapteri vaaditaan."
+        )
+        self.INVALID_LORA_SCALE_VALUE = "Virheellinen LoRA-skaalausarvo."
+        self.ERROR_STARTING_LORA_EXPORT = "Virhe aloitettaessa LoRA-vientiä: {}"
+        self.LORA_EXPORT_TASK_STARTED = "LoRA-vientitehtävä aloitettu."
+        self.EXPORTING_LORA = "Viedään LoRA..."
+        self.BROWSING_FOR_EXPORT_LORA_MODEL_FILE = (
+            "Selataan vietävää LoRA-mallitiedostoa..."
+        )
+        self.BROWSING_FOR_EXPORT_LORA_OUTPUT_FILE = (
+            "Selataan vietävää LoRA-tulostetiedostoa..."
+        )
+        self.ADDING_LORA_ADAPTER = "Lisätään LoRA-adapteri..."
+        self.DELETING_LORA_ADAPTER = "Poistetaan LoRA-adapteri..."
+        self.SELECT_LORA_ADAPTER_FILE = "Valitse LoRA-adapteritiedosto"
+        self.STARTING_LORA_EXPORT = "Aloitetaan LoRA-vienti..."
+        self.SELECT_OUTPUT_TYPE = "Valitse tulostetyyppi (GGUF tai GGML)"
+        self.BASE_MODEL = "Perusmalli"
+        self.SELECT_BASE_MODEL_FILE = "Valitse perusmallitiedosto (GGUF)"
+        self.BASE_MODEL_PATH_REQUIRED = "Perusmallin polku vaaditaan GGUF-tulosteelle."
+        self.BROWSING_FOR_BASE_MODEL_FILE = "Selataan perusmallitiedostoa..."
+        self.SELECT_BASE_MODEL_FOLDER = (
+            "Valitse perusmallikansio (sisältää safetensors-tiedostot)"
+        )
+        self.BROWSING_FOR_BASE_MODEL_FOLDER = "Selataan perusmallin kansiota..."
+        self.LORA_CONVERSION_FROM_TO = "LoRA-muunnos kohteesta {} kohteeseen {}"
+        self.GENERATING_IMATRIX_FOR = "Generoidaan IMatrix kohteelle {}"
+        self.MODEL_PATH_REQUIRED_FOR_IMATRIX = (
+            "Mallin polku vaaditaan IMatrix-generointia varten."
+        )
+        self.NO_ASSET_SELECTED_FOR_CUDA_CHECK = (
+            "Resurssia ei valittu CUDA-tarkistusta varten"
+        )
+        self.NO_QUANTIZATION_TYPE_SELECTED = (
+            "Kvantisointityyppiä ei valittu. Valitse vähintään yksi kvantisointityyppi."
+        )
+        self.STARTING_HF_TO_GGUF_CONVERSION = "Aloitetaan HuggingFace - GGUF -muunnos"
+        self.MODEL_DIRECTORY_REQUIRED = "Mallikansio vaaditaan"
+        self.HF_TO_GGUF_CONVERSION_COMMAND = "HF - GGUF -muunnoskomento: {}"
+        self.CONVERTING_TO_GGUF = "Muunnetaan {} GGUF-muotoon"
+        self.ERROR_STARTING_HF_TO_GGUF_CONVERSION = (
+            "Virhe aloitettaessa HuggingFace - GGUF -muunnosta: {}"
+        )
+        self.HF_TO_GGUF_CONVERSION_TASK_STARTED = (
+            "HuggingFace - GGUF -muunnos tehtävä aloitettu"
+        )
+
+        # Split GGUF
+        self.SPLIT_GGUF = "Jaa GGUF"
+        self.SPLIT_MAX_SIZE = "Jaon enimmäiskoko"
+        self.SPLIT_MAX_TENSORS = "Jaon enimmäistensorit"
+        self.SPLIT_GGUF_TASK_STARTED = "GGUF-jakotehtävä aloitettu"
+        self.SPLIT_GGUF_TASK_FINISHED = "GGUF-jakotehtävä valmis"
+        self.SPLIT_GGUF_COMMAND = "GGUF-jakokomento"
+        self.SPLIT_GGUF_ERROR = "Virhe aloitettaessa GGUF-jakoa"
+        self.NUMBER_OF_TENSORS = "Tensorien määrä"
+        self.SIZE_IN_UNITS = "Koko G/M-yksiköissä"
+
+        # Model actions
+        self.CONFIRM_DELETE = "Vahvista poistaminen"
+        self.DELETE_MODEL_WARNING = "Haluatko varmasti poistaa mallin: {}?"
+        self.MODEL_RENAMED_SUCCESSFULLY = "Malli nimetty uudelleen onnistuneesti."
+        self.MODEL_DELETED_SUCCESSFULLY = "Malli poistettu onnistuneesti."
+
+        # HuggingFace Transfer
+        self.ALL_FIELDS_REQUIRED = "Kaikki kentät vaaditaan."
+        self.HUGGINGFACE_UPLOAD_COMMAND = "HuggingFace-latauskomento: "
+        self.UPLOADING = "Ladataan"
+        self.UPLOADING_FOLDER = "Ladataan kansiota"
+        self.HF_TRANSFER_TASK_NAME = "{} {} kohteeseen {} kohteesta {}"
+        self.ERROR_STARTING_HF_TRANSFER = "Virhe aloitettaessa HF-siirtoa: {}"
+        self.STARTED_HUGGINGFACE_TRANSFER = "Aloitettu HuggingFace {}-toiminto."
+        self.SELECT_FOLDER = "Valitse kansio"
+        self.SELECT_FILE = "Valitse tiedosto"
 
 
 class _Bengali(_Localization):
