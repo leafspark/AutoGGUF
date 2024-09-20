@@ -26,6 +26,7 @@ class TensorNameMap:
             "embedding.word_embeddings",
             "transformer.token_embeddings",
             "shared",
+            "rwkv.embeddings",
         ),
         MODEL_TENSOR.TOKEN_TYPES: ("embeddings.token_type_embeddings",),
         MODEL_TENSOR.TOKEN_EMBD_NORM: (
@@ -33,6 +34,7 @@ class TensorNameMap:
             "embeddings.LayerNorm",
             "emb_ln",
             "transformer.norm",
+            "rwkv.blocks.0.pre_ln",
         ),
         MODEL_TENSOR.POS_EMBD: (
             "transformer.wpe",
@@ -46,6 +48,7 @@ class TensorNameMap:
             "word_embeddings_for_head",
             "lm_head.linear",
             "output_layer",
+            "head",
         ),
         MODEL_TENSOR.OUTPUT_NORM: (
             "gpt_neox.final_layer_norm",
@@ -63,6 +66,7 @@ class TensorNameMap:
             "encoder.final_layernorm",
             "transformer.norm",
             "model.norm",
+            "rwkv.ln_out",
         ),
         MODEL_TENSOR.ROPE_FREQS: (
             "rope.freqs",
@@ -92,10 +96,12 @@ class TensorNameMap:
             "transformer.blocks.{bid}.norm_attn_norm.norm_1",
             "encoder.layers.{bid}.input_layernorm",
             "transformer.layers.{bid}.attn_norm",
+            "rwkv.blocks.{bid}.ln1",
         ),
         MODEL_TENSOR.ATTN_NORM_2: (
             "transformer.h.{bid}.ln_attn",
             "encoder.layer.{bid}.layer_norm_1",
+            "rwkv.blocks.{bid}.ln2",
         ),
         MODEL_TENSOR.ATTN_QKV: (
             "gpt_neox.layers.{bid}.attention.query_key_value",
@@ -332,31 +338,72 @@ class TensorNameMap:
         MODEL_TENSOR.SSM_IN: (
             "model.layers.{bid}.in_proj",
             "backbone.layers.{bid}.mixer.in_proj",
+            "model.layers.{bid}.mamba.in_proj",
         ),
         MODEL_TENSOR.SSM_CONV1D: (
             "model.layers.{bid}.conv1d",
             "backbone.layers.{bid}.mixer.conv1d",
+            "model.layers.{bid}.mamba.conv1d",
         ),
         MODEL_TENSOR.SSM_X: (
             "model.layers.{bid}.x_proj",
             "backbone.layers.{bid}.mixer.x_proj",
+            "model.layers.{bid}.mamba.x_proj",
         ),
         MODEL_TENSOR.SSM_DT: (
             "model.layers.{bid}.dt_proj",
             "backbone.layers.{bid}.mixer.dt_proj",
+            "model.layers.{bid}.mamba.dt_proj",
         ),
+        MODEL_TENSOR.SSM_DT_NORM: ("model.layers.{bid}.mamba.dt_layernorm",),
         MODEL_TENSOR.SSM_A: (
             "model.layers.{bid}.A_log",
             "backbone.layers.{bid}.mixer.A_log",
+            "model.layers.{bid}.mamba.A_log",
+        ),
+        MODEL_TENSOR.SSM_B_NORM: (
+            "model.layers.{bid}.mamba.b_layernorm",
+            "model.layers.{bid}.mamba.B_layernorm",
+        ),
+        MODEL_TENSOR.SSM_C_NORM: (
+            "model.layers.{bid}.mamba.c_layernorm",
+            "model.layers.{bid}.mamba.C_layernorm",
         ),
         MODEL_TENSOR.SSM_D: (
             "model.layers.{bid}.D",
             "backbone.layers.{bid}.mixer.D",
+            "model.layers.{bid}.mamba.D",
         ),
         MODEL_TENSOR.SSM_OUT: (
             "model.layers.{bid}.out_proj",
             "backbone.layers.{bid}.mixer.out_proj",
+            "model.layers.{bid}.mamba.out_proj",
         ),
+        MODEL_TENSOR.TIME_MIX_W1: ("rwkv.blocks.{bid}.attention.time_maa_w1",),
+        MODEL_TENSOR.TIME_MIX_W2: ("rwkv.blocks.{bid}.attention.time_maa_w2",),
+        MODEL_TENSOR.TIME_MIX_LERP_X: ("rwkv.blocks.{bid}.attention.time_maa_x",),
+        MODEL_TENSOR.TIME_MIX_LERP_K: ("rwkv.blocks.{bid}.attention.time_maa_k",),
+        MODEL_TENSOR.TIME_MIX_LERP_V: ("rwkv.blocks.{bid}.attention.time_maa_v",),
+        MODEL_TENSOR.TIME_MIX_LERP_R: ("rwkv.blocks.{bid}.attention.time_maa_r",),
+        MODEL_TENSOR.TIME_MIX_LERP_G: ("rwkv.blocks.{bid}.attention.time_maa_g",),
+        MODEL_TENSOR.TIME_MIX_LERP_W: ("rwkv.blocks.{bid}.attention.time_maa_w",),
+        MODEL_TENSOR.TIME_MIX_FIRST: ("rwkv.blocks.{bid}.attention.time_faaaa",),
+        MODEL_TENSOR.TIME_MIX_DECAY: ("rwkv.blocks.{bid}.attention.time_decay",),
+        MODEL_TENSOR.TIME_MIX_DECAY_W1: ("rwkv.blocks.{bid}.attention.time_decay_w1",),
+        MODEL_TENSOR.TIME_MIX_DECAY_W2: ("rwkv.blocks.{bid}.attention.time_decay_w2",),
+        MODEL_TENSOR.TIME_MIX_KEY: ("rwkv.blocks.{bid}.attention.key",),
+        MODEL_TENSOR.TIME_MIX_VALUE: ("rwkv.blocks.{bid}.attention.value",),
+        MODEL_TENSOR.TIME_MIX_RECEPTANCE: ("rwkv.blocks.{bid}.attention.receptance",),
+        MODEL_TENSOR.TIME_MIX_GATE: ("rwkv.blocks.{bid}.attention.gate",),
+        MODEL_TENSOR.TIME_MIX_LN: ("rwkv.blocks.{bid}.attention.ln_x",),
+        MODEL_TENSOR.TIME_MIX_OUTPUT: ("rwkv.blocks.{bid}.attention.output",),
+        MODEL_TENSOR.CHANNEL_MIX_LERP_K: ("rwkv.blocks.{bid}.feed_forward.time_maa_k",),
+        MODEL_TENSOR.CHANNEL_MIX_LERP_R: ("rwkv.blocks.{bid}.feed_forward.time_maa_r",),
+        MODEL_TENSOR.CHANNEL_MIX_KEY: ("rwkv.blocks.{bid}.feed_forward.key",),
+        MODEL_TENSOR.CHANNEL_MIX_RECEPTANCE: (
+            "rwkv.blocks.{bid}.feed_forward.receptance",
+        ),
+        MODEL_TENSOR.CHANNEL_MIX_VALUE: ("rwkv.blocks.{bid}.feed_forward.value",),
         MODEL_TENSOR.ATTN_Q_A: ("model.layers.{bid}.self_attn.q_a_proj",),
         MODEL_TENSOR.ATTN_Q_B: ("model.layers.{bid}.self_attn.q_b_proj",),
         MODEL_TENSOR.ATTN_KV_A_MQA: (

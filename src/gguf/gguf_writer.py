@@ -32,7 +32,6 @@ from .quants import quant_shape_from_byte_shape
 
 logger = logging.getLogger(__name__)
 
-
 SHARD_NAME_FORMAT = "{:s}-{:05d}-of-{:05d}.gguf"
 
 
@@ -136,7 +135,7 @@ class GGUFWriter:
                     continue
                 elif name.endswith(".lora_b"):
                     if last_lora_a is None or last_lora_a[0] != name[:-1] + "a":
-                        # Bail when the LoRA pair can't be found trivially
+
                         logger.warning(
                             "can't measure LoRA size correctly, tensor order is unusual"
                         )
@@ -155,14 +154,11 @@ class GGUFWriter:
 
                 total_params += size
 
-        # Hopefully this should work even for variable-expert-count models
         expert_count = (expert_sum // n_expert_tensors) if n_expert_tensors > 0 else 0
 
-        # Negate the total to signal it's likely not exact
         if last_lora_a is not None:
             total_params = -total_params
 
-        # NOTE: keep the output in the same order as accepted by 'size_label' in gguf-py/gguf/utility.py
         return total_params, shared_params, expert_params, expert_count
 
     def format_shard_names(self, path: Path) -> list[Path]:
@@ -181,7 +177,7 @@ class GGUFWriter:
             and self.fout is not None
             and (path is None or path == self.path)
         ):
-            # allow calling this multiple times as long as the path is the same
+
             return
 
         if self.state is not WriterState.NO_FILE:
@@ -210,7 +206,7 @@ class GGUFWriter:
         if self.dry_run:
             logger.info("Dry run, not writing files")
             for name in filenames:
-                print(name)  # noqa: NP100
+                print(name)
             exit()
 
         return filenames
@@ -394,12 +390,11 @@ class GGUFWriter:
             if tensor_dtype == np.uint8:
                 tensor_shape = quant_shape_from_byte_shape(tensor_shape, raw_dtype)
 
-        # make sure there is at least one tensor before splitting
         if len(self.tensors[-1]) > 0:
-            if (  # split when over tensor limit
+            if (
                 self.split_max_tensors != 0
                 and len(self.tensors[-1]) >= self.split_max_tensors
-            ) or (  # split when over size limit
+            ) or (
                 self.split_max_size != 0
                 and sum(ti.nbytes for ti in self.tensors[-1].values()) + tensor_nbytes
                 > self.split_max_size
@@ -465,8 +460,6 @@ class GGUFWriter:
 
         fout = self.fout[file_id]
 
-        # pop the first tensor info
-        # TODO: cleaner way to get the first key
         first_tensor_name = [
             name for name, _ in zip(self.tensors[file_id].keys(), range(1))
         ][0]
@@ -513,11 +506,8 @@ class GGUFWriter:
                     total = sum(ti.nbytes for ti in tensors.values())
                     shard_bar.reset(total=(total if total > 0 else None))
 
-                # relying on the fact that Python dicts preserve insertion order (since 3.7)
                 for ti in tensors.values():
-                    assert (
-                        ti.tensor is not None
-                    )  # can only iterate once over the tensors
+                    assert ti.tensor is not None
                     assert ti.tensor.nbytes == ti.nbytes
                     ti.tensor.tofile(fout)
                     if shard_bar is not None:
@@ -749,6 +739,24 @@ class GGUFWriter:
     def add_expert_weights_scale(self, value: float) -> None:
         self.add_float32(Keys.LLM.EXPERT_WEIGHTS_SCALE.format(arch=self.arch), value)
 
+    def add_rescale_every_n_layers(self, count: int) -> None:
+        self.add_uint32(Keys.LLM.RESCALE_EVERY_N_LAYERS.format(arch=self.arch), count)
+
+    def add_time_mix_extra_dim(self, dim: int) -> None:
+        self.add_uint32(Keys.LLM.TIME_MIX_EXTRA_DIM.format(arch=self.arch), dim)
+
+    def add_time_decay_extra_dim(self, dim: int) -> None:
+        self.add_uint32(Keys.LLM.TIME_DECAY_EXTRA_DIM.format(arch=self.arch), dim)
+
+    def add_residual_scale(self, value: float) -> None:
+        self.add_float32(Keys.LLM.RESIDUAL_SCALE.format(arch=self.arch), value)
+
+    def add_embedding_scale(self, value: float) -> None:
+        self.add_float32(Keys.LLM.EMBEDDING_SCALE.format(arch=self.arch), value)
+
+    def add_wkv_head_size(self, size: int) -> None:
+        self.add_uint32(Keys.WKV.HEAD_SIZE.format(arch=self.arch), size)
+
     def add_layer_norm_eps(self, value: float) -> None:
         self.add_float32(Keys.Attention.LAYERNORM_EPS.format(arch=self.arch), value)
 
@@ -769,6 +777,9 @@ class GGUFWriter:
 
     def add_sliding_window(self, value: int) -> None:
         self.add_uint32(Keys.Attention.SLIDING_WINDOW.format(arch=self.arch), value)
+
+    def add_attention_scale(self, value: float) -> None:
+        self.add_float32(Keys.Attention.SCALE.format(arch=self.arch), value)
 
     def add_pooling_type(self, value: PoolingType) -> None:
         self.add_uint32(Keys.LLM.POOLING_TYPE.format(arch=self.arch), value.value)
@@ -808,6 +819,9 @@ class GGUFWriter:
 
     def add_ssm_time_step_rank(self, value: int) -> None:
         self.add_uint32(Keys.SSM.TIME_STEP_RANK.format(arch=self.arch), value)
+
+    def add_ssm_dt_b_c_rms(self, value: bool) -> None:
+        self.add_bool(Keys.SSM.DT_B_C_RMS.format(arch=self.arch), value)
 
     def add_tokenizer_model(self, model: str) -> None:
         self.add_string(Keys.Tokenizer.MODEL, model)
@@ -879,7 +893,6 @@ class GGUFWriter:
                 name = choice.get("name", "")
                 template = choice.get("template")
 
-                # Allowing non-alphanumerical characters in template name is probably not a good idea, so filter it
                 name = "".join(
                     (c if c in ascii_letters + digits else "_" for c in name)
                 )
@@ -914,6 +927,9 @@ class GGUFWriter:
 
     def add_eot_token_id(self, id: int) -> None:
         self.add_uint32(Keys.Tokenizer.EOT_ID, id)
+
+    def add_eom_token_id(self, id: int) -> None:
+        self.add_uint32(Keys.Tokenizer.EOM_ID, id)
 
     def _pack(self, fmt: str, value: Any, skip_pack_prefix: bool = False) -> bytes:
         pack_prefix = ""
