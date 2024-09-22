@@ -9,5 +9,5 @@ sentencepiece~=0.2.0
 setuptools~=74.1.2
 huggingface-hub~=0.25.0
 transformers~=4.44.2
-fastapi~=0.114.2
+fastapi~=0.115.0
 uvicorn~=0.30.6
