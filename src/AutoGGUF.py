@@ -313,38 +313,56 @@ class AutoGGUF(QMainWindow):
         self.hf_upload_dialog.setFixedWidth(500)
         self.hf_upload_layout = QVBoxLayout()
 
+        # Form layout for inputs
+        form_layout = QFormLayout()
+
         # Repo input
-        repo_layout = QHBoxLayout()
         self.hf_repo_input = QLineEdit()
-        repo_layout.addWidget(QLabel("Repository:"))
-        repo_layout.addWidget(self.hf_repo_input)
-        self.hf_upload_layout.addLayout(repo_layout)
+        form_layout.addRow("Repository:", self.hf_repo_input)
 
         # Remote path input
-        remote_path_layout = QHBoxLayout()
         self.hf_remote_path_input = QLineEdit()
-        remote_path_layout.addWidget(QLabel("Remote Path:"))
-        remote_path_layout.addWidget(self.hf_remote_path_input)
-        self.hf_upload_layout.addLayout(remote_path_layout)
+        form_layout.addRow("Remote Path:", self.hf_remote_path_input)
 
         # Local file/folder input
         local_path_layout = QHBoxLayout()
         self.hf_local_path_input = QLineEdit()
         local_path_button = QPushButton("Browse")
         local_path_button.clicked.connect(self.browse_local_path)
-        local_path_layout.addWidget(QLabel("Local Path:"))
         local_path_layout.addWidget(self.hf_local_path_input)
         local_path_layout.addWidget(local_path_button)
-        self.hf_upload_layout.addLayout(local_path_layout)
+        form_layout.addRow("Local Path:", local_path_layout)
+
+        self.hf_upload_layout.addLayout(form_layout)
 
         # Upload type (file or folder)
+        upload_type_group = QGroupBox("Upload Type")
+        upload_type_layout = QHBoxLayout()
         self.upload_type_group = QButtonGroup()
         self.upload_type_file = QRadioButton("File")
         self.upload_type_folder = QRadioButton("Folder")
         self.upload_type_group.addButton(self.upload_type_file)
         self.upload_type_group.addButton(self.upload_type_folder)
-        self.hf_upload_layout.addWidget(self.upload_type_file)
-        self.hf_upload_layout.addWidget(self.upload_type_folder)
+        upload_type_layout.addWidget(self.upload_type_file)
+        upload_type_layout.addWidget(self.upload_type_folder)
+        upload_type_group.setLayout(upload_type_layout)
+        self.hf_upload_layout.addWidget(upload_type_group)
+
+        # Repo type (dataset/space/model)
+        repo_type_group = QGroupBox("Repository Type")
+        repo_type_layout = QHBoxLayout()
+        self.repo_type_group = QButtonGroup()
+        self.repo_type_model = QRadioButton("Model")
+        self.repo_type_dataset = QRadioButton("Dataset")
+        self.repo_type_space = QRadioButton("Space")
+        self.repo_type_group.addButton(self.repo_type_model)
+        self.repo_type_group.addButton(self.repo_type_dataset)
+        self.repo_type_group.addButton(self.repo_type_space)
+        repo_type_layout.addWidget(self.repo_type_model)
+        repo_type_layout.addWidget(self.repo_type_dataset)
+        repo_type_layout.addWidget(self.repo_type_space)
+        repo_type_group.setLayout(repo_type_layout)
+        self.hf_upload_layout.addWidget(repo_type_group)
 
         # Upload button
         upload_button = QPushButton("Upload")
@@ -1437,6 +1455,14 @@ class AutoGGUF(QMainWindow):
             command = ["huggingface-cli", type, hf_repo, local_path]
             if remote_path:
                 command.append(remote_path)
+
+            # Add repo type argument if selected
+            if self.repo_type_model.isChecked():
+                command.append("--repo-type=model")
+            elif self.repo_type_dataset.isChecked():
+                command.append("--repo-type=dataset")
+            elif self.repo_type_space.isChecked():
+                command.append("--repo-type=space")
 
             logs_path = self.logs_input.text()
             ensure_directory(logs_path)
