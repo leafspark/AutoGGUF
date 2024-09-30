@@ -307,6 +307,51 @@ class AutoGGUF(QMainWindow):
         self.split_gguf_layout.addWidget(split_button)
         self.split_gguf_dialog.setLayout(self.split_gguf_layout)
 
+        # Merge GGUF Window
+        self.merge_gguf_dialog = QDialog(self)
+        self.merge_gguf_dialog.setWindowTitle("Merge GGUF")
+        self.merge_gguf_dialog.setFixedWidth(500)
+        self.merge_gguf_layout = QVBoxLayout()
+
+        # Input path
+        input_layout = QHBoxLayout()
+        self.merge_gguf_input = QLineEdit()
+        input_button = QPushButton(BROWSE)
+        input_button.clicked.connect(
+            lambda: self.merge_gguf_input.setText(
+                QFileDialog.getExistingDirectory(self, OPEN_MODEL_FOLDER)
+            )
+        )
+        input_layout.addWidget(QLabel(INPUT_MODEL))
+        input_layout.addWidget(self.merge_gguf_input)
+        input_layout.addWidget(input_button)
+        self.merge_gguf_layout.addLayout(input_layout)
+
+        # Output path
+        output_layout = QHBoxLayout()
+        self.merge_gguf_output = QLineEdit()
+        output_button = QPushButton(BROWSE)
+        output_button.clicked.connect(
+            lambda: self.merge_gguf_output.setText(
+                QFileDialog.getExistingDirectory(self, OPEN_MODEL_FOLDER)
+            )
+        )
+        output_layout.addWidget(QLabel(OUTPUT))
+        output_layout.addWidget(self.merge_gguf_output)
+        output_layout.addWidget(output_button)
+        self.merge_gguf_layout.addLayout(output_layout)
+
+        # Split button
+        split_button = QPushButton("Merge GGUF")
+        split_button.clicked.connect(
+            lambda: self.merge_gguf(
+                self.merge_gguf_input.text(),
+                self.merge_gguf_output.text(),
+            )
+        )
+        self.merge_gguf_layout.addWidget(split_button)
+        self.merge_gguf_dialog.setLayout(self.merge_gguf_layout)
+
         # HF Upload Window
         self.hf_upload_dialog = QDialog(self)
         self.hf_upload_dialog.setWindowTitle("HF Upload")
@@ -379,6 +424,9 @@ class AutoGGUF(QMainWindow):
         split_gguf_action = QAction("&Split GGUF", self)
         split_gguf_action.setShortcut(QKeySequence("Shift+G"))
         split_gguf_action.triggered.connect(self.split_gguf_dialog.exec)
+        merge_gguf_action = QAction("&Merge GGUF", self)
+        merge_gguf_action.setShortcut(QKeySequence("Shift+M"))
+        merge_gguf_action.triggered.connect(self.merge_gguf_dialog.exec)
         hf_transfer_action = QAction("&HF Transfer", self)
         hf_transfer_action.setShortcut(QKeySequence("Shift+H"))
         hf_transfer_action.triggered.connect(self.hf_upload_dialog.exec)
@@ -1698,6 +1746,51 @@ class AutoGGUF(QMainWindow):
         except Exception as e:
             show_error(self.logger, SPLIT_GGUF_ERROR.format(e))
         self.logger.info(SPLIT_GGUF_TASK_FINISHED)
+
+    def merge_gguf(self, model_dir: str, output_dir: str) -> None:
+        if not model_dir or not output_dir:
+            show_error(self.logger, f"{SPLIT_GGUF_ERROR}: {NO_MODEL_SELECTED}")
+            return
+        self.logger.info(SPLIT_GGUF_TASK_STARTED)
+        try:
+            command = ["llama-gguf-split", "--merge"]
+
+            command.extend([model_dir, output_dir])
+
+            logs_path = self.logs_input.text()
+            ensure_directory(logs_path)
+
+            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+            log_file = os.path.join(logs_path, f"gguf_merge_{timestamp}.log")
+
+            thread = QuantizationThread(command, os.getcwd(), log_file)
+            self.quant_threads.append(thread)
+
+            task_name = SPLIT_GGUF_DYNAMIC.format(os.path.basename(model_dir))
+            task_item = TaskListItem(
+                task_name,
+                log_file,
+                show_progress_bar=False,
+                logger=self.logger,
+                quant_threads=self.quant_threads,
+            )
+            list_item = QListWidgetItem(self.task_list)
+            list_item.setSizeHint(task_item.sizeHint())
+            self.task_list.addItem(list_item)
+            self.task_list.setItemWidget(list_item, task_item)
+
+            thread.status_signal.connect(task_item.update_status)
+            thread.finished_signal.connect(
+                lambda: self.task_finished(thread, task_item)
+            )
+            thread.error_signal.connect(
+                lambda err: handle_error(self.logger, err, task_item)
+            )
+            thread.start()
+
+        except Exception as e:
+            show_error(self.logger, "Error starting merge GGUF task: {}".format(e))
+        self.logger.info("Split GGUF task finished.")
 
     def quantize_model(self) -> None:
         self.logger.info(STARTING_MODEL_QUANTIZATION)
