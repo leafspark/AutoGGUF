@@ -1749,9 +1749,9 @@ class AutoGGUF(QMainWindow):
 
     def merge_gguf(self, model_dir: str, output_dir: str) -> None:
         if not model_dir or not output_dir:
-            show_error(self.logger, f"{SPLIT_GGUF_ERROR}: {NO_MODEL_SELECTED}")
+            show_error(self.logger, f"Error merging GGUF: No model selected")
             return
-        self.logger.info(SPLIT_GGUF_TASK_STARTED)
+        self.logger.info("Merge GGUF task started.")
         try:
             command = ["llama-gguf-split", "--merge"]
 
@@ -1766,7 +1766,7 @@ class AutoGGUF(QMainWindow):
             thread = QuantizationThread(command, os.getcwd(), log_file)
             self.quant_threads.append(thread)
 
-            task_name = SPLIT_GGUF_DYNAMIC.format(os.path.basename(model_dir))
+            task_name = "Merging GGUFs {}".format(os.path.basename(model_dir))
             task_item = TaskListItem(
                 task_name,
                 log_file,
