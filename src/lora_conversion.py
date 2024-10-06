@@ -12,7 +12,7 @@ from PySide6.QtWidgets import (
 from QuantizationThread import QuantizationThread
 from TaskListItem import TaskListItem
 from error_handling import handle_error, show_error
-from imports_and_globals import ensure_directory
+from globals import ensure_directory
 from Localizations import *
 
 

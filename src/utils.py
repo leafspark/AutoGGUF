@@ -7,7 +7,7 @@ from PySide6.QtWidgets import QFileDialog, QInputDialog, QMenu
 from DownloadThread import DownloadThread
 from Localizations import *
 from error_handling import show_error
-from imports_and_globals import ensure_directory
+from globals import ensure_directory
 from KVOverrideEntry import KVOverrideEntry
 
 

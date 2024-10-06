@@ -1,7 +1,7 @@
 import os
 import re
 
-AUTOGGUF_VERSION = "v1.9.0"
+AUTOGGUF_VERSION = "v2.0.0"
 
 
 class _Localization:
@@ -428,6 +428,31 @@ class _English(_Localization):
         self.STARTED_HUGGINGFACE_TRANSFER = "Started HuggingFace {} operation."
         self.SELECT_FOLDER = "Select Folder"
         self.SELECT_FILE = "Select File"
+
+        # Menubar
+        self.CLOSE = "Close"
+        self.FILE = "File"
+        self.FOLDER = "Folder"
+        self.HELP = "Help"
+        self.ABOUT = "About"
+
+        self.AUTOFP8 = "AutoFP8"
+        self.TOOLS = "Tools"
+        self.HF_TRANSFER = "HF Transfer"
+        self.MERGE_GGUF = "Merge GGUF"
+
+        self.HF_UPLOAD = "HF Upload"
+        self.HF_REPOSITORY = "Repository:"
+        self.HF_REMOTE_PATH = "Remote Path:"
+        self.HF_LOCAL_PATH = "Local Path:"
+        self.MODEL = "Model"
+        self.DATASET = "Dataset"
+        self.SPACE = "Space"
+        self.HF_REPOSITORY_TYPE = "Repository Type"
+        self.UPLOAD_TYPE = "Upload Type"
+        self.UPLOAD = "Upload"
+
+        self.EXTRA_COMMAND_ARGUMENTS = "Additional command-line arguments"
 
 
 class _French(_Localization):

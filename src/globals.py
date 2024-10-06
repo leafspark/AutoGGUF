@@ -1,7 +1,7 @@
 import os
 import re
 import sys
-from typing import Any, TextIO, Union
+from typing import Any, List, TextIO, Union
 
 from PySide6.QtWidgets import (
     QMessageBox,
@@ -13,6 +13,34 @@ from Localizations import (
     ERROR_LOADING_DOTENV,
     AUTOGGUF_VERSION,
 )
+
+
+def verify_gguf(file_path) -> bool:
+    try:
+        with open(file_path, "rb") as f:
+            magic = f.read(4)
+            return magic == b"GGUF"
+    except (FileNotFoundError, IOError, OSError):
+        return False
+
+
+def process_args(args: List[str]) -> bool:
+    try:
+        i = 1
+        while i < len(args):
+            key = (
+                args[i][2:].replace("-", "_").upper()
+            )  # Strip the first two '--' and replace '-' with '_'
+            if i + 1 < len(args) and not args[i + 1].startswith("--"):
+                value = args[i + 1]
+                i += 2
+            else:
+                value = "enabled"
+                i += 1
+            os.environ[key] = value
+        return True
+    except Exception:
+        return False
 
 
 def load_dotenv(self=Any) -> None:

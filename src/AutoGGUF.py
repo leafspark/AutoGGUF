@@ -1,11 +1,10 @@
-import importlib
 import json
 import shutil
 import urllib.error
 import urllib.request
 from datetime import datetime
 from functools import partial, wraps
-from typing import Any, Dict, List
+from typing import List
 
 from PySide6.QtCore import *
 from PySide6.QtGui import *
@@ -16,18 +15,21 @@ import presets
 import ui_update
 import utils
 from CustomTitleBar import CustomTitleBar
-from GPUMonitor import GPUMonitor, SimpleGraph
+from GPUMonitor import GPUMonitor
 from Localizations import *
 from Logger import Logger
+from Plugins import Plugins
 from QuantizationThread import QuantizationThread
 from TaskListItem import TaskListItem
 from error_handling import handle_error, show_error
-from imports_and_globals import (
+from globals import (
     ensure_directory,
     load_dotenv,
     open_file_safe,
+    process_args,
     resource_path,
     show_about,
+    verify_gguf,
 )
 
 
@@ -78,7 +80,7 @@ class AutoGGUF(QMainWindow):
         self.setWindowFlag(Qt.FramelessWindowHint)
 
         load_dotenv(self)  # Loads the .env file
-        self.process_args(args)  # Load any command line parameters
+        process_args(args)  # Load any command line parameters
 
         # Configuration
         self.model_dir_name = os.environ.get("AUTOGGUF_MODEL_DIR_NAME", "models")
@@ -182,26 +184,19 @@ class AutoGGUF(QMainWindow):
         self.title_bar.layout().insertWidget(1, self.menubar)
 
         # File menu
-        file_menu = self.menubar.addMenu("&File")
-        close_action = QAction("&Close", self)
+        file_menu = self.menubar.addMenu(f"&{FILE}")
+        close_action = QAction(f"&{CLOSE}", self)
         close_action.setShortcut(QKeySequence("Alt+F4"))
         close_action.triggered.connect(self.close)
-        save_preset_action = QAction("&Save Preset", self)
+        save_preset_action = QAction(f"&{SAVE_PRESET}", self)
         save_preset_action.setShortcut(QKeySequence("Ctrl+S"))
         save_preset_action.triggered.connect(self.save_preset)
-        load_preset_action = QAction("&Load Preset", self)
+        load_preset_action = QAction(f"&{SAVE_PRESET}", self)
         load_preset_action.setShortcut(QKeySequence("Ctrl+S"))
         load_preset_action.triggered.connect(self.load_preset)
         file_menu.addAction(close_action)
         file_menu.addAction(save_preset_action)
         file_menu.addAction(load_preset_action)
-
-        # Help menu
-        help_menu = self.menubar.addMenu("&Help")
-        about_action = QAction("&About", self)
-        about_action.setShortcut(QKeySequence("Ctrl+Q"))
-        about_action.triggered.connect(self.show_about)
-        help_menu.addAction(about_action)
 
         # AutoFP8 Window
         self.fp8_dialog = QDialog(self)
@@ -260,7 +255,7 @@ class AutoGGUF(QMainWindow):
         input_button = QPushButton(BROWSE)
         input_button.clicked.connect(
             lambda: self.split_gguf_input.setText(
-                QFileDialog.getExistingDirectory(self, OPEN_MODEL_FOLDER)
+                QFileDialog.getOpenFileName(self, SELECT_FILE, filter=GGUF_FILES)[0]
             )
         )
         input_layout.addWidget(QLabel(INPUT_MODEL))
@@ -274,7 +269,7 @@ class AutoGGUF(QMainWindow):
         output_button = QPushButton(BROWSE)
         output_button.clicked.connect(
             lambda: self.split_gguf_output.setText(
-                QFileDialog.getExistingDirectory(self, OPEN_MODEL_FOLDER)
+                QFileDialog.getOpenFileName(self, SELECT_FILE, filter=GGUF_FILES)[0]
             )
         )
         output_layout.addWidget(QLabel(OUTPUT))
@@ -309,7 +304,7 @@ class AutoGGUF(QMainWindow):
 
         # Merge GGUF Window
         self.merge_gguf_dialog = QDialog(self)
-        self.merge_gguf_dialog.setWindowTitle("Merge GGUF")
+        self.merge_gguf_dialog.setWindowTitle(MERGE_GGUF)
         self.merge_gguf_dialog.setFixedWidth(500)
         self.merge_gguf_layout = QVBoxLayout()
 
@@ -319,7 +314,7 @@ class AutoGGUF(QMainWindow):
         input_button = QPushButton(BROWSE)
         input_button.clicked.connect(
             lambda: self.merge_gguf_input.setText(
-                QFileDialog.getExistingDirectory(self, OPEN_MODEL_FOLDER)
+                QFileDialog.getOpenFileName(self, SELECT_FILE, filter=GGUF_FILES)[0]
             )
         )
         input_layout.addWidget(QLabel(INPUT_MODEL))
@@ -333,7 +328,7 @@ class AutoGGUF(QMainWindow):
         output_button = QPushButton(BROWSE)
         output_button.clicked.connect(
             lambda: self.merge_gguf_output.setText(
-                QFileDialog.getExistingDirectory(self, OPEN_MODEL_FOLDER)
+                QFileDialog.getOpenFileName(self, SELECT_FILE, filter=GGUF_FILES)[0]
             )
         )
         output_layout.addWidget(QLabel(OUTPUT))
@@ -342,7 +337,7 @@ class AutoGGUF(QMainWindow):
         self.merge_gguf_layout.addLayout(output_layout)
 
         # Split button
-        split_button = QPushButton("Merge GGUF")
+        split_button = QPushButton(MERGE_GGUF)
         split_button.clicked.connect(
             lambda: self.merge_gguf(
                 self.merge_gguf_input.text(),
@@ -354,7 +349,7 @@ class AutoGGUF(QMainWindow):
 
         # HF Upload Window
         self.hf_upload_dialog = QDialog(self)
-        self.hf_upload_dialog.setWindowTitle("HF Upload")
+        self.hf_upload_dialog.setWindowTitle(HF_UPLOAD)
         self.hf_upload_dialog.setFixedWidth(500)
         self.hf_upload_layout = QVBoxLayout()
 
@@ -363,29 +358,29 @@ class AutoGGUF(QMainWindow):
 
         # Repo input
         self.hf_repo_input = QLineEdit()
-        form_layout.addRow("Repository:", self.hf_repo_input)
+        form_layout.addRow(HF_REPOSITORY, self.hf_repo_input)
 
         # Remote path input
         self.hf_remote_path_input = QLineEdit()
-        form_layout.addRow("Remote Path:", self.hf_remote_path_input)
+        form_layout.addRow(HF_REMOTE_PATH, self.hf_remote_path_input)
 
         # Local file/folder input
         local_path_layout = QHBoxLayout()
         self.hf_local_path_input = QLineEdit()
-        local_path_button = QPushButton("Browse")
+        local_path_button = QPushButton(BROWSE)
         local_path_button.clicked.connect(self.browse_local_path)
         local_path_layout.addWidget(self.hf_local_path_input)
         local_path_layout.addWidget(local_path_button)
-        form_layout.addRow("Local Path:", local_path_layout)
+        form_layout.addRow(HF_LOCAL_PATH, local_path_layout)
 
         self.hf_upload_layout.addLayout(form_layout)
 
         # Upload type (file or folder)
-        upload_type_group = QGroupBox("Upload Type")
+        upload_type_group = QGroupBox(UPLOAD_TYPE)
         upload_type_layout = QHBoxLayout()
         self.upload_type_group = QButtonGroup()
-        self.upload_type_file = QRadioButton("File")
-        self.upload_type_folder = QRadioButton("Folder")
+        self.upload_type_file = QRadioButton(FILE)
+        self.upload_type_folder = QRadioButton(FOLDER)
         self.upload_type_group.addButton(self.upload_type_file)
         self.upload_type_group.addButton(self.upload_type_folder)
         upload_type_layout.addWidget(self.upload_type_file)
@@ -394,12 +389,12 @@ class AutoGGUF(QMainWindow):
         self.hf_upload_layout.addWidget(upload_type_group)
 
         # Repo type (dataset/space/model)
-        repo_type_group = QGroupBox("Repository Type")
+        repo_type_group = QGroupBox(HF_REPOSITORY_TYPE)
         repo_type_layout = QHBoxLayout()
         self.repo_type_group = QButtonGroup()
-        self.repo_type_model = QRadioButton("Model")
-        self.repo_type_dataset = QRadioButton("Dataset")
-        self.repo_type_space = QRadioButton("Space")
+        self.repo_type_model = QRadioButton(MODEL)
+        self.repo_type_dataset = QRadioButton(DATASET)
+        self.repo_type_space = QRadioButton(SPACE)
         self.repo_type_group.addButton(self.repo_type_model)
         self.repo_type_group.addButton(self.repo_type_dataset)
         self.repo_type_group.addButton(self.repo_type_space)
@@ -410,29 +405,37 @@ class AutoGGUF(QMainWindow):
         self.hf_upload_layout.addWidget(repo_type_group)
 
         # Upload button
-        upload_button = QPushButton("Upload")
+        upload_button = QPushButton(UPLOAD)
         upload_button.clicked.connect(self.transfer_to_hf)
         self.hf_upload_layout.addWidget(upload_button)
 
         self.hf_upload_dialog.setLayout(self.hf_upload_layout)
 
         # Tools menu
-        tools_menu = self.menubar.addMenu("&Tools")
-        autofp8_action = QAction("&AutoFP8", self)
+        tools_menu = self.menubar.addMenu(f"&{TOOLS}")
+        autofp8_action = QAction(f"&{AUTOFP8}", self)
         autofp8_action.setShortcut(QKeySequence("Shift+Q"))
         autofp8_action.triggered.connect(self.fp8_dialog.exec)
-        split_gguf_action = QAction("&Split GGUF", self)
+        split_gguf_action = QAction(f"&{SPLIT_GGUF}", self)
         split_gguf_action.setShortcut(QKeySequence("Shift+G"))
         split_gguf_action.triggered.connect(self.split_gguf_dialog.exec)
-        merge_gguf_action = QAction("&Merge GGUF", self)
+        merge_gguf_action = QAction(f"&{MERGE_GGUF}", self)
         merge_gguf_action.setShortcut(QKeySequence("Shift+M"))
         merge_gguf_action.triggered.connect(self.merge_gguf_dialog.exec)
-        hf_transfer_action = QAction("&HF Transfer", self)
+        hf_transfer_action = QAction(f"&{HF_TRANSFER}", self)
         hf_transfer_action.setShortcut(QKeySequence("Shift+H"))
         hf_transfer_action.triggered.connect(self.hf_upload_dialog.exec)
         tools_menu.addAction(hf_transfer_action)
         tools_menu.addAction(autofp8_action)
         tools_menu.addAction(split_gguf_action)
+        tools_menu.addAction(merge_gguf_action)
+
+        # Help menu
+        help_menu = self.menubar.addMenu(f"&{HELP}")
+        about_action = QAction(f"&{ABOUT}", self)
+        about_action.setShortcut(QKeySequence("Ctrl+Q"))
+        about_action.triggered.connect(self.show_about)
+        help_menu.addAction(about_action)
 
         # Content widget
         content_widget = QWidget()
@@ -757,7 +760,7 @@ class AutoGGUF(QMainWindow):
 
         self.extra_arguments = QLineEdit()
         quant_options_layout.addRow(
-            self.create_label(EXTRA_ARGUMENTS, "Additional command-line arguments"),
+            self.create_label(EXTRA_ARGUMENTS, EXTRA_COMMAND_ARGUMENTS),
             self.extra_arguments,
         )
 
@@ -1088,8 +1091,8 @@ class AutoGGUF(QMainWindow):
         self.load_models()
 
         # Load plugins
-        self.plugins = self.load_plugins()
-        self.apply_plugins()
+        self.plugins = Plugins.load_plugins(self)
+        Plugins.apply_plugins(self)
 
         # Finish initialization
         self.logger.info(AUTOGGUF_INITIALIZATION_COMPLETE)
@@ -1121,98 +1124,6 @@ class AutoGGUF(QMainWindow):
                 self.logger.info(MODEL_DELETED_SUCCESSFULLY.format(model_name))
             except Exception as e:
                 show_error(self.logger, f"Error deleting model: {e}")
-
-    def process_args(self, args: List[str]) -> bool:
-        try:
-            i = 1
-            while i < len(args):
-                key = (
-                    args[i][2:].replace("-", "_").upper()
-                )  # Strip the first two '--' and replace '-' with '_'
-                if i + 1 < len(args) and not args[i + 1].startswith("--"):
-                    value = args[i + 1]
-                    i += 2
-                else:
-                    value = "enabled"
-                    i += 1
-                os.environ[key] = value
-            return True
-        except Exception:
-            return False
-
-    def load_plugins(self) -> Dict[str, Dict[str, Any]]:
-        plugins = {}
-        plugin_dir = "plugins"
-
-        if not os.path.exists(plugin_dir):
-            self.logger.info(PLUGINS_DIR_NOT_EXIST.format(plugin_dir))
-            return plugins
-
-        if not os.path.isdir(plugin_dir):
-            self.logger.warning(PLUGINS_DIR_NOT_DIRECTORY.format(plugin_dir))
-            return plugins
-
-        for file in os.listdir(plugin_dir):
-            if file.endswith(".py") and not file.endswith(".disabled.py"):
-                name = file[:-3]
-                path = os.path.join(plugin_dir, file)
-
-                try:
-                    spec = importlib.util.spec_from_file_location(name, path)
-                    module = importlib.util.module_from_spec(spec)
-                    spec.loader.exec_module(module)
-
-                    for item_name in dir(module):
-                        item = getattr(module, item_name)
-                        if isinstance(item, type) and hasattr(item, "__data__"):
-                            plugin_instance = item()
-                            plugin_data = plugin_instance.__data__()
-
-                            compatible_versions = plugin_data.get(
-                                "compatible_versions", []
-                            )
-                            if (
-                                "*" in compatible_versions
-                                or AUTOGGUF_VERSION in compatible_versions
-                            ):
-                                plugins[name] = {
-                                    "instance": plugin_instance,
-                                    "data": plugin_data,
-                                }
-                                self.logger.info(
-                                    PLUGIN_LOADED.format(
-                                        plugin_data["name"], plugin_data["version"]
-                                    )
-                                )
-                            else:
-                                self.logger.warning(
-                                    PLUGIN_INCOMPATIBLE.format(
-                                        plugin_data["name"],
-                                        plugin_data["version"],
-                                        AUTOGGUF_VERSION,
-                                        ", ".join(compatible_versions),
-                                    )
-                                )
-                            break
-                except Exception as e:
-                    self.logger.error(PLUGIN_LOAD_FAILED.format(name, str(e)))
-
-        return plugins
-
-    def apply_plugins(self) -> None:
-        if not self.plugins:
-            self.logger.info(NO_PLUGINS_LOADED)
-            return
-
-        for plugin_name, plugin_info in self.plugins.items():
-            plugin_instance = plugin_info["instance"]
-            for attr_name in dir(plugin_instance):
-                if not attr_name.startswith("__") and attr_name != "init":
-                    attr_value = getattr(plugin_instance, attr_name)
-                    setattr(self, attr_name, attr_value)
-
-            if hasattr(plugin_instance, "init") and callable(plugin_instance.init):
-                plugin_instance.init(self)
 
     def check_for_updates(self) -> None:
         try:
@@ -1340,14 +1251,6 @@ class AutoGGUF(QMainWindow):
         if index >= 0:
             self.backend_combo.setCurrentIndex(index)
 
-    def verify_gguf(self, file_path) -> bool:
-        try:
-            with open(file_path, "rb") as f:
-                magic = f.read(4)
-                return magic == b"GGUF"
-        except (FileNotFoundError, IOError, OSError):
-            return False
-
     def validate_quantization_inputs(self) -> None:
         self.logger.debug(VALIDATING_QUANTIZATION_INPUTS)
         errors = []
@@ -1381,7 +1284,7 @@ class AutoGGUF(QMainWindow):
         for file in os.listdir(models_dir):
             full_path = os.path.join(models_dir, file)
             if file.endswith(".gguf"):
-                if not self.verify_gguf(full_path):
+                if not verify_gguf(full_path):
                     show_error(self.logger, INVALID_GGUF_FILE.format(file))
                     continue
 
@@ -1405,7 +1308,7 @@ class AutoGGUF(QMainWindow):
                     file_name not in single_models
                     and file_name not in concatenated_models
                 ):
-                    if self.verify_gguf(imported_model):
+                    if verify_gguf(imported_model):
                         single_models.append(file_name)
                     else:
                         show_error(
@@ -2015,7 +1918,7 @@ class AutoGGUF(QMainWindow):
             file_name = os.path.basename(file_path)
 
             # Verify GGUF file
-            if not self.verify_gguf(file_path):
+            if not verify_gguf(file_path):
                 show_error(self.logger, INVALID_GGUF_FILE.format(file_name))
                 return
 

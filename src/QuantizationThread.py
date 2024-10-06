@@ -5,7 +5,7 @@ import subprocess
 
 from PySide6.QtCore import Signal, QThread
 
-from imports_and_globals import open_file_safe
+from globals import open_file_safe
 from Localizations import IN_PROGRESS, COMPLETED
 
 
