@@ -1,4 +1,5 @@
 import json
+import os
 import shutil
 import urllib.error
 import urllib.request
@@ -70,8 +71,10 @@ class AutoGGUF(QMainWindow):
 
         self.parse_resolution = ui_update.parse_resolution.__get__(self)
 
+        self.log_dir_name = os.environ.get("AUTOGGUF_LOG_DIR_NAME", "logs")
+
         width, height = self.parse_resolution()
-        self.logger = Logger("AutoGGUF", "logs")
+        self.logger = Logger("AutoGGUF", self.log_dir_name)
 
         self.logger.info(INITIALIZING_AUTOGGUF)
         self.setWindowTitle(WINDOW_TITLE)
@@ -565,7 +568,7 @@ class AutoGGUF(QMainWindow):
 
         # Logs path
         logs_layout = QHBoxLayout()
-        self.logs_input = QLineEdit(os.path.abspath("logs"))
+        self.logs_input = QLineEdit(os.path.abspath(self.log_dir_name))
         logs_button = QPushButton(BROWSE)
         logs_button.clicked.connect(self.browse_logs)
         logs_layout.addWidget(QLabel(LOGS_PATH))
