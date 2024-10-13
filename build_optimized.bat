@@ -1,7 +1,7 @@
 @echo off
 
 if "%1"=="" (
-    echo Usage: build_fast.bat [RELEASE^|DEV]
+    echo Usage: build_optimized.bat [RELEASE^|DEV]
     exit /b 1
 )
 

@@ -1,33 +1,20 @@
 #!/bin/bash
 
 if [ $# -eq 0 ]; then
-    echo "Usage: $0 [RELEASE|DEV]"
+    echo "Usage: build.sh [RELEASE|DEV]"
     exit 1
 fi
 
-BUILD_TYPE=$1
-ICON_PATH="../../assets/favicon_large.png"
-ASSETS_PATH="../../assets"
-SRC_PATH="src/main.py"
-
-case $BUILD_TYPE in
-    RELEASE)
-        OUTPUT_DIR="build/release"
-        EXTRA_ARGS="--windowed"
-        ;;
-    DEV)
-        OUTPUT_DIR="build/dev"
-        EXTRA_ARGS=""
-        ;;
-    *)
-        echo "Invalid build type. Use RELEASE or DEV."
-        exit 1
-        ;;
-esac
-
-echo "Building $BUILD_TYPE version..."
-
-pyinstaller $EXTRA_ARGS --onefile --name=AutoGGUF --icon=$ICON_PATH --add-data "$ASSETS_PATH:assets" --distpath=$OUTPUT_DIR/dist --workpath=$OUTPUT_DIR/build --specpath=$OUTPUT_DIR $SRC_PATH
+if [ "${1,,}" = "release" ]; then
+    echo "Building RELEASE version..."
+    pyinstaller --windowed --onefile --name=AutoGGUF --icon=../../assets/favicon_large.png --add-data "../../assets:assets" --distpath=build/release/dist --workpath=build/release/build --specpath=build/release src/main.py
+elif [ "${1,,}" = "dev" ]; then
+    echo "Building DEV version..."
+    pyinstaller --onefile --name=AutoGGUF --icon=../../assets/favicon_large.png --add-data "../../assets:assets" --distpath=build/dev/dist --workpath=build/dev/build --specpath=build/dev src/main.py
+else
+    echo "Invalid argument. Use RELEASE or DEV."
+    exit 1
+fi
 
 if [ $? -ne 0 ]; then
     echo "Build failed."

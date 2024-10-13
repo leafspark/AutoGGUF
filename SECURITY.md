@@ -4,9 +4,9 @@
 
 | Version         | Supported          |
 |-----------------|--------------------|
-| stable (v1.9.0) | :white_check_mark: |
+| stable (v1.9.x) | :white_check_mark: |
 
-Beta versions are not supported, and may have unknown security issues.
+Beta versions are not officially supported and may contain unknown security vulnerabilities. Use them at your own risk.
 
 ## Reporting a Vulnerability
 

@@ -1,5 +1,34 @@
 # Changelog
 
+## [v1.9.1] - 2024-10-13
+
+### Added
+- Support for specifying log directory name using AUTOGGUF_LOG_DIR_NAME environment variable
+- Work in progress GGUF merge window
+- Support for repository types in HF Transfer utility
+- New `dequantize_gguf.py` script
+- Support for MiniCPM3, RWKVv6, OLMoE, IBM Granite, and Jamba in llama.cpp convert scripts (conversion only)
+- Add Nuitka build script for Linux
+
+### Changed
+- Updated Finnish and Russian localizations using Claude 3 Opus
+- Improved layout of HF Upload window
+- Updated gguf library from upstream
+- Refactored code to use localizations for menubar
+- Renamed imports_and_globals.py to globals.py
+- Moved general functions verify_gguf and process_args to globals.py
+- Created Plugins class for extensibility
+- Updated dependencies:
+  - huggingface-hub
+  - fastapi (~=0.115.0)
+  - setuptools (~=75.1.0)
+  - pyside6 (~=6.7.3)
+  - uvicorn (~=0.31.0)
+
+### Fixed
+- Corrected localization strings and file select types for GGUF merging
+- Fix minor errors in build scripts
+
 ## [v1.9.0] - 2024-09-15
 
 ### Added

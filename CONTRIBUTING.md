@@ -2,8 +2,6 @@
 
 First off, thanks for taking the time to contribute! 🎉👍
 
-## How Can I Contribute?
-
 ### Reporting Bugs
 
 - Use the issue tracker to report bugs
@@ -15,17 +13,18 @@ First off, thanks for taking the time to contribute! 🎉👍
 - Use the issue tracker to suggest enhancements
 - Explain why this enhancement would be useful
 
-### Your First Code Contribution
+### Code Contributions
 
 You can find issues labeled with "good first issue" in the Issues tab as a starting point. Code refactors and optimizations are also appreciated, although if there's a vulnrability please report it privately in the Security tab. For feature PRs, please make a discussion first to make sure your feature can be added and continously maintained.
 
 1. Fork the repo
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Install pre-commit: (`pip install pre-commit`)
-4. Set up the git hook scripts: (`pre-commit install`)
-5. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-6. Push to the branch (`git push origin feature/AmazingFeature`)
-7. Open a Pull Request
+2. Clone your fork (`git clone https://github.com/your-username/AutoGGUF.git && cd AutoGGUF`)
+3. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+5. Install pre-commit: (`pip install pre-commit`)
+6. Set up the git hook scripts: (`pre-commit install`)
+7. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+8. Push to the branch (`git push origin feature/AmazingFeature`)
+9. Open a Pull Request on GitHub
 
 ## Styleguides
 

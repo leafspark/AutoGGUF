@@ -37,7 +37,7 @@ AutoGGUF provides a graphical user interface for quantizing GGUF models using th
 - LoRA conversion and merging
 - Preset saving and loading
 - AutoFP8 quantization
-- GGUF splitting
+- GGUF splitting and merging
 
 ## Usage
 
@@ -59,9 +59,10 @@ Standard builds:
 1. Download the latest release
 2. Extract all files to a folder
 3. Run `AutoGGUF-x64.exe`
+4. Any necessary folders will be automatically created
 
 Setup builds:
-1. Download setup varient of latest release
+1. Download setup variant of latest release
 2. Extract all files to a folder
 3. Run the setup program
 4. The .GGUF extension will be registered with the program automatically
@@ -74,8 +75,8 @@ After launching the program, you may access its local server at port 7001 (set `
 #### Linux/macOS:
 ```bash
 gpg --import AutoGGUF-v1.5.0-prerel.asc
-gpg --verify AutoGGUF-v1.5.0-Windows-avx2-prerel.zip.sig AutoGGUF-v1.5.0-Windows-avx2-prerel.zip
-sha256sum -c AutoGGUF-v1.5.0-prerel.sha256
+gpg --verify AutoGGUF-v1.9.1-Windows-avx2.zip.sig AutoGGUF-v1.9.1-Windows-avx2.zip
+sha256sum -c AutoGGUF-v1.9.1.sha256
 ```
 
 #### Windows (PowerShell):
@@ -84,11 +85,11 @@ sha256sum -c AutoGGUF-v1.5.0-prerel.sha256
 gpg --import AutoGGUF-v1.5.0-prerel.asc
 
 # Verify the signature
-gpg --verify AutoGGUF-v1.8.1-Windows-avx2.zip.sig AutoGGUF-v1.8.1-Windows-avx2.zip
+gpg --verify AutoGGUF-v1.9.1-Windows-avx2.zip.sig AutoGGUF-v1.9.1-Windows-avx2.zip
 
 # Check SHA256
-$fileHash = (Get-FileHash -Algorithm SHA256 AutoGGUF-v1.8.1-Windows-avx2.zip).Hash.ToLower()
-$storedHash = (Get-Content AutoGGUF-v1.8.1.sha256 | Select-String AutoGGUF-v1.8.1-Windows-avx2.zip).Line.Split()[0]
+$fileHash = (Get-FileHash -Algorithm SHA256 AutoGGUF-v1.9.1-Windows-avx2.zip).Hash.ToLower()
+$storedHash = (Get-Content AutoGGUF-v1.9.1.sha256 | Select-String AutoGGUF-v1.9.1-Windows-avx2.zip).Line.Split()[0]
 if ($fileHash -eq $storedHash) { "SHA256 Match" } else { "SHA256 Mismatch" }
 ```
 
@@ -106,11 +107,12 @@ cd build/<type>/dist/
 
 ### Windows
 ```bash
+pip install -U pyinstaller
 build RELEASE | DEV
 ```
 Find the executable in `build/<type>/dist/AutoGGUF.exe`.
 
-You can also use the slower build but faster executable method (Nuitka):
+You can also use Nuitka, which may result in a slower build but a faster output executable:
 ```bash
 build_optimized RELEASE | DEV
 ```
