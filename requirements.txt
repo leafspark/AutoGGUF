@@ -4,7 +4,7 @@ pynvml~=11.5.3
 PySide6~=6.8.0.1
 safetensors~=0.4.5
 numpy<2.0.0
-torch~=2.4.1
+torch~=2.5.0
 sentencepiece~=0.2.0
 setuptools~=75.1.0
 huggingface-hub~=0.25.2
