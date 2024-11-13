@@ -6,7 +6,7 @@ safetensors~=0.4.5
 numpy<2.0.0
 torch~=2.5.1
 sentencepiece~=0.2.0
-setuptools~=75.1.0
+setuptools~=75.4.0
 huggingface-hub~=0.25.2
 transformers~=4.46.2
 fastapi~=0.115.2
