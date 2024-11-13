@@ -5,7 +5,7 @@ import urllib.error
 import urllib.request
 from datetime import datetime
 from functools import partial, wraps
-from typing import List
+from typing import Any, List, Union
 
 from PySide6.QtCore import *
 from PySide6.QtGui import *
@@ -71,7 +71,7 @@ class AutoGGUF(QMainWindow):
 
         self.parse_resolution = ui_update.parse_resolution.__get__(self)
 
-        self.log_dir_name = os.environ.get("AUTOGGUF_LOG_DIR_NAME", "logs")
+        self.log_dir_name = str(os.environ.get("AUTOGGUF_LOG_DIR_NAME", "logs"))
 
         width, height = self.parse_resolution()
         self.logger = Logger("AutoGGUF", self.log_dir_name)
@@ -775,7 +775,7 @@ class AutoGGUF(QMainWindow):
         # Quantize button layout
         quantize_layout = QHBoxLayout()
         quantize_button = QPushButton(QUANTIZE_MODEL)
-        quantize_button.clicked.connect(self.quantize_model)
+        quantize_button.clicked[bool].connect(self.quantize_model_handler)
         save_preset_button = QPushButton(SAVE_PRESET)
         save_preset_button.clicked.connect(self.save_preset)
         load_preset_button = QPushButton(LOAD_PRESET)
@@ -1101,6 +1101,20 @@ class AutoGGUF(QMainWindow):
         self.logger.info(AUTOGGUF_INITIALIZATION_COMPLETE)
         self.logger.info(STARTUP_ELASPED_TIME.format(init_timer.elapsed()))
 
+    def quantize_model_handler(self) -> None:
+        if QApplication.keyboardModifiers() == Qt.ShiftModifier and self.quantize_model(
+            return_command=True
+        ):
+            QApplication.clipboard().setText(self.quantize_model(return_command=True))
+            QMessageBox.information(
+                None,
+                INFO,
+                f"{COPIED_COMMAND_TO_CLIPBOARD} "
+                + f"<code style='font-family: monospace; white-space: pre;'>{self.quantize_model(return_command=True)}</code>",
+            )
+        else:
+            self.quantize_model()
+
     def resizeEvent(self, event) -> None:
         super().resizeEvent(event)
         path = QPainterPath()
@@ -1253,23 +1267,6 @@ class AutoGGUF(QMainWindow):
         index = self.backend_combo.findText(new_backend_name)
         if index >= 0:
             self.backend_combo.setCurrentIndex(index)
-
-    def validate_quantization_inputs(self) -> None:
-        self.logger.debug(VALIDATING_QUANTIZATION_INPUTS)
-        errors = []
-        if not self.backend_combo.currentData():
-            errors.append(NO_BACKEND_SELECTED)
-        if not self.models_input.text():
-            errors.append(MODELS_PATH_REQUIRED)
-        if not self.output_input.text():
-            errors.append(OUTPUT_PATH_REQUIRED)
-        if not self.logs_input.text():
-            errors.append(LOGS_PATH_REQUIRED)
-        if not self.model_tree.currentItem():
-            errors.append(NO_MODEL_SELECTED)
-
-        if errors:
-            raise ValueError("\n".join(errors))
 
     def load_models(self) -> None:
         self.logger.info(LOADING_MODELS)
@@ -1698,10 +1695,9 @@ class AutoGGUF(QMainWindow):
             show_error(self.logger, "Error starting merge GGUF task: {}".format(e))
         self.logger.info("Split GGUF task finished.")
 
-    def quantize_model(self) -> None:
+    def quantize_model(self, return_command=False) -> str:
         self.logger.info(STARTING_MODEL_QUANTIZATION)
         try:
-            self.validate_quantization_inputs()
             selected_item = self.model_tree.currentItem()
             if not selected_item:
                 raise ValueError(NO_MODEL_SELECTED)
@@ -1821,6 +1817,12 @@ class AutoGGUF(QMainWindow):
                 # Add extra arguments
                 if self.extra_arguments.text():
                     command.extend(self.extra_arguments.text().split())
+
+                if return_command:
+                    self.logger.info(
+                        f"{QUANTIZATION_COMMAND}: {str(' '.join(command))}"
+                    )
+                    return str(" ".join(command))
 
                 logs_path = self.logs_input.text()
                 ensure_directory(logs_path)

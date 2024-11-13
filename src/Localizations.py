@@ -454,6 +454,9 @@ class _English(_Localization):
 
         self.EXTRA_COMMAND_ARGUMENTS = "Additional command-line arguments"
 
+        self.INFO = "Info"
+        self.COPIED_COMMAND_TO_CLIPBOARD = "Copied command to clipboard:"
+
 
 class _French(_Localization):
     def __init__(self):
