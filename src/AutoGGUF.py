@@ -194,7 +194,7 @@ class AutoGGUF(QMainWindow):
         save_preset_action = QAction(f"&{SAVE_PRESET}", self)
         save_preset_action.setShortcut(QKeySequence("Ctrl+S"))
         save_preset_action.triggered.connect(self.save_preset)
-        load_preset_action = QAction(f"&{SAVE_PRESET}", self)
+        load_preset_action = QAction(f"&{LOAD_PRESET}", self)
         load_preset_action.setShortcut(QKeySequence("Ctrl+S"))
         load_preset_action.triggered.connect(self.load_preset)
         file_menu.addAction(close_action)

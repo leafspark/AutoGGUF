@@ -9,9 +9,9 @@
 
 <!-- Project Info -->
 [![Powered by llama.cpp](https://img.shields.io/badge/Powered%20by-llama.cpp-green.svg)](https://github.com/ggerganov/llama.cpp)
-![GitHub top language](https://img.shields.io/github/languages/top/leafspark/AutoGGUF.svg)
 [![Platform Compatibility](https://img.shields.io/badge/platform-Linux%20%7C%20macOS%20%7C%20Windows-blue)]()
 [![GitHub license](https://img.shields.io/github/license/leafspark/AutoGGUF.svg)](https://github.com/leafspark/AutoGGUF/blob/main/LICENSE)
+![GitHub top language](https://img.shields.io/github/languages/top/leafspark/AutoGGUF.svg)
 
 <!-- Repository Stats -->
 ![GitHub stars](https://img.shields.io/github/stars/leafspark/AutoGGUF.svg)
@@ -21,32 +21,43 @@
 ![Lines of Code](https://tokei.rs/b1/github/leafspark/AutoGGUF?category=code)
 
 <!-- Contribution -->
-[![Code Style: Black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 [![Issues](https://img.shields.io/github/issues/leafspark/AutoGGUF)](https://github.com/leafspark/AutoGGUF/issues)
+[![Code Style: Black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/leafspark/AutoGGUF/pulls)
 
-AutoGGUF provides a graphical user interface for quantizing GGUF models using the llama.cpp library. It allows users to download different versions of llama.cpp, manage multiple backends, and perform quantization tasks with various options.
+The most comprehensive GUI tool for GGUF model quantization. Stop wrestling with command lines - quantize, merge, and optimize your models with just a few clicks.
 
 ## Features
 
-- Download and manage llama.cpp backends
-- Select and quantize GGUF models
-- Configure quantization parameters
-- Monitor system resources during quantization
-- Parallel quantization + imatrix generation
-- LoRA conversion and merging
-- Preset saving and loading
-- AutoFP8 quantization
-- GGUF splitting and merging
+- 📩 Download and manage llama.cpp backends
+- 🗃️ Select and quantize GGUF models
+- 📐 Configure quantization parameters
+- 💻 Monitor system resources during quantization
+- ⏳ Parallel quantization + imatrix generation
+- 🎉 LoRA conversion and merging
+- 📁 Preset saving and loading
+- 8️⃣ AutoFP8 quantization
+- 🪓 GGUF splitting and merging
+- 🌐 HTTP API for automated monitoring
 
-## Usage
+## Why AutoGGUF?
+- Fast: Saves time on manual configuration
+- Simple: Clean UI, no terminal needed
+- Powerful: Handles models up to infinite size, only limited by your RAM 
+- Resource-aware: Optimized memory management and efficient UI library
+
+![AutoGGUF-v1 8 1-showcase-blue](https://github.com/user-attachments/assets/b136ccc3-5983-4266-9e66-00cebf3ca590)
+
+## Quick Start
 
 ### Cross-platform
-1. Install dependencies:
+1. `git clone https://github.com/leafspark/AutoGGUF`
+2. `cd AutoGGUF`
+3. Install dependencies:
    ```
    pip install -r requirements.txt
    ```
-2. Run the application:
+4. Run the application:
    ```
    python src/main.py
    ```
@@ -54,7 +65,7 @@ AutoGGUF provides a graphical user interface for quantizing GGUF models using th
 
 macOS and Ubuntu builds are provided with GitHub Actions, you may download the binaries in the releases section.
 
-### Windows
+### Windows (for the impatient)
 Standard builds:
 1. Download the latest release
 2. Extract all files to a folder
@@ -117,13 +128,11 @@ You can also use Nuitka, which may result in a slower build but a faster output 
 build_optimized RELEASE | DEV
 ```
 
-## Dependencies
-
-Find them in `requirements.txt`.
-
 ## Localizations
 
 View the list of supported languages at [AutoGGUF/wiki/Installation#configuration](https://github.com/leafspark/AutoGGUF/wiki/Installation#configuration) (LLM translated, except for English).
+
+More languages will be updated as soon as possible!
 
 To use a specific language, set the `AUTOGGUF_LANGUAGE` environment variable to one of the listed language codes (note: some languages may not be fully supported yet, those will fall back to English).
 
@@ -136,20 +145,16 @@ To use a specific language, set the `AUTOGGUF_LANGUAGE` environment variable to 
 - Time estimation for quantization
 - Quantization file size estimate
 - Perplexity testing
-- HuggingFace upload/download (coming in the next release)
 - bitsandbytes (coming soon)
 
-## Troubleshooting
+## Support
 
 - SSL module cannot be found error: Install OpenSSL or run from source using `python src/main.py` with the `run.bat` script (`pip install requests`)
+- Check out the [Wiki](https://github.com/leafspark/AutoGGUF/wiki) for advanced usage
 
 ## Contributing
 
 Fork the repo, make your changes, and ensure you have the latest commits when merging. Include a changelog of new features in your pull request description. Read `CONTRIBUTING.md` for more information.
-
-## User Interface
-
-![AutoGGUF-v1 8 1-showcase-blue](https://github.com/user-attachments/assets/b136ccc3-5983-4266-9e66-00cebf3ca590)
 
 ## Stargazers
 

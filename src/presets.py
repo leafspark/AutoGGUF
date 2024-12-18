@@ -1,7 +1,7 @@
 import json
 
 from PySide6.QtCore import Qt
-from PySide6.QtWidgets import QFileDialog, QMessageBox
+from PySide6.QtWidgets import QApplication, QFileDialog, QMessageBox
 from Localizations import (
     SAVING_PRESET,
     SAVE_PRESET,
@@ -36,20 +36,40 @@ def save_preset(self) -> None:
         "extra_arguments": self.extra_arguments.text(),
     }
 
-    file_name, _ = QFileDialog.getSaveFileName(self, SAVE_PRESET, "", JSON_FILES)
-    if file_name:
-        with open(file_name, "w") as f:
-            json.dump(preset, f, indent=4)
-        QMessageBox.information(self, PRESET_SAVED, PRESET_SAVED_TO.format(file_name))
-    self.logger.info(PRESET_SAVED_TO.format(file_name))
+    if not QApplication.keyboardModifiers() & Qt.ShiftModifier:
+        file_name, _ = QFileDialog.getSaveFileName(self, SAVE_PRESET, "", JSON_FILES)
+        if file_name:
+            with open(file_name, "w") as f:
+                json.dump(preset, f, indent=4)
+            QMessageBox.information(
+                self, PRESET_SAVED, PRESET_SAVED_TO.format(file_name)
+            )
+        self.logger.info(PRESET_SAVED_TO.format(file_name))
+    else:
+        clipboard = QApplication.clipboard()
+        preset_str = json.dumps(preset, indent=1)
+        clipboard.setText(preset_str)
+        QMessageBox.information(self, PRESET_SAVED, "Preset copied to clipboard")
+        self.logger.info("Preset copied to clipboard")
 
 
 def load_preset(self) -> None:
     self.logger.info(LOADING_PRESET)
-    file_name, _ = QFileDialog.getOpenFileName(self, LOAD_PRESET, "", JSON_FILES)
-    if file_name:
-        with open(file_name, "r") as f:
-            preset = json.load(f)
+
+    try:
+        if QApplication.keyboardModifiers() & Qt.ShiftModifier:
+            clipboard = QApplication.clipboard()
+            preset = json.loads(clipboard.text())
+            source = "clipboard"
+        else:
+            file_name, _ = QFileDialog.getOpenFileName(
+                self, LOAD_PRESET, "", JSON_FILES
+            )
+            if not file_name:
+                return
+            with open(file_name, "r") as f:
+                preset = json.load(f)
+            source = file_name
 
         self.quant_type.clearSelection()
         for quant_type in preset.get("quant_types", []):
@@ -80,6 +100,19 @@ def load_preset(self) -> None:
             self.add_kv_override(override)
 
         QMessageBox.information(
-            self, PRESET_LOADED, PRESET_LOADED_FROM.format(file_name)
+            self,
+            PRESET_LOADED,
+            PRESET_LOADED_FROM.format(
+                source
+                if not QApplication.keyboardModifiers() & Qt.ShiftModifier
+                else "clipboard"
+            ),
         )
-    self.logger.info(PRESET_LOADED_FROM.format(file_name))
+        self.logger.info(PRESET_LOADED_FROM.format(source))
+
+    except json.JSONDecodeError:
+        QMessageBox.critical(self, "Error", "Invalid JSON in clipboard")
+        self.logger.error("Failed to parse JSON from clipboard")
+    except Exception as e:
+        QMessageBox.critical(self, "Error", f"Failed to load preset: {str(e)}")
+        self.logger.error(f"Failed to load preset: {str(e)}")

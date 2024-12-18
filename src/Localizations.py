@@ -5800,187 +5800,339 @@ class _Romanian(_Localization):
 class _Czech(_Localization):
     def __init__(self):
         super().__init__()
-        self.WINDOW_TITLE = "AutoGGUF (Automatický kvantizátor modelů GGUF)"
+
+        # General UI
+        self.WINDOW_TITLE = (
+            "AutoGGUF (automatizovaný nástroj pro kvantizaci GGUF modelů)"
+        )
         self.RAM_USAGE = "Využití RAM:"
         self.CPU_USAGE = "Využití CPU:"
         self.BACKEND = "Backend Llama.cpp:"
         self.REFRESH_BACKENDS = "Obnovit backendy"
         self.MODELS_PATH = "Cesta k modelům:"
-        self.OUTPUT_PATH = "Výstupní cesta:"
+        self.OUTPUT_PATH = "Cesta pro výstup:"
         self.LOGS_PATH = "Cesta k logům:"
         self.BROWSE = "Procházet"
         self.AVAILABLE_MODELS = "Dostupné modely:"
+        self.REFRESH_MODELS = "Obnovit modely"
+        self.STARTUP_ELASPED_TIME = "Inicializace trvala {0} ms"
+
+        # Usage Graphs
+        self.CPU_USAGE_OVER_TIME = "Využití CPU v čase"
+        self.RAM_USAGE_OVER_TIME = "Využití RAM v čase"
+
+        # Environment variables
+        self.DOTENV_FILE_NOT_FOUND = "Soubor .env nenalezen."
+        self.COULD_NOT_PARSE_LINE = "Nelze zpracovat řádek: {0}"
+        self.ERROR_LOADING_DOTENV = "Chyba při načítání .env: {0}"
+
+        # Model Import
+        self.IMPORT_MODEL = "Importovat model"
+        self.SELECT_MODEL_TO_IMPORT = "Vyberte model k importu"
+        self.CONFIRM_IMPORT = "Potvrdit import"
+        self.IMPORT_MODEL_CONFIRMATION = "Chcete importovat model {}?"
+        self.MODEL_IMPORTED_SUCCESSFULLY = "Model {} byl úspěšně importován"
+        self.IMPORTING_MODEL = "Importuji model"
+        self.IMPORTED_MODEL_TOOLTIP = "Importovaný model: {}"
+
+        # AutoFP8 Quantization
+        self.AUTOFP8_QUANTIZATION_TASK_STARTED = (
+            "Úloha kvantizace AutoFP8 byla spuštěna"
+        )
+        self.ERROR_STARTING_AUTOFP8_QUANTIZATION = (
+            "Chyba při spuštění kvantizace AutoFP8"
+        )
+        self.QUANTIZING_WITH_AUTOFP8 = "Kvantizuji {0} pomocí AutoFP8"
+        self.QUANTIZING_TO_WITH_AUTOFP8 = "Kvantizuji {0} na {1}"
+        self.QUANTIZE_TO_FP8_DYNAMIC = "Kvantizovat na FP8 Dynamic"
+        self.OPEN_MODEL_FOLDER = "Otevřít složku modelu"
+        self.QUANTIZE = "Kvantizovat"
+        self.OPEN_MODEL_FOLDER = "Otevřít složku modelu"
+        self.INPUT_MODEL = "Vstupní model:"
+
+        # GGUF Verification
+        self.INVALID_GGUF_FILE = "Neplatný GGUF soubor: {}"
+        self.SHARDED_MODEL_NAME = "{} (Rozdělený)"
+        self.IMPORTED_MODEL_TOOLTIP = "Importovaný model: {}"
+        self.CONCATENATED_FILE_WARNING = "Toto je spojená část souboru. Nebude fungovat s llama-quantize; prosím, spojte soubor nejdříve."
+        self.CONCATENATED_FILES_FOUND = (
+            "Nalezeno {} spojených částí souboru. Prosím, spojte soubory nejdříve."
+        )
+
+        # Plugins
+        self.PLUGINS_DIR_NOT_EXIST = (
+            "Adresář pluginů '{}' neexistuje. Žádné pluginy nebudou načteny."
+        )
+        self.PLUGINS_DIR_NOT_DIRECTORY = (
+            "'{}' existuje, ale není to adresář. Žádné pluginy nebudou načteny."
+        )
+        self.PLUGIN_LOADED = "Načten plugin: {} {}"
+        self.PLUGIN_INCOMPATIBLE = (
+            "Plugin {} {} není kompatibilní s verzí AutoGGUF {}. Podporované verze: {}"
+        )
+        self.PLUGIN_LOAD_FAILED = "Nepodařilo se načíst plugin {}: {}"
+        self.NO_PLUGINS_LOADED = "Žádné pluginy nebyly načteny."
+
+        # GPU Monitoring
+        self.GPU_USAGE = "Využití GPU:"
+        self.GPU_USAGE_FORMAT = "GPU: {:.1f}% | VRAM: {:.1f}% ({} MB / {} MB)"
+        self.GPU_DETAILS = "Detaily GPU"
+        self.GPU_USAGE_OVER_TIME = "Využití GPU v čase"
+        self.VRAM_USAGE_OVER_TIME = "Využití VRAM v čase"
+        self.PERCENTAGE = "Procento"
+        self.TIME = "Čas (s)"
+        self.NO_GPU_DETECTED = "Nebyla detekována žádná GPU"
+        self.SELECT_GPU = "Vybrat GPU"
+        self.AMD_GPU_NOT_SUPPORTED = "Byla detekována AMD GPU, ale není podporována"
+
+        # Quantization
         self.QUANTIZATION_TYPE = "Typ kvantizace:"
         self.ALLOW_REQUANTIZE = "Povolit rekvantizaci"
-        self.LEAVE_OUTPUT_TENSOR = "Ponechat výstupní tenzor"
+        self.LEAVE_OUTPUT_TENSOR = "Ponechat výstupní tensor"
         self.PURE = "Čistý"
         self.IMATRIX = "IMatrix:"
         self.INCLUDE_WEIGHTS = "Zahrnout váhy:"
         self.EXCLUDE_WEIGHTS = "Vyloučit váhy:"
         self.USE_OUTPUT_TENSOR_TYPE = "Použít typ výstupního tenzoru"
-        self.USE_TOKEN_EMBEDDING_TYPE = "Použít typ vkládání tokenů"
+        self.USE_TOKEN_EMBEDDING_TYPE = "Použít typ pro token embeddings"
         self.KEEP_SPLIT = "Zachovat rozdělení"
         self.KV_OVERRIDES = "Přepsání KV:"
         self.ADD_NEW_OVERRIDE = "Přidat nové přepsání"
         self.QUANTIZE_MODEL = "Kvantizovat model"
+        self.EXTRA_ARGUMENTS = "Další argumenty:"
+        self.EXTRA_ARGUMENTS_LABEL = "Další argumenty příkazové řádky"
+        self.QUANTIZATION_COMMAND = "Příkaz pro kvantizaci"
+
+        # Presets
         self.SAVE_PRESET = "Uložit předvolbu"
         self.LOAD_PRESET = "Načíst předvolbu"
-        self.TASKS = "Úkoly:"
+
+        # Tasks
+        self.TASKS = "Úlohy:"
+
+        # llama.cpp Download
         self.DOWNLOAD_LLAMACPP = "Stáhnout llama.cpp"
         self.SELECT_RELEASE = "Vybrat verzi:"
-        self.SELECT_ASSET = "Vybrat aktivum:"
-        self.EXTRACT_CUDA_FILES = "Extrahovat soubory CUDA"
-        self.SELECT_CUDA_BACKEND = "Vybrat backend CUDA:"
+        self.SELECT_ASSET = "Vybrat asset:"
+        self.EXTRACT_CUDA_FILES = "Extrahovat CUDA soubory"
+        self.SELECT_CUDA_BACKEND = "Vybrat CUDA backend:"
         self.DOWNLOAD = "Stáhnout"
+        self.REFRESH_RELEASES = "Obnovit verze"
+
+        # IMatrix Generation
         self.IMATRIX_GENERATION = "Generování IMatrix"
         self.DATA_FILE = "Datový soubor:"
         self.MODEL = "Model:"
         self.OUTPUT = "Výstup:"
         self.OUTPUT_FREQUENCY = "Frekvence výstupu:"
-        self.GPU_OFFLOAD = "Odlehčení GPU:"
+        self.GPU_OFFLOAD = "Využití GPU:"
         self.AUTO = "Automaticky"
         self.GENERATE_IMATRIX = "Generovat IMatrix"
+        self.CONTEXT_SIZE = "Velikost kontextu:"
+        self.CONTEXT_SIZE_FOR_IMATRIX = "Velikost kontextu pro generování IMatrix"
+        self.THREADS = "Vlákna:"
+        self.NUMBER_OF_THREADS_FOR_IMATRIX = "Počet vláken pro generování IMatrix"
+        self.IMATRIX_GENERATION_COMMAND = "Příkaz pro generování IMatrix"
+
+        # LoRA Conversion
+        self.LORA_CONVERSION = "Konverze LoRA"
+        self.LORA_INPUT_PATH = "Vstupní cesta LoRA"
+        self.LORA_OUTPUT_PATH = "Výstupní cesta LoRA"
+        self.SELECT_LORA_INPUT_DIRECTORY = "Vybrat vstupní adresář LoRA"
+        self.SELECT_LORA_OUTPUT_FILE = "Vybrat výstupní soubor LoRA"
+        self.CONVERT_LORA = "Převést LoRA"
+        self.LORA_CONVERSION_COMMAND = "Příkaz pro konverzi LoRA"
+
+        # LoRA Export
+        self.EXPORT_LORA = "Exportovat LoRA"
+        self.GGML_LORA_ADAPTERS = "GGML LoRA adaptéry"
+        self.SELECT_LORA_ADAPTER_FILES = "Vybrat soubory LoRA adaptéru"
+        self.ADD_ADAPTER = "Přidat adaptér"
+        self.DELETE_ADAPTER = "Smazat"
+        self.LORA_SCALE = "LoRA škála"
+        self.ENTER_LORA_SCALE_VALUE = "Zadejte hodnotu LoRA škály (volitelné)"
+        self.NUMBER_OF_THREADS_FOR_LORA_EXPORT = "Počet vláken pro export LoRA"
+        self.LORA_EXPORT_COMMAND = "Příkaz pro export LoRA"
+
+        # HuggingFace to GGUF Conversion
+        self.HF_TO_GGUF_CONVERSION = "Konverze HuggingFace na GGUF"
+        self.MODEL_DIRECTORY = "Adresář modelu:"
+        self.OUTPUT_FILE = "Výstupní soubor:"
+        self.OUTPUT_TYPE = "Typ výstupu:"
+        self.VOCAB_ONLY = "Pouze slovník"
+        self.USE_TEMP_FILE = "Použít dočasný soubor"
+        self.NO_LAZY_EVALUATION = "Bez líného vyhodnocování"
+        self.MODEL_NAME = "Název modelu:"
+        self.VERBOSE = "Podrobný výpis"
+        self.SPLIT_MAX_SIZE = "Maximální velikost pro rozdělení:"
+        self.DRY_RUN = "Zkušební běh"
+        self.CONVERT_HF_TO_GGUF = "Převést HF na GGUF"
+        self.SELECT_HF_MODEL_DIRECTORY = "Vybrat adresář modelu HuggingFace"
+        self.BROWSE_FOR_HF_MODEL_DIRECTORY = "Procházení adresáře modelu HuggingFace"
+        self.BROWSE_FOR_HF_TO_GGUF_OUTPUT = (
+            "Procházení výstupního souboru pro konverzi HuggingFace na GGUF"
+        )
+
+        # Update Checking
+        self.UPDATE_AVAILABLE = "Aktualizace je k dispozici"
+        self.NEW_VERSION_AVAILABLE = "Je k dispozici nová verze: {}"
+        self.DOWNLOAD_NEW_VERSION = "Stáhnout?"
+        self.ERROR_CHECKING_FOR_UPDATES = "Chyba při kontrole aktualizací:"
+        self.CHECKING_FOR_UPDATES = "Kontrola aktualizací"
+
+        # General Messages
         self.ERROR = "Chyba"
         self.WARNING = "Varování"
         self.PROPERTIES = "Vlastnosti"
         self.CANCEL = "Zrušit"
         self.RESTART = "Restartovat"
         self.DELETE = "Smazat"
-        self.CONFIRM_DELETION = "Jste si jisti, že chcete smazat tento úkol?"
+        self.RENAME = "Přejmenovat"
+        self.CONFIRM_DELETION = "Opravdu chcete smazat tuto úlohu?"
         self.TASK_RUNNING_WARNING = (
-            "Některé úkoly stále běží. Jste si jisti, že chcete ukončit?"
+            "Některé úlohy stále běží. Opravdu chcete aplikaci ukončit?"
         )
         self.YES = "Ano"
         self.NO = "Ne"
+        self.COMPLETED = "Dokončeno"
+
+        # File Types
+        self.ALL_FILES = "Všechny soubory (*)"
+        self.GGUF_FILES = "GGUF soubory (*.gguf)"
+        self.DAT_FILES = "DAT soubory (*.dat)"
+        self.JSON_FILES = "JSON soubory (*.json)"
+        self.BIN_FILES = "Binární soubory (*.bin)"
+        self.LORA_FILES = "LoRA soubory (*.bin *.gguf)"
+        self.GGUF_AND_BIN_FILES = "GGUF a binární soubory (*.gguf *.bin)"
+        self.SHARDED = "rozdělený"
+
+        # Status Messages
         self.DOWNLOAD_COMPLETE = "Stahování dokončeno"
-        self.CUDA_EXTRACTION_FAILED = "Extrahování CUDA se nezdařilo"
+        self.CUDA_EXTRACTION_FAILED = "Extrakce CUDA selhala"
         self.PRESET_SAVED = "Předvolba uložena"
         self.PRESET_LOADED = "Předvolba načtena"
-        self.NO_ASSET_SELECTED = "Nebylo vybráno žádné aktivum"
-        self.DOWNLOAD_FAILED = "Stahování se nezdařilo"
+        self.NO_ASSET_SELECTED = "Nebyl vybrán žádný asset"
+        self.DOWNLOAD_FAILED = "Stahování selhalo"
         self.NO_BACKEND_SELECTED = "Nebyl vybrán žádný backend"
         self.NO_MODEL_SELECTED = "Nebyl vybrán žádný model"
-        self.REFRESH_RELEASES = "Obnovit verze"
-        self.NO_SUITABLE_CUDA_BACKENDS = "Nebyly nalezeny žádné vhodné backendy CUDA"
-        self.LLAMACPP_DOWNLOADED_EXTRACTED = "Binární soubor llama.cpp byl stažen a extrahován do {0}\nSoubory CUDA extrahovány do {1}"
-        self.CUDA_FILES_EXTRACTED = "Soubory CUDA extrahovány do"
+        self.NO_SUITABLE_CUDA_BACKENDS = "Nebyly nalezeny žádné vhodné CUDA backendy"
+        self.IN_PROGRESS = "Probíhá"
+        self.LLAMACPP_DOWNLOADED_EXTRACTED = (
+            "Binární soubor llama.cpp byl stažen a extrahován do {0}"
+        )
+        self.CUDA_FILES_EXTRACTED = "CUDA soubory byly extrahovány do"
         self.NO_SUITABLE_CUDA_BACKEND_EXTRACTION = (
-            "Nebyl nalezen žádný vhodný backend CUDA pro extrakci"
+            "Nebyl nalezen žádný vhodný CUDA backend pro extrakci"
         )
         self.ERROR_FETCHING_RELEASES = "Chyba při načítání verzí: {0}"
         self.CONFIRM_DELETION_TITLE = "Potvrdit smazání"
         self.LOG_FOR = "Log pro {0}"
-        self.ALL_FILES = "Všechny soubory (*)"
-        self.GGUF_FILES = "Soubory GGUF (*.gguf)"
-        self.DAT_FILES = "Soubory DAT (*.dat)"
-        self.JSON_FILES = "Soubory JSON (*.json)"
-        self.FAILED_LOAD_PRESET = "Nepodařilo se načíst předvolbu: {0}"
+        self.FAILED_TO_LOAD_PRESET = "Nepodařilo se načíst předvolbu: {0}"
         self.INITIALIZING_AUTOGGUF = "Inicializace aplikace AutoGGUF"
         self.AUTOGGUF_INITIALIZATION_COMPLETE = "Inicializace AutoGGUF dokončena"
-        self.REFRESHING_BACKENDS = "Obnovování backendů"
-        self.NO_BACKENDS_AVAILABLE = "Žádné dostupné backendy"
+        self.REFRESHING_BACKENDS = "Obnovuji backendy"
+        self.NO_BACKENDS_AVAILABLE = "Nejsou dostupné žádné backendy"
         self.FOUND_VALID_BACKENDS = "Nalezeno {0} platných backendů"
-        self.SAVING_PRESET = "Ukládání předvolby"
+        self.SAVING_PRESET = "Ukládám předvolbu"
         self.PRESET_SAVED_TO = "Předvolba uložena do {0}"
-        self.LOADING_PRESET = "Načítání předvolby"
+        self.LOADING_PRESET = "Načítám předvolbu"
         self.PRESET_LOADED_FROM = "Předvolba načtena z {0}"
-        self.ADDING_KV_OVERRIDE = "Přidávání přepsání KV: {0}"
-        self.SAVING_TASK_PRESET = "Ukládání předvolby úkolu pro {0}"
-        self.TASK_PRESET_SAVED = "Předvolba úkolu uložena"
-        self.TASK_PRESET_SAVED_TO = "Předvolba úkolu uložena do {0}"
-        self.RESTARTING_TASK = "Restartování úkolu: {0}"
-        self.IN_PROGRESS = "Probíhá"
+        self.ADDING_KV_OVERRIDE = "Přidávám přepsání KV: {0}"
+        self.SAVING_TASK_PRESET = "Ukládám předvolbu úlohy pro {0}"
+        self.TASK_PRESET_SAVED = "Předvolba úlohy uložena"
+        self.TASK_PRESET_SAVED_TO = "Předvolba úlohy uložena do {0}"
+        self.RESTARTING_TASK = "Restartuji úlohu: {0}"
         self.DOWNLOAD_FINISHED_EXTRACTED_TO = "Stahování dokončeno. Extrahováno do: {0}"
-        self.LLAMACPP_DOWNLOADED_AND_EXTRACTED = "Binární soubor llama.cpp byl stažen a extrahován do {0}\nSoubory CUDA extrahovány do {1}"
+        self.LLAMACPP_DOWNLOADED_AND_EXTRACTED = (
+            "Binární soubor llama.cpp byl stažen a extrahován do {0}"
+        )
         self.NO_SUITABLE_CUDA_BACKEND_FOUND = (
-            "Nebyl nalezen žádný vhodný backend CUDA pro extrakci"
+            "Nebyl nalezen žádný vhodný CUDA backend pro extrakci"
         )
         self.LLAMACPP_BINARY_DOWNLOADED_AND_EXTRACTED = (
             "Binární soubor llama.cpp byl stažen a extrahován do {0}"
         )
-        self.REFRESHING_LLAMACPP_RELEASES = "Obnovování verzí llama.cpp"
-        self.UPDATING_ASSET_LIST = "Aktualizace seznamu aktiv"
-        self.UPDATING_CUDA_OPTIONS = "Aktualizace možností CUDA"
-        self.STARTING_LLAMACPP_DOWNLOAD = "Zahájení stahování llama.cpp"
-        self.UPDATING_CUDA_BACKENDS = "Aktualizace backendů CUDA"
-        self.NO_CUDA_BACKEND_SELECTED = "Nebyl vybrán žádný backend CUDA pro extrakci"
-        self.EXTRACTING_CUDA_FILES = "Extrahování souborů CUDA z {0} do {1}"
+        self.REFRESHING_LLAMACPP_RELEASES = "Obnovuji verze llama.cpp"
+        self.UPDATING_ASSET_LIST = "Aktualizuji seznam assetů"
+        self.UPDATING_CUDA_OPTIONS = "Aktualizuji možnosti CUDA"
+        self.STARTING_LLAMACPP_DOWNLOAD = "Spouštím stahování llama.cpp"
+        self.UPDATING_CUDA_BACKENDS = "Aktualizuji CUDA backendy"
+        self.NO_CUDA_BACKEND_SELECTED = "Nebyl vybrán žádný CUDA backend pro extrakci"
+        self.EXTRACTING_CUDA_FILES = "Extrahuji CUDA soubory z {0} do {1}"
         self.DOWNLOAD_ERROR = "Chyba stahování: {0}"
-        self.SHOWING_TASK_CONTEXT_MENU = "Zobrazení kontextové nabídky úkolu"
-        self.SHOWING_PROPERTIES_FOR_TASK = "Zobrazení vlastností úkolu: {0}"
-        self.CANCELLING_TASK = "Zrušení úkolu: {0}"
+        self.SHOWING_TASK_CONTEXT_MENU = "Zobrazuji kontextové menu úlohy"
+        self.SHOWING_PROPERTIES_FOR_TASK = "Zobrazuji vlastnosti pro úlohu: {0}"
+        self.CANCELLING_TASK = "Ruším úlohu: {0}"
         self.CANCELED = "Zrušeno"
-        self.DELETING_TASK = "Mazání úkolu: {0}"
-        self.LOADING_MODELS = "Načítání modelů"
+        self.DELETING_TASK = "Mažu úlohu: {0}"
+        self.LOADING_MODELS = "Načítám modely"
         self.LOADED_MODELS = "Načteno {0} modelů"
         self.BROWSING_FOR_MODELS_DIRECTORY = "Procházení adresáře modelů"
-        self.SELECT_MODELS_DIRECTORY = "Vyberte adresář modelů"
+        self.SELECT_MODELS_DIRECTORY = "Vybrat adresář modelů"
         self.BROWSING_FOR_OUTPUT_DIRECTORY = "Procházení výstupního adresáře"
-        self.SELECT_OUTPUT_DIRECTORY = "Vyberte výstupní adresář"
+        self.SELECT_OUTPUT_DIRECTORY = "Vybrat výstupní adresář"
         self.BROWSING_FOR_LOGS_DIRECTORY = "Procházení adresáře logů"
-        self.SELECT_LOGS_DIRECTORY = "Vyberte adresář logů"
+        self.SELECT_LOGS_DIRECTORY = "Vybrat adresář logů"
         self.BROWSING_FOR_IMATRIX_FILE = "Procházení souboru IMatrix"
-        self.SELECT_IMATRIX_FILE = "Vyberte soubor IMatrix"
+        self.SELECT_IMATRIX_FILE = "Vybrat soubor IMatrix"
         self.RAM_USAGE_FORMAT = "{0:.1f}% ({1} MB / {2} MB)"
         self.CPU_USAGE_FORMAT = "Využití CPU: {0:.1f}%"
-        self.VALIDATING_QUANTIZATION_INPUTS = "Ověřování vstupů kvantizace"
-        self.MODELS_PATH_REQUIRED = "Cesta k modelům je vyžadována"
-        self.OUTPUT_PATH_REQUIRED = "Výstupní cesta je vyžadována"
-        self.LOGS_PATH_REQUIRED = "Cesta k logům je vyžadována"
-        self.STARTING_MODEL_QUANTIZATION = "Spuštění kvantizace modelu"
+        self.VALIDATING_QUANTIZATION_INPUTS = "Validuji vstupy pro kvantizaci"
+        self.MODELS_PATH_REQUIRED = "Je vyžadována cesta k modelům"
+        self.OUTPUT_PATH_REQUIRED = "Je vyžadována cesta pro výstup"
+        self.LOGS_PATH_REQUIRED = "Je vyžadována cesta k logům"
+        self.STARTING_MODEL_QUANTIZATION = "Spouštím kvantizaci modelu"
         self.INPUT_FILE_NOT_EXIST = "Vstupní soubor '{0}' neexistuje."
-        self.QUANTIZING_MODEL_TO = "Kvantizace {0} na {1}"
-        self.QUANTIZATION_TASK_STARTED = "Úkol kvantizace spuštěn pro {0}"
+        self.QUANTIZING_MODEL_TO = "Kvantizuji {0} na {1}"
+        self.QUANTIZATION_TASK_STARTED = "Úloha kvantizace spuštěna pro {0}"
         self.ERROR_STARTING_QUANTIZATION = "Chyba při spuštění kvantizace: {0}"
-        self.UPDATING_MODEL_INFO = "Aktualizace informací o modelu: {0}"
-        self.TASK_FINISHED = "Úkol dokončen: {0}"
-        self.SHOWING_TASK_DETAILS_FOR = "Zobrazení detailů úkolu pro: {0}"
+        self.UPDATING_MODEL_INFO = "Aktualizuji informace o modelu: {0}"
+        self.TASK_FINISHED = "Úloha dokončena: {0}"
+        self.SHOWING_TASK_DETAILS_FOR = "Zobrazuji detaily úlohy pro: {0}"
         self.BROWSING_FOR_IMATRIX_DATA_FILE = "Procházení datového souboru IMatrix"
-        self.SELECT_DATA_FILE = "Vyberte datový soubor"
+        self.SELECT_DATA_FILE = "Vybrat datový soubor"
         self.BROWSING_FOR_IMATRIX_MODEL_FILE = "Procházení souboru modelu IMatrix"
-        self.SELECT_MODEL_FILE = "Vyberte soubor modelu"
+        self.SELECT_MODEL_FILE = "Vybrat soubor modelu"
         self.BROWSING_FOR_IMATRIX_OUTPUT_FILE = "Procházení výstupního souboru IMatrix"
-        self.SELECT_OUTPUT_FILE = "Vyberte výstupní soubor"
-        self.STARTING_IMATRIX_GENERATION = "Spuštění generování IMatrix"
-        self.BACKEND_PATH_NOT_EXIST = "Cesta backendu neexistuje: {0}"
-        self.GENERATING_IMATRIX = "Generování IMatrix"
+        self.SELECT_OUTPUT_FILE = "Vybrat výstupní soubor"
+        self.STARTING_IMATRIX_GENERATION = "Spouštím generování IMatrix"
+        self.BACKEND_PATH_NOT_EXIST = "Cesta k backendu neexistuje: {0}"
+        self.GENERATING_IMATRIX = "Generuji IMatrix"
         self.ERROR_STARTING_IMATRIX_GENERATION = (
             "Chyba při spuštění generování IMatrix: {0}"
         )
-        self.IMATRIX_GENERATION_TASK_STARTED = "Úkol generování IMatrix spuštěn"
+        self.IMATRIX_GENERATION_TASK_STARTED = "Úloha generování IMatrix spuštěna"
         self.ERROR_MESSAGE = "Chyba: {0}"
-        self.TASK_ERROR = "Chyba úkolu: {0}"
-        self.APPLICATION_CLOSING = "Zavírání aplikace"
-        self.APPLICATION_CLOSED = "Aplikace zavřena"
+        self.TASK_ERROR = "Chyba úlohy: {0}"
+        self.APPLICATION_CLOSING = "Ukončuji aplikaci"
+        self.APPLICATION_CLOSED = "Aplikace ukončena"
         self.SELECT_QUANTIZATION_TYPE = "Vyberte typ kvantizace"
         self.ALLOWS_REQUANTIZING = (
-            "Umožňuje rekvantizovat tenzory, které již byly kvantizovány"
+            "Povoluje rekvantizaci tenzorů, které již byly kvantizovány"
         )
-        self.LEAVE_OUTPUT_WEIGHT = (
-            "Ponechá output.weight nekvantizovaný (nebo rekvantizovaný)"
-        )
+        self.LEAVE_OUTPUT_WEIGHT = "Ponechá output.weight ne(re)kvantizovaný"
         self.DISABLE_K_QUANT_MIXTURES = (
-            "Zakázat k-kvantové směsi a kvantizovat všechny tenzory na stejný typ"
+            "Zakáže k-kvantové směsi a kvantizuje všechny tenzory na stejný typ"
         )
         self.USE_DATA_AS_IMPORTANCE_MATRIX = (
-            "Použít data v souboru jako matici důležitosti pro optimalizace kvantizace"
+            "Použije data v souboru jako matici důležitosti pro optimalizace kvantizace"
         )
         self.USE_IMPORTANCE_MATRIX_FOR_TENSORS = (
-            "Použít matici důležitosti pro tyto tenzory"
+            "Použije matici důležitosti pro tyto tenzory"
         )
         self.DONT_USE_IMPORTANCE_MATRIX_FOR_TENSORS = (
-            "Nepoužívat matici důležitosti pro tyto tenzory"
+            "Nepoužije matici důležitosti pro tyto tenzory"
         )
         self.OUTPUT_TENSOR_TYPE = "Typ výstupního tenzoru:"
         self.USE_THIS_TYPE_FOR_OUTPUT_WEIGHT = (
-            "Použít tento typ pro tenzor output.weight"
+            "Použije tento typ pro tenzor output.weight"
         )
-        self.TOKEN_EMBEDDING_TYPE = "Typ vkládání tokenů:"
+        self.TOKEN_EMBEDDING_TYPE = "Typ token embeddings:"
         self.USE_THIS_TYPE_FOR_TOKEN_EMBEDDINGS = (
-            "Použít tento typ pro tenzor vkládání tokenů"
+            "Použije tento typ pro tenzor token embeddings"
         )
         self.WILL_GENERATE_QUANTIZED_MODEL_IN_SAME_SHARDS = (
-            "Vygeneruje kvantizovaný model ve stejných fragmentech jako vstup"
+            "Vygeneruje kvantizovaný model ve stejných sharded souborech jako vstup"
         )
         self.OVERRIDE_MODEL_METADATA = "Přepsat metadata modelu"
         self.INPUT_DATA_FILE_FOR_IMATRIX = (
@@ -5989,9 +6141,123 @@ class _Czech(_Localization):
         self.MODEL_TO_BE_QUANTIZED = "Model, který má být kvantizován"
         self.OUTPUT_PATH_FOR_GENERATED_IMATRIX = "Výstupní cesta pro generovaný IMatrix"
         self.HOW_OFTEN_TO_SAVE_IMATRIX = "Jak často ukládat IMatrix"
-        self.SET_GPU_OFFLOAD_VALUE = "Nastavit hodnotu odlehčení GPU (-ngl)"
-        self.COMPLETED = "Dokončeno"
-        self.REFRESH_MODELS = "Reîmprospătează modelele"
+        self.SET_GPU_OFFLOAD_VALUE = "Nastavit hodnotu pro využití GPU (-ngl)"
+        self.STARTING_LORA_CONVERSION = "Spouštím konverzi LoRA"
+        self.LORA_INPUT_PATH_REQUIRED = "Je vyžadována vstupní cesta LoRA."
+        self.LORA_OUTPUT_PATH_REQUIRED = "Je vyžadována výstupní cesta LoRA."
+        self.ERROR_STARTING_LORA_CONVERSION = "Chyba při spuštění konverze LoRA: {}"
+        self.LORA_CONVERSION_TASK_STARTED = "Úloha konverze LoRA spuštěna."
+        self.BROWSING_FOR_LORA_INPUT_DIRECTORY = "Procházení vstupního adresáře LoRA..."
+        self.BROWSING_FOR_LORA_OUTPUT_FILE = "Procházení výstupního souboru LoRA..."
+        self.CONVERTING_LORA = "Konverze LoRA"
+        self.LORA_CONVERSION_FINISHED = "Konverze LoRA dokončena."
+        self.LORA_FILE_MOVED = "Soubor LoRA přesunut z {} do {}."
+        self.LORA_FILE_NOT_FOUND = "Soubor LoRA nenalezen: {}."
+        self.ERROR_MOVING_LORA_FILE = "Chyba při přesouvání souboru LoRA: {}"
+        self.MODEL_PATH_REQUIRED = "Je vyžadována cesta k modelu."
+        self.AT_LEAST_ONE_LORA_ADAPTER_REQUIRED = (
+            "Je vyžadován alespoň jeden LoRA adaptér."
+        )
+        self.INVALID_LORA_SCALE_VALUE = "Neplatná hodnota LoRA škály."
+        self.ERROR_STARTING_LORA_EXPORT = "Chyba při spuštění exportu LoRA: {}"
+        self.LORA_EXPORT_TASK_STARTED = "Úloha exportu LoRA spuštěna."
+        self.EXPORTING_LORA = "Exportuji LoRA..."
+        self.BROWSING_FOR_EXPORT_LORA_MODEL_FILE = (
+            "Procházení souboru modelu pro export LoRA..."
+        )
+        self.BROWSING_FOR_EXPORT_LORA_OUTPUT_FILE = (
+            "Procházení výstupního souboru pro export LoRA..."
+        )
+        self.ADDING_LORA_ADAPTER = "Přidávám LoRA adaptér..."
+        self.DELETING_LORA_ADAPTER = "Mažu LoRA adaptér..."
+        self.SELECT_LORA_ADAPTER_FILE = "Vybrat soubor LoRA adaptéru"
+        self.STARTING_LORA_EXPORT = "Spouštím export LoRA..."
+        self.SELECT_OUTPUT_TYPE = "Vyberte typ výstupu (GGUF nebo GGML)"
+        self.BASE_MODEL = "Základní model"
+        self.SELECT_BASE_MODEL_FILE = "Vybrat soubor základního modelu (GGUF)"
+        self.BASE_MODEL_PATH_REQUIRED = (
+            "Pro výstup GGUF je vyžadována cesta k základnímu modelu."
+        )
+        self.BROWSING_FOR_BASE_MODEL_FILE = "Procházení souboru základního modelu..."
+        self.SELECT_BASE_MODEL_FOLDER = (
+            "Vybrat složku základního modelu (obsahující safetensors)"
+        )
+        self.BROWSING_FOR_BASE_MODEL_FOLDER = "Procházení složky základního modelu..."
+        self.LORA_CONVERSION_FROM_TO = "Konverze LoRA z {} na {}"
+        self.GENERATING_IMATRIX_FOR = "Generuji IMatrix pro {}"
+        self.MODEL_PATH_REQUIRED_FOR_IMATRIX = (
+            "Pro generování IMatrix je vyžadována cesta k modelu."
+        )
+        self.NO_ASSET_SELECTED_FOR_CUDA_CHECK = (
+            "Nebyl vybrán žádný asset pro kontrolu CUDA"
+        )
+        self.NO_QUANTIZATION_TYPE_SELECTED = "Nebyl vybrán žádný typ kvantizace. Prosím, vyberte alespoň jeden typ kvantizace."
+        self.STARTING_HF_TO_GGUF_CONVERSION = "Spouštím konverzi HuggingFace na GGUF"
+        self.MODEL_DIRECTORY_REQUIRED = "Je vyžadován adresář modelu"
+        self.HF_TO_GGUF_CONVERSION_COMMAND = "Příkaz pro konverzi HF na GGUF: {}"
+        self.CONVERTING_TO_GGUF = "Převádím {} na GGUF"
+        self.ERROR_STARTING_HF_TO_GGUF_CONVERSION = (
+            "Chyba při spuštění konverze HuggingFace na GGUF: {}"
+        )
+        self.HF_TO_GGUF_CONVERSION_TASK_STARTED = (
+            "Úloha konverze HuggingFace na GGUF spuštěna"
+        )
+
+        # Split GGUF
+        self.SPLIT_GGUF = "Rozdělit GGUF"
+        self.SPLIT_MAX_SIZE = "Maximální velikost pro rozdělení"
+        self.SPLIT_MAX_TENSORS = "Maximální počet tensorů pro rozdělení"
+        self.SPLIT_GGUF_TASK_STARTED = "Úloha rozdělení GGUF spuštěna"
+        self.SPLIT_GGUF_TASK_FINISHED = "Úloha rozdělení GGUF dokončena"
+        self.SPLIT_GGUF_COMMAND = "Příkaz pro rozdělení GGUF"
+        self.SPLIT_GGUF_ERROR = "Chyba při spuštění rozdělení GGUF"
+        self.NUMBER_OF_TENSORS = "Počet tensorů"
+        self.SIZE_IN_UNITS = "Velikost v G/M"
+
+        # Model actions
+        self.CONFIRM_DELETE = "Potvrdit smazání"
+        self.DELETE_MODEL_WARNING = "Opravdu chcete smazat model: {}?"
+        self.MODEL_RENAMED_SUCCESSFULLY = "Model byl úspěšně přejmenován."
+        self.MODEL_DELETED_SUCCESSFULLY = "Model byl úspěšně smazán."
+
+        # HuggingFace Transfer
+        self.ALL_FIELDS_REQUIRED = "Všechna pole jsou vyžadována."
+        self.HUGGINGFACE_UPLOAD_COMMAND = "Příkaz pro nahrávání na HuggingFace: "
+        self.UPLOADING = "Nahrávám"
+        self.UPLOADING_FOLDER = "Nahrávám složku"
+        self.HF_TRANSFER_TASK_NAME = "{} {} do {} z {}"
+        self.ERROR_STARTING_HF_TRANSFER = "Chyba při spuštění přenosu na HF: {}"
+        self.STARTED_HUGGINGFACE_TRANSFER = "Spuštěna operace {} na HuggingFace."
+        self.SELECT_FOLDER = "Vybrat složku"
+        self.SELECT_FILE = "Vybrat soubor"
+
+        # Menubar
+        self.CLOSE = "Zavřít"
+        self.FILE = "Soubor"
+        self.FOLDER = "Složka"
+        self.HELP = "Nápověda"
+        self.ABOUT = "O aplikaci"
+
+        self.AUTOFP8 = "AutoFP8"
+        self.TOOLS = "Nástroje"
+        self.HF_TRANSFER = "Přenos HF"
+        self.MERGE_GGUF = "Sloučit GGUF"
+
+        self.HF_UPLOAD = "Nahrát na HF"
+        self.HF_REPOSITORY = "Repozitář:"
+        self.HF_REMOTE_PATH = "Vzdálená cesta:"
+        self.HF_LOCAL_PATH = "Lokální cesta:"
+        self.MODEL = "Model"
+        self.DATASET = "Dataset"
+        self.SPACE = "Space"
+        self.HF_REPOSITORY_TYPE = "Typ repozitáře"
+        self.UPLOAD_TYPE = "Typ nahrávání"
+        self.UPLOAD = "Nahrát"
+
+        self.EXTRA_COMMAND_ARGUMENTS = "Další argumenty příkazové řádky"
+
+        self.INFO = "Info"
+        self.COPIED_COMMAND_TO_CLIPBOARD = "Zkopírován příkaz do schránky:"
 
 
 class _CanadianFrench(_Localization):
