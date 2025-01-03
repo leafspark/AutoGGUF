@@ -8,6 +8,6 @@ torch~=2.5.1
 sentencepiece~=0.2.0
 setuptools~=75.5.0
 huggingface-hub~=0.26.5
-transformers~=4.47.0
+transformers~=4.47.1
 fastapi~=0.115.6
 uvicorn~=0.34.0
