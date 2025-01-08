@@ -18,14 +18,16 @@ from typing import (
     SupportsIndex,
     cast,
 )
+from transformers import AutoConfig
 
 import torch
 
 if TYPE_CHECKING:
     from torch import Tensor
 
-from gguf.constants import *
+import gguf
 
+# reuse model definitions from convert_hf_to_gguf.py
 from convert_hf_to_gguf import LazyTorchTensor, Model
 
 logger = logging.getLogger("lora-to-gguf")
@@ -37,9 +39,10 @@ class PartialLoraTensor:
     B: Tensor | None = None
 
 
+# magic to support tensor shape modifications and splitting
 class LoraTorchTensor:
-    _lora_A: Tensor
-    _lora_B: Tensor
+    _lora_A: Tensor  # (n_rank, row_size)
+    _lora_B: Tensor  # (col_size, n_rank)
     _rank: int
 
     def __init__(self, A: Tensor, B: Tensor):
@@ -57,14 +60,20 @@ class LoraTorchTensor:
 
     def __getitem__(
         self,
-        indices: SupportsIndex | slice | tuple[SupportsIndex | slice | Tensor, ...],
+        indices: (
+            SupportsIndex
+            | slice
+            | tuple[
+                SupportsIndex | slice | Tensor, ...
+            ]  # TODO: add ellipsis in the type signature
+        ),
     ) -> LoraTorchTensor:
         shape = self.shape
         if isinstance(indices, SupportsIndex):
             if len(shape) > 2:
                 return LoraTorchTensor(self._lora_A[indices], self._lora_B[indices])
             else:
-                raise NotImplementedError
+                raise NotImplementedError  # can't return a vector
         elif isinstance(indices, slice):
             if len(shape) > 2:
                 return LoraTorchTensor(self._lora_A[indices], self._lora_B[indices])
@@ -74,7 +83,7 @@ class LoraTorchTensor:
             assert len(indices) > 0
             if indices[-1] is Ellipsis:
                 return self[indices[:-1]]
-
+            # expand ellipsis
             indices = tuple(
                 u
                 for v in (
@@ -94,6 +103,7 @@ class LoraTorchTensor:
                     *(slice(None, None) for _ in range(len(indices), len(shape))),
                 )
 
+            # TODO: make sure this is correct
             indices_A = (
                 *(
                     (
@@ -109,7 +119,7 @@ class LoraTorchTensor:
             indices_B = indices[:-1]
             return LoraTorchTensor(self._lora_A[indices_A], self._lora_B[indices_B])
         else:
-            raise NotImplementedError
+            raise NotImplementedError  # unknown indice type
 
     @property
     def dtype(self) -> torch.dtype:
@@ -132,8 +142,9 @@ class LoraTorchTensor:
             new_shape = cast(tuple[int, ...], shape)
         orig_shape = self.shape
         if len(new_shape) < 2:
-            raise NotImplementedError
+            raise NotImplementedError  # can't become a vector
 
+        # expand -1 in the shape
         if any(dim == -1 for dim in new_shape):
             n_elems = prod(orig_shape)
             n_new_elems = prod(dim if dim != -1 else 1 for dim in new_shape)
@@ -143,7 +154,7 @@ class LoraTorchTensor:
             )
 
         if new_shape[-1] != orig_shape[-1]:
-            raise NotImplementedError
+            raise NotImplementedError  # can't reshape the row size trivially
 
         shape_A = (*(1 for _ in new_shape[:-2]), self._rank, orig_shape[-1])
         shape_B = (*new_shape[:-1], self._rank)
@@ -162,7 +173,7 @@ class LoraTorchTensor:
         shape = self.shape
         dims = tuple(dim - len(shape) if dim >= 0 else dim for dim in dims)
         if dims[-1] == -1:
-
+            # TODO: support higher dimensional A shapes bigger than 1
             assert all(dim == 1 for dim in self._lora_A.shape[:-2])
             return LoraTorchTensor(self._lora_A, self._lora_B.permute(*dims))
         if len(shape) == 2 and dims[-1] == -2 and dims[-2] == -1:
@@ -170,7 +181,7 @@ class LoraTorchTensor:
                 self._lora_B.permute(*dims), self._lora_A.permute(*dims)
             )
         else:
-
+            # TODO: compose the above two
             raise NotImplementedError
 
     def transpose(self, dim0: int, dim1: int) -> LoraTorchTensor:
@@ -189,7 +200,7 @@ class LoraTorchTensor:
 
     @classmethod
     def __torch_function__(cls, func: Callable, types, args=(), kwargs=None):
-        del types
+        del types  # unused
 
         if kwargs is None:
             kwargs = {}
@@ -230,26 +241,71 @@ def get_base_tensor_name(lora_tensor_name: str) -> str:
     base_name = lora_tensor_name.replace("base_model.model.", "")
     base_name = base_name.replace(".lora_A.weight", ".weight")
     base_name = base_name.replace(".lora_B.weight", ".weight")
+    # models produced by mergekit-extract-lora have token embeddings in the adapter
+    base_name = base_name.replace(".lora_embedding_A", ".weight")
+    base_name = base_name.replace(".lora_embedding_B", ".weight")
     return base_name
 
 
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--outfile", type=Path)
+    parser = argparse.ArgumentParser(
+        description="Convert a Hugging Face PEFT LoRA adapter to a GGUF file"
+    )
+    parser.add_argument(
+        "--outfile",
+        type=Path,
+        help="path to write to; default: based on input. {ftype} will be replaced by the outtype.",
+    )
     parser.add_argument(
         "--outtype",
         type=str,
         choices=["f32", "f16", "bf16", "q8_0", "auto"],
         default="f16",
+        help="output format - use f32 for float32, f16 for float16, bf16 for bfloat16, q8_0 for Q8_0, auto for the highest-fidelity 16-bit float type depending on the first loaded tensor type",
     )
-    parser.add_argument("--bigendian", action="store_true")
-    parser.add_argument("--no-lazy", action="store_true")
-    parser.add_argument("--verbose", action="store_true")
-    parser.add_argument("--dry-run", action="store_true")
-    parser.add_argument("--base", type=Path, required=True)
-    parser.add_argument("lora_path", type=Path)
+    parser.add_argument(
+        "--bigendian",
+        action="store_true",
+        help="model is executed on big endian machine",
+    )
+    parser.add_argument(
+        "--no-lazy",
+        action="store_true",
+        help="use more RAM by computing all outputs before writing (use in case lazy evaluation is broken)",
+    )
+    parser.add_argument(
+        "--verbose",
+        action="store_true",
+        help="increase output verbosity",
+    )
+    parser.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="only print out what will be done, without writing any new files",
+    )
+    parser.add_argument(
+        "--base",
+        type=Path,
+        help="directory containing Hugging Face model config files (config.json, tokenizer.json) for the base model that the adapter is based on - only config is needed, actual model weights are not required. If base model is unspecified, it will be loaded from Hugging Face hub based on the adapter config",
+    )
+    parser.add_argument(
+        "--base-model-id",
+        type=str,
+        help="the model ID of the base model, if it is not available locally or in the adapter config. If specified, it will ignore --base and load the base model config from the Hugging Face hub (Example: 'meta-llama/Llama-3.2-1B-Instruct')",
+    )
+    parser.add_argument(
+        "lora_path",
+        type=Path,
+        help="directory containing Hugging Face PEFT LoRA config (adapter_model.json) and weights (adapter_model.safetensors or adapter_model.bin)",
+    )
 
     return parser.parse_args()
+
+
+def load_hparams_from_hf(hf_model_id: str) -> dict[str, Any]:
+    # normally, adapter does not come with base model config, we need to load it from AutoConfig
+    config = AutoConfig.from_pretrained(hf_model_id)
+    return config.to_dict()
 
 
 if __name__ == "__main__":
@@ -266,19 +322,20 @@ if __name__ == "__main__":
 
     ftype = ftype_map[args.outtype]
 
-    dir_base_model: Path = args.base
+    dir_base_model: Path | None = args.base
     dir_lora: Path = args.lora_path
+    base_model_id: str | None = args.base_model_id
     lora_config = dir_lora / "adapter_config.json"
     input_model = dir_lora / "adapter_model.safetensors"
 
     if args.outfile is not None:
         fname_out = args.outfile
     else:
-
+        # output in the same directory as the model by default
         fname_out = dir_lora
 
     if os.path.exists(input_model):
-
+        # lazy import load_file only if lora is in safetensors format.
         from safetensors.torch import load_file
 
         lora_model = load_file(input_model, device="cpu")
@@ -286,8 +343,38 @@ if __name__ == "__main__":
         input_model = os.path.join(dir_lora, "adapter_model.bin")
         lora_model = torch.load(input_model, map_location="cpu", weights_only=True)
 
-    logger.info(f"Loading base model: {dir_base_model.name}")
-    hparams = Model.load_hparams(dir_base_model)
+    # load LoRA config
+    with open(lora_config, "r") as f:
+        lparams: dict[str, Any] = json.load(f)
+
+    # load base model
+    if base_model_id is not None:
+        logger.info(f"Loading base model from Hugging Face: {base_model_id}")
+        hparams = load_hparams_from_hf(base_model_id)
+    elif dir_base_model is None:
+        if "base_model_name_or_path" in lparams:
+            model_id = lparams["base_model_name_or_path"]
+            logger.info(f"Loading base model from Hugging Face: {model_id}")
+            try:
+                hparams = load_hparams_from_hf(model_id)
+            except OSError as e:
+                logger.error(f"Failed to load base model config: {e}")
+                logger.error(
+                    "Please try downloading the base model and add its path to --base"
+                )
+                sys.exit(1)
+        else:
+            logger.error(
+                "'base_model_name_or_path' is not found in adapter_config.json"
+            )
+            logger.error(
+                "Base model config is required. Please download the base model and add its path to --base"
+            )
+            sys.exit(1)
+    else:
+        logger.info(f"Loading base model: {dir_base_model.name}")
+        hparams = Model.load_hparams(dir_base_model)
+
     with torch.inference_mode():
         try:
             model_class = Model.from_model_architecture(hparams["architectures"][0])
@@ -309,6 +396,9 @@ if __name__ == "__main__":
                 self.dir_model_card = dir_lora_model
                 self.lora_alpha = float(lora_alpha)
 
+            def set_vocab(self):
+                pass
+
             def set_type(self):
                 self.gguf_writer.add_type(gguf.GGUFType.ADAPTER)
                 self.gguf_writer.add_string(gguf.Keys.Adapter.TYPE, "lora")
@@ -317,7 +407,10 @@ if __name__ == "__main__":
                 self.gguf_writer.add_float32(
                     gguf.Keys.Adapter.LORA_ALPHA, self.lora_alpha
                 )
-                super().set_gguf_parameters()
+
+            def generate_extra_tensors(self) -> Iterable[tuple[str, Tensor]]:
+                # Never add extra tensors (e.g. rope_freqs) for LoRA adapters
+                return ()
 
             def get_tensors(self) -> Iterator[tuple[str, Tensor]]:
                 tensor_map: dict[str, PartialLoraTensor] = {}
@@ -326,14 +419,26 @@ if __name__ == "__main__":
                     if self.lazy:
                         tensor = LazyTorchTensor.from_eager(tensor)
                     base_name = get_base_tensor_name(name)
-                    is_lora_a = ".lora_A.weight" in name
-                    is_lora_b = ".lora_B.weight" in name
+                    # note: mergekit-extract-lora also adds token embeddings to the adapter
+                    is_lora_a = ".lora_A.weight" in name or ".lora_embedding_A" in name
+                    is_lora_b = ".lora_B.weight" in name or ".lora_embedding_B" in name
                     if not is_lora_a and not is_lora_b:
                         if ".base_layer.weight" in name:
+                            continue
+                        # mergekit-extract-lora add these layernorm to the adapter, we need to keep them
+                        if "_layernorm" in name or ".norm" in name:
+                            yield (base_name, tensor)
                             continue
                         logger.error(
                             f"Unexpected name '{name}': Not a lora_A or lora_B tensor"
                         )
+                        if ".embed_tokens.weight" in name or ".lm_head.weight" in name:
+                            logger.error(
+                                "Embeddings is present in the adapter. This can be due to new tokens added during fine tuning"
+                            )
+                            logger.error(
+                                "Please refer to https://github.com/ggerganov/llama.cpp/pull/9948"
+                            )
                         sys.exit(1)
 
                     if base_name in tensor_map:
@@ -358,16 +463,33 @@ if __name__ == "__main__":
             def modify_tensors(
                 self, data_torch: Tensor, name: str, bid: int | None
             ) -> Iterable[tuple[str, Tensor]]:
-                dest = super().modify_tensors(data_torch, name, bid)
+                dest = list(super().modify_tensors(data_torch, name, bid))
+                # some archs may have the same tensor for lm_head and output (tie word embeddings)
+                # in this case, adapters targeting lm_head will fail when using llama-export-lora
+                # therefore, we ignore them for now
+                # see: https://github.com/ggerganov/llama.cpp/issues/9065
+                if name == "lm_head.weight" and len(dest) == 0:
+                    raise ValueError(
+                        "lm_head is present in adapter, but is ignored in base model"
+                    )
                 for dest_name, dest_data in dest:
+                    # mergekit-extract-lora add these layernorm to the adapter
+                    if "_norm" in dest_name:
+                        assert dest_data.dim() == 1
+                        yield (dest_name, dest_data)
+                        continue
+
+                    # otherwise, we must get the lora_A and lora_B tensors
                     assert isinstance(dest_data, LoraTorchTensor)
                     lora_a, lora_b = dest_data.get_lora_A_B()
 
+                    # note: mergekit-extract-lora flip and transpose A and B
+                    # here we only need to transpose token_embd.lora_a, see llm_build_inp_embd()
+                    if "token_embd.weight" in dest_name:
+                        lora_a = lora_a.T
+
                     yield (dest_name + ".lora_a", lora_a)
                     yield (dest_name + ".lora_b", lora_b)
-
-        with open(lora_config, "r") as f:
-            lparams: dict[str, Any] = json.load(f)
 
         alpha: float = lparams["lora_alpha"]
 
@@ -381,7 +503,7 @@ if __name__ == "__main__":
             dry_run=args.dry_run,
             dir_lora_model=dir_lora,
             lora_alpha=alpha,
-            is_lora=True,
+            hparams=hparams,
         )
 
         logger.info("Exporting model...")

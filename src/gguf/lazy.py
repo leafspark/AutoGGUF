@@ -12,6 +12,7 @@ logger = logging.getLogger(__name__)
 
 
 class LazyMeta(ABCMeta):
+
     def __new__(
         cls, name: str, bases: tuple[type, ...], namespace: dict[str, Any], **kwargs
     ):
@@ -34,7 +35,7 @@ class LazyMeta(ABCMeta):
 
         # need to make a builder for the wrapped wrapper to copy the name,
         # or else it fails with very cryptic error messages,
-        # because somehow the same string would end up in every closure
+        # because somehow the same string would end up in every closures
         def mk_wrap(op_name: str, *, meta_noop: bool = False):
             # need to wrap the wrapper to get self
             def wrapped_special_op(self, *args, **kwargs):
@@ -253,6 +254,8 @@ class LazyBase(ABC, metaclass=LazyMeta):
 
 class LazyNumpyTensor(LazyBase):
     _tensor_type = np.ndarray
+
+    shape: tuple[int, ...]  # Makes the type checker happy in quants.py
 
     @classmethod
     def meta_with_dtype_and_shape(

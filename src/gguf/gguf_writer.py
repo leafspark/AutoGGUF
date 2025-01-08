@@ -26,11 +26,13 @@ from .constants import (
     RopeScalingType,
     PoolingType,
     TokenType,
+    ExpertGatingFuncType,
 )
 
 from .quants import quant_shape_from_byte_shape
 
 logger = logging.getLogger(__name__)
+
 
 SHARD_NAME_FORMAT = "{:s}-{:05d}-of-{:05d}.gguf"
 
@@ -135,7 +137,7 @@ class GGUFWriter:
                     continue
                 elif name.endswith(".lora_b"):
                     if last_lora_a is None or last_lora_a[0] != name[:-1] + "a":
-
+                        # Bail when the LoRA pair can't be found trivially
                         logger.warning(
                             "can't measure LoRA size correctly, tensor order is unusual"
                         )
@@ -154,11 +156,14 @@ class GGUFWriter:
 
                 total_params += size
 
+        # Hopefully this should work even for variable-expert-count models
         expert_count = (expert_sum // n_expert_tensors) if n_expert_tensors > 0 else 0
 
+        # Negate the total to signal it's likely not exact
         if last_lora_a is not None:
             total_params = -total_params
 
+        # NOTE: keep the output in the same order as accepted by 'size_label' in gguf-py/gguf/utility.py
         return total_params, shared_params, expert_params, expert_count
 
     def format_shard_names(self, path: Path) -> list[Path]:
@@ -177,7 +182,7 @@ class GGUFWriter:
             and self.fout is not None
             and (path is None or path == self.path)
         ):
-
+            # allow calling this multiple times as long as the path is the same
             return
 
         if self.state is not WriterState.NO_FILE:
@@ -206,7 +211,7 @@ class GGUFWriter:
         if self.dry_run:
             logger.info("Dry run, not writing files")
             for name in filenames:
-                print(name)
+                print(name)  # noqa: NP100
             exit()
 
         return filenames
@@ -390,11 +395,12 @@ class GGUFWriter:
             if tensor_dtype == np.uint8:
                 tensor_shape = quant_shape_from_byte_shape(tensor_shape, raw_dtype)
 
+        # make sure there is at least one tensor before splitting
         if len(self.tensors[-1]) > 0:
-            if (
+            if (  # split when over tensor limit
                 self.split_max_tensors != 0
                 and len(self.tensors[-1]) >= self.split_max_tensors
-            ) or (
+            ) or (  # split when over size limit
                 self.split_max_size != 0
                 and sum(ti.nbytes for ti in self.tensors[-1].values()) + tensor_nbytes
                 > self.split_max_size
@@ -460,6 +466,8 @@ class GGUFWriter:
 
         fout = self.fout[file_id]
 
+        # pop the first tensor info
+        # TODO: cleaner way to get the first key
         first_tensor_name = [
             name for name, _ in zip(self.tensors[file_id].keys(), range(1))
         ][0]
@@ -506,8 +514,11 @@ class GGUFWriter:
                     total = sum(ti.nbytes for ti in tensors.values())
                     shard_bar.reset(total=(total if total > 0 else None))
 
+                # relying on the fact that Python dicts preserve insertion order (since 3.7)
                 for ti in tensors.values():
-                    assert ti.tensor is not None
+                    assert (
+                        ti.tensor is not None
+                    )  # can only iterate once over the tensors
                     assert ti.tensor.nbytes == ti.nbytes
                     ti.tensor.tofile(fout)
                     if shard_bar is not None:
@@ -631,6 +642,11 @@ class GGUFWriter:
             Keys.General.BASE_MODEL_ORGANIZATION.format(id=source_id), organization
         )
 
+    def add_base_model_description(self, source_id: int, description: str) -> None:
+        self.add_string(
+            Keys.General.BASE_MODEL_DESCRIPTION.format(id=source_id), description
+        )
+
     def add_base_model_url(self, source_id: int, url: str) -> None:
         self.add_string(Keys.General.BASE_MODEL_URL.format(id=source_id), url)
 
@@ -643,14 +659,45 @@ class GGUFWriter:
     def add_base_model_repo_url(self, source_id: int, repo_url: str) -> None:
         self.add_string(Keys.General.BASE_MODEL_REPO_URL.format(id=source_id), repo_url)
 
+    def add_dataset_count(self, source_count: int) -> None:
+        self.add_uint32(Keys.General.DATASET_COUNT, source_count)
+
+    def add_dataset_name(self, source_id: int, name: str) -> None:
+        self.add_string(Keys.General.DATASET_NAME.format(id=source_id), name)
+
+    def add_dataset_author(self, source_id: int, author: str) -> None:
+        self.add_string(Keys.General.DATASET_AUTHOR.format(id=source_id), author)
+
+    def add_dataset_version(self, source_id: int, version: str) -> None:
+        self.add_string(Keys.General.DATASET_VERSION.format(id=source_id), version)
+
+    def add_dataset_organization(self, source_id: int, organization: str) -> None:
+        self.add_string(
+            Keys.General.DATASET_ORGANIZATION.format(id=source_id), organization
+        )
+
+    def add_dataset_description(self, source_id: int, description: str) -> None:
+        self.add_string(
+            Keys.General.DATASET_DESCRIPTION.format(id=source_id), description
+        )
+
+    def add_dataset_url(self, source_id: int, url: str) -> None:
+        self.add_string(Keys.General.DATASET_URL.format(id=source_id), url)
+
+    def add_dataset_doi(self, source_id: int, doi: str) -> None:
+        self.add_string(Keys.General.DATASET_DOI.format(id=source_id), doi)
+
+    def add_dataset_uuid(self, source_id: int, uuid: str) -> None:
+        self.add_string(Keys.General.DATASET_UUID.format(id=source_id), uuid)
+
+    def add_dataset_repo_url(self, source_id: int, repo_url: str) -> None:
+        self.add_string(Keys.General.DATASET_REPO_URL.format(id=source_id), repo_url)
+
     def add_tags(self, tags: Sequence[str]) -> None:
         self.add_array(Keys.General.TAGS, tags)
 
     def add_languages(self, languages: Sequence[str]) -> None:
         self.add_array(Keys.General.LANGUAGES, languages)
-
-    def add_datasets(self, datasets: Sequence[str]) -> None:
-        self.add_array(Keys.General.DATASETS, datasets)
 
     def add_tensor_data_layout(self, layout: str) -> None:
         self.add_string(Keys.LLM.TENSOR_DATA_LAYOUT.format(arch=self.arch), layout)
@@ -663,6 +710,21 @@ class GGUFWriter:
 
     def add_embedding_length(self, length: int) -> None:
         self.add_uint32(Keys.LLM.EMBEDDING_LENGTH.format(arch=self.arch), length)
+
+    def add_features_length(self, length: int) -> None:
+        self.add_uint32(Keys.LLM.FEATURES_LENGTH.format(arch=self.arch), length)
+
+    def add_posnet_embedding_length(self, length: int) -> None:
+        self.add_uint32(Keys.PosNet.EMBEDDING_LENGTH.format(arch=self.arch), length)
+
+    def add_posnet_block_count(self, length: int) -> None:
+        self.add_uint32(Keys.PosNet.BLOCK_COUNT.format(arch=self.arch), length)
+
+    def add_convnext_embedding_length(self, length: int) -> None:
+        self.add_uint32(Keys.ConvNext.EMBEDDING_LENGTH.format(arch=self.arch), length)
+
+    def add_convnext_block_count(self, length: int) -> None:
+        self.add_uint32(Keys.ConvNext.BLOCK_COUNT.format(arch=self.arch), length)
 
     def add_block_count(self, length: int) -> None:
         self.add_uint32(Keys.LLM.BLOCK_COUNT.format(arch=self.arch), length)
@@ -739,6 +801,15 @@ class GGUFWriter:
     def add_expert_weights_scale(self, value: float) -> None:
         self.add_float32(Keys.LLM.EXPERT_WEIGHTS_SCALE.format(arch=self.arch), value)
 
+    def add_expert_weights_norm(self, value: bool) -> None:
+        self.add_bool(Keys.LLM.EXPERT_WEIGHTS_NORM.format(arch=self.arch), value)
+
+    def add_expert_gating_func(self, value: ExpertGatingFuncType) -> None:
+        self.add_uint32(Keys.LLM.EXPERT_GATING_FUNC.format(arch=self.arch), value.value)
+
+    def add_swin_norm(self, value: bool) -> None:
+        self.add_bool(Keys.LLM.SWIN_NORM.format(arch=self.arch), value)
+
     def add_rescale_every_n_layers(self, count: int) -> None:
         self.add_uint32(Keys.LLM.RESCALE_EVERY_N_LAYERS.format(arch=self.arch), count)
 
@@ -763,6 +834,12 @@ class GGUFWriter:
     def add_layer_norm_rms_eps(self, value: float) -> None:
         self.add_float32(Keys.Attention.LAYERNORM_RMS_EPS.format(arch=self.arch), value)
 
+    def add_group_norm_eps(self, value: float) -> None:
+        self.add_float32(Keys.Attention.GROUPNORM_EPS.format(arch=self.arch), value)
+
+    def add_group_norm_groups(self, value: int) -> None:
+        self.add_uint32(Keys.Attention.GROUPNORM_GROUPS.format(arch=self.arch), value)
+
     def add_causal_attention(self, value: bool) -> None:
         self.add_bool(Keys.Attention.CAUSAL.format(arch=self.arch), value)
 
@@ -786,6 +863,9 @@ class GGUFWriter:
 
     def add_rope_dimension_count(self, count: int) -> None:
         self.add_uint32(Keys.Rope.DIMENSION_COUNT.format(arch=self.arch), count)
+
+    def add_rope_dimension_sections(self, dims: Sequence[int]) -> None:
+        self.add_array(Keys.Rope.DIMENSION_SECTIONS.format(arch=self.arch), dims)
 
     def add_rope_freq_base(self, value: float) -> None:
         self.add_float32(Keys.Rope.FREQ_BASE.format(arch=self.arch), value)
@@ -893,6 +973,7 @@ class GGUFWriter:
                 name = choice.get("name", "")
                 template = choice.get("template")
 
+                # Allowing non-alphanumerical characters in template name is probably not a good idea, so filter it
                 name = "".join(
                     (c if c in ascii_letters + digits else "_" for c in name)
                 )
@@ -915,15 +996,6 @@ class GGUFWriter:
             value = template_default
 
         self.add_string(Keys.Tokenizer.CHAT_TEMPLATE, value)
-
-    def add_prefix_token_id(self, id: int) -> None:
-        self.add_uint32(Keys.Tokenizer.PREFIX_ID, id)
-
-    def add_suffix_token_id(self, id: int) -> None:
-        self.add_uint32(Keys.Tokenizer.SUFFIX_ID, id)
-
-    def add_middle_token_id(self, id: int) -> None:
-        self.add_uint32(Keys.Tokenizer.MIDDLE_ID, id)
 
     def add_eot_token_id(self, id: int) -> None:
         self.add_uint32(Keys.Tokenizer.EOT_ID, id)

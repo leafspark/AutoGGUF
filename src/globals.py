@@ -80,11 +80,15 @@ def load_dotenv(self=Any) -> None:
 
 
 def show_about(self) -> None:
-    about_text = (
-        "AutoGGUF\n\n"
-        f"Version: {AUTOGGUF_VERSION}\n\n"
-        "A tool for managing and converting GGUF models."
-    )
+    about_text = f"""AutoGGUF
+
+Version: {AUTOGGUF_VERSION}
+        
+A tool for managing and converting GGUF models.
+This application is licensed under the Apache License 2.0.
+Copyright (c) 2025 leafspark.
+It also utilizes llama.cpp, licensed under the MIT License.
+Copyright (c) 2023-2024 The ggml authors."""
     QMessageBox.about(self, "About AutoGGUF", about_text)
 
 

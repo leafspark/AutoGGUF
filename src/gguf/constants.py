@@ -3,10 +3,18 @@ from __future__ import annotations
 from enum import Enum, IntEnum, auto
 from typing import Any
 
-GGUF_MAGIC = 0x46554747
+#
+# constants
+#
+
+GGUF_MAGIC = 0x46554747  # "GGUF"
 GGUF_VERSION = 3
 GGUF_DEFAULT_ALIGNMENT = 32
-GGML_QUANT_VERSION = 2
+GGML_QUANT_VERSION = 2  # GGML_QNT_VERSION from ggml.h
+
+#
+# metadata keys
+#
 
 
 class Keys:
@@ -17,6 +25,7 @@ class Keys:
         ALIGNMENT = "general.alignment"
         FILE_TYPE = "general.file_type"
 
+        # Authorship Metadata
         NAME = "general.name"
         AUTHOR = "general.author"
         VERSION = "general.version"
@@ -30,38 +39,62 @@ class Keys:
 
         SIZE_LABEL = "general.size_label"
 
+        # Licensing details
         LICENSE = "general.license"
         LICENSE_NAME = "general.license.name"
         LICENSE_LINK = "general.license.link"
 
-        URL = "general.url"
+        # Typically represents the converted GGUF repo (Unless native)
+        URL = "general.url"  # Model Website/Paper
         DOI = "general.doi"
         UUID = "general.uuid"
-        REPO_URL = "general.repo_url"
+        REPO_URL = "general.repo_url"  # Model Source Repository (git/svn/etc...)
 
-        SOURCE_URL = "general.source.url"
+        # Model Source during conversion
+        SOURCE_URL = "general.source.url"  # Model Website/Paper
         SOURCE_DOI = "general.source.doi"
         SOURCE_UUID = "general.source.uuid"
-        SOURCE_REPO_URL = "general.source.repo_url"
+        SOURCE_REPO_URL = (
+            "general.source.repo_url"  # Model Source Repository (git/svn/etc...)
+        )
 
+        # Base Model Source. There can be more than one source if it's a merged
+        # model like with 'Mistral-7B-Merge-14-v0.1'. This will assist in
+        # tracing linage of models as it is finetuned or merged over time.
         BASE_MODEL_COUNT = "general.base_model.count"
         BASE_MODEL_NAME = "general.base_model.{id}.name"
         BASE_MODEL_AUTHOR = "general.base_model.{id}.author"
         BASE_MODEL_VERSION = "general.base_model.{id}.version"
         BASE_MODEL_ORGANIZATION = "general.base_model.{id}.organization"
-        BASE_MODEL_URL = "general.base_model.{id}.url"
+        BASE_MODEL_DESCRIPTION = "general.base_model.{id}.description"
+        BASE_MODEL_URL = "general.base_model.{id}.url"  # Model Website/Paper
         BASE_MODEL_DOI = "general.base_model.{id}.doi"
         BASE_MODEL_UUID = "general.base_model.{id}.uuid"
-        BASE_MODEL_REPO_URL = "general.base_model.{id}.repo_url"
+        BASE_MODEL_REPO_URL = "general.base_model.{id}.repo_url"  # Model Source Repository (git/svn/etc...)
 
+        # Dataset Source
+        DATASET_COUNT = "general.dataset.count"
+        DATASET_NAME = "general.dataset.{id}.name"
+        DATASET_AUTHOR = "general.dataset.{id}.author"
+        DATASET_VERSION = "general.dataset.{id}.version"
+        DATASET_ORGANIZATION = "general.dataset.{id}.organization"
+        DATASET_DESCRIPTION = "general.dataset.{id}.description"
+        DATASET_URL = "general.dataset.{id}.url"  # Model Website/Paper
+        DATASET_DOI = "general.dataset.{id}.doi"
+        DATASET_UUID = "general.dataset.{id}.uuid"
+        DATASET_REPO_URL = (
+            "general.dataset.{id}.repo_url"  # Model Source Repository (git/svn/etc...)
+        )
+
+        # Array based KV stores
         TAGS = "general.tags"
         LANGUAGES = "general.languages"
-        DATASETS = "general.datasets"
 
     class LLM:
         VOCAB_SIZE = "{arch}.vocab_size"
         CONTEXT_LENGTH = "{arch}.context_length"
         EMBEDDING_LENGTH = "{arch}.embedding_length"
+        FEATURES_LENGTH = "{arch}.features_length"
         BLOCK_COUNT = "{arch}.block_count"
         LEADING_DENSE_BLOCK_COUNT = "{arch}.leading_dense_block_count"
         FEED_FORWARD_LENGTH = "{arch}.feed_forward_length"
@@ -73,11 +106,14 @@ class Keys:
         EXPERT_USED_COUNT = "{arch}.expert_used_count"
         EXPERT_SHARED_COUNT = "{arch}.expert_shared_count"
         EXPERT_WEIGHTS_SCALE = "{arch}.expert_weights_scale"
+        EXPERT_WEIGHTS_NORM = "{arch}.expert_weights_norm"
+        EXPERT_GATING_FUNC = "{arch}.expert_gating_func"
         POOLING_TYPE = "{arch}.pooling_type"
         LOGIT_SCALE = "{arch}.logit_scale"
         DECODER_START_TOKEN_ID = "{arch}.decoder_start_token_id"
         ATTN_LOGIT_SOFTCAPPING = "{arch}.attn_logit_softcapping"
         FINAL_LOGIT_SOFTCAPPING = "{arch}.final_logit_softcapping"
+        SWIN_NORM = "{arch}.swin_norm"
         RESCALE_EVERY_N_LAYERS = "{arch}.rescale_every_n_layers"
         TIME_MIX_EXTRA_DIM = "{arch}.time_mix_extra_dim"
         TIME_DECAY_EXTRA_DIM = "{arch}.time_decay_extra_dim"
@@ -93,6 +129,8 @@ class Keys:
         VALUE_LENGTH = "{arch}.attention.value_length"
         LAYERNORM_EPS = "{arch}.attention.layer_norm_epsilon"
         LAYERNORM_RMS_EPS = "{arch}.attention.layer_norm_rms_epsilon"
+        GROUPNORM_EPS = "{arch}.attention.group_norm_epsilon"
+        GROUPNORM_GROUPS = "{arch}.attention.group_norm_groups"
         CAUSAL = "{arch}.attention.causal"
         Q_LORA_RANK = "{arch}.attention.q_lora_rank"
         KV_LORA_RANK = "{arch}.attention.kv_lora_rank"
@@ -102,6 +140,7 @@ class Keys:
 
     class Rope:
         DIMENSION_COUNT = "{arch}.rope.dimension_count"
+        DIMENSION_SECTIONS = "{arch}.rope.dimension_sections"
         FREQ_BASE = "{arch}.rope.freq_base"
         SCALING_TYPE = "{arch}.rope.scaling.type"
         SCALING_FACTOR = "{arch}.rope.scaling.factor"
@@ -125,16 +164,28 @@ class Keys:
     class WKV:
         HEAD_SIZE = "{arch}.wkv.head_size"
 
+    class PosNet:
+        EMBEDDING_LENGTH = "{arch}.posnet.embedding_length"
+        BLOCK_COUNT = "{arch}.posnet.block_count"
+
+    class ConvNext:
+        EMBEDDING_LENGTH = "{arch}.convnext.embedding_length"
+        BLOCK_COUNT = "{arch}.convnext.block_count"
+
     class Tokenizer:
         MODEL = "tokenizer.ggml.model"
         PRE = "tokenizer.ggml.pre"
         LIST = "tokenizer.ggml.tokens"
         TOKEN_TYPE = "tokenizer.ggml.token_type"
-        TOKEN_TYPE_COUNT = "tokenizer.ggml.token_type_count"
+        TOKEN_TYPE_COUNT = (
+            "tokenizer.ggml.token_type_count"  # for BERT-style token types
+        )
         SCORES = "tokenizer.ggml.scores"
         MERGES = "tokenizer.ggml.merges"
         BOS_ID = "tokenizer.ggml.bos_token_id"
         EOS_ID = "tokenizer.ggml.eos_token_id"
+        EOT_ID = "tokenizer.ggml.eot_token_id"
+        EOM_ID = "tokenizer.ggml.eom_token_id"
         UNK_ID = "tokenizer.ggml.unknown_token_id"
         SEP_ID = "tokenizer.ggml.seperator_token_id"
         PAD_ID = "tokenizer.ggml.padding_token_id"
@@ -150,16 +201,26 @@ class Keys:
         CHAT_TEMPLATE = "tokenizer.chat_template"
         CHAT_TEMPLATE_N = "tokenizer.chat_template.{name}"
         CHAT_TEMPLATES = "tokenizer.chat_templates"
-
+        # FIM/Infill special tokens constants
+        FIM_PRE_ID = "tokenizer.ggml.fim_pre_token_id"
+        FIM_SUF_ID = "tokenizer.ggml.fim_suf_token_id"
+        FIM_MID_ID = "tokenizer.ggml.fim_mid_token_id"
+        FIM_PAD_ID = "tokenizer.ggml.fim_pad_token_id"
+        FIM_REP_ID = "tokenizer.ggml.fim_rep_token_id"
+        FIM_SEP_ID = "tokenizer.ggml.fim_sep_token_id"
+        # deprecated:
         PREFIX_ID = "tokenizer.ggml.prefix_token_id"
         SUFFIX_ID = "tokenizer.ggml.suffix_token_id"
         MIDDLE_ID = "tokenizer.ggml.middle_token_id"
-        EOT_ID = "tokenizer.ggml.eot_token_id"
-        EOM_ID = "tokenizer.ggml.eom_token_id"
 
     class Adapter:
         TYPE = "adapter.type"
         LORA_ALPHA = "adapter.lora.alpha"
+
+
+#
+# recommended mapping of model tensor names for storage in gguf
+#
 
 
 class GGUFType:
@@ -169,6 +230,7 @@ class GGUFType:
 
 class MODEL_ARCH(IntEnum):
     LLAMA = auto()
+    DECI = auto()
     FALCON = auto()
     BAICHUAN = auto()
     GROK = auto()
@@ -186,6 +248,7 @@ class MODEL_ARCH(IntEnum):
     QWEN = auto()
     QWEN2 = auto()
     QWEN2MOE = auto()
+    QWEN2VL = auto()
     PHI2 = auto()
     PHI3 = auto()
     PLAMO = auto()
@@ -199,14 +262,16 @@ class MODEL_ARCH(IntEnum):
     STARCODER2 = auto()
     RWKV6 = auto()
     MAMBA = auto()
-    JAMBA = auto()
     XVERSE = auto()
     COMMAND_R = auto()
+    COHERE2 = auto()
     DBRX = auto()
     OLMO = auto()
+    OLMO2 = auto()
     OLMOE = auto()
     OPENELM = auto()
     ARCTIC = auto()
+    DEEPSEEK = auto()
     DEEPSEEK2 = auto()
     CHATGLM = auto()
     BITNET = auto()
@@ -216,6 +281,9 @@ class MODEL_ARCH(IntEnum):
     NEMOTRON = auto()
     EXAONE = auto()
     GRANITE = auto()
+    GRANITE_MOE = auto()
+    CHAMELEON = auto()
+    WAVTOKENIZER_DEC = auto()
 
 
 class MODEL_TENSOR(IntEnum):
@@ -254,6 +322,7 @@ class MODEL_TENSOR(IntEnum):
     FFN_GATE_SHEXP = auto()
     FFN_DOWN_SHEXP = auto()
     FFN_UP_SHEXP = auto()
+    FFN_EXP_PROBS_B = auto()
     ATTN_Q_NORM = auto()
     ATTN_K_NORM = auto()
     LAYER_OUT_NORM = auto()
@@ -261,10 +330,7 @@ class MODEL_TENSOR(IntEnum):
     SSM_CONV1D = auto()
     SSM_X = auto()
     SSM_DT = auto()
-    SSM_DT_NORM = auto()
     SSM_A = auto()
-    SSM_B_NORM = auto()
-    SSM_C_NORM = auto()
     SSM_D = auto()
     SSM_OUT = auto()
     TIME_MIX_W1 = auto()
@@ -326,10 +392,29 @@ class MODEL_TENSOR(IntEnum):
     ENC_FFN_DOWN = auto()
     ENC_FFN_UP = auto()
     ENC_OUTPUT_NORM = auto()
+    CLS = auto()  # classifier
+    CLS_OUT = auto()  # classifier output projection
+    CONV1D = auto()
+    CONVNEXT_DW = auto()
+    CONVNEXT_NORM = auto()
+    CONVNEXT_PW1 = auto()
+    CONVNEXT_PW2 = auto()
+    CONVNEXT_GAMMA = auto()
+    POSNET_CONV1 = auto()
+    POSNET_CONV2 = auto()
+    POSNET_NORM = auto()
+    POSNET_NORM1 = auto()
+    POSNET_NORM2 = auto()
+    POSNET_ATTN_NORM = auto()
+    POSNET_ATTN_Q = auto()
+    POSNET_ATTN_K = auto()
+    POSNET_ATTN_V = auto()
+    POSNET_ATTN_OUT = auto()
 
 
 MODEL_ARCH_NAMES: dict[MODEL_ARCH, str] = {
     MODEL_ARCH.LLAMA: "llama",
+    MODEL_ARCH.DECI: "deci",
     MODEL_ARCH.FALCON: "falcon",
     MODEL_ARCH.BAICHUAN: "baichuan",
     MODEL_ARCH.GROK: "grok",
@@ -347,6 +432,7 @@ MODEL_ARCH_NAMES: dict[MODEL_ARCH, str] = {
     MODEL_ARCH.QWEN: "qwen",
     MODEL_ARCH.QWEN2: "qwen2",
     MODEL_ARCH.QWEN2MOE: "qwen2moe",
+    MODEL_ARCH.QWEN2VL: "qwen2vl",
     MODEL_ARCH.PHI2: "phi2",
     MODEL_ARCH.PHI3: "phi3",
     MODEL_ARCH.PLAMO: "plamo",
@@ -360,14 +446,16 @@ MODEL_ARCH_NAMES: dict[MODEL_ARCH, str] = {
     MODEL_ARCH.STARCODER2: "starcoder2",
     MODEL_ARCH.RWKV6: "rwkv6",
     MODEL_ARCH.MAMBA: "mamba",
-    MODEL_ARCH.JAMBA: "jamba",
     MODEL_ARCH.XVERSE: "xverse",
     MODEL_ARCH.COMMAND_R: "command-r",
+    MODEL_ARCH.COHERE2: "cohere2",
     MODEL_ARCH.DBRX: "dbrx",
     MODEL_ARCH.OLMO: "olmo",
+    MODEL_ARCH.OLMO2: "olmo2",
     MODEL_ARCH.OLMOE: "olmoe",
     MODEL_ARCH.OPENELM: "openelm",
     MODEL_ARCH.ARCTIC: "arctic",
+    MODEL_ARCH.DEEPSEEK: "deepseek",
     MODEL_ARCH.DEEPSEEK2: "deepseek2",
     MODEL_ARCH.CHATGLM: "chatglm",
     MODEL_ARCH.BITNET: "bitnet",
@@ -377,6 +465,9 @@ MODEL_ARCH_NAMES: dict[MODEL_ARCH, str] = {
     MODEL_ARCH.NEMOTRON: "nemotron",
     MODEL_ARCH.EXAONE: "exaone",
     MODEL_ARCH.GRANITE: "granite",
+    MODEL_ARCH.GRANITE_MOE: "granitemoe",
+    MODEL_ARCH.CHAMELEON: "chameleon",
+    MODEL_ARCH.WAVTOKENIZER_DEC: "wavtokenizer-dec",
 }
 
 TENSOR_NAMES: dict[MODEL_TENSOR, str] = {
@@ -417,15 +508,13 @@ TENSOR_NAMES: dict[MODEL_TENSOR, str] = {
     MODEL_TENSOR.FFN_GATE_EXP: "blk.{bid}.ffn_gate_exps",
     MODEL_TENSOR.FFN_DOWN_EXP: "blk.{bid}.ffn_down_exps",
     MODEL_TENSOR.FFN_UP_EXP: "blk.{bid}.ffn_up_exps",
+    MODEL_TENSOR.FFN_EXP_PROBS_B: "blk.{bid}.exp_probs_b",
     MODEL_TENSOR.LAYER_OUT_NORM: "blk.{bid}.layer_output_norm",
     MODEL_TENSOR.SSM_IN: "blk.{bid}.ssm_in",
     MODEL_TENSOR.SSM_CONV1D: "blk.{bid}.ssm_conv1d",
     MODEL_TENSOR.SSM_X: "blk.{bid}.ssm_x",
     MODEL_TENSOR.SSM_DT: "blk.{bid}.ssm_dt",
-    MODEL_TENSOR.SSM_DT_NORM: "blk.{bid}.ssm_dt_norm",
     MODEL_TENSOR.SSM_A: "blk.{bid}.ssm_a",
-    MODEL_TENSOR.SSM_B_NORM: "blk.{bid}.ssm_b_norm",
-    MODEL_TENSOR.SSM_C_NORM: "blk.{bid}.ssm_c_norm",
     MODEL_TENSOR.SSM_D: "blk.{bid}.ssm_d",
     MODEL_TENSOR.SSM_OUT: "blk.{bid}.ssm_out",
     MODEL_TENSOR.TIME_MIX_W1: "blk.{bid}.time_mix_w1",
@@ -487,10 +576,48 @@ TENSOR_NAMES: dict[MODEL_TENSOR, str] = {
     MODEL_TENSOR.ENC_FFN_DOWN: "enc.blk.{bid}.ffn_down",
     MODEL_TENSOR.ENC_FFN_UP: "enc.blk.{bid}.ffn_up",
     MODEL_TENSOR.ENC_OUTPUT_NORM: "enc.output_norm",
+    MODEL_TENSOR.CLS: "cls",
+    MODEL_TENSOR.CLS_OUT: "cls.output",
+    MODEL_TENSOR.CONV1D: "conv1d",
+    MODEL_TENSOR.CONVNEXT_DW: "convnext.{bid}.dw",
+    MODEL_TENSOR.CONVNEXT_NORM: "convnext.{bid}.norm",
+    MODEL_TENSOR.CONVNEXT_PW1: "convnext.{bid}.pw1",
+    MODEL_TENSOR.CONVNEXT_PW2: "convnext.{bid}.pw2",
+    MODEL_TENSOR.CONVNEXT_GAMMA: "convnext.{bid}.gamma",
+    MODEL_TENSOR.POSNET_CONV1: "posnet.{bid}.conv1",
+    MODEL_TENSOR.POSNET_CONV2: "posnet.{bid}.conv2",
+    MODEL_TENSOR.POSNET_NORM: "posnet.{bid}.norm",
+    MODEL_TENSOR.POSNET_NORM1: "posnet.{bid}.norm1",
+    MODEL_TENSOR.POSNET_NORM2: "posnet.{bid}.norm2",
+    MODEL_TENSOR.POSNET_ATTN_NORM: "posnet.{bid}.attn_norm",
+    MODEL_TENSOR.POSNET_ATTN_Q: "posnet.{bid}.attn_q",
+    MODEL_TENSOR.POSNET_ATTN_K: "posnet.{bid}.attn_k",
+    MODEL_TENSOR.POSNET_ATTN_V: "posnet.{bid}.attn_v",
+    MODEL_TENSOR.POSNET_ATTN_OUT: "posnet.{bid}.attn_output",
 }
 
 MODEL_TENSORS: dict[MODEL_ARCH, list[MODEL_TENSOR]] = {
     MODEL_ARCH.LLAMA: [
+        MODEL_TENSOR.TOKEN_EMBD,
+        MODEL_TENSOR.OUTPUT_NORM,
+        MODEL_TENSOR.OUTPUT,
+        MODEL_TENSOR.ROPE_FREQS,
+        MODEL_TENSOR.ATTN_NORM,
+        MODEL_TENSOR.ATTN_Q,
+        MODEL_TENSOR.ATTN_K,
+        MODEL_TENSOR.ATTN_V,
+        MODEL_TENSOR.ATTN_OUT,
+        MODEL_TENSOR.ATTN_ROT_EMBD,
+        MODEL_TENSOR.FFN_GATE_INP,
+        MODEL_TENSOR.FFN_NORM,
+        MODEL_TENSOR.FFN_GATE,
+        MODEL_TENSOR.FFN_DOWN,
+        MODEL_TENSOR.FFN_UP,
+        MODEL_TENSOR.FFN_GATE_EXP,
+        MODEL_TENSOR.FFN_DOWN_EXP,
+        MODEL_TENSOR.FFN_UP_EXP,
+    ],
+    MODEL_ARCH.DECI: [
         MODEL_TENSOR.TOKEN_EMBD,
         MODEL_TENSOR.OUTPUT_NORM,
         MODEL_TENSOR.OUTPUT,
@@ -596,6 +723,8 @@ MODEL_TENSORS: dict[MODEL_ARCH, list[MODEL_TENSOR]] = {
         MODEL_TENSOR.FFN_DOWN,
         MODEL_TENSOR.FFN_UP,
         MODEL_TENSOR.LAYER_OUT_NORM,
+        MODEL_TENSOR.CLS,
+        MODEL_TENSOR.CLS_OUT,
     ],
     MODEL_ARCH.NOMIC_BERT: [
         MODEL_TENSOR.TOKEN_EMBD,
@@ -627,6 +756,7 @@ MODEL_TENSORS: dict[MODEL_ARCH, list[MODEL_TENSOR]] = {
         MODEL_TENSOR.FFN_GATE,
         MODEL_TENSOR.FFN_DOWN,
         MODEL_TENSOR.LAYER_OUT_NORM,
+        MODEL_TENSOR.CLS,
     ],
     MODEL_ARCH.MPT: [
         MODEL_TENSOR.TOKEN_EMBD,
@@ -716,6 +846,21 @@ MODEL_TENSORS: dict[MODEL_ARCH, list[MODEL_TENSOR]] = {
         MODEL_TENSOR.TOKEN_EMBD,
         MODEL_TENSOR.OUTPUT_NORM,
         MODEL_TENSOR.OUTPUT,
+        MODEL_TENSOR.ROPE_FREQS,
+        MODEL_TENSOR.ATTN_NORM,
+        MODEL_TENSOR.ATTN_Q,
+        MODEL_TENSOR.ATTN_K,
+        MODEL_TENSOR.ATTN_V,
+        MODEL_TENSOR.ATTN_OUT,
+        MODEL_TENSOR.FFN_NORM,
+        MODEL_TENSOR.FFN_GATE,
+        MODEL_TENSOR.FFN_DOWN,
+        MODEL_TENSOR.FFN_UP,
+    ],
+    MODEL_ARCH.QWEN2VL: [
+        MODEL_TENSOR.TOKEN_EMBD,
+        MODEL_TENSOR.OUTPUT_NORM,
+        MODEL_TENSOR.OUTPUT,
         MODEL_TENSOR.ATTN_NORM,
         MODEL_TENSOR.ATTN_Q,
         MODEL_TENSOR.ATTN_K,
@@ -790,6 +935,8 @@ MODEL_TENSORS: dict[MODEL_ARCH, list[MODEL_TENSOR]] = {
         MODEL_TENSOR.TOKEN_EMBD,
         MODEL_TENSOR.OUTPUT_NORM,
         MODEL_TENSOR.OUTPUT,
+        MODEL_TENSOR.ROPE_FACTORS_LONG,
+        MODEL_TENSOR.ROPE_FACTORS_SHORT,
         MODEL_TENSOR.ATTN_NORM,
         MODEL_TENSOR.ATTN_QKV,
         MODEL_TENSOR.ATTN_Q,
@@ -849,6 +996,8 @@ MODEL_TENSORS: dict[MODEL_ARCH, list[MODEL_TENSOR]] = {
         MODEL_TENSOR.OUTPUT,
         MODEL_TENSOR.OUTPUT_NORM,
         MODEL_TENSOR.ROPE_FREQS,
+        MODEL_TENSOR.ROPE_FACTORS_LONG,
+        MODEL_TENSOR.ROPE_FACTORS_SHORT,
         MODEL_TENSOR.ATTN_NORM,
         MODEL_TENSOR.ATTN_Q,
         MODEL_TENSOR.ATTN_K,
@@ -868,6 +1017,8 @@ MODEL_TENSORS: dict[MODEL_ARCH, list[MODEL_TENSOR]] = {
         MODEL_TENSOR.TOKEN_EMBD,
         MODEL_TENSOR.OUTPUT_NORM,
         MODEL_TENSOR.OUTPUT,
+        MODEL_TENSOR.ROPE_FACTORS_LONG,
+        MODEL_TENSOR.ROPE_FACTORS_SHORT,
         MODEL_TENSOR.ATTN_NORM,
         MODEL_TENSOR.ATTN_Q_A,
         MODEL_TENSOR.ATTN_Q_B,
@@ -968,34 +1119,6 @@ MODEL_TENSORS: dict[MODEL_ARCH, list[MODEL_TENSOR]] = {
         MODEL_TENSOR.SSM_D,
         MODEL_TENSOR.SSM_OUT,
     ],
-    MODEL_ARCH.JAMBA: [
-        MODEL_TENSOR.TOKEN_EMBD,
-        MODEL_TENSOR.OUTPUT_NORM,
-        MODEL_TENSOR.OUTPUT,
-        MODEL_TENSOR.ATTN_NORM,
-        MODEL_TENSOR.ATTN_Q,
-        MODEL_TENSOR.ATTN_K,
-        MODEL_TENSOR.ATTN_V,
-        MODEL_TENSOR.ATTN_OUT,
-        MODEL_TENSOR.SSM_IN,
-        MODEL_TENSOR.SSM_CONV1D,
-        MODEL_TENSOR.SSM_X,
-        MODEL_TENSOR.SSM_DT,
-        MODEL_TENSOR.SSM_DT_NORM,
-        MODEL_TENSOR.SSM_A,
-        MODEL_TENSOR.SSM_B_NORM,
-        MODEL_TENSOR.SSM_C_NORM,
-        MODEL_TENSOR.SSM_D,
-        MODEL_TENSOR.SSM_OUT,
-        MODEL_TENSOR.FFN_GATE_INP,
-        MODEL_TENSOR.FFN_NORM,
-        MODEL_TENSOR.FFN_GATE,
-        MODEL_TENSOR.FFN_DOWN,
-        MODEL_TENSOR.FFN_UP,
-        MODEL_TENSOR.FFN_GATE_EXP,
-        MODEL_TENSOR.FFN_DOWN_EXP,
-        MODEL_TENSOR.FFN_UP_EXP,
-    ],
     MODEL_ARCH.XVERSE: [
         MODEL_TENSOR.TOKEN_EMBD,
         MODEL_TENSOR.OUTPUT_NORM,
@@ -1026,6 +1149,18 @@ MODEL_TENSORS: dict[MODEL_ARCH, list[MODEL_TENSOR]] = {
         MODEL_TENSOR.ATTN_K_NORM,
         MODEL_TENSOR.ATTN_Q_NORM,
     ],
+    MODEL_ARCH.COHERE2: [
+        MODEL_TENSOR.TOKEN_EMBD,
+        MODEL_TENSOR.OUTPUT_NORM,
+        MODEL_TENSOR.ATTN_NORM,
+        MODEL_TENSOR.ATTN_Q,
+        MODEL_TENSOR.ATTN_K,
+        MODEL_TENSOR.ATTN_V,
+        MODEL_TENSOR.ATTN_OUT,
+        MODEL_TENSOR.FFN_GATE,
+        MODEL_TENSOR.FFN_DOWN,
+        MODEL_TENSOR.FFN_UP,
+    ],
     MODEL_ARCH.DBRX: [
         MODEL_TENSOR.TOKEN_EMBD,
         MODEL_TENSOR.OUTPUT_NORM,
@@ -1046,6 +1181,22 @@ MODEL_TENSORS: dict[MODEL_ARCH, list[MODEL_TENSOR]] = {
         MODEL_TENSOR.ATTN_K,
         MODEL_TENSOR.ATTN_V,
         MODEL_TENSOR.ATTN_OUT,
+        MODEL_TENSOR.FFN_GATE,
+        MODEL_TENSOR.FFN_DOWN,
+        MODEL_TENSOR.FFN_UP,
+    ],
+    MODEL_ARCH.OLMO2: [
+        MODEL_TENSOR.TOKEN_EMBD,
+        MODEL_TENSOR.OUTPUT_NORM,
+        MODEL_TENSOR.OUTPUT,
+        MODEL_TENSOR.ATTN_Q,
+        MODEL_TENSOR.ATTN_K,
+        MODEL_TENSOR.ATTN_V,
+        MODEL_TENSOR.ATTN_OUT,
+        MODEL_TENSOR.ATTN_POST_NORM,
+        MODEL_TENSOR.ATTN_Q_NORM,
+        MODEL_TENSOR.ATTN_K_NORM,
+        MODEL_TENSOR.FFN_POST_NORM,
         MODEL_TENSOR.FFN_GATE,
         MODEL_TENSOR.FFN_DOWN,
         MODEL_TENSOR.FFN_UP,
@@ -1101,6 +1252,29 @@ MODEL_TENSORS: dict[MODEL_ARCH, list[MODEL_TENSOR]] = {
         MODEL_TENSOR.FFN_DOWN_EXP,
         MODEL_TENSOR.FFN_UP_EXP,
     ],
+    MODEL_ARCH.DEEPSEEK: [
+        MODEL_TENSOR.TOKEN_EMBD,
+        MODEL_TENSOR.OUTPUT_NORM,
+        MODEL_TENSOR.OUTPUT,
+        MODEL_TENSOR.ROPE_FREQS,
+        MODEL_TENSOR.ATTN_NORM,
+        MODEL_TENSOR.ATTN_Q,
+        MODEL_TENSOR.ATTN_K,
+        MODEL_TENSOR.ATTN_V,
+        MODEL_TENSOR.ATTN_OUT,
+        MODEL_TENSOR.ATTN_ROT_EMBD,
+        MODEL_TENSOR.FFN_GATE_INP,
+        MODEL_TENSOR.FFN_NORM,
+        MODEL_TENSOR.FFN_GATE,
+        MODEL_TENSOR.FFN_DOWN,
+        MODEL_TENSOR.FFN_UP,
+        MODEL_TENSOR.FFN_GATE_EXP,
+        MODEL_TENSOR.FFN_DOWN_EXP,
+        MODEL_TENSOR.FFN_UP_EXP,
+        MODEL_TENSOR.FFN_GATE_SHEXP,
+        MODEL_TENSOR.FFN_DOWN_SHEXP,
+        MODEL_TENSOR.FFN_UP_SHEXP,
+    ],
     MODEL_ARCH.DEEPSEEK2: [
         MODEL_TENSOR.TOKEN_EMBD,
         MODEL_TENSOR.OUTPUT_NORM,
@@ -1127,6 +1301,7 @@ MODEL_TENSORS: dict[MODEL_ARCH, list[MODEL_TENSOR]] = {
         MODEL_TENSOR.FFN_GATE_SHEXP,
         MODEL_TENSOR.FFN_DOWN_SHEXP,
         MODEL_TENSOR.FFN_UP_SHEXP,
+        MODEL_TENSOR.FFN_EXP_PROBS_B,
     ],
     MODEL_ARCH.CHATGLM: [
         MODEL_TENSOR.TOKEN_EMBD,
@@ -1248,6 +1423,7 @@ MODEL_TENSORS: dict[MODEL_ARCH, list[MODEL_TENSOR]] = {
     MODEL_ARCH.GRANITE: [
         MODEL_TENSOR.TOKEN_EMBD,
         MODEL_TENSOR.OUTPUT_NORM,
+        MODEL_TENSOR.OUTPUT,
         MODEL_TENSOR.ATTN_NORM,
         MODEL_TENSOR.ATTN_Q,
         MODEL_TENSOR.ATTN_K,
@@ -1258,10 +1434,69 @@ MODEL_TENSORS: dict[MODEL_ARCH, list[MODEL_TENSOR]] = {
         MODEL_TENSOR.FFN_DOWN,
         MODEL_TENSOR.FFN_UP,
     ],
+    MODEL_ARCH.GRANITE_MOE: [
+        MODEL_TENSOR.TOKEN_EMBD,
+        MODEL_TENSOR.OUTPUT_NORM,
+        MODEL_TENSOR.OUTPUT,
+        MODEL_TENSOR.ATTN_NORM,
+        MODEL_TENSOR.ATTN_Q,
+        MODEL_TENSOR.ATTN_K,
+        MODEL_TENSOR.ATTN_V,
+        MODEL_TENSOR.ATTN_OUT,
+        MODEL_TENSOR.FFN_NORM,
+        MODEL_TENSOR.FFN_GATE_INP,
+        MODEL_TENSOR.FFN_GATE_EXP,
+        MODEL_TENSOR.FFN_DOWN_EXP,
+        MODEL_TENSOR.FFN_UP_EXP,
+    ],
+    MODEL_ARCH.CHAMELEON: [
+        MODEL_TENSOR.TOKEN_EMBD,
+        MODEL_TENSOR.OUTPUT_NORM,
+        MODEL_TENSOR.OUTPUT,
+        MODEL_TENSOR.ATTN_NORM,
+        MODEL_TENSOR.ATTN_Q,
+        MODEL_TENSOR.ATTN_Q_NORM,
+        MODEL_TENSOR.ATTN_K,
+        MODEL_TENSOR.ATTN_K_NORM,
+        MODEL_TENSOR.ATTN_V,
+        MODEL_TENSOR.ATTN_OUT,
+        MODEL_TENSOR.FFN_NORM,
+        MODEL_TENSOR.FFN_GATE,
+        MODEL_TENSOR.FFN_DOWN,
+        MODEL_TENSOR.FFN_UP,
+    ],
+    MODEL_ARCH.WAVTOKENIZER_DEC: [
+        MODEL_TENSOR.TOKEN_EMBD,
+        MODEL_TENSOR.TOKEN_EMBD_NORM,
+        MODEL_TENSOR.CONV1D,
+        MODEL_TENSOR.CONVNEXT_DW,
+        MODEL_TENSOR.CONVNEXT_NORM,
+        MODEL_TENSOR.CONVNEXT_PW1,
+        MODEL_TENSOR.CONVNEXT_PW2,
+        MODEL_TENSOR.CONVNEXT_GAMMA,
+        MODEL_TENSOR.OUTPUT,
+        MODEL_TENSOR.OUTPUT_NORM,
+        MODEL_TENSOR.POSNET_CONV1,
+        MODEL_TENSOR.POSNET_CONV2,
+        MODEL_TENSOR.POSNET_NORM,
+        MODEL_TENSOR.POSNET_NORM1,
+        MODEL_TENSOR.POSNET_NORM2,
+        MODEL_TENSOR.POSNET_ATTN_NORM,
+        MODEL_TENSOR.POSNET_ATTN_Q,
+        MODEL_TENSOR.POSNET_ATTN_K,
+        MODEL_TENSOR.POSNET_ATTN_V,
+        MODEL_TENSOR.POSNET_ATTN_OUT,
+    ],
+    # TODO
 }
 
+# tensors that will not be serialized
 MODEL_TENSOR_SKIP: dict[MODEL_ARCH, list[MODEL_TENSOR]] = {
     MODEL_ARCH.LLAMA: [
+        MODEL_TENSOR.ROPE_FREQS,
+        MODEL_TENSOR.ATTN_ROT_EMBD,
+    ],
+    MODEL_ARCH.DECI: [
         MODEL_TENSOR.ROPE_FREQS,
         MODEL_TENSOR.ATTN_ROT_EMBD,
     ],
@@ -1289,6 +1524,10 @@ MODEL_TENSOR_SKIP: dict[MODEL_ARCH, list[MODEL_TENSOR]] = {
         MODEL_TENSOR.ROPE_FREQS,
         MODEL_TENSOR.ATTN_ROT_EMBD,
     ],
+    MODEL_ARCH.DEEPSEEK: [
+        MODEL_TENSOR.ROPE_FREQS,
+        MODEL_TENSOR.ATTN_ROT_EMBD,
+    ],
     MODEL_ARCH.DEEPSEEK2: [
         MODEL_TENSOR.ROPE_FREQS,
         MODEL_TENSOR.ATTN_ROT_EMBD,
@@ -1301,6 +1540,10 @@ MODEL_TENSOR_SKIP: dict[MODEL_ARCH, list[MODEL_TENSOR]] = {
         MODEL_TENSOR.ATTN_ROT_EMBD,
     ],
 }
+
+#
+# types
+#
 
 
 class TokenType(IntEnum):
@@ -1316,6 +1559,7 @@ class RopeScalingType(Enum):
     NONE = "none"
     LINEAR = "linear"
     YARN = "yarn"
+    LONGROPE = "longrope"
 
 
 class PoolingType(IntEnum):
@@ -1354,52 +1598,61 @@ class GGMLQuantizationType(IntEnum):
     F64 = 28
     IQ1_M = 29
     BF16 = 30
-    Q4_0_4_4 = 31
-    Q4_0_4_8 = 32
-    Q4_0_8_8 = 33
     TQ1_0 = 34
     TQ2_0 = 35
 
 
+class ExpertGatingFuncType(IntEnum):
+    SOFTMAX = 1
+    SIGMOID = 2
+
+
+# TODO: add GGMLFileType from ggml_ftype in ggml.h
+
+
+# from llama_ftype in llama.h
+# ALL VALUES SHOULD BE THE SAME HERE AS THEY ARE OVER THERE.
 class LlamaFileType(IntEnum):
     ALL_F32 = 0
-    MOSTLY_F16 = 1
-    MOSTLY_Q4_0 = 2
-    MOSTLY_Q4_1 = 3
+    MOSTLY_F16 = 1  # except 1d tensors
+    MOSTLY_Q4_0 = 2  # except 1d tensors
+    MOSTLY_Q4_1 = 3  # except 1d tensors
+    # MOSTLY_Q4_1_SOME_F16 = 4   # tok_embeddings.weight and output.weight are F16
+    # MOSTLY_Q4_2        = 5   # support has been removed
+    # MOSTLY_Q4_3        = 6   # support has been removed
+    MOSTLY_Q8_0 = 7  # except 1d tensors
+    MOSTLY_Q5_0 = 8  # except 1d tensors
+    MOSTLY_Q5_1 = 9  # except 1d tensors
+    MOSTLY_Q2_K = 10  # except 1d tensors
+    MOSTLY_Q3_K_S = 11  # except 1d tensors
+    MOSTLY_Q3_K_M = 12  # except 1d tensors
+    MOSTLY_Q3_K_L = 13  # except 1d tensors
+    MOSTLY_Q4_K_S = 14  # except 1d tensors
+    MOSTLY_Q4_K_M = 15  # except 1d tensors
+    MOSTLY_Q5_K_S = 16  # except 1d tensors
+    MOSTLY_Q5_K_M = 17  # except 1d tensors
+    MOSTLY_Q6_K = 18  # except 1d tensors
+    MOSTLY_IQ2_XXS = 19  # except 1d tensors
+    MOSTLY_IQ2_XS = 20  # except 1d tensors
+    MOSTLY_Q2_K_S = 21  # except 1d tensors
+    MOSTLY_IQ3_XS = 22  # except 1d tensors
+    MOSTLY_IQ3_XXS = 23  # except 1d tensors
+    MOSTLY_IQ1_S = 24  # except 1d tensors
+    MOSTLY_IQ4_NL = 25  # except 1d tensors
+    MOSTLY_IQ3_S = 26  # except 1d tensors
+    MOSTLY_IQ3_M = 27  # except 1d tensors
+    MOSTLY_IQ2_S = 28  # except 1d tensors
+    MOSTLY_IQ2_M = 29  # except 1d tensors
+    MOSTLY_IQ4_XS = 30  # except 1d tensors
+    MOSTLY_IQ1_M = 31  # except 1d tensors
+    MOSTLY_BF16 = 32  # except 1d tensors
+    # MOSTLY_Q4_0_4_4      = 33  # removed from gguf files, use Q4_0 and runtime repack
+    # MOSTLY_Q4_0_4_8      = 34  # removed from gguf files, use Q4_0 and runtime repack
+    # MOSTLY_Q4_0_8_8      = 35  # removed from gguf files, use Q4_0 and runtime repack
+    MOSTLY_TQ1_0 = 36  # except 1d tensors
+    MOSTLY_TQ2_0 = 37  # except 1d tensors
 
-    MOSTLY_Q8_0 = 7
-    MOSTLY_Q5_0 = 8
-    MOSTLY_Q5_1 = 9
-    MOSTLY_Q2_K = 10
-    MOSTLY_Q3_K_S = 11
-    MOSTLY_Q3_K_M = 12
-    MOSTLY_Q3_K_L = 13
-    MOSTLY_Q4_K_S = 14
-    MOSTLY_Q4_K_M = 15
-    MOSTLY_Q5_K_S = 16
-    MOSTLY_Q5_K_M = 17
-    MOSTLY_Q6_K = 18
-    MOSTLY_IQ2_XXS = 19
-    MOSTLY_IQ2_XS = 20
-    MOSTLY_Q2_K_S = 21
-    MOSTLY_IQ3_XS = 22
-    MOSTLY_IQ3_XXS = 23
-    MOSTLY_IQ1_S = 24
-    MOSTLY_IQ4_NL = 25
-    MOSTLY_IQ3_S = 26
-    MOSTLY_IQ3_M = 27
-    MOSTLY_IQ2_S = 28
-    MOSTLY_IQ2_M = 29
-    MOSTLY_IQ4_XS = 30
-    MOSTLY_IQ1_M = 31
-    MOSTLY_BF16 = 32
-    MOSTLY_Q4_0_4_4 = 33
-    MOSTLY_Q4_0_4_8 = 34
-    MOSTLY_Q4_0_8_8 = 35
-    MOSTLY_TQ1_0 = 36
-    MOSTLY_TQ2_0 = 37
-
-    GUESSED = 1024
+    GUESSED = 1024  # not specified in the model file
 
 
 class GGUFEndian(IntEnum):
@@ -1434,11 +1687,12 @@ class GGUFValueType(IntEnum):
             return GGUFValueType.BOOL
         elif isinstance(val, int):
             return GGUFValueType.INT32
-
+        # TODO: need help with 64-bit types in Python
         else:
             raise ValueError(f"Unknown type: {type(val)}")
 
 
+# Items here are (block size, type size)
 QK_K = 256
 GGML_QUANT_SIZES: dict[GGMLQuantizationType, tuple[int, int]] = {
     GGMLQuantizationType.F32: (1, 4),
@@ -1470,13 +1724,14 @@ GGML_QUANT_SIZES: dict[GGMLQuantizationType, tuple[int, int]] = {
     GGMLQuantizationType.F64: (1, 8),
     GGMLQuantizationType.IQ1_M: (256, QK_K // 8 + QK_K // 16 + QK_K // 32),
     GGMLQuantizationType.BF16: (1, 2),
-    GGMLQuantizationType.Q4_0_4_4: (32, 2 + 16),
-    GGMLQuantizationType.Q4_0_4_8: (32, 2 + 16),
-    GGMLQuantizationType.Q4_0_8_8: (32, 2 + 16),
     GGMLQuantizationType.TQ1_0: (256, 2 + 4 * 13),
     GGMLQuantizationType.TQ2_0: (256, 2 + 64),
 }
 
+
+# Aliases for backward compatibility.
+
+# general
 KEY_GENERAL_ARCHITECTURE = Keys.General.ARCHITECTURE
 KEY_GENERAL_QUANTIZATION_VERSION = Keys.General.QUANTIZATION_VERSION
 KEY_GENERAL_ALIGNMENT = Keys.General.ALIGNMENT
@@ -1488,6 +1743,7 @@ KEY_GENERAL_LICENSE = Keys.General.LICENSE
 KEY_GENERAL_SOURCE_URL = Keys.General.SOURCE_URL
 KEY_GENERAL_FILE_TYPE = Keys.General.FILE_TYPE
 
+# LLM
 KEY_VOCAB_SIZE = Keys.LLM.VOCAB_SIZE
 KEY_CONTEXT_LENGTH = Keys.LLM.CONTEXT_LENGTH
 KEY_EMBEDDING_LENGTH = Keys.LLM.EMBEDDING_LENGTH
@@ -1496,6 +1752,7 @@ KEY_FEED_FORWARD_LENGTH = Keys.LLM.FEED_FORWARD_LENGTH
 KEY_USE_PARALLEL_RESIDUAL = Keys.LLM.USE_PARALLEL_RESIDUAL
 KEY_TENSOR_DATA_LAYOUT = Keys.LLM.TENSOR_DATA_LAYOUT
 
+# attention
 KEY_ATTENTION_HEAD_COUNT = Keys.Attention.HEAD_COUNT
 KEY_ATTENTION_HEAD_COUNT_KV = Keys.Attention.HEAD_COUNT_KV
 KEY_ATTENTION_MAX_ALIBI_BIAS = Keys.Attention.MAX_ALIBI_BIAS
@@ -1503,6 +1760,7 @@ KEY_ATTENTION_CLAMP_KQV = Keys.Attention.CLAMP_KQV
 KEY_ATTENTION_LAYERNORM_EPS = Keys.Attention.LAYERNORM_EPS
 KEY_ATTENTION_LAYERNORM_RMS_EPS = Keys.Attention.LAYERNORM_RMS_EPS
 
+# RoPE
 KEY_ROPE_DIMENSION_COUNT = Keys.Rope.DIMENSION_COUNT
 KEY_ROPE_FREQ_BASE = Keys.Rope.FREQ_BASE
 KEY_ROPE_SCALING_TYPE = Keys.Rope.SCALING_TYPE
@@ -1510,12 +1768,14 @@ KEY_ROPE_SCALING_FACTOR = Keys.Rope.SCALING_FACTOR
 KEY_ROPE_SCALING_ORIG_CTX_LEN = Keys.Rope.SCALING_ORIG_CTX_LEN
 KEY_ROPE_SCALING_FINETUNED = Keys.Rope.SCALING_FINETUNED
 
+# SSM
 KEY_SSM_CONV_KERNEL = Keys.SSM.CONV_KERNEL
 KEY_SSM_INNER_SIZE = Keys.SSM.INNER_SIZE
 KEY_SSM_STATE_SIZE = Keys.SSM.STATE_SIZE
 KEY_SSM_TIME_STEP_RANK = Keys.SSM.TIME_STEP_RANK
 KEY_SSM_DT_B_C_RMS = Keys.SSM.DT_B_C_RMS
 
+# tokenization
 KEY_TOKENIZER_MODEL = Keys.Tokenizer.MODEL
 KEY_TOKENIZER_PRE = Keys.Tokenizer.PRE
 KEY_TOKENIZER_LIST = Keys.Tokenizer.LIST
@@ -1524,6 +1784,8 @@ KEY_TOKENIZER_SCORES = Keys.Tokenizer.SCORES
 KEY_TOKENIZER_MERGES = Keys.Tokenizer.MERGES
 KEY_TOKENIZER_BOS_ID = Keys.Tokenizer.BOS_ID
 KEY_TOKENIZER_EOS_ID = Keys.Tokenizer.EOS_ID
+KEY_TOKENIZER_EOT_ID = Keys.Tokenizer.EOT_ID
+KEY_TOKENIZER_EOM_ID = Keys.Tokenizer.EOM_ID
 KEY_TOKENIZER_UNK_ID = Keys.Tokenizer.UNK_ID
 KEY_TOKENIZER_SEP_ID = Keys.Tokenizer.SEP_ID
 KEY_TOKENIZER_PAD_ID = Keys.Tokenizer.PAD_ID
@@ -1531,8 +1793,15 @@ KEY_TOKENIZER_CLS_ID = Keys.Tokenizer.CLS_ID
 KEY_TOKENIZER_MASK_ID = Keys.Tokenizer.MASK_ID
 KEY_TOKENIZER_HF_JSON = Keys.Tokenizer.HF_JSON
 KEY_TOKENIZER_RWKV = Keys.Tokenizer.RWKV
-KEY_TOKENIZER_PRIFIX_ID = Keys.Tokenizer.PREFIX_ID
+
+KEY_TOKENIZER_FIM_PRE_ID = Keys.Tokenizer.FIM_PRE_ID
+KEY_TOKENIZER_FIM_SUF_ID = Keys.Tokenizer.FIM_SUF_ID
+KEY_TOKENIZER_FIM_MID_ID = Keys.Tokenizer.FIM_MID_ID
+KEY_TOKENIZER_FIM_PAD_ID = Keys.Tokenizer.FIM_PAD_ID
+KEY_TOKENIZER_FIM_REP_ID = Keys.Tokenizer.FIM_REP_ID
+KEY_TOKENIZER_FIM_SEP_ID = Keys.Tokenizer.FIM_SEP_ID
+
+# deprecated
+KEY_TOKENIZER_PREFIX_ID = Keys.Tokenizer.PREFIX_ID
 KEY_TOKENIZER_SUFFIX_ID = Keys.Tokenizer.SUFFIX_ID
 KEY_TOKENIZER_MIDDLE_ID = Keys.Tokenizer.MIDDLE_ID
-KEY_TOKENIZER_EOT_ID = Keys.Tokenizer.EOT_ID
-KEY_TOKENIZER_EOM_ID = Keys.Tokenizer.EOM_ID

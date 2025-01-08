@@ -500,7 +500,7 @@ class AutoGGUF(QMainWindow):
         # Timer for updating system info
         self.timer = QTimer()
         self.timer.timeout.connect(self.update_system_info)
-        self.timer.start(200)
+        self.timer.start(500)
 
         # Backend selection
         backend_layout = QHBoxLayout()
@@ -1023,7 +1023,9 @@ class AutoGGUF(QMainWindow):
         hf_to_gguf_layout.addRow(OUTPUT_FILE, hf_outfile_layout)
 
         self.hf_outtype = QComboBox()
-        self.hf_outtype.addItems(["f32", "f16", "bf16", "q8_0", "auto"])
+        self.hf_outtype.addItems(
+            ["f32", "f16", "bf16", "q8_0", "tq1_0", "tq2_0", "auto"]
+        )
         hf_to_gguf_layout.addRow(OUTPUT_TYPE, self.hf_outtype)
 
         self.hf_vocab_only = QCheckBox(VOCAB_ONLY)
