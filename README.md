@@ -121,7 +121,7 @@ cd build/<type>/dist/
 pip install -U pyinstaller
 build RELEASE | DEV
 ```
-Find the executable in `build/<type>/dist/AutoGGUF.exe`.
+Find the executable in `build/<type>/dist/AutoGGUF-x64.exe`.
 
 You can also use Nuitka, which may result in a slower build but a faster output executable:
 ```bash
@@ -139,18 +139,21 @@ To use a specific language, set the `AUTOGGUF_LANGUAGE` environment variable to 
 ## Issues
 
 - Some inconsistent logging
+- Missing translations
 
 ## Planned Features
 
 - Time estimation for quantization
 - Quantization file size estimate
 - Perplexity testing
-- bitsandbytes (coming soon)
+- bitsandbytes
+
+Due to my limited availability and a lack of time, I won't be actively developing new features for this project as much. While I'll continue to publish builds from time to time, I strongly recommend running from source if you want to stay up to date with the latest changes. I'm still committed to keeping dependencies updated weekly and making small maintenance fixes to ensure everything runs smoothly. If you run into any problems or notice issues, please don't hesitate to let me know - I appreciate your feedback and will do my best to address them.
 
 ## Support
 
 - SSL module cannot be found error: Install OpenSSL or run from source using `python src/main.py` with the `run.bat` script (`pip install requests`)
-- Check out the [Wiki](https://github.com/leafspark/AutoGGUF/wiki) for advanced usage
+- Check out the [Wiki](https://github.com/leafspark/AutoGGUF/wiki) for advanced usage and configuration
 
 ## Contributing
 

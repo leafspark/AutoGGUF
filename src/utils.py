@@ -169,18 +169,35 @@ def download_llama_cpp(self) -> None:
     self.download_progress.setValue(0)
 
 
+def get_repo_from_env() -> tuple[str, str]:
+    repo = os.getenv("AUTOGGUF_BACKEND_REPO", "ggerganov/llama.cpp")
+
+    if not repo or "/" not in repo:
+        raise ValueError(INVALID_REPOSITORY_FORMAT)
+
+    owner, repo_name = repo.split("/", 1)
+    if not all(part.strip() for part in (owner, repo_name)):
+        raise ValueError(REPO_CANNOT_BE_EMPTY)
+
+    return owner, repo_name
+
+
 def refresh_releases(self) -> None:
     self.logger.info(REFRESHING_LLAMACPP_RELEASES)
     try:
-        response = requests.get(
-            "https://api.github.com/repos/ggerganov/llama.cpp/releases"
-        )
-        response.raise_for_status()  # Raise an exception for bad status codes
+        owner, repo = get_repo_from_env()
+        url = f"https://api.github.com/repos/{owner}/{repo}/releases"
+
+        response = requests.get(url)
+        response.raise_for_status()
+
         releases = response.json()
         self.release_combo.clear()
         for release in releases:
             self.release_combo.addItem(release["tag_name"], userData=release)
         self.release_combo.currentIndexChanged.connect(self.update_assets)
         self.update_assets()
+    except ValueError as e:
+        show_error(self.logger, f"Invalid repository configuration: {str(e)}")
     except requests.exceptions.RequestException as e:
         show_error(self.logger, ERROR_FETCHING_RELEASES.format(str(e)))

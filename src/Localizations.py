@@ -415,6 +415,7 @@ class _English(_Localization):
         # Model actions
         self.CONFIRM_DELETE = "Confirm Delete"
         self.DELETE_MODEL_WARNING = "Are you sure you want to delete the model: {}?"
+        self.ERROR_DELETING_MODEL = "Error deleting model: {}"
         self.MODEL_RENAMED_SUCCESSFULLY = "Model renamed successfully."
         self.MODEL_DELETED_SUCCESSFULLY = "Model deleted successfully."
 
@@ -451,11 +452,16 @@ class _English(_Localization):
         self.HF_REPOSITORY_TYPE = "Repository Type"
         self.UPLOAD_TYPE = "Upload Type"
         self.UPLOAD = "Upload"
+        self.INFO = "Info"
 
         self.EXTRA_COMMAND_ARGUMENTS = "Additional command-line arguments"
-
-        self.INFO = "Info"
         self.COPIED_COMMAND_TO_CLIPBOARD = "Copied command to clipboard:"
+
+        # Repository
+        self.INVALID_REPOSITORY_FORMAT = (
+            "Invalid repository format. Must be 'owner/repo'"
+        )
+        self.REPO_CANNOT_BE_EMPTY = "Owner and repository name cannot be empty"
 
 
 class _French(_Localization):

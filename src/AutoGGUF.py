@@ -1129,7 +1129,7 @@ class AutoGGUF(QMainWindow):
         reply = QMessageBox.question(
             self,
             CONFIRM_DELETE,
-            DELETE_WARNING.format(model_name),
+            DELETE_MODEL_WARNING.format(model_name),
             QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
             QMessageBox.StandardButton.No,
         )
@@ -1142,7 +1142,7 @@ class AutoGGUF(QMainWindow):
                 )
                 self.logger.info(MODEL_DELETED_SUCCESSFULLY.format(model_name))
             except Exception as e:
-                show_error(self.logger, f"Error deleting model: {e}")
+                show_error(self.logger, ERROR_DELETING_MODEL.format(e))
 
     def check_for_updates(self) -> None:
         try:
@@ -1929,17 +1929,9 @@ class AutoGGUF(QMainWindow):
                 show_error(self.logger, INVALID_GGUF_FILE.format(file_name))
                 return
 
-            reply = QMessageBox.question(
-                self,
-                CONFIRM_IMPORT,
-                IMPORT_MODEL_CONFIRMATION.format(file_name),
-                QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
-                QMessageBox.StandardButton.No,
-            )
-            if reply == QMessageBox.StandardButton.Yes:
-                self.imported_models.append(file_path)
-                self.load_models()
-                self.logger.info(MODEL_IMPORTED_SUCCESSFULLY.format(file_name))
+            self.imported_models.append(file_path)
+            self.load_models()
+            self.logger.info(MODEL_IMPORTED_SUCCESSFULLY.format(file_name))
 
     @validate_input(
         "imatrix_model", "imatrix_datafile", "imatrix_model", "imatrix_output"
