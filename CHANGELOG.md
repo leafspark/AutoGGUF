@@ -1,5 +1,27 @@
 # Changelog
 
+## [v2.0.0] - 2025-01-27
+
+### Added
+- Clipboard support for save/load preset functionality with shift-click option
+- Support for shift-clicking to get quantization command
+- AUTOGGUF_BACKEND_REPO environment variable for custom GitHub repository fetching
+- New HF to GGUF conversion types: `tq1_0` and `tq2_0`
+
+### Changed
+- Updated multiple dependencies:
+  - PySide6, PyTorch, Transformers, FastAPI, uvicorn, and other core libraries to their latest compatible versions
+- Adjusted monitoring intervals from 0.2s to 0.5s
+- Updated copyright year to 2025
+- Bundled llama.cpp licensing text in About menu
+- Removed x86 build matrix from CI
+- Removed Import Model confirmation dialog
+
+### Fixed
+- Resolved PySide6 segfault issue
+- Fixed error when deleting models from list
+- Corrected incorrect menu bar name for Load Preset
+
 ## [v1.9.1] - 2024-10-13
 
 ### Added
