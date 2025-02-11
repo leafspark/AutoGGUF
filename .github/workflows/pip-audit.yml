@@ -52,7 +52,7 @@ jobs:
         cat requirements.txt >> detailed_report.txt
 
     - name: Upload audit results
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: pip-audit-report
         path: detailed_report.txt
