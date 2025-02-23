@@ -7,7 +7,7 @@ numpy<2.0.0
 torch~=2.5.1
 sentencepiece~=0.2.0
 setuptools~=75.6.0
-huggingface-hub~=0.27.0
+huggingface-hub~=0.29.1
 transformers~=4.48.0
 fastapi~=0.115.6
 uvicorn~=0.34.0
