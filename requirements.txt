@@ -3,7 +3,7 @@ psutil~=7.0.0
 pynvml~=12.0.0
 PySide6~=6.8.2
 safetensors~=0.5.2
-numpy<2.0.0
+numpy<3.0.0
 torch~=2.5.1
 sentencepiece~=0.2.0
 setuptools~=75.6.0
