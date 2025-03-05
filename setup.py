@@ -5,12 +5,12 @@ with open("requirements.txt") as f:
 
 setup(
     name="AutoGGUF",
-    version="v1.9.0",
+    version="v2.0.1",
     packages=[""],
     url="https://github.com/leafspark/AutoGGUF",
     license="apache-2.0",
     author="leafspark",
-    author_email="",
+    author_email="leafspark@duck.com",
     description="automatically quant GGUF models",
     install_requires=required,
     entry_points={"console_scripts": ["autogguf-gui = main:main"]},
