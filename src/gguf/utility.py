@@ -67,7 +67,7 @@ def naming_convention(
     output_type: str | None,
     model_type: Literal["vocab", "LoRA"] | None = None,
 ) -> str:
-    # Reference: https://github.com/ggerganov/ggml/blob/master/docs/gguf.md#gguf-naming-convention
+    # Reference: https://github.com/ggml-org/ggml/blob/master/docs/gguf.md#gguf-naming-convention
 
     if base_name is not None:
         name = base_name.strip().replace(" ", "-").replace("/", "-")
