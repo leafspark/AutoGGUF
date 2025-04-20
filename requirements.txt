@@ -10,4 +10,4 @@ setuptools~=75.6.0
 huggingface-hub~=0.29.2
 transformers~=4.48.0
 fastapi~=0.115.6
-uvicorn~=0.34.0
+uvicorn~=0.34.2
