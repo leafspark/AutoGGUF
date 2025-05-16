@@ -1,7 +1,3 @@
-#
-# GGUF file reading/modification support. For API usage information,
-# please see the files scripts/ for some fairly simple examples.
-#
 from __future__ import annotations
 
 import logging

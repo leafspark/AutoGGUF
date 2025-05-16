@@ -1,11 +1,10 @@
 import json
-import os
 import shutil
 import urllib.error
 import urllib.request
 from datetime import datetime
 from functools import partial, wraps
-from typing import Any, List, Union
+from typing import List
 
 from PySide6.QtCore import *
 from PySide6.QtGui import *
@@ -339,15 +338,15 @@ class AutoGGUF(QMainWindow):
         output_layout.addWidget(output_button)
         self.merge_gguf_layout.addLayout(output_layout)
 
-        # Split button
-        split_button = QPushButton(MERGE_GGUF)
-        split_button.clicked.connect(
+        # Merge button
+        merge_button = QPushButton(MERGE_GGUF)
+        merge_button.clicked.connect(
             lambda: self.merge_gguf(
                 self.merge_gguf_input.text(),
                 self.merge_gguf_output.text(),
             )
         )
-        self.merge_gguf_layout.addWidget(split_button)
+        self.merge_gguf_layout.addWidget(merge_button)
         self.merge_gguf_dialog.setLayout(self.merge_gguf_layout)
 
         # HF Upload Window
@@ -763,7 +762,7 @@ class AutoGGUF(QMainWindow):
 
         self.extra_arguments = QLineEdit()
         quant_options_layout.addRow(
-            self.create_label(EXTRA_ARGUMENTS, EXTRA_COMMAND_ARGUMENTS),
+            self.create_label(EXTRA_ARGUMENTS, EXTRA_ARGUMENTS_LABEL),
             self.extra_arguments,
         )
 
@@ -1202,15 +1201,25 @@ class AutoGGUF(QMainWindow):
             and "cudart-llama" not in item.lower()
         ]
 
+        def extract_b_val(name: str) -> int:
+            match = re.search(r"b(\d+)", name)
+            return int(match.group(1)) if match else -1
+
         if valid_backends:
+            # Sort by newest version
+            valid_backends.sort(key=lambda x: extract_b_val(x[0]), reverse=True)
+
             for name, path in valid_backends:
                 self.backend_combo.addItem(name, userData=path)
-            self.backend_combo.setEnabled(
-                True
-            )  # Enable the combo box if there are valid backends
+
+            self.backend_combo.setEnabled(True)
+
+            # Selects the newest version (now at index 0)
+            self.backend_combo.setCurrentIndex(0)
         else:
             self.backend_combo.addItem(NO_BACKENDS_AVAILABLE)
             self.backend_combo.setEnabled(False)
+
         self.logger.info(FOUND_VALID_BACKENDS.format(len(valid_backends)))
 
     def save_task_preset(self, task_item) -> None:
@@ -1252,13 +1261,13 @@ class AutoGGUF(QMainWindow):
                 )
             else:
                 QMessageBox.warning(
-                    self, CUDA_EXTRACTION_FAILED, NO_SUITABLE_CUDA_BACKEND_FOUND
+                    self, CUDA_EXTRACTION_FAILED, NO_SUITABLE_CUDA_BACKEND_EXTRACTION
                 )
         else:
             QMessageBox.information(
                 self,
                 DOWNLOAD_COMPLETE,
-                LLAMACPP_BINARY_DOWNLOADED_AND_EXTRACTED.format(extract_dir),
+                LLAMACPP_DOWNLOADED_AND_EXTRACTED.format(extract_dir),
             )
 
         self.refresh_backends()  # Refresh the backends after successful download
@@ -1906,12 +1915,25 @@ class AutoGGUF(QMainWindow):
             # Load existing content
             if os.path.exists(task_item.log_file):
                 with open_file_safe(task_item.log_file, "r") as f:
-                    log_text.setPlainText(f.read())
+                    content = f.read().rstrip("\n")  # Remove trailing newlines
+                    log_text.setPlainText(content)
+
+                    # Scroll to the end
+                    log_text.moveCursor(QTextCursor.End)
 
             # Connect to the thread if it's still running
             for thread in self.quant_threads:
                 if thread.log_file == task_item.log_file:
-                    thread.output_signal.connect(log_text.appendPlainText)
+                    # Create a local slot function that updates the text
+                    def update_log(text):
+                        log_text.appendPlainText(text)
+                        log_text.moveCursor(QTextCursor.End)
+
+                    thread.output_signal.connect(update_log)
+                    # Disconnect the signal when the dialog is destroyed
+                    log_dialog.destroyed.connect(
+                        lambda: thread.output_signal.disconnect(update_log)
+                    )
                     break
 
             log_dialog.exec()

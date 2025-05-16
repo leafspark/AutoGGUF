@@ -10,7 +10,7 @@ setup(
     url="https://github.com/leafspark/AutoGGUF",
     license="apache-2.0",
     author="leafspark",
-    author_email="leafspark@duck.com",
+    author_email="leafspark@proton.me",
     description="automatically quant GGUF models",
     install_requires=required,
     entry_points={"console_scripts": ["autogguf-gui = main:main"]},

@@ -1,7 +1,7 @@
 import os
 import re
 
-AUTOGGUF_VERSION = "v2.0.0"
+AUTOGGUF_VERSION = "v2.0.1"
 
 
 class _Localization:
@@ -53,13 +53,11 @@ class _English(_Localization):
         self.QUANTIZE_TO_FP8_DYNAMIC = "Quantize to FP8 Dynamic"
         self.OPEN_MODEL_FOLDER = "Open Model Folder"
         self.QUANTIZE = "Quantize"
-        self.OPEN_MODEL_FOLDER = "Open Model Folder"
         self.INPUT_MODEL = "Input Model:"
 
         # GGUF Verification
         self.INVALID_GGUF_FILE = "Invalid GGUF file: {}"
         self.SHARDED_MODEL_NAME = "{} (Sharded)"
-        self.IMPORTED_MODEL_TOOLTIP = "Imported model: {}"
         self.CONCATENATED_FILE_WARNING = "This is a concatenated file part. It will not work with llama-quantize; please concat the file first."
         self.CONCATENATED_FILES_FOUND = (
             "Found {} concatenated file parts. Please concat the files first."
@@ -248,12 +246,6 @@ class _English(_Localization):
         self.RESTARTING_TASK = "Restarting task: {0}"
         self.DOWNLOAD_FINISHED_EXTRACTED_TO = "Download finished. Extracted to: {0}"
         self.LLAMACPP_DOWNLOADED_AND_EXTRACTED = (
-            "llama.cpp binary downloaded and extracted to {0}"
-        )
-        self.NO_SUITABLE_CUDA_BACKEND_FOUND = (
-            "No suitable CUDA backend found for extraction"
-        )
-        self.LLAMACPP_BINARY_DOWNLOADED_AND_EXTRACTED = (
             "llama.cpp binary downloaded and extracted to {0}"
         )
         self.REFRESHING_LLAMACPP_RELEASES = "Refreshing llama.cpp releases"
@@ -454,7 +446,6 @@ class _English(_Localization):
         self.UPLOAD = "Upload"
         self.INFO = "Info"
 
-        self.EXTRA_COMMAND_ARGUMENTS = "Additional command-line arguments"
         self.COPIED_COMMAND_TO_CLIPBOARD = "Copied command to clipboard:"
 
         # Repository

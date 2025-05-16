@@ -104,20 +104,35 @@ class TaskListItem(QWidget):
                 break
 
     def cancel_task(self, item) -> None:
-        self.logger.info(CANCELLING_TASK.format(item.text()))
+        # TODO: fix possibly buggy signal behavior
         task_item = self.task_list.itemWidget(item)
-        for thread in self.quant_threads:
-            if thread.log_file == task_item.log_file:
-                thread.terminate()
-                task_item.update_status(CANCELED)
-                self.quant_threads.remove(thread)
-                break
+        if task_item:
+            task_name = task_item.task_name  # Store the name before any changes
+            self.logger.info(CANCELLING_TASK.format(task_name))
+
+            # Find the thread and disconnect signals before terminating
+            for thread in self.quant_threads:
+                if thread.log_file == task_item.log_file:
+                    # Disconnect all signals from this thread first
+                    try:
+                        thread.error_signal.disconnect()  # Disconnect all error signal connections
+                        thread.output_signal.disconnect()  # Disconnect all output signal connections
+                    except TypeError:
+                        # No connections to disconnect
+                        pass
+
+                    # Now terminate the thread
+                    thread.terminate()
+                    self.quant_threads.remove(thread)
+                    break
 
     def delete_task(self, item) -> None:
-        self.logger.info(DELETING_TASK.format(item.text()))
+        task_item = self.task_list.itemWidget(item)
+        if not task_item:
+            return
 
-        # Cancel the task first
-        self.cancel_task(item)
+        task_name = task_item.task_name  # Store task_name before deletion
+        self.logger.info(DELETING_TASK.format(task_name))
 
         reply = QMessageBox.question(
             self,
@@ -126,13 +141,17 @@ class TaskListItem(QWidget):
             QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
             QMessageBox.StandardButton.No,
         )
+
         if reply == QMessageBox.StandardButton.Yes:
-            task_item = self.task_list.itemWidget(item)
+            # Cancel the task first (which disconnects signals)
+            self.cancel_task(item)
+
+            # Now remove from list and delete
             row = self.task_list.row(item)
             self.task_list.takeItem(row)
 
-            if task_item:
-                task_item.deleteLater()
+            # Delete the widget after removing from list
+            task_item.deleteLater()
 
     def update_status(self, status) -> None:
         self.status = status

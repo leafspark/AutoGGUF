@@ -29,16 +29,16 @@ The most comprehensive GUI tool for GGUF model quantization. Stop wrestling with
 
 ## Features
 
-- 📩 Download and manage llama.cpp backends
-- 🗃️ Select and quantize GGUF models
+- 📩 Update and manage llama.cpp backends
+- 🗃️ Download and quantize GGUF/safetensors models
 - 📐 Configure quantization parameters
-- 💻 Monitor system resources during quantization
+- 💻 Monitor system resources in real time during quantization
 - ⏳ Parallel quantization + imatrix generation
 - 🎉 LoRA conversion and merging
 - 📁 Preset saving and loading
 - 8️⃣ AutoFP8 quantization
 - 🪓 GGUF splitting and merging
-- 🌐 HTTP API for automated monitoring
+- 🌐 HTTP API for automation and monitoring
 
 ## Why AutoGGUF?
 - Fast: Saves time on manual configuration
@@ -138,17 +138,20 @@ To use a specific language, set the `AUTOGGUF_LANGUAGE` environment variable to 
 
 ## Issues
 
-- Some inconsistent logging
-- Missing translations
+- Some inconsistent logging and signal handling 
+- Missing or duplicated translations
+- Buggy/incomplete API interfaces
 
 ## Planned Features
 
-- Time estimation for quantization
-- Quantization file size estimate
-- Perplexity testing
-- bitsandbytes
+- [ ] Time estimation for quantization
+- [ ] Quantization file size estimate
+- [ ] Perplexity testing
+- [ ] bitsandbytes support
 
-Due to my limited availability and a lack of time, I won't be actively developing new features for this project as much. While I'll continue to publish builds from time to time, I strongly recommend running from source if you want to stay up to date with the latest changes. I'm still committed to keeping dependencies updated weekly and making small maintenance fixes to ensure everything runs smoothly. If you run into any problems or notice issues, please don't hesitate to let me know - I appreciate your feedback and will do my best to address them.
+#### Project Status
+
+AutoGGUF has now entered maintenance mode. It's considered stable and feature-complete for most use cases, so I'm not actively developing new features, but I’ll continue to publish occasional builds, update dependencies regularly, and fix critical bugs as needed. If you encounter issues or have suggestions, feel free to open an issue.
 
 ## Support
 
@@ -162,3 +165,5 @@ Fork the repo, make your changes, and ensure you have the latest commits when me
 ## Stargazers
 
 [![Star History Chart](https://api.star-history.com/svg?repos=leafspark/AutoGGUF&type=Date)](https://star-history.com/#leafspark/AutoGGUF&Date)
+
+`Last Updated: 5/15/2025`
