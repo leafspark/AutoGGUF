@@ -19,6 +19,8 @@ jobs:
         os: [windows-latest, ubuntu-latest, macos-latest]
         arch: [x64]
     runs-on: ${{ matrix.os }}
+    outputs:
+      artifact-names: ${{ steps.set-outputs.outputs.artifact-names }}
 
     steps:
     - uses: actions/checkout@v4
@@ -64,6 +66,7 @@ jobs:
         Copy-Item -Path "src\convert_lora_to_gguf.py" -Destination "$distPath\src"
         Copy-Item -Path "src\convert_lora_to_ggml.py" -Destination "$distPath\src"
         Copy-Item -Path "src\quantize_to_fp8_dynamic.py" -Destination "$distPath\src"
+        Copy-Item -Path ".env.example" -Destination "$distPath\"
 
     - name: Copy additional files (Linux/macOS)
       if: matrix.os != 'windows-latest'
@@ -75,46 +78,58 @@ jobs:
         cp src/convert_lora_to_gguf.py $distPath/src/
         cp src/convert_lora_to_ggml.py $distPath/src/
         cp src/quantize_to_fp8_dynamic.py $distPath/src/
+        cp .env.example $distPath/
 
-    - name: Generate SHA256 (Windows)
-      if: matrix.os == 'windows-latest'
-      run: |
-        $distPath = if ("${{ github.event.inputs.build_type }}" -eq "RELEASE") { "build\release\dist" } else { "build\dev\dist" }
-        $archSuffix = "-x64"
-        $exeName = "AutoGGUF$archSuffix.exe"
-        $versionHash = "${{ github.sha }}".Substring(0, 7)
-        $hashFile = "AutoGGUF-${{ matrix.os }}-${{ matrix.arch }}-$versionHash.sha256"
-        $hash = (Get-FileHash "$distPath\$exeName" -Algorithm SHA256).Hash.ToLower()
-        "$hash *$exeName" | Out-File -FilePath "$distPath\$hashFile" -Encoding utf8
-
-    - name: Generate SHA256 (Linux)
-      if: matrix.os == 'ubuntu-latest'
-      run: |
-        distPath=$(if [ "${{ github.event.inputs.build_type }}" = "RELEASE" ]; then echo "build/release/dist"; else echo "build/dev/dist"; fi)
-        exeName="AutoGGUF-x64"
-        versionHash=$(echo ${{ github.sha }} | cut -c1-7)
-        hashFile="AutoGGUF-${{ matrix.os }}-x64-$versionHash.sha256"
-        cd $distPath && sha256sum $exeName > $hashFile
-
-    - name: Generate SHA256 (macOS)
-      if: matrix.os == 'macos-latest'
-      run: |
-        distPath=$(if [ "${{ github.event.inputs.build_type }}" = "RELEASE" ]; then echo "build/release/dist"; else echo "build/dev/dist"; fi)
-        exeName="AutoGGUF-x64"
-        versionHash=$(echo ${{ github.sha }} | cut -c1-7)
-        hashFile="AutoGGUF-${{ matrix.os }}-x64-$versionHash.sha256"
-        cd $distPath && shasum -a 256 $exeName > $hashFile
+    - name: Set outputs for artifact name
+      id: set-outputs
+      run: echo "artifact-name=AutoGGUF-${{ matrix.os }}-${{ matrix.arch }}-${{ github.event.inputs.build_type }}-${{ github.sha }}" >> $GITHUB_OUTPUT
         
     - name: Upload Artifact
       uses: actions/upload-artifact@v4
       with:
         name: AutoGGUF-${{ matrix.os }}-${{ matrix.arch }}-${{ github.event.inputs.build_type }}-${{ github.sha }}
-        path: |
-          build/${{ github.event.inputs.build_type == 'RELEASE' && 'release' || 'dev' }}/dist
-          !build/${{ github.event.inputs.build_type == 'RELEASE' && 'release' || 'dev' }}/dist/AutoGGUF-*.sha256
+        path: build/${{ github.event.inputs.build_type == 'RELEASE' && 'release' || 'dev' }}/dist
 
-    - name: Upload SHA256
+  generate-checksums:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+    - name: Download all artifacts
+      uses: actions/download-artifact@v4
+      with:
+        path: ./artifacts
+
+    - name: Generate SHA256 checksums for all artifacts
+      run: |
+        cd artifacts
+        versionHash=$(echo ${{ github.sha }} | cut -c1-7)
+        echo "# AutoGGUF Build Checksums" > ../checksums.txt
+        echo "Build: ${{ github.event.inputs.build_type }}" >> ../checksums.txt
+        echo "Commit: ${{ github.sha }}" >> ../checksums.txt
+        echo "Date: $(date -u)" >> ../checksums.txt
+        echo "" >> ../checksums.txt
+        
+        # Find all artifact directories and generate checksums of their zip equivalents
+        for artifact_dir in AutoGGUF-*-${{ github.event.inputs.build_type }}-${{ github.sha }}; do
+          if [ -d "$artifact_dir" ]; then
+            echo "Processing $artifact_dir..."
+            cd "$artifact_dir"
+            
+            # Create a temporary zip to calculate hash (simulating what GitHub creates)
+            zip -r "../temp_${artifact_dir}.zip" .
+            cd ..
+            
+            # Generate SHA256 of the zip file
+            hash=$(sha256sum "temp_${artifact_dir}.zip" | cut -d' ' -f1)
+            echo "${hash}  ${artifact_dir}.zip" >> ../checksums.txt
+            
+            # Clean up the temporary zip
+            rm "temp_${artifact_dir}.zip"
+          fi
+        done
+
+    - name: Upload checksums
       uses: actions/upload-artifact@v4
       with:
         name: AutoGGUF-${{ github.sha }}-SHA256
-        path: build/${{ github.event.inputs.build_type == 'RELEASE' && 'release' || 'dev' }}/dist/AutoGGUF-*.sha256
+        path: checksums.txt
