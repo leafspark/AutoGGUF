@@ -18,7 +18,7 @@
 ![GitHub forks](https://img.shields.io/github/forks/leafspark/AutoGGUF.svg)
 ![GitHub release (latest by date)](https://img.shields.io/github/downloads/leafspark/AutoGGUF/latest/total?color=green)
 ![GitHub repo size](https://img.shields.io/github/repo-size/leafspark/AutoGGUF.svg)
-![Lines of Code](https://tokei.rs/b1/github/leafspark/AutoGGUF?category=code)
+<!-- ![Lines of Code](https://ghloc.vercel.app/leafspark/AutoGGUF?filter=.bat$,.py$,.sh$,.bat$) -->
 
 <!-- Contribution -->
 [![Issues](https://img.shields.io/github/issues/leafspark/AutoGGUF)](https://github.com/leafspark/AutoGGUF/issues)
@@ -50,7 +50,7 @@ The most comprehensive GUI tool for GGUF model quantization. Stop wrestling with
 
 ## Quick Start
 
-### Cross-platform
+### Cross-platform (recommended)
 1. `git clone https://github.com/leafspark/AutoGGUF`
 2. `cd AutoGGUF`
 3. Install dependencies:
@@ -73,13 +73,13 @@ Standard builds:
 4. Any necessary folders will be automatically created
 
 Setup builds:
-1. Download setup variant of latest release
+1. Download the setup variant of latest release
 2. Extract all files to a folder
 3. Run the setup program
-4. The .GGUF extension will be registered with the program automatically
+4. The .gguf extension will be registered with the program automatically
 5. Run the program from the Start Menu or desktop shortcuts
 
-After launching the program, you may access its local server at port 7001 (set `AUTOGGUF_SERVER` to "enabled" first)
+After launching the program, you may access its local server at port 7001 (set `AUTOGGUF_SERVER` to "enabled" first).
 
 ### Verifying Releases
 
@@ -132,15 +132,16 @@ build_optimized RELEASE | DEV
 
 View the list of supported languages at [AutoGGUF/wiki/Installation#configuration](https://github.com/leafspark/AutoGGUF/wiki/Installation#configuration) (LLM translated, except for English).
 
-More languages will be updated as soon as possible!
+Languages will be updated as soon as possible after an update, or as a part of the update.
 
-To use a specific language, set the `AUTOGGUF_LANGUAGE` environment variable to one of the listed language codes (note: some languages may not be fully supported yet, those will fall back to English).
+To use a specific language, set the `AUTOGGUF_LANGUAGE` environment variable to one of the listed language codes (note: some languages may not be fully supported yet, in which the UI elements will fall back to English).
 
 ## Issues
 
-- Some inconsistent logging and signal handling 
-- Missing or duplicated translations
+- Some inconsistent logging and signal handling
+- Missing or duplicated translations (priority)
 - Buggy/incomplete API interfaces
+- Code review and formatting (priority)
 
 ## Planned Features
 
@@ -166,4 +167,4 @@ Fork the repo, make your changes, and ensure you have the latest commits when me
 
 [![Star History Chart](https://api.star-history.com/svg?repos=leafspark/AutoGGUF&type=Date)](https://star-history.com/#leafspark/AutoGGUF&Date)
 
-`Last Updated: 5/15/2025`
+`Last Updated: May 24, 2025`
