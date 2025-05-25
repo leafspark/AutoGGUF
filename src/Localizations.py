@@ -365,7 +365,7 @@ class _English(_Localization):
         self.ADDING_LORA_ADAPTER = "Adding LoRA Adapter..."
         self.DELETING_LORA_ADAPTER = "Deleting LoRA Adapter..."
         self.SELECT_LORA_ADAPTER_FILE = "Select LoRA Adapter File"
-        self.STARTING_LORA_EXPORT = "Starting LoRA export..."
+        self.STARTING_LORA_EXPORT = "Starting LoRA export"
         self.SELECT_OUTPUT_TYPE = "Select Output Type (GGUF or GGML)"
         self.BASE_MODEL = "Base Model"
         self.SELECT_BASE_MODEL_FILE = "Select Base Model File (GGUF)"

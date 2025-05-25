@@ -2,6 +2,8 @@ import json
 import shutil
 import urllib.error
 import urllib.request
+import certifi
+import ssl
 from datetime import datetime
 from functools import partial, wraps
 from typing import List
@@ -1148,7 +1150,10 @@ class AutoGGUF(QMainWindow):
             url = "https://api.github.com/repos/leafspark/AutoGGUF/releases/latest"
             req = urllib.request.Request(url)
 
-            with urllib.request.urlopen(req) as response:
+            # Create SSL context with certifi certificates
+            ssl_context = ssl.create_default_context(cafile=certifi.where())
+
+            with urllib.request.urlopen(req, context=ssl_context) as response:
                 if response.status != 200:
                     raise urllib.error.HTTPError(
                         url, response.status, "HTTP Error", response.headers, None

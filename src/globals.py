@@ -1,7 +1,7 @@
 import os
 import re
 import sys
-from typing import Any, List, TextIO, Union
+from typing import Any, IO, List, TextIO, Union
 
 from PySide6.QtWidgets import (
     QMessageBox,
@@ -86,9 +86,9 @@ Version: {AUTOGGUF_VERSION}
         
 A tool for managing and converting GGUF models.
 This application is licensed under the Apache License 2.0.
-Copyright (c) 2025 leafspark.
+Copyright (c) 2024-2025 leafspark.
 It also utilizes llama.cpp, licensed under the MIT License.
-Copyright (c) 2023-2024 The ggml authors."""
+Copyright (c) 2023-2025 The ggml authors."""
     QMessageBox.about(self, "About AutoGGUF", about_text)
 
 
@@ -97,7 +97,7 @@ def ensure_directory(path) -> None:
         os.makedirs(path)
 
 
-def open_file_safe(file_path, mode="r") -> TextIO:
+def open_file_safe(file_path, mode="r") -> IO[Any]:
     encodings = ["utf-8", "latin-1", "ascii", "utf-16"]
     for encoding in encodings:
         try:

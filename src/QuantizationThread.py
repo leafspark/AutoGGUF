@@ -59,6 +59,34 @@ class QuantizationThread(QThread):
             self.error_signal.emit(str(e))
 
     def parse_model_info(self, line) -> None:
+        # Mapping of technical keys to human-readable names
+        key_mappings = {
+            "general.architecture": "Architecture",
+            "general.name": "Model Name",
+            "general.file_type": "File Type",
+            "general.quantization_version": "Quantization Version",
+            "llama.block_count": "Layers",
+            "llama.context_length": "Context Length",
+            "llama.embedding_length": "Embedding Size",
+            "llama.feed_forward_length": "Feed Forward Length",
+            "llama.attention.head_count": "Attention Heads",
+            "llama.attention.head_count_kv": "Key-Value Heads",
+            "llama.attention.layer_norm_rms_epsilon": "RMS Norm Epsilon",
+            "llama.rope.freq_base": "RoPE Frequency Base",
+            "llama.rope.dimension_count": "RoPE Dimensions",
+            "llama.vocab_size": "Vocabulary Size",
+            "tokenizer.ggml.model": "Tokenizer Model",
+            "tokenizer.ggml.pre": "Tokenizer Preprocessing",
+            "tokenizer.ggml.tokens": "Tokens",
+            "tokenizer.ggml.token_type": "Token Types",
+            "tokenizer.ggml.merges": "BPE Merges",
+            "tokenizer.ggml.bos_token_id": "Begin of Sequence Token ID",
+            "tokenizer.ggml.eos_token_id": "End of Sequence Token ID",
+            "tokenizer.chat_template": "Chat Template",
+            "tokenizer.ggml.padding_token_id": "Padding Token ID",
+            "tokenizer.ggml.unk_token_id": "Unknown Token ID",
+        }
+
         # Parse output for model information
         if "llama_model_loader: loaded meta data with" in line:
             parts = line.split()
@@ -66,10 +94,25 @@ class QuantizationThread(QThread):
             self.model_info["tensors"] = parts[9]
         elif "general.architecture" in line:
             self.model_info["architecture"] = line.split("=")[-1].strip()
-        elif line.startswith("llama_model_loader: - kv"):
-            key = line.split(":")[2].strip()
-            value = line.split("=")[-1].strip()
-            self.model_info.setdefault("kv_data", {})[key] = value
+        elif line.startswith("llama_model_loader: - kv") and "=" in line:
+            # Split on '=' and take the parts
+            parts = line.split("=", 1)  # Split only on first '='
+            left_part = parts[0].strip()
+            value = parts[1].strip()
+
+            # Extract key and type from left part
+            # Format: "llama_model_loader: - kv N: key type"
+            kv_parts = left_part.split(":")
+            if len(kv_parts) >= 3:
+                key_type_part = kv_parts[2].strip()  # This is "key type"
+                key = key_type_part.rsplit(" ", 1)[
+                    0
+                ]  # Everything except last word (type)
+
+                # Use human-readable name if available, otherwise use original key
+                display_key = key_mappings.get(key, key)
+
+                self.model_info.setdefault("kv_data", {})[display_key] = value
         elif line.startswith("llama_model_loader: - type"):
             parts = line.split(":")
             if len(parts) > 1:

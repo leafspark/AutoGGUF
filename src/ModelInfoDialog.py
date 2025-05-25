@@ -24,8 +24,21 @@ class ModelInfoDialog(QDialog):
     def format_model_info(self, model_info) -> str:
         html = "<h2>Model Information</h2>"
         html += f"<p><b>Architecture:</b> {model_info.get('architecture', 'N/A')}</p>"
-        html += f"<p><b>Quantization Type:</b> {model_info.get('quantization_type', 'N/A')}</p>"
-        html += f"<p><b>KV Pairs:</b> {model_info.get('kv_pairs', 'N/A')}</p>"
+
+        # Format quantization types
+        quant_types = model_info.get("quantization_type", [])
+        if quant_types:
+            # Clean up the format: remove "- type " prefix and join with " | "
+            formatted_types = []
+            for qtype in quant_types:
+                # Remove "- type " prefix if present
+                clean_type = qtype.replace("- type ", "").strip()
+                formatted_types.append(clean_type)
+            quant_display = " | ".join(formatted_types)
+        else:
+            quant_display = "N/A"
+
+        html += f"<p><b>Quantization Type:</b> {quant_display}</p>"
         html += f"<p><b>Tensors:</b> {model_info.get('tensors', 'N/A')}</p>"
 
         html += "<h3>Key-Value Pairs:</h3>"

@@ -98,7 +98,7 @@ class CustomTitleBar(QWidget):
     def mouseReleaseEvent(self, event) -> None:
         self.pressing = False
 
-    def toggle_maximize(self):
+    def toggle_maximize(self) -> None:
         if self.isMaximized:
             self.parent.showNormal()
             if self.normal_size:

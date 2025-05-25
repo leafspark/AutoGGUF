@@ -22,6 +22,7 @@ class KVOverrideEntry(QWidget):
 
         self.key_input = QLineEdit()
         self.key_input.setPlaceholderText("Key")
+
         # Set validator for key input (letters and dots only)
         key_validator = QRegularExpressionValidator(QRegularExpression(r"[A-Za-z.]+"))
         self.key_input.setValidator(key_validator)

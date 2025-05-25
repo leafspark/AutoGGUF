@@ -159,7 +159,9 @@ def update_cuda_backends(self) -> None:
         for item in os.listdir(llama_bin):
             item_path = os.path.join(llama_bin, item)
             if os.path.isdir(item_path) and "cudart-llama" not in item.lower():
-                if "cu1" in item.lower():  # Only include CUDA-capable backends
+                if (
+                    "cu1" in item.lower() or "cuda-1" in item.lower()
+                ):  # Only include CUDA-capable backends
                     self.backend_combo_cuda.addItem(item, userData=item_path)
 
     if self.backend_combo_cuda.count() == 0:

@@ -2,6 +2,8 @@ import os
 import urllib.request
 import urllib.error
 import zipfile
+import ssl
+import certifi
 from PySide6.QtCore import QThread, Signal
 
 
@@ -19,7 +21,10 @@ class DownloadThread(QThread):
         try:
             req = urllib.request.Request(self.url)
 
-            with urllib.request.urlopen(req) as response:
+            # Create SSL context with certifi certificates
+            ssl_context = ssl.create_default_context(cafile=certifi.where())
+
+            with urllib.request.urlopen(req, context=ssl_context) as response:
                 if response.status != 200:
                     raise urllib.error.HTTPError(
                         self.url, response.status, "HTTP Error", response.headers, None

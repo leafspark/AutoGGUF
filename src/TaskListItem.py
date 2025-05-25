@@ -95,13 +95,10 @@ class TaskListItem(QWidget):
 
     def show_task_properties(self, item) -> None:
         self.logger.debug(SHOWING_PROPERTIES_FOR_TASK.format(item.text()))
-        task_item = self.task_list.itemWidget(item)
         for thread in self.quant_threads:
-            if thread.log_file == task_item.log_file:
-                model_info_dialog = ModelInfoDialog(thread.model_info, self)
-
-                model_info_dialog.exec()
-                break
+            model_info_dialog = ModelInfoDialog(thread.model_info, self)
+            model_info_dialog.exec()
+            break
 
     def cancel_task(self, item) -> None:
         # TODO: fix possibly buggy signal behavior

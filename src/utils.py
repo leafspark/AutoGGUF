@@ -1,6 +1,10 @@
 from typing import Any, Union
 
-import requests
+import urllib.request
+import urllib.error
+import json
+import ssl
+import certifi
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import QFileDialog, QInputDialog, QMenu
 
@@ -188,16 +192,28 @@ def refresh_releases(self) -> None:
         owner, repo = get_repo_from_env()
         url = f"https://api.github.com/repos/{owner}/{repo}/releases"
 
-        response = requests.get(url)
-        response.raise_for_status()
+        # Create SSL context with certifi certificates
+        ssl_context = ssl.create_default_context(cafile=certifi.where())
 
-        releases = response.json()
+        # Create request
+        req = urllib.request.Request(url)
+
+        # Make the request
+        with urllib.request.urlopen(req, context=ssl_context) as response:
+            if response.status != 200:
+                raise urllib.error.HTTPError(
+                    url, response.status, "HTTP Error", response.headers, None
+                )
+
+            releases = json.loads(response.read().decode("utf-8"))
+
         self.release_combo.clear()
         for release in releases:
             self.release_combo.addItem(release["tag_name"], userData=release)
         self.release_combo.currentIndexChanged.connect(self.update_assets)
         self.update_assets()
+
     except ValueError as e:
         show_error(self.logger, f"Invalid repository configuration: {str(e)}")
-    except requests.exceptions.RequestException as e:
+    except (urllib.error.URLError, urllib.error.HTTPError) as e:
         show_error(self.logger, ERROR_FETCHING_RELEASES.format(str(e)))
