@@ -1,5 +1,28 @@
 # Changelog
 
+## [v2.0.1] - 2025-05-24
+
+### Added
+- Human readable mappings from KV pairs into model properties
+- certifi library for backend download and update checking
+- Automated checksums in CI process
+
+### Changed
+- Updated llama.cpp backend
+- Improved backend UI, logging, and task handling
+- Enhanced display of model properties and cleaner formatting of KV pairs
+- Updated tensor data formatting and removed redundant KV pairs property
+- Updated CUDA backend check for latest llama.cpp release format
+- Global urllib usage implementation
+- Updated README with more information about patches and updates
+- Edited quick start instructions
+- Small file formatting improvements
+
+### Fixed
+- Type hints corrections
+- Build errors in CI
+- `@upload-artifact` updated to v4
+
 ## [v2.0.0] - 2025-01-27
 
 ### Added
@@ -237,7 +260,7 @@
 - Fast build: Higher unzipped size (97MB), smaller download (38MB)
 - Standard build: Created with PyInstaller, medium download and unzipped size (50MB), potentially slower
 
-## [1.6.0] - 2024-08-08
+## [v1.6.0] - 2024-08-08
 
 ### Changed
 - Resolve licensing issues by using PySide6
@@ -245,7 +268,7 @@
 ### Added
 - Add GPU monitoring support for NVIDIA GPUs
 
-## [1.5.1] - 2024-08-08
+## [v1.5.1] - 2024-08-08
 
 ### Changed
 - Refactor localizations to use them in HF conversion area
@@ -257,7 +280,7 @@
 ### Added
 - Support loading *.gguf file types
 
-## [1.5.0] - 2024-08-06
+## [v1.5.0] - 2024-08-06
 
 ### Changed
 - Refactor localizations to use them in HF conversion area
@@ -270,7 +293,7 @@
 ### Fixed
 - Fix scaling on low resolution screens, interface now scrolls
 
-## [1.4.3] - 2024-08-05
+## [v1.4.3] - 2024-08-05
 
 ### Changed
 - Updated src file in release to be Black formatted
@@ -283,7 +306,7 @@
 - Added model sharding management support
 - Allow multiple quantization types to be selected and started simultaneously
 
-## [1.4.2] - 2024-08-04
+## [v1.4.2] - 2024-08-04
 
 ### Fixed
 - Resolves bug where Base Model text was shown even when GGML type was selected
@@ -292,13 +315,13 @@
 ### Changed
 - Minor repository changes
 
-## [1.4.1] - 2024-08-04
+## [v1.4.1] - 2024-08-04
 
 ### Added
 - Dynamic KV Overrides (see wiki: AutoGGUF/wiki/Dynamic-KV-Overrides)
 - Quantization commands are now printed and logged
 
-## [1.4.0] - 2024-08-04
+## [v1.4.0] - 2024-08-04
 
 ### Added
 - LoRA Conversion:
@@ -322,7 +345,7 @@
   - Currently includes src folder with conversion tools
   - No console window popup
 
-## [1.3.1] - 2024-08-04
+## [v1.3.1] - 2024-08-04
 
 ### Added
 - AUTOGGUF_CHECK_BACKEND environment variable to disable backend check on start
@@ -330,7 +353,7 @@
 ### Changed
 - --onefile build with PyInstaller, _internal directory is no longer required
 
-## [1.3.0] - 2024-08-03
+## [v1.3.0] - 2024-08-03
 
 ### Added
 - Support for new llama-imatrix parameters:
@@ -352,7 +375,7 @@
 ### Removed
 - Duplicated functions
 
-## [1.2.1] - 2024-08-03
+## [v1.2.1] - 2024-08-03
 
 ### Added
 - Refresh Models button
@@ -361,13 +384,13 @@
 ### Fixed
 - iostream llama.cpp issue, quantized_models directory created on launch
 
-## [1.2.0] - 2024-08-03
+## [v1.2.0] - 2024-08-03
 
 ### Added
 - More robust logging (find logs at latest_<timestamp>.log in logs folder)
 - Localizations with support for 28 languages (machine translated using Gemini Experimental 0801)
 
-## [1.1.0] - 2024-08-03
+## [v1.1.0] - 2024-08-03
 
 ### Added
 - Dynamic KV override functionality
@@ -390,7 +413,7 @@
 ### Fixed
 - Issue where quantization errored with "AutoGGUF does not have x attribute"
 
-## [1.0.0] - 2024-08-02
+## [v1.0.0] - 2024-08-02
 
 ### Added
 - Initial release
