@@ -11,4 +11,4 @@ huggingface-hub~=0.31.2
 transformers~=4.51.3
 fastapi~=0.115.12
 uvicorn~=0.34.2
-certifi~=2025.4.26
+certifi~=2025.6.15
