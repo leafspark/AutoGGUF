@@ -9,6 +9,6 @@ sentencepiece~=0.2.0
 setuptools~=80.7.1
 huggingface-hub~=0.33.1
 transformers~=4.56.1
-fastapi~=0.115.12
+fastapi~=0.120.0
 uvicorn~=0.34.2
 certifi~=2025.4.26
