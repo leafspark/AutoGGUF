@@ -1,6 +1,6 @@
 PyYAML~=6.0.2
 psutil~=7.0.0
-pynvml~=12.0.0
+pynvml~=13.0.1
 PySide6~=6.9.1
 safetensors~=0.5.3
 numpy<2.0.0
